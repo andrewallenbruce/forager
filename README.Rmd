@@ -1,5 +1,8 @@
 ---
 output: github_document
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,17 +16,35 @@ knitr::opts_chunk$set(
 )
 ```
 
-# forager
+# {forager}
+
+> ***Forager** (noun)*
+>
+> *A person that goes from place to place searching for things that they
+> can eat or use.*[^1]
+
+> ***Ager** (noun)*
+>
+> *A person that calls from place to place searching for payment before
+> insurance can refuse.*[^2]
+
+<br><br>
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
+[![repo status:
+WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
 <!-- badges: end -->
 
-The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.
+The goal of {forager} is to provide tools for common healthcare revenue
+cycle management processes and analyses.
 
 ## Installation
 
-You can install the development version of forager from [GitHub](https://github.com/) with:
+You can install the development version of forager from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -32,7 +53,8 @@ devtools::install_github("andrewallenbruce/forager")
 
 ## Calculating Days in AR
 
-This is a basic example of a monthly Days in Accounts Receivables calculation:
+This is a basic example of a monthly Days in Accounts Receivables
+calculation:
 
 ```{r example}
 library(forager)
@@ -41,8 +63,18 @@ library(forager)
 dar_mon_ex
 ```
 
-
 ```{r}
-dar_month(dar_mon_ex, date, gct, earb, dart = 39.445)
+dar_month(dar_mon_ex, date, gct, earb, dart = 39.445) |> 
+  dplyr::select(!c(date, nmon, ndip, actual:radiff))
 ```
 
+## Code of Conduct
+
+Please note that the forager project is released with a [Contributor
+Code of
+Conduct](https://andrewallenbruce.github.io/forager/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+[^1]: <https://dictionary.cambridge.org/dictionary/english/forager>
+
+[^2]: Bruce, A.A.

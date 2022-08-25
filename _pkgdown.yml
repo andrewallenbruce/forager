@@ -1,4 +1,34 @@
 url: https://andrewallenbruce.github.io/forager/
+
 template:
   bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "Fira Code"}
+    pkgdown-nav-height: 100px
 
+home:
+  sidebar:
+    structure: [toc, links, license, community, citation, authors, dev]
+
+navbar:
+  bg: primary
+  type: dark
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, twitter, github]
+  components:
+    twitter:
+      icon: fa-twitter
+      href: http://twitter.com/aabrucehimni
+      aria-label: Twitter
+  opengraph:
+    image:
+      src: man/figures/card.png
+      alt: "Illustration of person retrieving profile from the unknown"
+    twitter:
+      creator: "@aabrucehimni"
+      site: "@aabrucehimni"
+      card: summary_large_image

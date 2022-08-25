@@ -1,5 +1,5 @@
 Package: forager
-Title: Common Healthcare Revenue Cycle Calculations & Analyses
+Title: Common Healthcare Revenue Cycle KPIs & Calculations
 Version: 0.0.0.9000
 Authors@R: 
     person("Andrew", "Bruce", , "andrewbruce.himni@gmail.com", role = c("aut", "cre"))
