@@ -1,0 +1,48 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# forager
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.
+
+## Installation
+
+You can install the development version of forager from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("andrewallenbruce/forager")
+```
+
+## Calculating Days in AR
+
+This is a basic example of a monthly Days in Accounts Receivables calculation:
+
+```{r example}
+library(forager)
+
+# Example data frame
+dar_mon_ex
+```
+
+
+```{r}
+dar_month(dar_mon_ex, date, gct, earb, dart = 39.445)
+```
+

@@ -1,13 +1,23 @@
 Package: forager
-Title: What the Package Does (One Line, Title Case)
+Title: Common Healthcare Revenue Cycle Calculations & Analyses
 Version: 0.0.0.9000
 Authors@R: 
     person("Andrew", "Bruce", , "andrewbruce.himni@gmail.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.
+License: MIT + file LICENSE
+URL: https://github.com/andrewallenbruce/forager,
+    https://andrewallenbruce.github.io/forager/
+BugReports: https://github.com/andrewallenbruce/forager/issues
+Depends: 
+    R (>= 2.10)
+Imports: 
+    dplyr,
+    janitor,
+    lubridate
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
-URL: https://github.com/andrewallenbruce/forager
-BugReports: https://github.com/andrewallenbruce/forager/issues
