@@ -1,6 +1,6 @@
 Package: forager
 Title: Common Healthcare Revenue Cycle KPIs & Calculations
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person("Andrew", "Bruce", , "andrewbruce.himni@gmail.com", role = c("aut", "cre"))
 Description: The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.
