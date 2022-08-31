@@ -11,23 +11,52 @@ template:
 
 home:
   sidebar:
-    structure: [toc, links, license, community, citation, authors, dev]
+    structure: [links, license, community, citation, authors, dev]
 
 navbar:
   bg: primary
   type: dark
   structure:
-    left:  [intro, reference, articles, news]
-    right: [search, twitter, github]
+    left:
+    - intro
+    - reference
+    - articles
+    right:
+    - home
+    - news
+    - github
+    - twitter
+    - linkedin
   components:
+    home:
+      icon: fas fa-home fa-lg
+      text: ""
+      href: index.html
+    intro:
+      icon: ~
+      text: Overview
+      href: articles/forager.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      icon: far fa-newspaper fa-lg
+      href: news/index.html
+      text: ""
+      title: "Changelog"
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/andrewallenbruce/forager
+    linkedin:
+      icon: fas fa-linkedin fa-lg
+      href: https://www.linkedin.com/in/andybruce1/
     twitter:
-      icon: fa-twitter
+      icon: fab fa-twitter fa-lg
       href: http://twitter.com/aabrucehimni
-      aria-label: Twitter
   opengraph:
     image:
       src: man/figures/card.png
-      alt: "Illustration of person retrieving profile from the unknown"
+      alt: "Forager Logo"
     twitter:
       creator: "@aabrucehimni"
       site: "@aabrucehimni"

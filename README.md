@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# {forager}
+# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="500" /></a>
 
 > ***Forager** (noun)*
 >
@@ -13,18 +13,26 @@
 > *A person that calls from place to place searching for payment before
 > insurance can refuse.*[^2]
 
-<br><br>
+<br>
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![repo status:
 WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![License:
+MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
+[![code
+size](https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager)
+[![last
+commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager/commits/master)
 
 <!-- badges: end -->
 
-The goal of {forager} is to provide tools for common healthcare revenue
-cycle management processes and analyses.
+The goal of {forager} is to provide a suite of tools for the analysis of
+common healthcare revenue cycle management Key Performance Indicators
+(KPIs).
 
 ## Installation
 
@@ -36,60 +44,68 @@ You can install the development version of forager from
 devtools::install_github("andrewallenbruce/forager")
 ```
 
-## Calculating Days in AR
+## Days in AR Calculation
 
-This is a basic example of a monthly Days in Accounts Receivables
-calculation:
+This is a basic example of a monthly Days in AR calculation:
 
 ``` r
 library(forager)
 
 # Example data frame
-dar_mon_ex
-#>          date      gct     earb
-#> 1  2022-01-01 325982.0 288432.5
-#> 2  2022-02-01 297731.7 307871.1
-#> 3  2022-03-01 198655.1 253976.6
-#> 4  2022-04-01 186047.0 183684.9
-#> 5  2022-05-01 123654.0 204227.6
-#> 6  2022-06-01 131440.3 203460.5
-#> 7  2022-07-01 153991.0 182771.3
-#> 8  2022-08-01 156975.0 169633.6
-#> 9  2022-09-01 146878.1 179347.7
-#> 10 2022-10-01 163799.4 178051.1
-#> 11 2022-11-01 151410.7 162757.5
-#> 12 2022-12-01 169094.5 199849.3
+dar_mon_ex |> 
+  knitr::kable(
+    digits = 2, 
+    col.names = c(
+      "Month", 
+      "Gross Charges", 
+      "Ending AR Balance"))
 ```
 
+| Month      | Gross Charges | Ending AR Balance |
+|:-----------|--------------:|------------------:|
+| 2022-01-01 |      325982.0 |          288432.5 |
+| 2022-02-01 |      297731.7 |          307871.1 |
+| 2022-03-01 |      198655.1 |          253976.6 |
+| 2022-04-01 |      186047.0 |          183684.9 |
+| 2022-05-01 |      123654.0 |          204227.6 |
+| 2022-06-01 |      131440.3 |          203460.5 |
+| 2022-07-01 |      153991.0 |          182771.3 |
+| 2022-08-01 |      156975.0 |          169633.6 |
+| 2022-09-01 |      146878.1 |          179347.7 |
+| 2022-10-01 |      163799.4 |          178051.1 |
+| 2022-11-01 |      151410.7 |          162757.5 |
+| 2022-12-01 |      169094.5 |          199849.3 |
+
 ``` r
-dar_month(dar_mon_ex, date, gct, earb, dart = 39.445) |> 
-  dplyr::select(!c(date, nmon, ndip, actual:radiff))
-#>         gct     earb     month      adc   dar earb_trg    earb_dc earb_dcpct
-#> 1  325982.0 288432.5   January 10515.55 27.43 414785.8 -126353.29      -0.44
-#> 2  297731.7 307871.1  February 10633.28 28.95 419429.6 -111558.51      -0.36
-#> 3  198655.1 253976.6     March  6408.23 39.63 252772.6    1203.91       0.00
-#> 4  186047.0 183684.9     April  6201.57 29.62 244620.8  -60935.90      -0.33
-#> 5  123654.0 204227.6       May  3988.84 51.20 157339.7   46887.85       0.23
-#> 6  131440.3 203460.5      June  4381.34 46.44 172822.1   30638.41       0.15
-#> 7  153991.0 182771.3      July  4967.45 36.79 195941.1  -13169.81      -0.07
-#> 8  156975.0 169633.6    August  5063.71 33.50 199738.0  -30104.39      -0.18
-#> 9  146878.1 179347.7 September  4895.94 36.63 193120.2  -13772.53      -0.08
-#> 10 163799.4 178051.1   October  5283.85 33.70 208421.6  -30370.47      -0.17
-#> 11 151410.7 162757.5  November  5047.02 32.25 199079.9  -36322.40      -0.22
-#> 12 169094.5 199849.3  December  5454.66 36.64 215159.1  -15309.76      -0.08
-#>     pass
-#> 1   TRUE
-#> 2   TRUE
-#> 3  FALSE
-#> 4   TRUE
-#> 5  FALSE
-#> 6  FALSE
-#> 7   TRUE
-#> 8   TRUE
-#> 9   TRUE
-#> 10  TRUE
-#> 11  TRUE
-#> 12  TRUE
+dar_month_2022 <- dar_month(dar_mon_ex, date, gct, earb, dart = 35)
+
+dar_month_2022
+#>          date      gct     earb nmon     month ndip      adc   dar actual ideal
+#> 1  2022-01-01 325982.0 288432.5    1   January   31 10515.55 27.43   0.88  1.13
+#> 2  2022-02-01 297731.7 307871.1    2  February   28 10633.28 28.95   1.03  1.25
+#> 3  2022-03-01 198655.1 253976.6    3     March   31  6408.23 39.63   1.28  1.13
+#> 4  2022-04-01 186047.0 183684.9    4     April   30  6201.57 29.62   0.99  1.17
+#> 5  2022-05-01 123654.0 204227.6    5       May   31  3988.84 51.20   1.65  1.13
+#> 6  2022-06-01 131440.3 203460.5    6      June   30  4381.34 46.44   1.55  1.17
+#> 7  2022-07-01 153991.0 182771.3    7      July   31  4967.45 36.79   1.19  1.13
+#> 8  2022-08-01 156975.0 169633.6    8    August   31  5063.71 33.50   1.08  1.13
+#> 9  2022-09-01 146878.1 179347.7    9 September   30  4895.94 36.63   1.22  1.17
+#> 10 2022-10-01 163799.4 178051.1   10   October   31  5283.85 33.70   1.09  1.13
+#> 11 2022-11-01 151410.7 162757.5   11  November   30  5047.02 32.25   1.07  1.17
+#> 12 2022-12-01 169094.5 199849.3   12  December   31  5454.66 36.64   1.18  1.13
+#>    radiff earb_trg   earb_dc earb_dcpct  pass
+#> 1   -0.25 368044.2 -79611.67      -0.28  TRUE
+#> 2   -0.22 372164.7 -64293.60      -0.21  TRUE
+#> 3    0.15 224288.1  29688.50       0.12 FALSE
+#> 4   -0.18 217054.8 -33369.93      -0.18  TRUE
+#> 5    0.52 139609.4  64618.24       0.32 FALSE
+#> 6    0.38 153347.0  50113.48       0.25 FALSE
+#> 7    0.06 173860.8   8910.51       0.05 FALSE
+#> 8   -0.05 177229.8  -7596.20      -0.04  TRUE
+#> 9    0.05 171357.8   7989.91       0.04 FALSE
+#> 10  -0.04 184934.9  -6883.74      -0.04  TRUE
+#> 11  -0.10 176645.9 -13888.37      -0.09  TRUE
+#> 12   0.05 190913.1   8936.20       0.04 FALSE
 ```
 
 ## Code of Conduct
@@ -101,4 +117,4 @@ By contributing to this project, you agree to abide by its terms.
 
 [^1]: <https://dictionary.cambridge.org/dictionary/english/forager>
 
-[^2]: Bruce, A.A.
+[^2]: Me.

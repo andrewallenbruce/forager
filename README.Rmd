@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# {forager}
+# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="500" /></a>
 
 > ***Forager** (noun)*
 >
@@ -28,18 +28,21 @@ knitr::opts_chunk$set(
 > *A person that calls from place to place searching for payment before
 > insurance can refuse.*[^2]
 
-<br><br>
+<br>
 
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
-[![repo status:
-WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![repo status: WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
+[![code size](https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager)
+[![last commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager/commits/master)
 
 <!-- badges: end -->
 
-The goal of {forager} is to provide tools for common healthcare revenue
-cycle management processes and analyses.
+The goal of {forager} is to provide a suite of tools for the analysis of common healthcare revenue
+cycle management Key Performance Indicators (KPIs).
 
 ## Installation
 
@@ -51,22 +54,75 @@ You can install the development version of forager from
 devtools::install_github("andrewallenbruce/forager")
 ```
 
-## Calculating Days in AR
+## Days in AR Calculation
 
-This is a basic example of a monthly Days in Accounts Receivables
-calculation:
+This is a basic example of a monthly Days in AR calculation:
 
 ```{r example}
 library(forager)
 
 # Example data frame
-dar_mon_ex
+dar_mon_ex |> 
+  knitr::kable(
+    digits = 2, 
+    col.names = c(
+      "Month", 
+      "Gross Charges", 
+      "Ending AR Balance"))
 ```
 
+
 ```{r}
-dar_month(dar_mon_ex, date, gct, earb, dart = 39.445) |> 
-  dplyr::select(!c(date, nmon, ndip, actual:radiff))
+dar_month_2022 <- dar_month(dar_mon_ex, date, gct, earb, dart = 35)
+
+dar_month_2022
 ```
+
+```{r eval=FALSE, include=FALSE}
+# Create df for gt_plt_bar_stack
+dar_month_2022_pct <- dar_month_2022 |>
+  dplyr::mutate(gct_pct = (gct / (gct + earb) * 100),
+         earb_pct = (earb / (gct + earb) * 100)) |>
+  dplyr::select(month, gct_pct, earb_pct) |>
+  tidyr::pivot_longer(-month, names_to = "measure", values_to = "percentage") |>
+  dplyr::group_by(month) |>
+  dplyr::summarize(list_data = list(percentage))
+
+# Right join the two data frames
+dar_month_2022_join <- dplyr::right_join(dar_month_2022, 
+                                         dar_month_2022_pct, 
+                                         by = "month")
+
+# Create new copy cols for gt_plt_bullet
+dar_month_2022_gt <- dar_month_2022_join |> 
+  dplyr::select(month, 
+                gct, 
+                earb, 
+                earb_trg, 
+                dar, 
+                pass,
+                list_data) |>
+  dplyr::mutate(target_col = earb, 
+                plot_col = earb_trg)
+
+# Create gt table
+dar_month_2022_gt |> 
+  gt::gt(rowname_col = "month") |>
+  gt::cols_label(gct = "Gross Charges",
+                 earb = "Ending AR",
+                 earb_trg = "Optimal AR",
+                 dar = "Days in AR",
+                 pass = "Pass",
+                 plot_col = "Optimal AR Threshold") |>
+  gt::fmt_number(columns = dar) |>
+  gt::fmt_currency(columns = c(gct, earb, earb_trg)) |>
+  gtExtras::gt_plt_bullet(column = plot_col, target = target_col, palette = c("#8ca0aa", "black"), width = 65) |>
+  gtExtras::gt_plt_bar_stack(list_data, width = 50, labels = c("Charges (%) ", " AR (%)"), palette = c("#2c3e50", "#8ca0aa")) |>
+  gtExtras::gt_badge(pass, palette = c("FALSE" = "red")) |> 
+  gt::tab_style(style = gt::cell_text(color = "red", weight = "bold"), locations = gt::cells_body(columns = pass, rows = pass == "FALSE")) |>
+  gtExtras::gt_theme_538()
+```
+
 
 ## Code of Conduct
 
@@ -77,4 +133,4 @@ By contributing to this project, you agree to abide by its terms.
 
 [^1]: <https://dictionary.cambridge.org/dictionary/english/forager>
 
-[^2]: Bruce, A.A.
+[^2]: Me.
