@@ -7,6 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.">
 <title>Common Healthcare Revenue Cycle KPIs &amp; Calculations • forager</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.2/font.css" rel="stylesheet">
@@ -16,6 +22,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Common Healthcare Revenue Cycle KPIs &amp; Calculations">
 <meta property="og:description" content="The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.">
+<meta property="og:image" content="https://andrewallenbruce.github.io/forager/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -39,6 +46,9 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/forager.html">Overview</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
       </ul>
@@ -47,15 +57,35 @@
 </form>
 
       <ul class="navbar-nav">
+<li class="active nav-item">
+  <a class="nav-link" href="index.html">
+    <span class="fas fa fas fa-home fa-lg"></span>
+     
+    
+  </a>
+</li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/aabrucehimni" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
+  <a class="nav-link" href="news/index.html">
+    <span class="far fa far fa-newspaper fa-lg"></span>
+     
+    
+  </a>
+</li>
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/andrewallenbruce/forager">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/andrewallenbruce/forager/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
+  <a class="external-link nav-link" href="http://twitter.com/aabrucehimni">
+    <span class="fab fa fab fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://www.linkedin.com/in/andybruce1/">
+    <span class="fas fa fas fa-linkedin fa-lg"></span>
      
   </a>
 </li>
@@ -67,19 +97,23 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="forager">{forager}<a class="anchor" aria-label="anchor" href="#forager"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.svg" class="logo" alt=""><h1 id="forager-">
+<code>forager</code> 
+<a class="anchor" aria-label="anchor" href="#forager-"></a>
+</h1>
+</div>
 <blockquote>
 <p><em><strong>Forager</strong> (noun)</em></p>
 <p><em>A person that goes from place to place searching for things that they can eat or use.</em><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;a href="https://dictionary.cambridge.org/dictionary/english/forager" class="external-link uri"&gt;https://dictionary.cambridge.org/dictionary/english/forager&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a></p>
 </blockquote>
 <blockquote>
 <p><em><strong>Ager</strong> (noun)</em></p>
-<p><em>A person that calls from place to place searching for payment before insurance can refuse.</em><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Bruce, A.A.&lt;/p&gt;"><sup>2</sup></a></p>
+<p><em>A person that calls from place to place searching for payment before insurance can refuse.</em><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Me.&lt;/p&gt;"><sup>2</sup></a></p>
 </blockquote>
-<p><br><br></p>
+<p><br></p>
 <!-- badges: start -->
-<!-- badges: end --><p>The goal of {forager} is to provide tools for common healthcare revenue cycle management processes and analyses.</p>
+<!-- badges: end --><p>The goal of {forager} is to provide a suite of tools for the analysis of common healthcare revenue cycle management Key Performance Indicators (KPIs).</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -89,56 +123,119 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="calculating-days-in-ar">Calculating Days in AR<a class="anchor" aria-label="anchor" href="#calculating-days-in-ar"></a>
+<h2 id="days-in-ar-calculation">Days in AR Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-calculation"></a>
 </h2>
-<p>This is a basic example of a monthly Days in Accounts Receivables calculation:</p>
+<p>This is a basic example of a monthly Days in AR calculation:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrewallenbruce/forager" class="external-link">forager</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example data frame</span></span>
-<span><span class="va">dar_mon_ex</span></span>
-<span><span class="co">#&gt;          date      gct     earb</span></span>
-<span><span class="co">#&gt; 1  2022-01-01 325982.0 288432.5</span></span>
-<span><span class="co">#&gt; 2  2022-02-01 297731.7 307871.1</span></span>
-<span><span class="co">#&gt; 3  2022-03-01 198655.1 253976.6</span></span>
-<span><span class="co">#&gt; 4  2022-04-01 186047.0 183684.9</span></span>
-<span><span class="co">#&gt; 5  2022-05-01 123654.0 204227.6</span></span>
-<span><span class="co">#&gt; 6  2022-06-01 131440.3 203460.5</span></span>
-<span><span class="co">#&gt; 7  2022-07-01 153991.0 182771.3</span></span>
-<span><span class="co">#&gt; 8  2022-08-01 156975.0 169633.6</span></span>
-<span><span class="co">#&gt; 9  2022-09-01 146878.1 179347.7</span></span>
-<span><span class="co">#&gt; 10 2022-10-01 163799.4 178051.1</span></span>
-<span><span class="co">#&gt; 11 2022-11-01 151410.7 162757.5</span></span>
-<span><span class="co">#&gt; 12 2022-12-01 169094.5 199849.3</span></span></code></pre></div>
+<span><span class="va">dar_mon_ex</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
+<span>    digits <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>    col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Month"</span>, </span>
+<span>      <span class="st">"Gross Charges"</span>, </span>
+<span>      <span class="st">"Ending AR Balance"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Month</th>
+<th align="right">Gross Charges</th>
+<th align="right">Ending AR Balance</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2022-01-01</td>
+<td align="right">325982.0</td>
+<td align="right">288432.5</td>
+</tr>
+<tr class="even">
+<td align="left">2022-02-01</td>
+<td align="right">297731.7</td>
+<td align="right">307871.1</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-03-01</td>
+<td align="right">198655.1</td>
+<td align="right">253976.6</td>
+</tr>
+<tr class="even">
+<td align="left">2022-04-01</td>
+<td align="right">186047.0</td>
+<td align="right">183684.9</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-05-01</td>
+<td align="right">123654.0</td>
+<td align="right">204227.6</td>
+</tr>
+<tr class="even">
+<td align="left">2022-06-01</td>
+<td align="right">131440.3</td>
+<td align="right">203460.5</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-07-01</td>
+<td align="right">153991.0</td>
+<td align="right">182771.3</td>
+</tr>
+<tr class="even">
+<td align="left">2022-08-01</td>
+<td align="right">156975.0</td>
+<td align="right">169633.6</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-09-01</td>
+<td align="right">146878.1</td>
+<td align="right">179347.7</td>
+</tr>
+<tr class="even">
+<td align="left">2022-10-01</td>
+<td align="right">163799.4</td>
+<td align="right">178051.1</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-11-01</td>
+<td align="right">151410.7</td>
+<td align="right">162757.5</td>
+</tr>
+<tr class="even">
+<td align="left">2022-12-01</td>
+<td align="right">169094.5</td>
+<td align="right">199849.3</td>
+</tr>
+</tbody>
+</table>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/dar_month.html">dar_month</a></span><span class="op">(</span><span class="va">dar_mon_ex</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">39.445</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">nmon</span>, <span class="va">ndip</span>, <span class="va">actual</span><span class="op">:</span><span class="va">radiff</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         gct     earb     month      adc   dar earb_trg    earb_dc earb_dcpct</span></span>
-<span><span class="co">#&gt; 1  325982.0 288432.5   January 10515.55 27.43 414785.8 -126353.29      -0.44</span></span>
-<span><span class="co">#&gt; 2  297731.7 307871.1  February 10633.28 28.95 419429.6 -111558.51      -0.36</span></span>
-<span><span class="co">#&gt; 3  198655.1 253976.6     March  6408.23 39.63 252772.6    1203.91       0.00</span></span>
-<span><span class="co">#&gt; 4  186047.0 183684.9     April  6201.57 29.62 244620.8  -60935.90      -0.33</span></span>
-<span><span class="co">#&gt; 5  123654.0 204227.6       May  3988.84 51.20 157339.7   46887.85       0.23</span></span>
-<span><span class="co">#&gt; 6  131440.3 203460.5      June  4381.34 46.44 172822.1   30638.41       0.15</span></span>
-<span><span class="co">#&gt; 7  153991.0 182771.3      July  4967.45 36.79 195941.1  -13169.81      -0.07</span></span>
-<span><span class="co">#&gt; 8  156975.0 169633.6    August  5063.71 33.50 199738.0  -30104.39      -0.18</span></span>
-<span><span class="co">#&gt; 9  146878.1 179347.7 September  4895.94 36.63 193120.2  -13772.53      -0.08</span></span>
-<span><span class="co">#&gt; 10 163799.4 178051.1   October  5283.85 33.70 208421.6  -30370.47      -0.17</span></span>
-<span><span class="co">#&gt; 11 151410.7 162757.5  November  5047.02 32.25 199079.9  -36322.40      -0.22</span></span>
-<span><span class="co">#&gt; 12 169094.5 199849.3  December  5454.66 36.64 215159.1  -15309.76      -0.08</span></span>
-<span><span class="co">#&gt;     pass</span></span>
-<span><span class="co">#&gt; 1   TRUE</span></span>
-<span><span class="co">#&gt; 2   TRUE</span></span>
-<span><span class="co">#&gt; 3  FALSE</span></span>
-<span><span class="co">#&gt; 4   TRUE</span></span>
-<span><span class="co">#&gt; 5  FALSE</span></span>
-<span><span class="co">#&gt; 6  FALSE</span></span>
-<span><span class="co">#&gt; 7   TRUE</span></span>
-<span><span class="co">#&gt; 8   TRUE</span></span>
-<span><span class="co">#&gt; 9   TRUE</span></span>
-<span><span class="co">#&gt; 10  TRUE</span></span>
-<span><span class="co">#&gt; 11  TRUE</span></span>
-<span><span class="co">#&gt; 12  TRUE</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dar_month_2022</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dar_month.html">dar_month</a></span><span class="op">(</span><span class="va">dar_mon_ex</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dar_month_2022</span></span>
+<span><span class="co">#&gt;          date      gct     earb nmon     month ndip      adc   dar actual ideal</span></span>
+<span><span class="co">#&gt; 1  2022-01-01 325982.0 288432.5    1   January   31 10515.55 27.43   0.88  1.13</span></span>
+<span><span class="co">#&gt; 2  2022-02-01 297731.7 307871.1    2  February   28 10633.28 28.95   1.03  1.25</span></span>
+<span><span class="co">#&gt; 3  2022-03-01 198655.1 253976.6    3     March   31  6408.23 39.63   1.28  1.13</span></span>
+<span><span class="co">#&gt; 4  2022-04-01 186047.0 183684.9    4     April   30  6201.57 29.62   0.99  1.17</span></span>
+<span><span class="co">#&gt; 5  2022-05-01 123654.0 204227.6    5       May   31  3988.84 51.20   1.65  1.13</span></span>
+<span><span class="co">#&gt; 6  2022-06-01 131440.3 203460.5    6      June   30  4381.34 46.44   1.55  1.17</span></span>
+<span><span class="co">#&gt; 7  2022-07-01 153991.0 182771.3    7      July   31  4967.45 36.79   1.19  1.13</span></span>
+<span><span class="co">#&gt; 8  2022-08-01 156975.0 169633.6    8    August   31  5063.71 33.50   1.08  1.13</span></span>
+<span><span class="co">#&gt; 9  2022-09-01 146878.1 179347.7    9 September   30  4895.94 36.63   1.22  1.17</span></span>
+<span><span class="co">#&gt; 10 2022-10-01 163799.4 178051.1   10   October   31  5283.85 33.70   1.09  1.13</span></span>
+<span><span class="co">#&gt; 11 2022-11-01 151410.7 162757.5   11  November   30  5047.02 32.25   1.07  1.17</span></span>
+<span><span class="co">#&gt; 12 2022-12-01 169094.5 199849.3   12  December   31  5454.66 36.64   1.18  1.13</span></span>
+<span><span class="co">#&gt;    radiff earb_trg   earb_dc earb_dcpct  pass</span></span>
+<span><span class="co">#&gt; 1   -0.25 368044.2 -79611.67      -0.28  TRUE</span></span>
+<span><span class="co">#&gt; 2   -0.22 372164.7 -64293.60      -0.21  TRUE</span></span>
+<span><span class="co">#&gt; 3    0.15 224288.1  29688.50       0.12 FALSE</span></span>
+<span><span class="co">#&gt; 4   -0.18 217054.8 -33369.93      -0.18  TRUE</span></span>
+<span><span class="co">#&gt; 5    0.52 139609.4  64618.24       0.32 FALSE</span></span>
+<span><span class="co">#&gt; 6    0.38 153347.0  50113.48       0.25 FALSE</span></span>
+<span><span class="co">#&gt; 7    0.06 173860.8   8910.51       0.05 FALSE</span></span>
+<span><span class="co">#&gt; 8   -0.05 177229.8  -7596.20      -0.04  TRUE</span></span>
+<span><span class="co">#&gt; 9    0.05 171357.8   7989.91       0.04 FALSE</span></span>
+<span><span class="co">#&gt; 10  -0.04 184934.9  -6883.74      -0.04  TRUE</span></span>
+<span><span class="co">#&gt; 11  -0.10 176645.9 -13888.37      -0.09  TRUE</span></span>
+<span><span class="co">#&gt; 12   0.05 190913.1   8936.20       0.04 FALSE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
@@ -148,14 +245,7 @@
 </div>
 
 
-  </main><aside class="col-md-3"><div class="table-of-contents">
-<h2 data-toc-skip>Table of contents</h2>
-<ul class="list-unstyled">
-<li><nav id="toc"></nav></li>
-</ul>
-</div>
-
-<div class="links">
+  </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/andrewallenbruce/forager/" class="external-link">Browse source code</a></li>
@@ -196,7 +286,11 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="lifecycle"></a></li>
 <li><a href="https://www.repostatus.org/#wip" class="external-link"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="repo status: WIP"></a></li>
+<li><a href="https://choosealicense.com/licenses/mit/" class="external-link"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a></li>
+<li><a href="https://github.com/andrewallenbruce/forager" class="external-link"><img src="https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg" alt="code size"></a></li>
+<li><a href="https://github.com/andrewallenbruce/forager/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg" alt="last commit"></a></li>
 </ul>
 </div>
 
