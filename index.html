@@ -125,22 +125,17 @@
 <div class="section level2">
 <h2 id="days-in-ar-calculation">Days in AR Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-calculation"></a>
 </h2>
-<p>This is a basic example of a monthly Days in AR calculation:</p>
+<p>The following is a basic example of a monthly Days in AR calculation:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrewallenbruce/forager" class="external-link">forager</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Example data frame</span></span>
 <span><span class="va">dar_mon_ex</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span></span>
-<span>    digits <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"Month"</span>, </span>
-<span>      <span class="st">"Gross Charges"</span>, </span>
-<span>      <span class="st">"Ending AR Balance"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Month"</span>, <span class="st">"Total Gross Charges"</span>, <span class="st">"Ending AR Balance"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Month</th>
-<th align="right">Gross Charges</th>
+<th align="right">Total Gross Charges</th>
 <th align="right">Ending AR Balance</th>
 </tr></thead>
 <tbody>
@@ -207,10 +202,124 @@
 </tbody>
 </table>
 <p><br></p>
+<p>Using the <code><a href="reference/dar_month.html">dar_month()</a></code> function, we set the Days in AR target (<code>dart</code>) to 35 and calculate:</p>
+<p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dar_month_2022</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dar_month.html">dar_month</a></span><span class="op">(</span><span class="va">dar_mon_ex</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
-<details><summary>Table Code</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<table class="table">
+<thead><tr class="header">
+<th align="left">Month</th>
+<th align="right">Gross Charges</th>
+<th align="right">Ending AR</th>
+<th align="right">Target AR</th>
+<th align="right">Days in AR</th>
+<th align="left">Pass</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">January</td>
+<td align="right">325982.0</td>
+<td align="right">288432.5</td>
+<td align="right">368044.2</td>
+<td align="right">27.43</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">February</td>
+<td align="right">297731.7</td>
+<td align="right">307871.1</td>
+<td align="right">372164.7</td>
+<td align="right">28.95</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">March</td>
+<td align="right">198655.1</td>
+<td align="right">253976.6</td>
+<td align="right">224288.1</td>
+<td align="right">39.63</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">April</td>
+<td align="right">186047.0</td>
+<td align="right">183684.9</td>
+<td align="right">217054.8</td>
+<td align="right">29.62</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">May</td>
+<td align="right">123654.0</td>
+<td align="right">204227.6</td>
+<td align="right">139609.4</td>
+<td align="right">51.20</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">June</td>
+<td align="right">131440.3</td>
+<td align="right">203460.5</td>
+<td align="right">153347.0</td>
+<td align="right">46.44</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">July</td>
+<td align="right">153991.0</td>
+<td align="right">182771.3</td>
+<td align="right">173860.8</td>
+<td align="right">36.79</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">August</td>
+<td align="right">156975.0</td>
+<td align="right">169633.6</td>
+<td align="right">177229.8</td>
+<td align="right">33.50</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">September</td>
+<td align="right">146878.1</td>
+<td align="right">179347.7</td>
+<td align="right">171357.8</td>
+<td align="right">36.63</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">October</td>
+<td align="right">163799.4</td>
+<td align="right">178051.1</td>
+<td align="right">184934.9</td>
+<td align="right">33.70</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">November</td>
+<td align="right">151410.7</td>
+<td align="right">162757.5</td>
+<td align="right">176645.9</td>
+<td align="right">32.25</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">December</td>
+<td align="right">169094.5</td>
+<td align="right">199849.3</td>
+<td align="right">190913.1</td>
+<td align="right">36.64</td>
+<td align="left">FALSE</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<div class="section level3">
+<h3 id="presentation-examples">Presentation Examples<a class="anchor" aria-label="anchor" href="#presentation-examples"></a>
+</h3>
+<details><summary>Click to View Code for Table</summary><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gt_1</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span>, <span class="va">dar</span>, <span class="va">pass</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">headliner</span><span class="fu">::</span><span class="fu">add_headline_column</span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb</span>, y <span class="op">=</span> <span class="va">earb_trg</span>, </span>
@@ -242,10 +351,8 @@
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_table_font.html" class="external-link">opt_table_font</a></span><span class="op">(</span>font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Roboto"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_align_table_header.html" class="external-link">opt_align_table_header</a></span><span class="op">(</span>align <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#gt_1 |&gt; gt::gtsave("gt_1.png", expand = 10)</span></span></code></pre></div></details><p><br></p>
-<p><img src="gt_1.png" width="100%"></p>
-<p><br><br></p>
-<details><summary>Table Code</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<span><span class="co">#gt_1 |&gt; gt::gtsave("gt_1.png", expand = 20)</span></span></code></pre></div></details><p><img src="reference/figures/gt_1.png" style="width:100.0%"></p>
+<details><summary>Click to View Code for Table</summary><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create df for gt_plt_bar_stack</span></span>
 <span><span class="va">dar_month_2022_pct</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gct_pct <span class="op">=</span> <span class="op">(</span><span class="va">gct</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>,</span>
@@ -301,9 +408,9 @@
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Horizontal bar indicates Optimal AR, vertical bar is Actual."</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># gt_2 |&gt; gt::gtsave("gt_2.png", expand = 20)</span></span></code></pre></div></details><p><br></p>
-<p><img src="gt_2.png" width="100%"></p>
+<span><span class="co">#gt_2 |&gt; gt::gtsave("gt_2.png", expand = 20)</span></span></code></pre></div></details><p><img src="reference/figures/gt_2.png" style="width:100.0%"></p>
 <p><br></p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
