@@ -46,35 +46,35 @@ devtools::install_github("andrewallenbruce/forager")
 
 ## Days in AR Calculation
 
-This is a basic example of a monthly Days in AR calculation:
+The following is a basic example of a monthly Days in AR calculation:
 
 ``` r
 library(forager)
 
 # Example data frame
 dar_mon_ex |> 
-  knitr::kable(
-    digits = 2, 
-    col.names = c(
-      "Month", 
-      "Gross Charges", 
-      "Ending AR Balance"))
+  knitr::kable(col.names = c("Month", "Total Gross Charges", "Ending AR Balance"))
 ```
 
-| Month      | Gross Charges | Ending AR Balance |
-|:-----------|--------------:|------------------:|
-| 2022-01-01 |      325982.0 |          288432.5 |
-| 2022-02-01 |      297731.7 |          307871.1 |
-| 2022-03-01 |      198655.1 |          253976.6 |
-| 2022-04-01 |      186047.0 |          183684.9 |
-| 2022-05-01 |      123654.0 |          204227.6 |
-| 2022-06-01 |      131440.3 |          203460.5 |
-| 2022-07-01 |      153991.0 |          182771.3 |
-| 2022-08-01 |      156975.0 |          169633.6 |
-| 2022-09-01 |      146878.1 |          179347.7 |
-| 2022-10-01 |      163799.4 |          178051.1 |
-| 2022-11-01 |      151410.7 |          162757.5 |
-| 2022-12-01 |      169094.5 |          199849.3 |
+| Month      | Total Gross Charges | Ending AR Balance |
+|:-----------|--------------------:|------------------:|
+| 2022-01-01 |            325982.0 |          288432.5 |
+| 2022-02-01 |            297731.7 |          307871.1 |
+| 2022-03-01 |            198655.1 |          253976.6 |
+| 2022-04-01 |            186047.0 |          183684.9 |
+| 2022-05-01 |            123654.0 |          204227.6 |
+| 2022-06-01 |            131440.3 |          203460.5 |
+| 2022-07-01 |            153991.0 |          182771.3 |
+| 2022-08-01 |            156975.0 |          169633.6 |
+| 2022-09-01 |            146878.1 |          179347.7 |
+| 2022-10-01 |            163799.4 |          178051.1 |
+| 2022-11-01 |            151410.7 |          162757.5 |
+| 2022-12-01 |            169094.5 |          199849.3 |
+
+<br>
+
+Using the `dar_month()` function, we set the Days in AR target (`dart`)
+to 35 and calculate:
 
 <br>
 
@@ -84,9 +84,28 @@ dar_month_2022 <- dar_month(dar_mon_ex, date, gct, earb, dart = 35)
 
 <br>
 
+| Month     | Gross Charges | Ending AR | Target AR | Days in AR | Pass  |
+|:----------|--------------:|----------:|----------:|-----------:|:------|
+| January   |      325982.0 |  288432.5 |  368044.2 |      27.43 | TRUE  |
+| February  |      297731.7 |  307871.1 |  372164.7 |      28.95 | TRUE  |
+| March     |      198655.1 |  253976.6 |  224288.1 |      39.63 | FALSE |
+| April     |      186047.0 |  183684.9 |  217054.8 |      29.62 | TRUE  |
+| May       |      123654.0 |  204227.6 |  139609.4 |      51.20 | FALSE |
+| June      |      131440.3 |  203460.5 |  153347.0 |      46.44 | FALSE |
+| July      |      153991.0 |  182771.3 |  173860.8 |      36.79 | FALSE |
+| August    |      156975.0 |  169633.6 |  177229.8 |      33.50 | TRUE  |
+| September |      146878.1 |  179347.7 |  171357.8 |      36.63 | FALSE |
+| October   |      163799.4 |  178051.1 |  184934.9 |      33.70 | TRUE  |
+| November  |      151410.7 |  162757.5 |  176645.9 |      32.25 | TRUE  |
+| December  |      169094.5 |  199849.3 |  190913.1 |      36.64 | FALSE |
+
+<br>
+
+### Presentation Examples
+
 <details>
 <summary>
-Table Code
+Click to View Code for Table
 </summary>
 
 ``` r
@@ -121,20 +140,16 @@ gt_1 <- dar_month_2022 |>
   gt::opt_table_font(font = list(gt::google_font(name = "Roboto"))) |> 
   gt::opt_align_table_header(align = "left")
 
-#gt_1 |> gt::gtsave("gt_1.png", expand = 10)
+#gt_1 |> gt::gtsave("gt_1.png", expand = 20)
 ```
 
 </details>
 
-<br>
-
-<img src="gt_1.png" width="100%" />
-
-<br><br>
+<img src="man/figures/gt_1.png" style="width:100.0%" />
 
 <details>
 <summary>
-Table Code
+Click to View Code for Table
 </summary>
 
 ``` r
@@ -193,14 +208,12 @@ gt_2 <- dar_month_2022_gt |>
   gt::tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", locations = gt::cells_column_labels(columns = plot_col)) |> 
   gt::tab_header(title = gt::md("Example **Days in AR Analysis** with the **{forager}** Package"))
 
-# gt_2 |> gt::gtsave("gt_2.png", expand = 20)
+#gt_2 |> gt::gtsave("gt_2.png", expand = 20)
 ```
 
 </details>
 
-<br>
-
-<img src="gt_2.png" width="100%" />
+<img src="man/figures/gt_2.png" style="width:100.0%" />
 
 <br>
 

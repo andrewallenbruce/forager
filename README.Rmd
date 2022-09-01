@@ -61,30 +61,40 @@ devtools::install_github("andrewallenbruce/forager")
 
 ## Days in AR Calculation
 
-This is a basic example of a monthly Days in AR calculation:
+The following is a basic example of a monthly Days in AR calculation:
 
 ```{r example}
 library(forager)
 
 # Example data frame
 dar_mon_ex |> 
-  knitr::kable(
-    digits = 2, 
-    col.names = c(
-      "Month", 
-      "Gross Charges", 
-      "Ending AR Balance"))
+  knitr::kable(col.names = c("Month", "Total Gross Charges", "Ending AR Balance"))
 ```
+
+<br>
+
+Using the `dar_month()` function, we set the Days in AR target (`dart`)
+to 35 and calculate:
+
 <br>
 
 ```{r}
 dar_month_2022 <- dar_month(dar_mon_ex, date, gct, earb, dart = 35)
 ```
+
 <br>
+
+```{r echo=FALSE}
+dar_month_2022 |> dplyr::select(month, gct, earb, earb_trg, dar, pass) |> knitr::kable(col.names = c("Month", "Gross Charges", "Ending AR", "Target AR", "Days in AR", "Pass"))
+```
+
+<br>
+
+### Presentation Examples
 
 <details>
 
-<summary>Table Code</summary>
+<summary>Click to View Code for Table</summary>
 
 ```{r eval=FALSE}
 gt_1 <- dar_month_2022 |> 
@@ -118,22 +128,21 @@ gt_1 <- dar_month_2022 |>
   gt::opt_table_font(font = list(gt::google_font(name = "Roboto"))) |> 
   gt::opt_align_table_header(align = "left")
 
-#gt_1 |> gt::gtsave("gt_1.png", expand = 10)
+#gt_1 |> gt::gtsave("gt_1.png", expand = 20)
 ```
 
 </details>
 
-<br>
 
-```{r echo=FALSE}
-knitr::include_graphics("gt_1.png")
-```
+![](man/figures/gt_1.png){width="100%"}
 
-<br><br>
 
-<details><summary>Table Code</summary>
 
-```{r eval=FALSE}
+<details>
+
+<summary>Click to View Code for Table</summary>
+
+```{r}
 # Create df for gt_plt_bar_stack
 dar_month_2022_pct <- dar_month_2022 |>
   dplyr::mutate(gct_pct = (gct / (gct + earb) * 100),
@@ -189,16 +198,13 @@ gt_2 <- dar_month_2022_gt |>
   gt::tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", locations = gt::cells_column_labels(columns = plot_col)) |> 
   gt::tab_header(title = gt::md("Example **Days in AR Analysis** with the **{forager}** Package"))
 
-# gt_2 |> gt::gtsave("gt_2.png", expand = 20)
+#gt_2 |> gt::gtsave("gt_2.png", expand = 20)
 ```
 
 </details>
 
-<br>
 
-```{r echo=FALSE}
-knitr::include_graphics("gt_2.png")
-```
+![](man/figures/gt_2.png){width="100%"}
 
 <br>
 
