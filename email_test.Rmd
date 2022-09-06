@@ -1,0 +1,185 @@
+---
+title: "email_test"
+author: "Andrew Bruce"
+date: "2022-09-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(forager)
+```
+
+# `forager` Package Demonstration
+
+## Days in AR Calculation
+
+The following is a basic example of a monthly Days in AR calculation:
+
+```{r}
+dar_mon_ex
+```
+
+<br>
+
+
+Using the `dar_month()` function, we set the Days in AR target (`dart`)
+to 35 and calculate:
+
+<br>
+
+```{r}
+dar_month_2022 <- dar_month(dar_mon_ex, date, gct, earb, dart = 35)
+```
+
+```{r echo=FALSE}
+#dar_month_2022
+```
+
+<br><br>
+
+# Report Examples
+
+## {gt} Table #1
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(gt)
+library(gtExtras)
+
+gt_1 <- dar_month_2022 |> 
+  dplyr::select(month, gct, earb, earb_trg, dar, pass) |> 
+  headliner::add_headline_column(x = earb, y = earb_trg, 
+  headline = "{delta_p}% {trend} than Target", 
+  trend_phrases = headliner::trend_terms(more = "HIGHER", less = "Lower"), n_decimal = 0) |> 
+  gt::gt(rowname_col = "month") |> 
+  gt::cols_label(gct = "Gross Charges",
+                 earb = "Ending AR",
+                 earb_trg = "Target AR",
+                 dar = "Days in AR",
+                 pass = "Pass",
+                 headline = "Ending AR Trend") |> 
+  gt::tab_row_group(label = "Q4", rows = c(10:12)) |>
+  gt::tab_row_group(label = "Q3", rows = c(7:9)) |>
+  gt::tab_row_group(label = "Q2", rows = c(4:6)) |>
+  gt::tab_row_group(label = "Q1", rows = c(1:3)) |> 
+  gt::fmt_number(columns = dar) |>
+  gt::fmt_currency(columns = c(gct, earb, earb_trg)) |>
+  gt::tab_style(style = gt::cell_text(font = c(gt::google_font(name = "IBM Plex Mono"),
+  gt::default_fonts())), locations = gt::cells_body(columns = c(gct, earb, earb_trg, dar))) |> 
+  gt::opt_stylize(style = 6, color = "cyan") |> 
+  gt::tab_header(
+    title = gt::md("Example **Days in AR Analysis** with the **{forager}** Package"), 
+    subtitle = gt::md("**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest <br> month-to-month increase in AR & highest percentage over the AR Target *(46%)*.")) |> 
+  gt::opt_all_caps() |> 
+  gt::grand_summary_rows(
+    columns = c(gct, earb, earb_trg, dar),
+    fns = list(Mean = ~mean(., na.rm = TRUE), Median = ~median(., na.rm = TRUE))) |> 
+  gt::opt_table_font(font = list(gt::google_font(name = "Roboto"))) |> 
+  gt::opt_align_table_header(align = "left") |> 
+  gt::as_raw_html(inline_css = TRUE)
+```
+
+```{r echo=FALSE}
+gt_1
+```
+
+<br><br>
+
+## {gt} Table #2
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+# Create df for gt_plt_bar_stack
+dar_month_2022_pct <- dar_month_2022 |>
+  dplyr::mutate(gct_pct = (gct / (gct + earb) * 100),
+         earb_pct = (earb / (gct + earb) * 100)) |>
+  dplyr::select(month, gct_pct, earb_pct) |>
+  tidyr::pivot_longer(-month, names_to = "measure", values_to = "percentage") |>
+  dplyr::group_by(month) |>
+  dplyr::summarize(list_data = list(percentage))
+
+# Right join the two data frames
+dar_month_2022_join <- dplyr::right_join(dar_month_2022, 
+                                         dar_month_2022_pct, 
+                                         by = "month")
+
+# Create new copy cols for gt_plt_bullet
+dar_month_2022_gt <- dar_month_2022_join |> 
+  dplyr::select(month, 
+                gct, 
+                earb, 
+                earb_trg, 
+                dar, 
+                pass,
+                list_data) |>
+  dplyr::mutate(target_col = earb, 
+                plot_col = earb_trg)
+
+# Create gt table
+gt_2 <- dar_month_2022_gt |> 
+  gt::gt(rowname_col = "month") |>
+  gt::cols_label(
+    #month = "Month",
+                 gct = "Gross Charges",
+                 earb = "Ending AR",
+                 earb_trg = "Optimal AR",
+                 dar = "Days in AR",
+                 pass = "Pass",
+                 plot_col = "Optimal AR Threshold") |>
+  gt::tab_row_group(label = "Q4", rows = c(10:12)) |>
+  gt::tab_row_group(label = "Q3", rows = c(7:9)) |>
+  gt::tab_row_group(label = "Q2", rows = c(4:6)) |>
+  gt::tab_row_group(label = "Q1", rows = c(1:3)) |> 
+  #gt::tab_options(row_group.as_column = TRUE) |> 
+  gtExtras::gt_theme_espn() |> 
+  gt::fmt_number(columns = dar) |>
+  gt::fmt_currency(columns = c(gct, earb, earb_trg)) |>
+  #gtExtras::gt_plt_dot(dar, month, palette = c("#2c3e50", "#8ca0aa")) |> 
+  gtExtras::gt_plt_bullet(column = plot_col, target = target_col, palette = c("#8ca0aa", "black"), width = 65) |>
+  gtExtras::gt_plt_bar_stack(list_data, width = 50, labels = c("Charges (%) ", " AR (%)"), palette = c("#2c3e50", "#8ca0aa")) |>
+  gtExtras::gt_badge(pass, palette = c("FALSE" = "#8ca0aa")) |> 
+  gt::tab_style(style = gt::cell_text(color = "#2c3e50", weight = "bolder"), locations = gt::cells_body(columns = pass, rows = pass == "FALSE")) |>
+  gt::tab_style(style = gt::cell_text(color = "#8ca0aa", weight = "normal"), locations = gt::cells_body(columns = pass, rows = pass == "TRUE")) |> 
+  gt::data_color(columns = c(gct, earb, dar), colors = scales::col_numeric(palette = c("#2c3e50", "#8ca0aa") |> as.character(), domain = NULL)) |> 
+  gt::tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", locations = gt::cells_column_labels(columns = plot_col)) |> 
+  gt::tab_header(title = gt::md("Example **Days in AR Analysis** with the **{forager}** Package")) |> 
+  gt::as_raw_html(inline_css = TRUE)
+```
+
+```{r echo=FALSE}
+gt_2
+```
+
+<br><br>
+
+## {GGally} Parallel Coordinates Comparison
+
+```{r message=FALSE, warning=FALSE}
+library(GGally)
+library(hrbrthemes)
+
+gg_1 <- dar_month_2022 |> 
+  dplyr::select(earb, 
+                earb_trg, 
+                gct, 
+                dar,
+                pass) |> 
+  ggparcoord(columns = 1:4, 
+             scale = "uniminmax",
+             #scale = "globalminmax",
+             groupColumn = "pass") + 
+  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
+  ggplot2::xlab("") +
+  ggplot2::ylab("") +
+  ggplot2::coord_flip() +
+  ggplot2::facet_wrap("pass") +
+  ggplot2::theme(legend.position = "none") +
+  hrbrthemes::theme_ipsum_rc()
+```
+
+```{r echo=FALSE, fig.cap="Mercury Vapour", out.width="75%", fig.class="center", dpi=300}
+gg_1
+```
+
+<br><br>
+
+

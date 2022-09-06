@@ -1,4 +1,4 @@
-#' Calculate Monthly Days in AR
+#' Calculate Quarterly Days in AR
 #'
 #' @param df data frame containing at least three columns:
 #' a date column, a gross charges column and an ending AR column
@@ -31,74 +31,67 @@
 #' 182771.32, 169633.64, 179347.72,
 #' 178051.11, 162757.49, 199849.32))
 #'
-#'dar_month(dar_mon_ex, date, gct, earb, dart = 40)
+#'dar_qtr(dar_mon_ex, date, gct, earb, dart = 40)
 
-dar_month <- function(df,
-                      date = date,
-                      gct = gct,
-                      earb = earb,
-                      dart = 35) {
+dar_qtr <- function(df, date = date, gct = gct, earb = earb, dart = 35) {
 
   stopifnot(inherits(df, "data.frame"))
 
-  results <- dplyr::mutate(df,
+  base <- dplyr::mutate(df,
+                        date = as.Date({{ date }}, "%yyyy-%mm-%dd", tz = "EST"),
+                        nmon = lubridate::month({{ date }}, label = FALSE),
+                        nqtr = lubridate::quarter({{ date }}),
+                        ndip = lubridate::days_in_month({{ date }}))
 
-    date = as.Date({{ date }},
-                   "%yyyy-%mm-%dd",
-                   tz = "EST"),
+  earb_sub <- base |>
+    dplyr::filter(nmon == 3 |
+                    nmon == 6 |
+                    nmon == 9 |
+                    nmon == 12) |>
+    dplyr::select(nqtr, date, {{ earb }})
 
-    nmon = lubridate::month(date,
-                            label = FALSE),
+  gct_sub <- base |>
+    dplyr::group_by(nqtr) |>
+    dplyr::summarise(gct_qtr = janitor::round_half_up(sum({{ gct }}), digits = 2),
+                     ndip = sum(ndip), .groups = "drop")
 
-    month = lubridate::month(date,
-                             label = TRUE,
-                             abbr = FALSE),
+  results <- merge(earb_sub, gct_sub)
 
-    # Number of Days in Period
-    ndip = lubridate::days_in_month(date),
+  results <- results |> dplyr::mutate(
 
     # Average Daily Charge
-    adc = janitor::round_half_up({{ gct }} / ndip,
-                                 digits = 2),
+    adc = janitor::round_half_up(gct_qtr / ndip, digits = 2),
 
     # Days in Accounts Receivable
-    dar = janitor::round_half_up({{ earb }} / adc,
-                                 digits = 2),
+    dar = janitor::round_half_up({{ earb }} / adc, digits = 2),
 
     # Ratio of Ending AR to Gross Charges
-    actual = janitor::round_half_up({{ earb }} / {{ gct }},
-                                    digits = 2),
+    actual = janitor::round_half_up({{ earb }} / gct_qtr, digits = 2),
 
     # Ideal Ratio of Ending AR to Gross Charges
-    ideal = janitor::round_half_up({{ dart }} / ndip,
-                                   digits = 2),
+    ideal = janitor::round_half_up({{ dart }} / ndip, digits = 2),
 
     # Actual - Ideal Ratio
-    radiff = janitor::round_half_up(actual - ideal,
-                                    digits = 2),
+    radiff = janitor::round_half_up(actual - ideal, digits = 2),
 
     # Ending AR Target
-    earb_trg = janitor::round_half_up(({{ gct }} * {{ dart }} / ndip),
+    earb_trg = janitor::round_half_up((gct_qtr * {{ dart }} / ndip),
                                       digits = 2),
 
     # Ending AR Decrease Needed
-    earb_dc = janitor::round_half_up({{ earb }} - earb_trg,
-                                     digits = 2),
+    earb_dc = janitor::round_half_up({{ earb }} - earb_trg, digits = 2),
 
     # Ending AR Percentage Decrease Needed
-    earb_pct = janitor::round_half_up(((
-      earb_dc / {{ earb }}) * 100), digits = 2),
+    earb_pct = janitor::round_half_up(((earb_dc / {{ earb }}) * 100), digits = 2),
 
     # Boolean indicating whether DAR was under/over DARt
-    pass = dplyr::case_when(dar < {{ dart }} ~ TRUE,
-                            TRUE ~ FALSE)) |>
+    pass = dplyr::case_when(dar < {{ dart }} ~ TRUE, TRUE ~ FALSE)) |>
 
     # Reorder columns
     dplyr::select(date,
-                  month,
-                  nmon,
+                  nqtr,
                   ndip,
-                  gct,
+                  gct_qtr,
                   earb,
                   earb_trg,
                   earb_dc,
@@ -111,5 +104,4 @@ dar_month <- function(df,
                   radiff)
 
   return(results)
-
 }

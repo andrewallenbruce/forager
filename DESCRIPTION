@@ -1,9 +1,9 @@
 Package: forager
-Title: Common Healthcare Revenue Cycle KPIs & Calculations
+Title: Healthcare Revenue Cycle Analysis Suite
 Version: 0.0.0.9001
 Authors@R: 
     person("Andrew", "Bruce", , "andrewbruce.himni@gmail.com", role = c("aut", "cre"))
-Description: The goal of forager is to provide tools for common healthcare revenue cycle management processes and analyses.
+Description: The goal of forager is to provide a suite of analytic tools for healthcare revenue cycle management.
 License: MIT + file LICENSE
 URL: https://github.com/andrewallenbruce/forager,
     https://andrewallenbruce.github.io/forager/
@@ -18,6 +18,7 @@ Suggests:
     tidyr,
     gt,
     gtExtras,
+    GGally,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8

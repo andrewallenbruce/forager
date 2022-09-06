@@ -44,13 +44,108 @@ You can install the development version of forager from
 devtools::install_github("andrewallenbruce/forager")
 ```
 
-## Days in AR Calculation
+## Aging Calculation
+
+``` r
+library(forager)
+```
+
+<br>
+
+``` r
+date_ex <- tibble::tibble(
+  dos = as.POSIXct(
+    c(
+      "2022-02-10", "2022-02-09", "2022-02-08", "2022-02-08", "2022-02-07",
+      "2022-02-07", "2022-02-05", "2022-02-05", "2022-02-02", "2022-02-02",
+      "2022-02-02", "2022-02-01", "2022-02-01", "2022-02-01", "2022-01-31",
+      "2022-01-30", "2022-01-30", "2022-01-29", "2022-01-29", "2022-01-28",
+      "2022-01-28", "2022-01-28", "2022-01-21", "2022-01-21", "2022-01-20",
+      "2022-01-20", "2022-01-20", "2022-01-08", "2022-01-07", "2021-12-31",
+      "2021-12-31", "2021-12-31", "2021-12-31", "2021-12-31", "2021-12-27",
+      "2021-12-27", "2021-12-26", "2021-12-26", "2021-12-25", "2021-12-25",
+      "2021-12-25", "2021-12-25", "2021-12-25", "2021-12-25", "2021-12-19",
+      "2021-12-18", "2021-12-08", "2021-11-27", "2021-11-20", "2021-11-20",
+      "2021-11-19", "2021-11-19"
+    ),
+    tz = "UTC"
+  ),
+  dor = as.POSIXct(
+    c(
+      "2022-02-28", "2022-02-10", "2022-02-10", "2022-02-10", "2022-02-10",
+      "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01",
+      "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01", "2021-01-21",
+      "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-18",
+      "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-21", "2022-01-18",
+      "2021-12-28", "2022-01-18", "2022-01-21", "2022-01-18", "2022-01-18",
+      "2022-02-01", "2022-02-01", "2021-12-11", "2022-01-31", "2022-01-31",
+      "2022-01-31", "2022-01-28", "2022-01-28", "2022-01-28", "2022-01-28",
+      "2022-01-28", "2022-01-28", "2022-01-31", "2022-01-31", "2022-01-31",
+      "2022-01-31", "2022-01-31", "2022-01-31", "2022-01-31", "2022-01-31",
+      "2022-01-31", "2022-01-31"
+    ),
+    tz = "UTC"
+  ),
+)
+```
+
+<br> Calculate the number of days between the Date of Service (DOS) and
+today’s date: <br>
+
+``` r
+date_ex |> 
+  dplyr::select(dos) |> 
+  dplyr::mutate(today = lubridate::today()) |> 
+  forager::age_days(dos, today) |> 
+  dplyr::arrange(desc(age))
+#> # A tibble: 52 × 3
+#>    dos                 today        age
+#>    <dttm>              <date>     <dbl>
+#>  1 2021-11-19 00:00:00 2022-09-05   292
+#>  2 2021-11-19 00:00:00 2022-09-05   292
+#>  3 2021-11-20 00:00:00 2022-09-05   291
+#>  4 2021-11-20 00:00:00 2022-09-05   291
+#>  5 2021-11-27 00:00:00 2022-09-05   284
+#>  6 2021-12-08 00:00:00 2022-09-05   273
+#>  7 2021-12-18 00:00:00 2022-09-05   263
+#>  8 2021-12-19 00:00:00 2022-09-05   262
+#>  9 2021-12-25 00:00:00 2022-09-05   256
+#> 10 2021-12-25 00:00:00 2022-09-05   256
+#> # … with 42 more rows
+```
+
+<br> Calculate the number of days between the Date of Service (DOS) and
+the Date of Release (DOR): <br>
+
+``` r
+date_ex |> 
+  dplyr::select(dos, dor) |>
+  dplyr::filter(!is.na(dor)) |> 
+  forager::age_days(dos, dor) |> 
+  dplyr::arrange(desc(age))
+#> # A tibble: 52 × 3
+#>    dos                 dor                   age
+#>    <dttm>              <dttm>              <dbl>
+#>  1 2021-11-19 00:00:00 2022-01-31 00:00:00    74
+#>  2 2021-11-19 00:00:00 2022-01-31 00:00:00    74
+#>  3 2021-11-20 00:00:00 2022-01-31 00:00:00    73
+#>  4 2021-11-20 00:00:00 2022-01-31 00:00:00    73
+#>  5 2021-11-27 00:00:00 2022-01-31 00:00:00    66
+#>  6 2021-12-08 00:00:00 2022-01-31 00:00:00    55
+#>  7 2021-12-18 00:00:00 2022-01-31 00:00:00    45
+#>  8 2021-12-19 00:00:00 2022-01-31 00:00:00    44
+#>  9 2021-12-25 00:00:00 2022-01-31 00:00:00    38
+#> 10 2021-12-25 00:00:00 2022-01-31 00:00:00    38
+#> # … with 42 more rows
+```
+
+<br><br>
+
+## Days in AR Monthly Calculation
 
 The following is a basic example of a monthly Days in AR calculation:
 
 ``` r
-library(forager)
-
 # Example data frame
 dar_mon_ex |> 
   knitr::kable(col.names = c("Month", "Total Gross Charges", "Ending AR Balance"))
@@ -79,7 +174,7 @@ to 35 and calculate:
 <br>
 
 ``` r
-dar_month_2022 <- dar_month(dar_mon_ex, date, gct, earb, dart = 35)
+dar_month_2022 <- dar_mon_ex |> forager::dar_month(date, gct, earb, 35)
 ```
 
 <br>
@@ -145,7 +240,7 @@ gt_1 <- dar_month_2022 |>
 
 </details>
 
-<img src="man/figures/gt_1.png" style="width:100.0%" />
+<img src="man/figures/gt_1.png" style="width:75.0%" />
 
 <details>
 <summary>
@@ -213,9 +308,74 @@ gt_2 <- dar_month_2022_gt |>
 
 </details>
 
-<img src="man/figures/gt_2.png" style="width:100.0%" />
+<img src="man/figures/gt_2.png" style="width:75.0%" />
 
 <br>
+
+``` r
+library(GGally)
+#> Loading required package: ggplot2
+#> Registered S3 method overwritten by 'GGally':
+#>   method from   
+#>   +.gg   ggplot2
+dar_month_2022 |> 
+  dplyr::select(earb, 
+                earb_trg, 
+                gct, 
+                dar,
+                pass) |> 
+  ggparcoord(columns = 1:4, 
+             scale = "uniminmax",
+             #scale = "globalminmax",
+             groupColumn = "pass") + 
+  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
+  ggplot2::xlab("") +
+  ggplot2::ylab("") +
+  ggplot2::coord_flip() +
+  ggplot2::facet_wrap("pass") +
+  ggplot2::theme(legend.position = "none")
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+
+## Days in AR Quarterly Calculation
+
+``` r
+dar_quarter_2022 <- dar_mon_ex |> forager::dar_qtr(date, gct, earb, 35)
+```
+
+<br>
+
+| Quarter | Gross Charges | Ending AR | Target AR | Days in AR | Pass  |
+|--------:|--------------:|----------:|----------:|-----------:|:------|
+|       1 |      822368.9 |  253976.6 |  319810.1 |      27.80 | TRUE  |
+|       2 |      441141.3 |  203460.5 |  169669.7 |      41.97 | FALSE |
+|       3 |      457844.1 |  179347.7 |  174179.8 |      36.04 | FALSE |
+|       4 |      484304.6 |  199849.3 |  184246.3 |      37.96 | FALSE |
+
+<br>
+
+``` r
+library(GGally)
+dar_quarter_2022 |> 
+  dplyr::select(earb, 
+                earb_trg, 
+                gct_qtr, 
+                dar,
+                pass) |> 
+  ggparcoord(columns = 1:4, 
+             scale = "uniminmax",
+             #scale = "globalminmax",
+             groupColumn = "pass") + 
+  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
+  ggplot2::xlab("") +
+  ggplot2::ylab("") +
+  ggplot2::coord_flip() +
+  ggplot2::facet_wrap("pass") +
+  ggplot2::theme(legend.position = "none")
+```
+
+<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
 
 ## Code of Conduct
 
