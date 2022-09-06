@@ -113,33 +113,52 @@ Days in AR is to be calculated</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">dar_month</span><span class="op">(</span><span class="va">dar_mon_ex</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">39.445</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          date      gct     earb nmon     month ndip      adc   dar actual ideal</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2022-01-01 325982.0 288432.5    1   January   31 10515.55 27.43   0.88  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2022-02-01 297731.7 307871.1    2  February   28 10633.28 28.95   1.03  1.41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2022-03-01 198655.1 253976.6    3     March   31  6408.23 39.63   1.28  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2022-04-01 186047.0 183684.9    4     April   30  6201.57 29.62   0.99  1.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2022-05-01 123654.0 204227.6    5       May   31  3988.84 51.20   1.65  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2022-06-01 131440.3 203460.5    6      June   30  4381.34 46.44   1.55  1.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2022-07-01 153991.0 182771.3    7      July   31  4967.45 36.79   1.19  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2022-08-01 156975.0 169633.6    8    August   31  5063.71 33.50   1.08  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2022-09-01 146878.1 179347.7    9 September   30  4895.94 36.63   1.22  1.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2022-10-01 163799.4 178051.1   10   October   31  5283.85 33.70   1.09  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2022-11-01 151410.7 162757.5   11  November   30  5047.02 32.25   1.07  1.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2022-12-01 169094.5 199849.3   12  December   31  5454.66 36.64   1.18  1.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    radiff earb_trg    earb_dc earb_dcpct  pass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   -0.39 414785.8 -126353.29      -0.44  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   -0.38 419429.6 -111558.51      -0.36  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    0.01 252772.6    1203.91       0.00 FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   -0.32 244620.8  -60935.90      -0.33  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    0.38 157339.7   46887.85       0.23 FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    0.24 172822.1   30638.41       0.15 FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   -0.08 195941.1  -13169.81      -0.07  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   -0.19 199738.0  -30104.39      -0.18  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   -0.09 193120.2  -13772.53      -0.08  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  -0.18 208421.6  -30370.47      -0.17  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  -0.24 199079.9  -36322.40      -0.22  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  -0.09 215159.1  -15309.76      -0.08  TRUE</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dar_mon_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="st">"2022-01-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-03-01"</span>,</span></span>
+<span class="r-in"><span><span class="st">"2022-04-01"</span>, <span class="st">"2022-05-01"</span>, <span class="st">"2022-06-01"</span>,</span></span>
+<span class="r-in"><span><span class="st">"2022-07-01"</span>, <span class="st">"2022-08-01"</span>, <span class="st">"2022-09-01"</span>,</span></span>
+<span class="r-in"><span><span class="st">"2022-10-01"</span>, <span class="st">"2022-11-01"</span>, <span class="st">"2022-12-01"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fl">325982.23</span>, <span class="fl">297731.74</span>, <span class="fl">198655.14</span>,</span></span>
+<span class="r-in"><span><span class="fl">186047.56</span>, <span class="fl">123654.34</span>, <span class="fl">131440.28</span>,</span></span>
+<span class="r-in"><span><span class="fl">153991.95</span>, <span class="fl">156975.52</span>, <span class="fl">146878.12</span>,</span></span>
+<span class="r-in"><span><span class="fl">163799.44</span>, <span class="fl">151410.74</span>, <span class="fl">169094.46</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fl">288432.52</span>, <span class="fl">307871.08</span>, <span class="fl">253976.56</span>,</span></span>
+<span class="r-in"><span><span class="fl">183684.92</span>, <span class="fl">204227.59</span>, <span class="fl">203460.47</span>,</span></span>
+<span class="r-in"><span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span>,</span></span>
+<span class="r-in"><span><span class="fl">178051.11</span>, <span class="fl">162757.49</span>, <span class="fl">199849.32</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dar_month</span><span class="op">(</span><span class="va">dar_mon_ex</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          date     month nmon ndip      gct     earb earb_trg    earb_dc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  2022-01-01   January    1   31 325982.2 288432.5 420622.2 -132189.71</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2022-02-01  February    2   28 297731.7 307871.1 425331.1 -117459.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2022-03-01     March    3   31 198655.1 253976.6 256329.2   -2352.65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  2022-04-01     April    4   30 186047.6 183684.9 248063.4  -64378.49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  2022-05-01       May    5   31 123654.3 204227.6 159554.0   44673.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  2022-06-01      June    6   30 131440.3 203460.5 175253.7   28206.76</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  2022-07-01      July    7   31 153992.0 182771.3 198699.3  -15927.97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  2022-08-01    August    8   31 156975.5 169633.6 202549.1  -32915.42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  2022-09-01 September    9   30 146878.1 179347.7 195837.5  -16489.77</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 2022-10-01   October   10   31 163799.4 178051.1 211354.1  -33303.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 2022-11-01  November   11   30 151410.7 162757.5 201881.0  -39123.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 2022-12-01  December   12   31 169094.5 199849.3 218186.4  -18337.08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    earb_pct      adc   dar  pass actual ideal radiff</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    -45.83 10515.56 27.43  TRUE   0.88  1.29  -0.41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    -38.15 10633.28 28.95  TRUE   1.03  1.43  -0.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     -0.93  6408.23 39.63  TRUE   1.28  1.29  -0.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    -35.05  6201.59 29.62  TRUE   0.99  1.33  -0.34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     21.87  3988.85 51.20 FALSE   1.65  1.29   0.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     13.86  4381.34 46.44 FALSE   1.55  1.33   0.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     -8.71  4967.48 36.79  TRUE   1.19  1.29  -0.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    -19.40  5063.73 33.50  TRUE   1.08  1.29  -0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     -9.19  4895.94 36.63  TRUE   1.22  1.33  -0.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   -18.70  5283.85 33.70  TRUE   1.09  1.29  -0.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   -24.04  5047.02 32.25  TRUE   1.07  1.33  -0.26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    -9.18  5454.66 36.64  TRUE   1.18  1.29  -0.11</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
