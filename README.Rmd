@@ -135,8 +135,29 @@ The following is a basic example of a monthly Days in AR calculation:
 
 ```{r}
 # Example data frame
+dar_mon_ex <- data.frame(
+date = as.Date(c(
+"2022-01-01", "2022-02-01", "2022-03-01",
+"2022-04-01", "2022-05-01", "2022-06-01",
+"2022-07-01", "2022-08-01", "2022-09-01",
+"2022-10-01", "2022-11-01", "2022-12-01")),
+
+gct = c(
+325982.23, 297731.74, 198655.14,
+186047.56, 123654.34, 131440.28,
+153991.95, 156975.52, 146878.12,
+163799.44, 151410.74, 169094.46),
+
+earb = c(
+288432.52, 307871.08, 253976.56,
+183684.92, 204227.59, 203460.47,
+182771.32, 169633.64, 179347.72,
+178051.11, 162757.49, 199849.32))
+
 dar_mon_ex |> 
-  knitr::kable(col.names = c("Month", "Total Gross Charges", "Ending AR Balance"))
+  knitr::kable(col.names = c("Month", 
+                             "Gross Charges", 
+                             "Ending AR Balance"))
 ```
 
 <br>
@@ -155,8 +176,18 @@ dar_month_2022 <- dar_mon_ex |> forager::dar_month(date, gct, earb, 35)
 
 ```{r echo=FALSE}
 dar_month_2022 |> 
-  dplyr::select(month, gct, earb, earb_trg, dar, pass) |> 
-  knitr::kable(col.names = c("Month", "Gross Charges", "Ending AR", "Target AR", "Days in AR", "Pass"))
+  dplyr::select(month, 
+                gct, 
+                earb, 
+                earb_trg, 
+                dar, 
+                pass) |> 
+  knitr::kable(col.names = c("Month", 
+                             "Gross Charges", 
+                             "Ending AR", 
+                             "Target AR", 
+                             "Days in AR", 
+                             "Pass"))
 ```
 
 <br>
@@ -212,6 +243,10 @@ gt_1 <- dar_month_2022 |>
 <details>
 
 <summary>Click to View Code for Table</summary>
+
+```{r}
+dar_month_2022
+```
 
 ```{r}
 # Create df for gt_plt_bar_stack
@@ -282,10 +317,10 @@ gt_2 <- dar_month_2022_gt |>
 ```{r}
 library(GGally)
 dar_month_2022 |> 
-  dplyr::select(earb, 
-                earb_trg, 
-                gct, 
-                dar,
+  dplyr::select("Ending AR" = earb, 
+                "AR Target" = earb_trg, 
+                "Gross Charges" = gct, 
+                "Days in AR" = dar,
                 pass) |> 
   ggparcoord(columns = 1:4, 
              scale = "uniminmax",
@@ -296,8 +331,177 @@ dar_month_2022 |>
   ggplot2::ylab("") +
   ggplot2::coord_flip() +
   ggplot2::facet_wrap("pass") +
+  ggthemes::theme_pander() +
   ggplot2::theme(legend.position = "none")
 ```
+
+```{r}
+ndip_31 <- dar_month_2022 |> dplyr::select(ndip, ideal) |> dplyr::filter(ndip == 31)
+ndip_31 <- ndip_31$ideal[[1]]
+```
+
+
+```{r}
+darmon2 <- dar_month_2022 |> dplyr::mutate(trg_abline = earb_trg / earb)
+
+trg_month <- darmon2 |> dplyr::select(month, trg_abline)
+
+jan <- trg_month$trg_abline[[1]]
+feb <- trg_month$trg_abline[[2]]
+mar <- trg_month$trg_abline[[3]]
+apr <- trg_month$trg_abline[[4]]
+may <- trg_month$trg_abline[[5]]
+jun <- trg_month$trg_abline[[6]]
+jul <- trg_month$trg_abline[[7]]
+aug <- trg_month$trg_abline[[8]]
+sep <- trg_month$trg_abline[[9]]
+oct <- trg_month$trg_abline[[10]]
+nov <- trg_month$trg_abline[[11]]
+dec <- trg_month$trg_abline[[12]]
+
+options(scipen = 999)
+library(ggplot2)
+library(geomtextpath)
+ggplot(data = darmon2) + 
+  geomtextpath::geom_labelabline(
+    slope = jan, 
+    intercept = 0, 
+    label = "Jan", 
+    linetype = 2, 
+    colour = "#00BFC4", 
+    fill = "#00BFC4", 
+    boxcolour = "white", 
+    textcolour = "white", 
+    hjust = 0.9, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = feb, 
+    intercept = 0, 
+    label = "Feb", 
+    linetype = 2, 
+    colour = "#00BFC4", 
+    fill = "#00BFC4", 
+    boxcolour = "white", 
+    textcolour = "white", 
+    hjust = 0.825, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = mar, 
+    intercept = 0, 
+    label = "Mar", 
+    linetype = 3,
+    colour = "red", 
+    fill = "red",
+    boxcolour = "white", 
+    textcolour = "white",
+    hjust = 0.5, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = apr, 
+    intercept = 0, 
+    label = "Apr", 
+    linetype = 2, 
+    colour = "#00BFC4", 
+    fill = "#00BFC4", 
+    boxcolour = "white", 
+    textcolour = "white", 
+    hjust = 0.7, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = may, 
+    intercept = 0, 
+    label = "May", 
+    linetype = 3,
+    colour = "red", 
+    fill = "red",
+    boxcolour = "white", 
+    textcolour = "white",
+    hjust = 0.5, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = jun, 
+    intercept = 0, 
+    label = "Jun", 
+    linetype = 3,
+    colour = "red", 
+    fill = "red",
+    boxcolour = "white", 
+    textcolour = "white",
+    hjust = 0.5, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = jul, 
+    intercept = 0, 
+    label = "Jul", 
+    linetype = 3,
+    colour = "red", 
+    fill = "red",
+    boxcolour = "white", 
+    textcolour = "white",
+    hjust = 0.5, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = aug, 
+    intercept = 0, 
+    label = "Aug", 
+    linetype = 2, 
+    colour = "#00BFC4", 
+    fill = "#00BFC4", 
+    boxcolour = "white", 
+    textcolour = "white", 
+    hjust = 0.7, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = sep, 
+    intercept = 0, 
+    label = "Sept", 
+    linetype = 3,
+    colour = "red", 
+    fill = "red",
+    boxcolour = "white", 
+    textcolour = "white",
+    hjust = 0.7, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = oct, 
+    intercept = 0, 
+    label = "Oct", 
+    linetype = 2, 
+    colour = "#00BFC4", 
+    fill = "#00BFC4", 
+    boxcolour = "white", 
+    textcolour = "white", 
+    hjust = 0.7, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = nov, 
+    intercept = 0, 
+    label = "Nov", 
+    linetype = 2, 
+    colour = "#00BFC4", 
+    fill = "#00BFC4", 
+    boxcolour = "white", 
+    textcolour = "white", 
+    hjust = 0.7, 
+    vjust = 0.5) +
+  geomtextpath::geom_labelabline(
+    slope = dec, 
+    intercept = 0, 
+    label = "Dec", 
+    linetype = 3,
+    colour = "red", 
+    fill = "red",
+    boxcolour = "white", 
+    textcolour = "white",
+    hjust = 0.5, 
+    vjust = 0.5) +
+  geom_point(mapping = aes(x = earb_trg, y = earb, color = pass), size = 3) +
+  ggrepel::geom_text_repel(aes(x = earb_trg, y = earb, label = month), force = 3) +
+  xlab("Ending AR Target") +
+  ylab("Ending AR Balance") +
+  ggthemes::theme_pander()
+```
+
 
 ## Days in AR Quarterly Calculation
 
@@ -314,13 +518,88 @@ dar_quarter_2022 |>
 ```
 <br>
 
+<details>
+
+<summary>Click to View Code for Table</summary>
+
+```{r}
+dar_quarter_2022
+```
+
+
+```{r}
+# Create df for gt_plt_bar_stack
+dar_qtr_2022_pct <- dar_quarter_2022 |>
+  dplyr::mutate(gct_pct = (gct_qtr / (gct_qtr + earb) * 100),
+                earb_pct = (earb / (gct_qtr + earb) * 100)) |>
+  dplyr::select(nqtr, gct_pct, earb_pct) |>
+  tidyr::pivot_longer(-nqtr, 
+                      names_to = "measure", 
+                      values_to = "percentage") |>
+  dplyr::group_by(nqtr) |>
+  dplyr::summarize(list_data = list(percentage))
+
+# Right join the two data frames
+dar_qtr_2022_join <- dplyr::right_join(
+  dar_quarter_2022, 
+  dar_qtr_2022_pct, 
+  by = "nqtr")
+
+# Create new copy cols for gt_plt_bullet
+dar_qtr_2022_gt <- dar_qtr_2022_join |> 
+  dplyr::select(nqtr, 
+                gct_qtr, 
+                earb, 
+                earb_trg, 
+                dar, 
+                pass,
+                list_data) |>
+  dplyr::mutate(target_col = earb, 
+                plot_col = earb_trg)
+
+# Create gt table
+gt_qtr_2 <- dar_qtr_2022_gt |> 
+  gt::gt(rowname_col = "nqtr") |>
+  gt::cols_label(
+    #month = "Month",
+                 gct_qtr = "Gross Charges",
+                 earb = "Ending AR",
+                 earb_trg = "Optimal AR",
+                 dar = "Days in AR",
+                 pass = "Pass",
+                 plot_col = "Optimal AR Threshold") |>
+  # gt::tab_row_group(label = "Q4", rows = c(10:12)) |>
+  # gt::tab_row_group(label = "Q3", rows = c(7:9)) |>
+  # gt::tab_row_group(label = "Q2", rows = c(4:6)) |>
+  # gt::tab_row_group(label = "Q1", rows = c(1:3)) |> 
+  #gt::tab_options(row_group.as_column = TRUE) |> 
+  gtExtras::gt_theme_espn() |> 
+  gt::fmt_number(columns = dar) |>
+  gt::fmt_currency(columns = c(gct_qtr, earb, earb_trg)) |>
+  #gtExtras::gt_plt_dot(dar, month, palette = c("#2c3e50", "#8ca0aa")) |> 
+  gtExtras::gt_plt_bullet(column = plot_col, target = target_col, palette = c("#8ca0aa", "black"), width = 65) |>
+  gtExtras::gt_plt_bar_stack(list_data, width = 50, labels = c("Charges (%) ", " AR (%)"), palette = c("#2c3e50", "#8ca0aa")) |>
+  gtExtras::gt_badge(pass, palette = c("FALSE" = "#8ca0aa")) |> 
+  gt::tab_style(style = gt::cell_text(color = "#2c3e50", weight = "bolder"), locations = gt::cells_body(columns = pass, rows = pass == "FALSE")) |>
+  gt::tab_style(style = gt::cell_text(color = "#8ca0aa", weight = "normal"), locations = gt::cells_body(columns = pass, rows = pass == "TRUE")) |> 
+  gt::data_color(columns = c(gct_qtr, earb, dar), colors = scales::col_numeric(palette = c("#2c3e50", "#8ca0aa") |> as.character(), domain = NULL)) |> 
+  gt::tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", locations = gt::cells_column_labels(columns = plot_col)) |> 
+  gt::tab_header(title = gt::md("Example **Days in AR Analysis** with the **{forager}** Package"))
+
+#gt_qtr_2 |> gt::gtsave("gt_qtr_2.png", expand = 20)
+```
+
+</details>
+
+![](man/figures/gt_qtr_2.png){width="75%"}
+
 ```{r}
 library(GGally)
 dar_quarter_2022 |> 
-  dplyr::select(earb, 
-                earb_trg, 
-                gct_qtr, 
-                dar,
+  dplyr::select("Ending AR" = earb, 
+                "AR Target" = earb_trg, 
+                "Gross Charges" = gct_qtr, 
+                "Days in AR" = dar,
                 pass) |> 
   ggparcoord(columns = 1:4, 
              scale = "uniminmax",
@@ -331,6 +610,7 @@ dar_quarter_2022 |>
   ggplot2::ylab("") +
   ggplot2::coord_flip() +
   ggplot2::facet_wrap("pass") +
+  ggthemes::theme_pander() +
   ggplot2::theme(legend.position = "none")
 ```
 
