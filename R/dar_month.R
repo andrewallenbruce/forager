@@ -10,7 +10,7 @@
 #'
 #' @return data frame
 #' @export
-#'
+#' @autoglobal
 #' @examples
 #' dar_mon_ex <- data.frame(
 #' date = as.Date(c(
@@ -33,67 +33,24 @@
 #'
 #'dar_month(dar_mon_ex, date, gct, earb, dart = 40)
 
-dar_month <- function(df,
-                      date = date,
-                      gct = gct,
-                      earb = earb,
-                      dart = 35) {
+dar_month <- function(df, date, gct, earb, dart = 35) {
 
-  stopifnot(inherits(df, "data.frame"))
-
-  results <- dplyr::mutate(df,
-
-    date = as.Date({{ date }},
-                   "%yyyy-%mm-%dd",
-                   tz = "EST"),
-
-    nmon = lubridate::month(date,
-                            label = FALSE),
-
-    month = lubridate::month(date,
-                             label = TRUE,
-                             abbr = FALSE),
-
-    # Number of Days in Period
+  results <- df |> dplyr::mutate(
+    date = clock::as_date({{ date }}),
+    nmon = lubridate::month(date, label = FALSE),
+    month = lubridate::month(date, label = TRUE, abbr = FALSE),
     ndip = lubridate::days_in_month(date),
-
-    # Average Daily Charge
-    adc = janitor::round_half_up({{ gct }} / ndip,
-                                 digits = 2),
-
-    # Days in Accounts Receivable
-    dar = janitor::round_half_up({{ earb }} / adc,
-                                 digits = 2),
-
-    # Ratio of Ending AR to Gross Charges
-    actual = janitor::round_half_up({{ earb }} / {{ gct }},
-                                    digits = 2),
-
-    # Ideal Ratio of Ending AR to Gross Charges
-    ideal = janitor::round_half_up({{ dart }} / ndip,
-                                   digits = 2),
-
-    # Actual - Ideal Ratio
-    radiff = janitor::round_half_up(actual - ideal,
-                                    digits = 2),
-
-    # Ending AR Target
-    earb_trg = janitor::round_half_up(({{ gct }} * {{ dart }} / ndip),
-                                      digits = 2),
-
-    # Ending AR Decrease Needed
-    earb_dc = janitor::round_half_up({{ earb }} - earb_trg,
-                                     digits = 2),
-
-    # Ending AR Percentage Decrease Needed
-    earb_pct = janitor::round_half_up(((
-      earb_dc / {{ earb }}) * 100), digits = 2),
-
-    # Boolean indicating whether DAR was under/over DARt
-    pass = dplyr::case_when(dar < {{ dart }} ~ TRUE,
-                            TRUE ~ FALSE)) |>
-
-    # Reorder columns
+    adc = {{ gct }} / ndip,
+    dar = {{ earb }} / adc,
+    actual = {{ earb }} / {{ gct }},
+    ideal = {{ dart }} / ndip,
+    radiff = actual - ideal,
+    earb_trg = ({{ gct }} * {{ dart }}) / ndip,
+    earb_dc = {{ earb }} - earb_trg,
+    earb_pct = (earb_dc / {{ earb }}) * 100,
+    pass = dplyr::case_when(
+      dar < {{ dart }} ~ TRUE,
+      TRUE ~ FALSE)) |>
     dplyr::select(date,
                   month,
                   nmon,

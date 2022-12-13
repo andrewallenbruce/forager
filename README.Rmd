@@ -9,14 +9,19 @@ editor_options:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  collapse  = TRUE,
+  echo      = TRUE, 
+  message   = FALSE, 
+  warning   = FALSE,
+  error     = TRUE,
+  comment   = "#>",
+  dpi       = 150, 
+  out.width = "100%",
+  fig.path  = "man/figures/README-"
 )
 ```
 
-# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="500"/></a>
+# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="200"/></a>
 
 > ***Forager** (noun)*
 >
@@ -42,152 +47,94 @@ MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.
 size](https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager)
 [![last
 commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager/commits/master)
-
+[![Codecov test coverage](https://codecov.io/gh/andrewallenbruce/forager/branch/master/graph/badge.svg)](https://app.codecov.io/gh/andrewallenbruce/forager?branch=master)
 <!-- badges: end -->
 
-The goal of {forager} is to provide a suite of tools for the analysis of
-common healthcare revenue cycle management Key Performance Indicators
-(KPIs).
+`forager` is a work-in-progress, the goal of which is to become a suite of integrated analytics tools focused on a comprehensive overview of a healthcare organization's operational and financial performance areas. Build your own rule-based, automated reporting pipeline to monitor:
+
+  - Patient Scheduling
+  - Coding / Billing
+  - Productivity
+  - Collections & A/R
+  - Denial Management
 
 ## Installation
 
-You can install the development version of forager from
+You can install the development version of `forager` from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("andrewallenbruce/forager")
-```
 
-## Aging Calculation
+# install.packages("remotes")
+remotes::install_github("andrewallenbruce/forager")
+```
 
 ```{r}
 library(forager)
 ```
 
-<br>
+## Usage
 
-```{r}
-date_ex <- tibble::tibble(
-  dos = as.POSIXct(
-    c(
-      "2022-02-10", "2022-02-09", "2022-02-08", "2022-02-08", "2022-02-07",
-      "2022-02-07", "2022-02-05", "2022-02-05", "2022-02-02", "2022-02-02",
-      "2022-02-02", "2022-02-01", "2022-02-01", "2022-02-01", "2022-01-31",
-      "2022-01-30", "2022-01-30", "2022-01-29", "2022-01-29", "2022-01-28",
-      "2022-01-28", "2022-01-28", "2022-01-21", "2022-01-21", "2022-01-20",
-      "2022-01-20", "2022-01-20", "2022-01-08", "2022-01-07", "2021-12-31",
-      "2021-12-31", "2021-12-31", "2021-12-31", "2021-12-31", "2021-12-27",
-      "2021-12-27", "2021-12-26", "2021-12-26", "2021-12-25", "2021-12-25",
-      "2021-12-25", "2021-12-25", "2021-12-25", "2021-12-25", "2021-12-19",
-      "2021-12-18", "2021-12-08", "2021-11-27", "2021-11-20", "2021-11-20",
-      "2021-11-19", "2021-11-19"
-    ),
-    tz = "UTC"
-  ),
-  dor = as.POSIXct(
-    c(
-      "2022-02-28", "2022-02-10", "2022-02-10", "2022-02-10", "2022-02-10",
-      "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01",
-      "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01", "2021-01-21",
-      "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-18",
-      "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-21", "2022-01-18",
-      "2021-12-28", "2022-01-18", "2022-01-21", "2022-01-18", "2022-01-18",
-      "2022-02-01", "2022-02-01", "2021-12-11", "2022-01-31", "2022-01-31",
-      "2022-01-31", "2022-01-28", "2022-01-28", "2022-01-28", "2022-01-28",
-      "2022-01-28", "2022-01-28", "2022-01-31", "2022-01-31", "2022-01-31",
-      "2022-01-31", "2022-01-31", "2022-01-31", "2022-01-31", "2022-01-31",
-      "2022-01-31", "2022-01-31"
-    ),
-    tz = "UTC"
-  ),
+Calculate: 
+
+   * Provider Lag: Days between Date of Service (`dos`) and Date of Release (`dor`)
+   * Billing Lag:  Days between Date of Release (`dor`) and Date of Submission (`dtos`)
+   * Acceptance Lag:  Days between Date of Submission (`dtos`) and Date of Acceptance (`dtoa`)
+   * Payment Lag: Days between Date of Acceptance (`dtoa`) and Date of Adjudication (`dtad`)
+   * Days in AR: Days between Date of Release (`dor`) and Date of Adjudication (`dtad`)
+
+```{r results='asis', echo=TRUE}
+x <- tibble::tibble(
+  dos = seq(clock::date_build(2021, 1, 1), 
+  clock::date_build(2021, 12, 31), by = 1),
+  dor = dos + round(abs(rnorm(365, 11, 4))),
+  prov_lag = clock::date_count_between(dos, dor, "day"),
+  dtos = dor + round(abs(rnorm(365, 2, 2))),
+  bill_lag = clock::date_count_between(dor, dtos, "day"),
+  dtoa = dtos + round(abs(rnorm(365, 3, 2))),
+  accept_lag = clock::date_count_between(dtos, dtoa, "day"),
+  dtad = dtoa + round(abs(rnorm(365, 30, 3))),
+  pay_lag = clock::date_count_between(dtoa, dtad, "day"),
+  days_in_ar = clock::date_count_between(dor, dtad, "day"),
 )
+
+x |> head(n = 25) |> gluedown::md_table()
+```
+<br>
+
+```{r results='asis', echo=TRUE}
+x |> dplyr::group_by(month = clock::date_month_factor(dos)) |> 
+     dplyr::summarise(avg_prov_lag = round(mean(prov_lag), 2),
+                      avg_bill_lag = round(mean(bill_lag), 2),
+                      avg_accept_lag = round(mean(accept_lag), 2),
+                      avg_pay_lag = round(mean(pay_lag), 2),
+                      avg_dar = round(mean(days_in_ar), 2)) |> 
+     gluedown::md_table()
 ```
 
-<br>
-Calculate the number of days between the Date of Service (DOS) and today's date:
-<br>
+## Aging Calculation
 
-```{r}
-date_ex |> 
-  dplyr::select(dos) |> 
-  dplyr::mutate(today = lubridate::today()) |> 
-  forager::age_days(dos, today) |> 
-  dplyr::arrange(desc(age))
+```{r results='asis', echo=TRUE}
+x |> dplyr::select(dos, dor, dtad, days_in_ar) |> 
+  dplyr::group_by(month = clock::date_month_factor(dos), 
+                  aging_bucket = cut(days_in_ar, breaks = seq(0, 500, 30))) |> 
+  dplyr::tally(name = "claims") |> 
+  gluedown::md_table()
 ```
 
-<br>
-Calculate the number of days between the Date of Service (DOS) and the Date of Release (DOR):
-<br>
+## Average Days in AR Monthly Calculation
 
-```{r}
-date_ex |> 
-  dplyr::select(dos, dor) |>
-  dplyr::filter(!is.na(dor)) |> 
-  forager::age_days(dos, dor) |> 
-  dplyr::arrange(desc(age))
-```
-<br><br>
+```{r results='asis', echo=TRUE}
+y <- tibble::tibble(
+  date = clock::date_build(2022, 1:12),
+  gct = abs(rnorm(12, c(365000.567, 169094.46, 297731.74), c(2:3))),
+  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3))))
 
-## Days in AR Monthly Calculation
-
-The following is a basic example of a monthly Days in AR calculation:
-
-```{r}
-# Example data frame
-dar_mon_ex <- data.frame(
-date = as.Date(c(
-"2022-01-01", "2022-02-01", "2022-03-01",
-"2022-04-01", "2022-05-01", "2022-06-01",
-"2022-07-01", "2022-08-01", "2022-09-01",
-"2022-10-01", "2022-11-01", "2022-12-01")),
-
-gct = c(
-325982.23, 297731.74, 198655.14,
-186047.56, 123654.34, 131440.28,
-153991.95, 156975.52, 146878.12,
-163799.44, 151410.74, 169094.46),
-
-earb = c(
-288432.52, 307871.08, 253976.56,
-183684.92, 204227.59, 203460.47,
-182771.32, 169633.64, 179347.72,
-178051.11, 162757.49, 199849.32))
-
-dar_mon_ex |> 
-  knitr::kable(col.names = c("Month", 
-                             "Gross Charges", 
-                             "Ending AR Balance"))
-```
-
-<br>
-
-
-Using the `dar_month()` function, we set the Days in AR target (`dart`)
-to 35 and calculate:
-
-<br>
-
-```{r}
-dar_month_2022 <- dar_mon_ex |> forager::dar_month(date, gct, earb, 35)
-```
-
-<br>
-
-```{r echo=FALSE}
-dar_month_2022 |> 
-  dplyr::select(month, 
-                gct, 
-                earb, 
-                earb_trg, 
-                dar, 
-                pass) |> 
-  knitr::kable(col.names = c("Month", 
-                             "Gross Charges", 
-                             "Ending AR", 
-                             "Target AR", 
-                             "Days in AR", 
-                             "Pass"))
+y |> 
+  forager::dar_month(date, gct, earb, dart = 35) |> 
+  gluedown::md_table()
 ```
 
 <br>
@@ -198,7 +145,7 @@ dar_month_2022 |>
 
 <summary>Click to View Code for Table</summary>
 
-```{r}
+```{r eval=FALSE}
 gt_1 <- dar_month_2022 |> 
   dplyr::select(month, gct, earb, earb_trg, dar, pass) |> 
   headliner::add_headline_column(x = earb, y = earb_trg, 
@@ -244,11 +191,7 @@ gt_1 <- dar_month_2022 |>
 
 <summary>Click to View Code for Table</summary>
 
-```{r}
-dar_month_2022
-```
-
-```{r}
+```{r eval=FALSE}
 # Create df for gt_plt_bar_stack
 dar_month_2022_pct <- dar_month_2022 |>
   dplyr::mutate(gct_pct = (gct / (gct + earb) * 100),
@@ -314,220 +257,20 @@ gt_2 <- dar_month_2022_gt |>
 
 <br>
 
-```{r}
-library(GGally)
-dar_month_2022 |> 
-  dplyr::select("Ending AR" = earb, 
-                "AR Target" = earb_trg, 
-                "Gross Charges" = gct, 
-                "Days in AR" = dar,
-                pass) |> 
-  ggparcoord(columns = 1:4, 
-             scale = "uniminmax",
-             #scale = "globalminmax",
-             groupColumn = "pass") + 
-  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
-  ggplot2::xlab("") +
-  ggplot2::ylab("") +
-  ggplot2::coord_flip() +
-  ggplot2::facet_wrap("pass") +
-  ggthemes::theme_pander() +
-  ggplot2::theme(legend.position = "none")
-```
-
-```{r}
-ndip_31 <- dar_month_2022 |> dplyr::select(ndip, ideal) |> dplyr::filter(ndip == 31)
-ndip_31 <- ndip_31$ideal[[1]]
-```
-
-
-```{r}
-darmon2 <- dar_month_2022 |> dplyr::mutate(trg_abline = earb_trg / earb)
-
-trg_month <- darmon2 |> dplyr::select(month, trg_abline)
-
-jan <- trg_month$trg_abline[[1]]
-feb <- trg_month$trg_abline[[2]]
-mar <- trg_month$trg_abline[[3]]
-apr <- trg_month$trg_abline[[4]]
-may <- trg_month$trg_abline[[5]]
-jun <- trg_month$trg_abline[[6]]
-jul <- trg_month$trg_abline[[7]]
-aug <- trg_month$trg_abline[[8]]
-sep <- trg_month$trg_abline[[9]]
-oct <- trg_month$trg_abline[[10]]
-nov <- trg_month$trg_abline[[11]]
-dec <- trg_month$trg_abline[[12]]
-
-options(scipen = 999)
-library(ggplot2)
-library(geomtextpath)
-ggplot(data = darmon2) + 
-  geomtextpath::geom_labelabline(
-    slope = jan, 
-    intercept = 0, 
-    label = "Jan", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.9, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = feb, 
-    intercept = 0, 
-    label = "Feb", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.825, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = mar, 
-    intercept = 0, 
-    label = "Mar", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = apr, 
-    intercept = 0, 
-    label = "Apr", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = may, 
-    intercept = 0, 
-    label = "May", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = jun, 
-    intercept = 0, 
-    label = "Jun", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = jul, 
-    intercept = 0, 
-    label = "Jul", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = aug, 
-    intercept = 0, 
-    label = "Aug", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = sep, 
-    intercept = 0, 
-    label = "Sept", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = oct, 
-    intercept = 0, 
-    label = "Oct", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = nov, 
-    intercept = 0, 
-    label = "Nov", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = dec, 
-    intercept = 0, 
-    label = "Dec", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geom_point(mapping = aes(x = earb_trg, y = earb, color = pass), size = 3) +
-  ggrepel::geom_text_repel(aes(x = earb_trg, y = earb, label = month), force = 3) +
-  xlab("Ending AR Target") +
-  ylab("Ending AR Balance") +
-  ggthemes::theme_pander()
-```
-
-
 ## Days in AR Quarterly Calculation
 
-```{r}
-dar_quarter_2022 <- dar_mon_ex |> forager::dar_qtr(date, gct, earb, 35)
+```{r results='asis', echo=TRUE}
+y |> forager::dar_qtr(date, gct, earb, 35) |> 
+     gluedown::md_table()
 ```
 
-<br>
-
-```{r echo=FALSE}
-dar_quarter_2022 |> 
-  dplyr::select(nqtr, gct_qtr, earb, earb_trg, dar, pass) |> 
-  knitr::kable(col.names = c("Quarter", "Gross Charges", "Ending AR", "Target AR", "Days in AR", "Pass"))
-```
 <br>
 
 <details>
 
 <summary>Click to View Code for Table</summary>
 
-```{r}
-dar_quarter_2022
-```
-
-
-```{r}
+```{r eval=FALSE}
 # Create df for gt_plt_bar_stack
 dar_qtr_2022_pct <- dar_quarter_2022 |>
   dplyr::mutate(gct_pct = (gct_qtr / (gct_qtr + earb) * 100),
@@ -593,26 +336,6 @@ gt_qtr_2 <- dar_qtr_2022_gt |>
 
 ![](man/figures/gt_qtr_2.png){width="75%"}
 
-```{r}
-library(GGally)
-dar_quarter_2022 |> 
-  dplyr::select("Ending AR" = earb, 
-                "AR Target" = earb_trg, 
-                "Gross Charges" = gct_qtr, 
-                "Days in AR" = dar,
-                pass) |> 
-  ggparcoord(columns = 1:4, 
-             scale = "uniminmax",
-             #scale = "globalminmax",
-             groupColumn = "pass") + 
-  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
-  ggplot2::xlab("") +
-  ggplot2::ylab("") +
-  ggplot2::coord_flip() +
-  ggplot2::facet_wrap("pass") +
-  ggthemes::theme_pander() +
-  ggplot2::theme(legend.position = "none")
-```
 
 ## Code of Conduct
 
@@ -624,3 +347,4 @@ By contributing to this project, you agree to abide by its terms.
 [^1]: <https://dictionary.cambridge.org/dictionary/english/forager>
 
 [^2]: Me.
+

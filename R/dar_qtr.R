@@ -10,7 +10,7 @@
 #'
 #' @return data frame
 #' @export
-#'
+#' @autoglobal
 #' @examples
 #' dar_mon_ex <- data.frame(
 #' date = as.Date(c(

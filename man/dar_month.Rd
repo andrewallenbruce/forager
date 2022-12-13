@@ -4,7 +4,7 @@
 \alias{dar_month}
 \title{Calculate Monthly Days in AR}
 \usage{
-dar_month(df, date = date, gct = gct, earb = earb, dart = 35)
+dar_month(df, date, gct, earb, dart = 35)
 }
 \arguments{
 \item{df}{data frame containing at least three columns:

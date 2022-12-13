@@ -1,0 +1,277 @@
+---
+title: "KPI: PARBx & BPI"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(tidyverse) # Easily Install and Load the 'Tidyverse'
+library(lubridate) # Make Dealing with Dates a Little Easier
+library(reactable) # Interactive Data Tables Based on 'React Table'
+library(reactablefmtr) # Streamlined Table Styling and Formatting for Reactable
+library(highcharter) # A Wrapper for the 'Highcharts' Library
+library(htmltools) # Tools for HTML
+library(printr) # Automatically Print R Objects to Appropriate Formats According to the 'knitr' Output Format
+```
+
+```{r setup}
+library(forager) # Healthcare Revenue Cycle Analysis Suite
+```
+
+<br>
+
+# PARB$x$
+
+<br>
+
+PARB$x$, or *Percentage of Accounts Receivable Beyond* $x$ Days, is exactly what it sounds like: monitoring the percentage of your AR balances as they age, in what are commonly referred to as aging "buckets" or "bins." This idea, in and of itself, is not revolutionary, other than his suggestion to use PARB$x$ to resolve Days in AR's inability to highlight the overall behavior of Accounts Receivable. The innovation comes in the form of using the PARB$x$ data to create an index that tracks a payer's performance month-to-month and annually:
+
+> PARB$x$ data can then be used to calculate a BPI, or Billing Performance Index. BPI is a key billing performance characteristic because it's an indicator of claims that are never paid. Obviously, the lower the index, the better the billing performance. But this statistic is meaningful only when considered in the context of the relative performance of other payers. @lirov2009
+
+# Billing Performance Index (BPI)
+
+Lirov's *Billing Performance Index* was inspired by a Wall Street benchmarking technique called a *payment performance index*. He emphasizes the advantage of a "context-driven, rule-based approach to relative benchmarking":
+
+> The advantage of rule-driven indexing is that participation is dynamically determined at a point in time, reflecting the dynamic nature of the entire market. Today's top 10 list of index performers may not include the same names next week...A financial instrument's specific performance is recomputed every time the index itself is computed, reflecting the dynamic nature of performance relative to the market itself. @lirov2009
+
+Applying this indexing method to payers allows providers to track the ease/difficulty of the reimbursement process with each payer. Inclusion in the monthly index indicates that the percentage of AR older than 120 days belonging to a payer ranks among the lowest in a provider's payer mix.
+
+This results in a provider being able to focus his or her AR management resources on more problematic payers. Lirov does suggest several criteria that should be considered before a payer is elligible for inclusion such as a minimum threshold of claims submitted and total gross charges processed.
+
+## Monthly BPI Ranking
+
+For this example, I've put the mock data provided by Dr. Lirov into a data frame. The data ranks (or indexes) the payers with the top 10 lowest PARB$x$ percentages by the most recent month's (December) figures, including November's figures as well. December's rankings appear alongside a **Rank Change** column indicating the number of places each payer rose or fell from November to December. Using {reactable} and {reactablefmtr} I can create an interactive table of the data:
+
+```{r}
+bpi_mon <- data.frame(
+    payer = c("Medicare", "BCBS", "Cigna", "AmeriHealth", "Aetna", "UHC", "Aetna", "Cigna", "Meritain", "Ambetter"),
+    rank_change = c(0, 0, 1, 3, 1, -4, -1, 1, -2, 1),
+    nov_rank = c(1, 2, 4, 7, 6, 3, 5, 9, 8, 10),
+    nov_parbx = c(5.8, 7.9, 15.7, 20.7, 20, 15, 19.4, 36.2, 30.5, 39.9),
+    dec_rank = c(1, 2, 3, 4, 5, 7, 6, 8, 10, 9), 
+    dec_parbx = c(6.8, 8.1, 10.7, 13.9, 14.8, 21.2, 18.8, 35.2, 43.4, 43.3))
+```
+
+
+```{r}
+# Create initial tibble
+bpi_ex <- tibble::tibble(
+  date = rep(c("2022-01-01", "2022-02-01"), times = 1, each = 10),
+  payer = rep(c(
+    "Medicare", 
+    "BCBS", 
+    "Cigna", 
+    "AmeriHealth", 
+    "Aetna",
+    "UHC", 
+    "Humana", 
+    "Cigna", 
+    "Meritain", 
+    "Ambetter"), times = 2, each = 1),
+  parbx = c(5.8, 7.9, 15.7, 20.7, 20, 15, 19.4, 36.2, 30.5, 39.9, 6.8, 8.1, 10.7, 13.9, 14.8, 21.2, 18.8, 35.2, 43.4, 43.3),
+  bin = rep(c(""))
+)
+
+# Convert month to date object
+bpi_ex$date <- as.Date(bpi_ex$date) |> lubridate::ymd(date)
+
+# Generate two sets of 10 numbers, the sums of which will each be equal to 1
+set.seed(1234)
+a <- wakefield::probs(10)
+b <- wakefield::probs(10)
+
+pct <- bind_rows(pct = c(a, b))
+
+# Add percentages to original tibble -- unnest for some reason
+bpi_ex <- bpi_ex |> dplyr::mutate(pct = pct) |> tidyr::unnest(pct)
+
+# Add Month column
+bpi_ex <- bpi_ex |> mutate(month = lubridate::month(date, label = TRUE, abbr = FALSE)) |> dplyr::relocate(month, .after = date)
+
+bpi_ex |> mutate(claims = )
+```
+
+
+```{r}
+
+```
+
+<br><br>
+
+```{r}
+bpi_mon_tbl <- reactable(
+  bpi_mon,
+  pagination = FALSE,
+  outlined = TRUE,
+  showSortable = TRUE,
+  defaultColDef = colDef(
+      footerStyle = list(fontWeight = "bold"),
+      headerClass = "col-header",
+      footerClass = "col-footer",
+      align = "left"
+      ),
+    columnGroups = list(
+    colGroup(
+      name = "December", 
+      columns = c(
+        "dec_rank", 
+        "dec_parbx")
+      ),
+    colGroup(
+      name = "November", 
+      columns = c(
+        "nov_rank", 
+        "nov_parbx")
+      )
+  ),
+  columns = list(
+    dec_rank = colDef(
+    name = "Rank",
+    align = "center",
+    width = 90
+    ),
+    dec_parbx = colDef(
+        footer = function(values) sprintf("%.2f", mean(values)
+        ),
+    name = "PARBx",
+    width = 90,
+      format = colFormat(
+        digits = 1
+        ),
+      defaultSortOrder = "desc",
+      align = "center",
+      style = color_scales(bpi_mon)
+    ),
+    nov_rank = colDef(
+    name = "Rank",
+    align = "center",
+    width = 90
+    ),
+    nov_parbx = colDef(
+        footer = function(values) sprintf("%.2f", mean(values)
+        ),
+    name = "PARBx",
+    width = 90,
+      format = colFormat(
+          digits = 1
+        ),
+      align = "center",
+      style = color_scales(bpi_mon)
+    ),
+    payer = colDef(
+      name = "Payer",
+      sortable = FALSE,
+      align = "right",
+      footer = "PARBx Averages"
+    ),
+    rank_change = colDef(
+        name = "Change",
+        width = 100,
+        format = colFormat(
+          digits = 0
+          ),
+        show = TRUE,
+        align = "center",
+        cell = function(value) {
+        value <- format(
+          value, 
+          big.mark = ",")
+        if (value > 0) paste0("+", value) 
+        else value
+      },
+      style = function(value) {
+        color <- if (value > 0) {
+          "black"
+        } else if (value < 0) {
+          "#ef4035"
+        }
+        list(fontWeight = 600, color = color)
+      }
+    ),
+    html = TRUE
+  ),
+  defaultSorted = "dec_rank",
+  compact = FALSE,
+  class = "rcm-tbl"
+) |>
+  add_title("Billing Performance Index: November to December 2021", 
+            align = "left", 
+            font_color = "black", 
+            font_size = 24) |>
+  add_subtitle("Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days", 
+               align = "left", 
+               font_color = "black", 
+               font_size = 18, 
+               font_weight = "normal")
+
+div(class = "rcm-analysis", bpi_mon_tbl)
+```
+
+### Slopegraph
+
+In terms of visualization, a [slopegraph](https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0003nk) would be effective for displaying month-to-month ranking changes by PARB$x$ percentages. Before I can begin any visualizations, I need to pivot my data into a "long" format with {tidyr}:
+
+```{r monlong1, echo=TRUE, message=FALSE, warning=FALSE}
+bpi_mon_long <- bpi_mon |> 
+  select(payer, nov_parbx, dec_parbx) |>  
+  rename(November = nov_parbx, December = dec_parbx) |>  
+    tidyr::pivot_longer(!payer, names_to = "month", values_to = "parbx")
+head(bpi_mon_long, 10)
+```
+
+The interactive slopegraph with the {highcharter} package produces an effective presentation of data in this form. The viewer can intuitively understand each payer's monthly ranking change and the PARB$x$ percentage associated with that change:
+
+```{r hc1, echo=TRUE, message=FALSE, warning=FALSE, code_folding=TRUE, layout="l-page"}
+parbx_hc1 <- bpi_mon_long |> 
+hchart("line", hcaes(x = month, y = parbx, group = payer),
+  dataLabels = list(
+      enabled = TRUE, 
+      formatter = JS("function(){return(this.point.payer + ' ' + this.y + '%')}")),
+  style = list(fontSize = "16px", color = "#000000")) |>
+  hc_yAxis(
+    gridLineWidth = 0,
+    title = list(
+      text = " ",
+      align = "high",
+      margin = 10),
+    labels = list(format = "{value}")) |> 
+  hc_xAxis(
+    title = list(text = NULL),
+    opposite = TRUE,
+    labels = list(format = "{value}"),
+     crosshair = list(
+       snap = TRUE,
+       width = 2,
+       zIndex = 0)) |> 
+  hc_title(
+    text = "PARBx: November to December 2021", 
+    align = "left",
+    style = list(fontSize = "18", color = "#000000", fontWeight = "bold")) |> 
+  hc_subtitle(
+    text = "Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days", 
+    align = "left",
+    style = list(fontSize = "14px", color = "#000000")) |> 
+  hc_plotOptions(
+        line = list(
+          marker = list(
+            symbol = "circle", 
+            lineWidth = 2, 
+            radius = 5))) |> 
+    hc_tooltip(
+    useHTML = TRUE,
+    crosshairs = TRUE,
+    backgroundColor = "#F0F0F0",
+    borderWidth = 1,
+    sort = TRUE) |> 
+    hc_legend(enabled = FALSE) |> 
+    hc_size(height = 800, width = 800) |> 
+    hc_chart(style = list(fontFamily = "Karla")) |> 
+    hc_chart(zoomType = "xy") |>
+    hc_exporting(enabled = TRUE, filename = "chart")
+
+parbx_hc1
+```
+

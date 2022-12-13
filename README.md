@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="500"/></a>
+# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="200"/></a>
 
 > ***Forager** (noun)*
 >
@@ -27,193 +27,190 @@ MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.
 size](https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager)
 [![last
 commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager/commits/master)
-
+[![Codecov test
+coverage](https://codecov.io/gh/andrewallenbruce/forager/branch/master/graph/badge.svg)](https://app.codecov.io/gh/andrewallenbruce/forager?branch=master)
 <!-- badges: end -->
 
-The goal of {forager} is to provide a suite of tools for the analysis of
-common healthcare revenue cycle management Key Performance Indicators
-(KPIs).
+`forager` is a work-in-progress, the goal of which is to become a suite
+of integrated analytics tools focused on a comprehensive overview of a
+healthcare organization’s operational and financial performance areas.
+Build your own rule-based, automated reporting pipeline to monitor:
+
+- Patient Scheduling
+- Coding / Billing
+- Productivity
+- Collections & A/R
+- Denial Management
 
 ## Installation
 
-You can install the development version of forager from
+You can install the development version of `forager` from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("andrewallenbruce/forager")
-```
 
-## Aging Calculation
+# install.packages("remotes")
+remotes::install_github("andrewallenbruce/forager")
+```
 
 ``` r
 library(forager)
 ```
 
-<br>
+## Usage
+
+Calculate:
+
+- Provider Lag: Days between Date of Service (`dos`) and Date of Release
+  (`dor`)
+- Billing Lag: Days between Date of Release (`dor`) and Date of
+  Submission (`dtos`)
+- Acceptance Lag: Days between Date of Submission (`dtos`) and Date of
+  Acceptance (`dtoa`)
+- Payment Lag: Days between Date of Acceptance (`dtoa`) and Date of
+  Adjudication (`dtad`)
+- Days in AR: Days between Date of Release (`dor`) and Date of
+  Adjudication (`dtad`)
 
 ``` r
-date_ex <- tibble::tibble(
-  dos = as.POSIXct(
-    c(
-      "2022-02-10", "2022-02-09", "2022-02-08", "2022-02-08", "2022-02-07",
-      "2022-02-07", "2022-02-05", "2022-02-05", "2022-02-02", "2022-02-02",
-      "2022-02-02", "2022-02-01", "2022-02-01", "2022-02-01", "2022-01-31",
-      "2022-01-30", "2022-01-30", "2022-01-29", "2022-01-29", "2022-01-28",
-      "2022-01-28", "2022-01-28", "2022-01-21", "2022-01-21", "2022-01-20",
-      "2022-01-20", "2022-01-20", "2022-01-08", "2022-01-07", "2021-12-31",
-      "2021-12-31", "2021-12-31", "2021-12-31", "2021-12-31", "2021-12-27",
-      "2021-12-27", "2021-12-26", "2021-12-26", "2021-12-25", "2021-12-25",
-      "2021-12-25", "2021-12-25", "2021-12-25", "2021-12-25", "2021-12-19",
-      "2021-12-18", "2021-12-08", "2021-11-27", "2021-11-20", "2021-11-20",
-      "2021-11-19", "2021-11-19"
-    ),
-    tz = "UTC"
-  ),
-  dor = as.POSIXct(
-    c(
-      "2022-02-28", "2022-02-10", "2022-02-10", "2022-02-10", "2022-02-10",
-      "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01",
-      "2022-02-01", "2022-02-01", "2022-02-01", "2022-02-01", "2021-01-21",
-      "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-18",
-      "2022-01-18", "2022-01-18", "2022-01-18", "2022-01-21", "2022-01-18",
-      "2021-12-28", "2022-01-18", "2022-01-21", "2022-01-18", "2022-01-18",
-      "2022-02-01", "2022-02-01", "2021-12-11", "2022-01-31", "2022-01-31",
-      "2022-01-31", "2022-01-28", "2022-01-28", "2022-01-28", "2022-01-28",
-      "2022-01-28", "2022-01-28", "2022-01-31", "2022-01-31", "2022-01-31",
-      "2022-01-31", "2022-01-31", "2022-01-31", "2022-01-31", "2022-01-31",
-      "2022-01-31", "2022-01-31"
-    ),
-    tz = "UTC"
-  ),
+x <- tibble::tibble(
+  dos = seq(clock::date_build(2021, 1, 1), 
+  clock::date_build(2021, 12, 31), by = 1),
+  dor = dos + round(abs(rnorm(365, 11, 4))),
+  prov_lag = clock::date_count_between(dos, dor, "day"),
+  dtos = dor + round(abs(rnorm(365, 2, 2))),
+  bill_lag = clock::date_count_between(dor, dtos, "day"),
+  dtoa = dtos + round(abs(rnorm(365, 3, 2))),
+  accept_lag = clock::date_count_between(dtos, dtoa, "day"),
+  dtad = dtoa + round(abs(rnorm(365, 30, 3))),
+  pay_lag = clock::date_count_between(dtoa, dtad, "day"),
+  days_in_ar = clock::date_count_between(dor, dtad, "day"),
 )
+
+x |> head(n = 25) |> gluedown::md_table()
 ```
 
-<br> Calculate the number of days between the Date of Service (DOS) and
-today’s date: <br>
-
-``` r
-date_ex |> 
-  dplyr::select(dos) |> 
-  dplyr::mutate(today = lubridate::today()) |> 
-  forager::age_days(dos, today) |> 
-  dplyr::arrange(desc(age))
-#> # A tibble: 52 × 3
-#>    dos                 today        age
-#>    <dttm>              <date>     <dbl>
-#>  1 2021-11-19 00:00:00 2022-09-06   293
-#>  2 2021-11-19 00:00:00 2022-09-06   293
-#>  3 2021-11-20 00:00:00 2022-09-06   292
-#>  4 2021-11-20 00:00:00 2022-09-06   292
-#>  5 2021-11-27 00:00:00 2022-09-06   285
-#>  6 2021-12-08 00:00:00 2022-09-06   274
-#>  7 2021-12-18 00:00:00 2022-09-06   264
-#>  8 2021-12-19 00:00:00 2022-09-06   263
-#>  9 2021-12-25 00:00:00 2022-09-06   257
-#> 10 2021-12-25 00:00:00 2022-09-06   257
-#> # … with 42 more rows
-```
-
-<br> Calculate the number of days between the Date of Service (DOS) and
-the Date of Release (DOR): <br>
-
-``` r
-date_ex |> 
-  dplyr::select(dos, dor) |>
-  dplyr::filter(!is.na(dor)) |> 
-  forager::age_days(dos, dor) |> 
-  dplyr::arrange(desc(age))
-#> # A tibble: 52 × 3
-#>    dos                 dor                   age
-#>    <dttm>              <dttm>              <dbl>
-#>  1 2021-11-19 00:00:00 2022-01-31 00:00:00    74
-#>  2 2021-11-19 00:00:00 2022-01-31 00:00:00    74
-#>  3 2021-11-20 00:00:00 2022-01-31 00:00:00    73
-#>  4 2021-11-20 00:00:00 2022-01-31 00:00:00    73
-#>  5 2021-11-27 00:00:00 2022-01-31 00:00:00    66
-#>  6 2021-12-08 00:00:00 2022-01-31 00:00:00    55
-#>  7 2021-12-18 00:00:00 2022-01-31 00:00:00    45
-#>  8 2021-12-19 00:00:00 2022-01-31 00:00:00    44
-#>  9 2021-12-25 00:00:00 2022-01-31 00:00:00    38
-#> 10 2021-12-25 00:00:00 2022-01-31 00:00:00    38
-#> # … with 42 more rows
-```
-
-<br><br>
-
-## Days in AR Monthly Calculation
-
-The following is a basic example of a monthly Days in AR calculation:
-
-``` r
-# Example data frame
-dar_mon_ex <- data.frame(
-date = as.Date(c(
-"2022-01-01", "2022-02-01", "2022-03-01",
-"2022-04-01", "2022-05-01", "2022-06-01",
-"2022-07-01", "2022-08-01", "2022-09-01",
-"2022-10-01", "2022-11-01", "2022-12-01")),
-
-gct = c(
-325982.23, 297731.74, 198655.14,
-186047.56, 123654.34, 131440.28,
-153991.95, 156975.52, 146878.12,
-163799.44, 151410.74, 169094.46),
-
-earb = c(
-288432.52, 307871.08, 253976.56,
-183684.92, 204227.59, 203460.47,
-182771.32, 169633.64, 179347.72,
-178051.11, 162757.49, 199849.32))
-
-dar_mon_ex |> 
-  knitr::kable(col.names = c("Month", 
-                             "Gross Charges", 
-                             "Ending AR Balance"))
-```
-
-| Month      | Gross Charges | Ending AR Balance |
-|:-----------|--------------:|------------------:|
-| 2022-01-01 |      325982.2 |          288432.5 |
-| 2022-02-01 |      297731.7 |          307871.1 |
-| 2022-03-01 |      198655.1 |          253976.6 |
-| 2022-04-01 |      186047.6 |          183684.9 |
-| 2022-05-01 |      123654.3 |          204227.6 |
-| 2022-06-01 |      131440.3 |          203460.5 |
-| 2022-07-01 |      153992.0 |          182771.3 |
-| 2022-08-01 |      156975.5 |          169633.6 |
-| 2022-09-01 |      146878.1 |          179347.7 |
-| 2022-10-01 |      163799.4 |          178051.1 |
-| 2022-11-01 |      151410.7 |          162757.5 |
-| 2022-12-01 |      169094.5 |          199849.3 |
-
-<br>
-
-Using the `dar_month()` function, we set the Days in AR target (`dart`)
-to 35 and calculate:
+| dos        | dor        | prov_lag | dtos       | bill_lag | dtoa       | accept_lag | dtad       | pay_lag | days_in_ar |
+|:-----------|:-----------|---------:|:-----------|---------:|:-----------|-----------:|:-----------|--------:|-----------:|
+| 2021-01-01 | 2021-01-15 |       14 | 2021-01-19 |        4 | 2021-01-23 |          4 | 2021-02-25 |      33 |         41 |
+| 2021-01-02 | 2021-01-18 |       16 | 2021-01-18 |        0 | 2021-01-20 |          2 | 2021-02-20 |      31 |         33 |
+| 2021-01-03 | 2021-01-20 |       17 | 2021-01-22 |        2 | 2021-01-25 |          3 | 2021-02-16 |      22 |         27 |
+| 2021-01-04 | 2021-01-10 |        6 | 2021-01-10 |        0 | 2021-01-11 |          1 | 2021-02-07 |      27 |         28 |
+| 2021-01-05 | 2021-01-20 |       15 | 2021-01-26 |        6 | 2021-01-30 |          4 | 2021-03-01 |      30 |         40 |
+| 2021-01-06 | 2021-01-17 |       11 | 2021-01-22 |        5 | 2021-01-26 |          4 | 2021-02-20 |      25 |         34 |
+| 2021-01-07 | 2021-01-15 |        8 | 2021-01-18 |        3 | 2021-01-22 |          4 | 2021-02-22 |      31 |         38 |
+| 2021-01-08 | 2021-01-18 |       10 | 2021-01-20 |        2 | 2021-01-25 |          5 | 2021-02-21 |      27 |         34 |
+| 2021-01-09 | 2021-01-21 |       12 | 2021-01-23 |        2 | 2021-01-26 |          3 | 2021-02-21 |      26 |         31 |
+| 2021-01-10 | 2021-01-26 |       16 | 2021-01-31 |        5 | 2021-02-05 |          5 | 2021-03-08 |      31 |         41 |
+| 2021-01-11 | 2021-02-02 |       22 | 2021-02-07 |        5 | 2021-02-09 |          2 | 2021-03-12 |      31 |         38 |
+| 2021-01-12 | 2021-01-14 |        2 | 2021-01-16 |        2 | 2021-01-19 |          3 | 2021-02-14 |      26 |         31 |
+| 2021-01-13 | 2021-01-23 |       10 | 2021-01-28 |        5 | 2021-02-01 |          4 | 2021-03-07 |      34 |         43 |
+| 2021-01-14 | 2021-01-25 |       11 | 2021-01-25 |        0 | 2021-01-29 |          4 | 2021-02-24 |      26 |         30 |
+| 2021-01-15 | 2021-02-04 |       20 | 2021-02-06 |        2 | 2021-02-09 |          3 | 2021-03-15 |      34 |         39 |
+| 2021-01-16 | 2021-01-28 |       12 | 2021-02-02 |        5 | 2021-02-03 |          1 | 2021-03-04 |      29 |         35 |
+| 2021-01-17 | 2021-01-18 |        1 | 2021-01-22 |        4 | 2021-01-28 |          6 | 2021-02-28 |      31 |         41 |
+| 2021-01-18 | 2021-01-26 |        8 | 2021-01-26 |        0 | 2021-01-30 |          4 | 2021-03-05 |      34 |         38 |
+| 2021-01-19 | 2021-02-12 |       24 | 2021-02-16 |        4 | 2021-02-19 |          3 | 2021-03-16 |      25 |         32 |
+| 2021-01-20 | 2021-02-03 |       14 | 2021-02-07 |        4 | 2021-02-09 |          2 | 2021-03-10 |      29 |         35 |
+| 2021-01-21 | 2021-01-29 |        8 | 2021-01-30 |        1 | 2021-02-02 |          3 | 2021-03-03 |      29 |         33 |
+| 2021-01-22 | 2021-02-01 |       10 | 2021-02-04 |        3 | 2021-02-06 |          2 | 2021-03-08 |      30 |         35 |
+| 2021-01-23 | 2021-01-26 |        3 | 2021-01-30 |        4 | 2021-02-04 |          5 | 2021-03-05 |      29 |         38 |
+| 2021-01-24 | 2021-01-31 |        7 | 2021-02-02 |        2 | 2021-02-05 |          3 | 2021-03-01 |      24 |         29 |
+| 2021-01-25 | 2021-01-31 |        6 | 2021-02-03 |        3 | 2021-02-06 |          3 | 2021-03-13 |      35 |         41 |
 
 <br>
 
 ``` r
-dar_month_2022 <- dar_mon_ex |> forager::dar_month(date, gct, earb, 35)
+x |> dplyr::group_by(month = clock::date_month_factor(dos)) |> 
+     dplyr::summarise(avg_prov_lag = round(mean(prov_lag), 2),
+                      avg_bill_lag = round(mean(bill_lag), 2),
+                      avg_accept_lag = round(mean(accept_lag), 2),
+                      avg_pay_lag = round(mean(pay_lag), 2),
+                      avg_dar = round(mean(days_in_ar), 2)) |> 
+     gluedown::md_table()
 ```
 
-<br>
+| month     | avg_prov_lag | avg_bill_lag | avg_accept_lag | avg_pay_lag | avg_dar |
+|:----------|-------------:|-------------:|---------------:|------------:|--------:|
+| January   |        11.65 |         2.94 |           3.35 |       29.35 |   35.65 |
+| February  |        10.54 |         2.39 |           3.18 |       29.82 |   35.39 |
+| March     |        11.45 |         2.42 |           3.32 |       29.35 |   35.10 |
+| April     |        11.47 |         2.53 |           2.83 |       30.17 |   35.53 |
+| May       |        10.48 |         2.23 |           3.03 |       29.23 |   34.48 |
+| June      |        11.50 |         2.03 |           3.43 |       31.00 |   36.47 |
+| July      |        10.81 |         2.55 |           3.03 |       29.23 |   34.81 |
+| August    |        11.32 |         2.55 |           2.94 |       28.97 |   34.45 |
+| September |        10.40 |         2.30 |           3.27 |       29.43 |   35.00 |
+| October   |        10.71 |         2.06 |           3.23 |       30.19 |   35.48 |
+| November  |        11.77 |         2.43 |           3.10 |       29.20 |   34.73 |
+| December  |        11.23 |         1.97 |           2.84 |       30.19 |   35.00 |
 
-| Month     | Gross Charges | Ending AR | Target AR | Days in AR | Pass  |
-|:----------|--------------:|----------:|----------:|-----------:|:------|
-| January   |      325982.2 |  288432.5 |  368044.5 |      27.43 | TRUE  |
-| February  |      297731.7 |  307871.1 |  372164.7 |      28.95 | TRUE  |
-| March     |      198655.1 |  253976.6 |  224288.1 |      39.63 | FALSE |
-| April     |      186047.6 |  183684.9 |  217055.5 |      29.62 | TRUE  |
-| May       |      123654.3 |  204227.6 |  139609.7 |      51.20 | FALSE |
-| June      |      131440.3 |  203460.5 |  153347.0 |      46.44 | FALSE |
-| July      |      153992.0 |  182771.3 |  173861.9 |      36.79 | FALSE |
-| August    |      156975.5 |  169633.6 |  177230.4 |      33.50 | TRUE  |
-| September |      146878.1 |  179347.7 |  171357.8 |      36.63 | FALSE |
-| October   |      163799.4 |  178051.1 |  184934.9 |      33.70 | TRUE  |
-| November  |      151410.7 |  162757.5 |  176645.9 |      32.25 | TRUE  |
-| December  |      169094.5 |  199849.3 |  190913.1 |      36.64 | FALSE |
+## Aging Calculation
+
+``` r
+x |> dplyr::select(dos, dor, dtad, days_in_ar) |> 
+  dplyr::group_by(month = clock::date_month_factor(dos), 
+                  aging_bucket = cut(days_in_ar, breaks = seq(0, 500, 30))) |> 
+  dplyr::tally(name = "claims") |> 
+  gluedown::md_table()
+```
+
+| month     | aging_bucket | claims |
+|:----------|:-------------|-------:|
+| January   | (0,30\]      |      4 |
+| January   | (30,60\]     |     27 |
+| February  | (0,30\]      |      2 |
+| February  | (30,60\]     |     26 |
+| March     | (0,30\]      |      3 |
+| March     | (30,60\]     |     28 |
+| April     | (0,30\]      |      4 |
+| April     | (30,60\]     |     26 |
+| May       | (0,30\]      |      2 |
+| May       | (30,60\]     |     29 |
+| June      | (0,30\]      |      3 |
+| June      | (30,60\]     |     27 |
+| July      | (0,30\]      |      6 |
+| July      | (30,60\]     |     25 |
+| August    | (0,30\]      |      5 |
+| August    | (30,60\]     |     26 |
+| September | (0,30\]      |      3 |
+| September | (30,60\]     |     27 |
+| October   | (0,30\]      |      2 |
+| October   | (30,60\]     |     29 |
+| November  | (0,30\]      |      4 |
+| November  | (30,60\]     |     26 |
+| December  | (0,30\]      |      4 |
+| December  | (30,60\]     |     27 |
+
+## Average Days in AR Monthly Calculation
+
+``` r
+y <- tibble::tibble(
+  date = clock::date_build(2022, 1:12),
+  gct = abs(rnorm(12, c(365000.567, 169094.46, 297731.74), c(2:3))),
+  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3))))
+
+y |> 
+  forager::dar_month(date, gct, earb, dart = 35) |> 
+  gluedown::md_table()
+```
+
+| date       | month     | nmon | ndip |      gct |     earb | earb_trg |    earb_dc |   earb_pct |       adc |      dar | pass |    actual |    ideal |     radiff |
+|:-----------|:----------|-----:|-----:|---------:|---------:|---------:|-----------:|-----------:|----------:|---------:|:-----|----------:|---------:|-----------:|
+| 2022-01-01 | January   |    1 |   31 | 364998.5 | 182767.4 | 412095.1 | -229327.68 | -125.47513 | 11774.146 | 15.52278 | TRUE | 0.5007347 | 1.129032 | -0.6282975 |
+| 2022-02-01 | February  |    2 |   28 | 169096.1 | 169635.2 | 211370.2 |  -41734.98 |  -24.60278 |  6039.148 | 28.08926 | TRUE | 1.0031879 | 1.250000 | -0.2468121 |
+| 2022-03-01 | March     |    3 |   31 | 297730.2 | 179343.5 | 336147.0 | -156803.57 |  -87.43200 |  9604.201 | 18.67344 | TRUE | 0.6023690 | 1.129032 | -0.5266633 |
+| 2022-04-01 | April     |    4 |   30 | 365003.2 | 182771.3 | 425837.1 | -243065.79 | -132.98906 | 12166.773 | 15.02216 | TRUE | 0.5007388 | 1.166667 | -0.6659278 |
+| 2022-05-01 | May       |    5 |   31 | 169094.3 | 169635.1 | 190912.9 |  -21277.86 |  -12.54331 |  5454.655 | 31.09914 | TRUE | 1.0031980 | 1.129032 | -0.1258343 |
+| 2022-06-01 | June      |    6 |   30 | 297731.9 | 179349.7 | 347353.9 | -168004.21 |  -93.67412 |  9924.396 | 18.07159 | TRUE | 0.6023865 | 1.166667 | -0.5642802 |
+| 2022-07-01 | July      |    7 |   31 | 364997.9 | 182769.4 | 412094.5 | -229325.04 | -125.47233 | 11774.127 | 15.52297 | TRUE | 0.5007409 | 1.129032 | -0.6282913 |
+| 2022-08-01 | August    |    8 |   31 | 169093.6 | 169633.3 | 190912.1 |  -21278.76 |  -12.54397 |  5454.632 | 31.09896 | TRUE | 1.0031921 | 1.129032 | -0.1258401 |
+| 2022-09-01 | September |    9 |   30 | 297728.5 | 179347.6 | 347349.9 | -168002.27 |  -93.67411 |  9924.282 | 18.07159 | TRUE | 0.6023865 | 1.166667 | -0.5642802 |
+| 2022-10-01 | October   |   10 |   31 | 365002.3 | 182776.8 | 412099.4 | -229322.55 | -125.46589 | 11774.268 | 15.52341 | TRUE | 0.5007552 | 1.129032 | -0.6282770 |
+| 2022-11-01 | November  |   11 |   30 | 169096.6 | 169630.3 | 197279.4 |  -27649.04 |  -16.29958 |  5636.554 | 30.09469 | TRUE | 1.0031563 | 1.166667 | -0.1635103 |
+| 2022-12-01 | December  |   12 |   31 | 297733.0 | 179352.7 | 336150.1 | -156797.46 |  -87.42411 |  9604.289 | 18.67423 | TRUE | 0.6023944 | 1.129032 | -0.5266379 |
 
 <br>
 
@@ -267,36 +264,6 @@ gt_1 <- dar_month_2022 |>
 <summary>
 Click to View Code for Table
 </summary>
-
-``` r
-dar_month_2022
-#>          date     month nmon ndip      gct     earb earb_trg   earb_dc earb_pct
-#> 1  2022-01-01   January    1   31 325982.2 288432.5 368044.5 -79611.93   -27.60
-#> 2  2022-02-01  February    2   28 297731.7 307871.1 372164.7 -64293.60   -20.88
-#> 3  2022-03-01     March    3   31 198655.1 253976.6 224288.1  29688.50    11.69
-#> 4  2022-04-01     April    4   30 186047.6 183684.9 217055.5 -33370.57   -18.17
-#> 5  2022-05-01       May    5   31 123654.3 204227.6 139609.7  64617.85    31.64
-#> 6  2022-06-01      June    6   30 131440.3 203460.5 153347.0  50113.48    24.63
-#> 7  2022-07-01      July    7   31 153992.0 182771.3 173861.9   8909.44     4.87
-#> 8  2022-08-01    August    8   31 156975.5 169633.6 177230.4  -7596.79    -4.48
-#> 9  2022-09-01 September    9   30 146878.1 179347.7 171357.8   7989.91     4.45
-#> 10 2022-10-01   October   10   31 163799.4 178051.1 184934.9  -6883.74    -3.87
-#> 11 2022-11-01  November   11   30 151410.7 162757.5 176645.9 -13888.37    -8.53
-#> 12 2022-12-01  December   12   31 169094.5 199849.3 190913.1   8936.22     4.47
-#>         adc   dar  pass actual ideal radiff
-#> 1  10515.56 27.43  TRUE   0.88  1.13  -0.25
-#> 2  10633.28 28.95  TRUE   1.03  1.25  -0.22
-#> 3   6408.23 39.63 FALSE   1.28  1.13   0.15
-#> 4   6201.59 29.62  TRUE   0.99  1.17  -0.18
-#> 5   3988.85 51.20 FALSE   1.65  1.13   0.52
-#> 6   4381.34 46.44 FALSE   1.55  1.17   0.38
-#> 7   4967.48 36.79 FALSE   1.19  1.13   0.06
-#> 8   5063.73 33.50  TRUE   1.08  1.13  -0.05
-#> 9   4895.94 36.63 FALSE   1.22  1.17   0.05
-#> 10  5283.85 33.70  TRUE   1.09  1.13  -0.04
-#> 11  5047.02 32.25  TRUE   1.07  1.17  -0.10
-#> 12  5454.66 36.64 FALSE   1.18  1.13   0.05
-```
 
 ``` r
 # Create df for gt_plt_bar_stack
@@ -363,215 +330,19 @@ gt_2 <- dar_month_2022_gt |>
 
 <br>
 
-``` r
-library(GGally)
-#> Loading required package: ggplot2
-#> Registered S3 method overwritten by 'GGally':
-#>   method from   
-#>   +.gg   ggplot2
-dar_month_2022 |> 
-  dplyr::select("Ending AR" = earb, 
-                "AR Target" = earb_trg, 
-                "Gross Charges" = gct, 
-                "Days in AR" = dar,
-                pass) |> 
-  ggparcoord(columns = 1:4, 
-             scale = "uniminmax",
-             #scale = "globalminmax",
-             groupColumn = "pass") + 
-  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
-  ggplot2::xlab("") +
-  ggplot2::ylab("") +
-  ggplot2::coord_flip() +
-  ggplot2::facet_wrap("pass") +
-  ggthemes::theme_pander() +
-  ggplot2::theme(legend.position = "none")
-```
-
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="100%" />
-
-``` r
-ndip_31 <- dar_month_2022 |> dplyr::select(ndip, ideal) |> dplyr::filter(ndip == 31)
-ndip_31 <- ndip_31$ideal[[1]]
-```
-
-``` r
-darmon2 <- dar_month_2022 |> dplyr::mutate(trg_abline = earb_trg / earb)
-
-trg_month <- darmon2 |> dplyr::select(month, trg_abline)
-
-jan <- trg_month$trg_abline[[1]]
-feb <- trg_month$trg_abline[[2]]
-mar <- trg_month$trg_abline[[3]]
-apr <- trg_month$trg_abline[[4]]
-may <- trg_month$trg_abline[[5]]
-jun <- trg_month$trg_abline[[6]]
-jul <- trg_month$trg_abline[[7]]
-aug <- trg_month$trg_abline[[8]]
-sep <- trg_month$trg_abline[[9]]
-oct <- trg_month$trg_abline[[10]]
-nov <- trg_month$trg_abline[[11]]
-dec <- trg_month$trg_abline[[12]]
-
-options(scipen = 999)
-library(ggplot2)
-library(geomtextpath)
-ggplot(data = darmon2) + 
-  geomtextpath::geom_labelabline(
-    slope = jan, 
-    intercept = 0, 
-    label = "Jan", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.9, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = feb, 
-    intercept = 0, 
-    label = "Feb", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.825, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = mar, 
-    intercept = 0, 
-    label = "Mar", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = apr, 
-    intercept = 0, 
-    label = "Apr", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = may, 
-    intercept = 0, 
-    label = "May", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = jun, 
-    intercept = 0, 
-    label = "Jun", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = jul, 
-    intercept = 0, 
-    label = "Jul", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = aug, 
-    intercept = 0, 
-    label = "Aug", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = sep, 
-    intercept = 0, 
-    label = "Sept", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = oct, 
-    intercept = 0, 
-    label = "Oct", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = nov, 
-    intercept = 0, 
-    label = "Nov", 
-    linetype = 2, 
-    colour = "#00BFC4", 
-    fill = "#00BFC4", 
-    boxcolour = "white", 
-    textcolour = "white", 
-    hjust = 0.7, 
-    vjust = 0.5) +
-  geomtextpath::geom_labelabline(
-    slope = dec, 
-    intercept = 0, 
-    label = "Dec", 
-    linetype = 3,
-    colour = "red", 
-    fill = "red",
-    boxcolour = "white", 
-    textcolour = "white",
-    hjust = 0.5, 
-    vjust = 0.5) +
-  geom_point(mapping = aes(x = earb_trg, y = earb, color = pass), size = 3) +
-  ggrepel::geom_text_repel(aes(x = earb_trg, y = earb, label = month), force = 3) +
-  xlab("Ending AR Target") +
-  ylab("Ending AR Balance") +
-  ggthemes::theme_pander()
-```
-
-<img src="man/figures/README-unnamed-chunk-14-1.png" width="100%" />
-
 ## Days in AR Quarterly Calculation
 
 ``` r
-dar_quarter_2022 <- dar_mon_ex |> forager::dar_qtr(date, gct, earb, 35)
+y |> forager::dar_qtr(date, gct, earb, 35) |> 
+     gluedown::md_table()
 ```
 
-<br>
-
-| Quarter | Gross Charges | Ending AR | Target AR | Days in AR | Pass  |
-|--------:|--------------:|----------:|----------:|-----------:|:------|
-|       1 |      822369.1 |  253976.6 |  319810.2 |      27.80 | TRUE  |
-|       2 |      441142.2 |  203460.5 |  169670.1 |      41.97 | FALSE |
-|       3 |      457845.6 |  179347.7 |  174180.4 |      36.04 | FALSE |
-|       4 |      484304.6 |  199849.3 |  184246.3 |      37.96 | FALSE |
+| date       | nqtr | ndip |  gct_qtr |     earb | earb_trg |   earb_dc | earb_pct |     adc |   dar | pass | actual | ideal | radiff |
+|:-----------|-----:|-----:|---------:|---------:|---------:|----------:|---------:|--------:|------:|:-----|-------:|------:|-------:|
+| 2022-03-01 |    1 |   90 | 831824.9 | 179343.5 | 323487.5 | -144144.0 |   -80.37 | 9242.50 | 19.40 | TRUE |   0.22 |  0.39 |  -0.17 |
+| 2022-06-01 |    2 |   91 | 831829.4 | 179349.7 | 319934.4 | -140584.7 |   -78.39 | 9140.98 | 19.62 | TRUE |   0.22 |  0.38 |  -0.16 |
+| 2022-09-01 |    3 |   92 | 831820.0 | 179347.6 | 316453.2 | -137105.6 |   -76.45 | 9041.52 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
+| 2022-12-01 |    4 |   92 | 831831.9 | 179352.7 | 316457.8 | -137105.1 |   -76.44 | 9041.65 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
 
 <br>
 
@@ -579,20 +350,6 @@ dar_quarter_2022 <- dar_mon_ex |> forager::dar_qtr(date, gct, earb, 35)
 <summary>
 Click to View Code for Table
 </summary>
-
-``` r
-dar_quarter_2022
-#>         date nqtr ndip  gct_qtr     earb earb_trg   earb_dc earb_pct     adc
-#> 1 2022-03-01    1   90 822369.1 253976.6 319810.2 -65833.65   -25.92 9137.43
-#> 2 2022-06-01    2   91 441142.2 203460.5 169670.1  33790.40    16.61 4847.72
-#> 3 2022-09-01    3   92 457845.6 179347.7 174180.4   5167.33     2.88 4976.58
-#> 4 2022-12-01    4   92 484304.6 199849.3 184246.3  15602.99     7.81 5264.18
-#>     dar  pass actual ideal radiff
-#> 1 27.80  TRUE   0.31  0.39  -0.08
-#> 2 41.97 FALSE   0.46  0.38   0.08
-#> 3 36.04 FALSE   0.39  0.38   0.01
-#> 4 37.96 FALSE   0.41  0.38   0.03
-```
 
 ``` r
 # Create df for gt_plt_bar_stack
@@ -659,29 +416,6 @@ gt_qtr_2 <- dar_qtr_2022_gt |>
 </details>
 
 <img src="man/figures/gt_qtr_2.png" style="width:75.0%" />
-
-``` r
-library(GGally)
-dar_quarter_2022 |> 
-  dplyr::select("Ending AR" = earb, 
-                "AR Target" = earb_trg, 
-                "Gross Charges" = gct_qtr, 
-                "Days in AR" = dar,
-                pass) |> 
-  ggparcoord(columns = 1:4, 
-             scale = "uniminmax",
-             #scale = "globalminmax",
-             groupColumn = "pass") + 
-  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
-  ggplot2::xlab("") +
-  ggplot2::ylab("") +
-  ggplot2::coord_flip() +
-  ggplot2::facet_wrap("pass") +
-  ggthemes::theme_pander() +
-  ggplot2::theme(legend.position = "none")
-```
-
-<img src="man/figures/README-unnamed-chunk-19-1.png" width="100%" />
 
 ## Code of Conduct
 
