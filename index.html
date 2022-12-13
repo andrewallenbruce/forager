@@ -15,9 +15,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.2/font.css" rel="stylesheet">
-<link href="deps/Fira_Code-0.4.2/font.css" rel="stylesheet">
-<link href="deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.4/font.css" rel="stylesheet">
+<link href="deps/Fira_Code-0.4.4/font.css" rel="stylesheet">
+<link href="deps/Roboto_Slab-0.4.4/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Healthcare Revenue Cycle Analysis Suite">
@@ -113,309 +113,899 @@
 </blockquote>
 <p><br></p>
 <!-- badges: start -->
-<!-- badges: end --><p>The goal of {forager} is to provide a suite of tools for the analysis of common healthcare revenue cycle management Key Performance Indicators (KPIs).</p>
+
+<p><code>forager</code> is a work-in-progress, the goal of which is to become a suite of integrated analytics tools focused on a comprehensive overview of a healthcare organization’s operational and financial performance areas. Build your own rule-based, automated reporting pipeline to monitor:</p>
+<ul>
+<li>Patient Scheduling</li>
+<li>Coding / Billing</li>
+<li>Productivity</li>
+<li>Collections &amp; A/R</li>
+<li>Denial Management</li>
+</ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of forager from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of <code>forager</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
-</h2>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrewallenbruce/forager" class="external-link">forager</a></span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">date_ex</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  dos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"2022-02-10"</span>, <span class="st">"2022-02-09"</span>, <span class="st">"2022-02-08"</span>, <span class="st">"2022-02-08"</span>, <span class="st">"2022-02-07"</span>,</span>
-<span>      <span class="st">"2022-02-07"</span>, <span class="st">"2022-02-05"</span>, <span class="st">"2022-02-05"</span>, <span class="st">"2022-02-02"</span>, <span class="st">"2022-02-02"</span>,</span>
-<span>      <span class="st">"2022-02-02"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-01-31"</span>,</span>
-<span>      <span class="st">"2022-01-30"</span>, <span class="st">"2022-01-30"</span>, <span class="st">"2022-01-29"</span>, <span class="st">"2022-01-29"</span>, <span class="st">"2022-01-28"</span>,</span>
-<span>      <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-21"</span>, <span class="st">"2022-01-21"</span>, <span class="st">"2022-01-20"</span>,</span>
-<span>      <span class="st">"2022-01-20"</span>, <span class="st">"2022-01-20"</span>, <span class="st">"2022-01-08"</span>, <span class="st">"2022-01-07"</span>, <span class="st">"2021-12-31"</span>,</span>
-<span>      <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-31"</span>, <span class="st">"2021-12-27"</span>,</span>
-<span>      <span class="st">"2021-12-27"</span>, <span class="st">"2021-12-26"</span>, <span class="st">"2021-12-26"</span>, <span class="st">"2021-12-25"</span>, <span class="st">"2021-12-25"</span>,</span>
-<span>      <span class="st">"2021-12-25"</span>, <span class="st">"2021-12-25"</span>, <span class="st">"2021-12-25"</span>, <span class="st">"2021-12-25"</span>, <span class="st">"2021-12-19"</span>,</span>
-<span>      <span class="st">"2021-12-18"</span>, <span class="st">"2021-12-08"</span>, <span class="st">"2021-11-27"</span>, <span class="st">"2021-11-20"</span>, <span class="st">"2021-11-20"</span>,</span>
-<span>      <span class="st">"2021-11-19"</span>, <span class="st">"2021-11-19"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    tz <span class="op">=</span> <span class="st">"UTC"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  dor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="st">"2022-02-28"</span>, <span class="st">"2022-02-10"</span>, <span class="st">"2022-02-10"</span>, <span class="st">"2022-02-10"</span>, <span class="st">"2022-02-10"</span>,</span>
-<span>      <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>,</span>
-<span>      <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2021-01-21"</span>,</span>
-<span>      <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>,</span>
-<span>      <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-21"</span>, <span class="st">"2022-01-18"</span>,</span>
-<span>      <span class="st">"2021-12-28"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-21"</span>, <span class="st">"2022-01-18"</span>, <span class="st">"2022-01-18"</span>,</span>
-<span>      <span class="st">"2022-02-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2021-12-11"</span>, <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>,</span>
-<span>      <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-28"</span>,</span>
-<span>      <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-28"</span>, <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>,</span>
-<span>      <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span>,</span>
-<span>      <span class="st">"2022-01-31"</span>, <span class="st">"2022-01-31"</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    tz <span class="op">=</span> <span class="st">"UTC"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><br> Calculate the number of days between the Date of Service (DOS) and today’s date: <br></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">date_ex</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>today <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/age_days.html">age_days</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">today</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 52 × 3</span></span>
-<span><span class="co">#&gt;    dos                 today        age</span></span>
-<span><span class="co">#&gt;    &lt;dttm&gt;              &lt;date&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2021-11-19 00:00:00 2022-09-06   293</span></span>
-<span><span class="co">#&gt;  2 2021-11-19 00:00:00 2022-09-06   293</span></span>
-<span><span class="co">#&gt;  3 2021-11-20 00:00:00 2022-09-06   292</span></span>
-<span><span class="co">#&gt;  4 2021-11-20 00:00:00 2022-09-06   292</span></span>
-<span><span class="co">#&gt;  5 2021-11-27 00:00:00 2022-09-06   285</span></span>
-<span><span class="co">#&gt;  6 2021-12-08 00:00:00 2022-09-06   274</span></span>
-<span><span class="co">#&gt;  7 2021-12-18 00:00:00 2022-09-06   264</span></span>
-<span><span class="co">#&gt;  8 2021-12-19 00:00:00 2022-09-06   263</span></span>
-<span><span class="co">#&gt;  9 2021-12-25 00:00:00 2022-09-06   257</span></span>
-<span><span class="co">#&gt; 10 2021-12-25 00:00:00 2022-09-06   257</span></span>
-<span><span class="co">#&gt; # … with 42 more rows</span></span></code></pre></div>
-<p><br> Calculate the number of days between the Date of Service (DOS) and the Date of Release (DOR): <br></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">date_ex</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">dor</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">dor</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/age_days.html">age_days</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">dor</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 52 × 3</span></span>
-<span><span class="co">#&gt;    dos                 dor                   age</span></span>
-<span><span class="co">#&gt;    &lt;dttm&gt;              &lt;dttm&gt;              &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2021-11-19 00:00:00 2022-01-31 00:00:00    74</span></span>
-<span><span class="co">#&gt;  2 2021-11-19 00:00:00 2022-01-31 00:00:00    74</span></span>
-<span><span class="co">#&gt;  3 2021-11-20 00:00:00 2022-01-31 00:00:00    73</span></span>
-<span><span class="co">#&gt;  4 2021-11-20 00:00:00 2022-01-31 00:00:00    73</span></span>
-<span><span class="co">#&gt;  5 2021-11-27 00:00:00 2022-01-31 00:00:00    66</span></span>
-<span><span class="co">#&gt;  6 2021-12-08 00:00:00 2022-01-31 00:00:00    55</span></span>
-<span><span class="co">#&gt;  7 2021-12-18 00:00:00 2022-01-31 00:00:00    45</span></span>
-<span><span class="co">#&gt;  8 2021-12-19 00:00:00 2022-01-31 00:00:00    44</span></span>
-<span><span class="co">#&gt;  9 2021-12-25 00:00:00 2022-01-31 00:00:00    38</span></span>
-<span><span class="co">#&gt; 10 2021-12-25 00:00:00 2022-01-31 00:00:00    38</span></span>
-<span><span class="co">#&gt; # … with 42 more rows</span></span></code></pre></div>
-<p><br><br></p>
 </div>
 <div class="section level2">
-<h2 id="days-in-ar-monthly-calculation">Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-monthly-calculation"></a>
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>The following is a basic example of a monthly Days in AR calculation:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Example data frame</span></span>
-<span><span class="va">dar_mon_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span><span class="st">"2022-01-01"</span>, <span class="st">"2022-02-01"</span>, <span class="st">"2022-03-01"</span>,</span>
-<span><span class="st">"2022-04-01"</span>, <span class="st">"2022-05-01"</span>, <span class="st">"2022-06-01"</span>,</span>
-<span><span class="st">"2022-07-01"</span>, <span class="st">"2022-08-01"</span>, <span class="st">"2022-09-01"</span>,</span>
-<span><span class="st">"2022-10-01"</span>, <span class="st">"2022-11-01"</span>, <span class="st">"2022-12-01"</span><span class="op">)</span><span class="op">)</span>,</span>
+<p>Calculate:</p>
+<ul>
+<li>Provider Lag: Days between Date of Service (<code>dos</code>) and Date of Release (<code>dor</code>)</li>
+<li>Billing Lag: Days between Date of Release (<code>dor</code>) and Date of Submission (<code>dtos</code>)</li>
+<li>Acceptance Lag: Days between Date of Submission (<code>dtos</code>) and Date of Acceptance (<code>dtoa</code>)</li>
+<li>Payment Lag: Days between Date of Acceptance (<code>dtoa</code>) and Date of Adjudication (<code>dtad</code>)</li>
+<li>Days in AR: Days between Date of Release (<code>dor</code>) and Date of Adjudication (<code>dtad</code>)</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  dos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2021</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, </span>
+<span>  <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2021</span>, <span class="fl">12</span>, <span class="fl">31</span><span class="op">)</span>, by <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  dor <span class="op">=</span> <span class="va">dos</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">365</span>, <span class="fl">11</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  prov_lag <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_count_between.html" class="external-link">date_count_between</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">dor</span>, <span class="st">"day"</span><span class="op">)</span>,</span>
+<span>  dtos <span class="op">=</span> <span class="va">dor</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">365</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  bill_lag <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_count_between.html" class="external-link">date_count_between</a></span><span class="op">(</span><span class="va">dor</span>, <span class="va">dtos</span>, <span class="st">"day"</span><span class="op">)</span>,</span>
+<span>  dtoa <span class="op">=</span> <span class="va">dtos</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">365</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  accept_lag <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_count_between.html" class="external-link">date_count_between</a></span><span class="op">(</span><span class="va">dtos</span>, <span class="va">dtoa</span>, <span class="st">"day"</span><span class="op">)</span>,</span>
+<span>  dtad <span class="op">=</span> <span class="va">dtoa</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">365</span>, <span class="fl">30</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  pay_lag <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_count_between.html" class="external-link">date_count_between</a></span><span class="op">(</span><span class="va">dtoa</span>, <span class="va">dtad</span>, <span class="st">"day"</span><span class="op">)</span>,</span>
+<span>  days_in_ar <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_count_between.html" class="external-link">date_count_between</a></span><span class="op">(</span><span class="va">dor</span>, <span class="va">dtad</span>, <span class="st">"day"</span><span class="op">)</span>,</span>
+<span><span class="op">)</span></span>
 <span></span>
-<span>gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span><span class="fl">325982.23</span>, <span class="fl">297731.74</span>, <span class="fl">198655.14</span>,</span>
-<span><span class="fl">186047.56</span>, <span class="fl">123654.34</span>, <span class="fl">131440.28</span>,</span>
-<span><span class="fl">153991.95</span>, <span class="fl">156975.52</span>, <span class="fl">146878.12</span>,</span>
-<span><span class="fl">163799.44</span>, <span class="fl">151410.74</span>, <span class="fl">169094.46</span><span class="op">)</span>,</span>
-<span></span>
-<span>earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span><span class="fl">288432.52</span>, <span class="fl">307871.08</span>, <span class="fl">253976.56</span>,</span>
-<span><span class="fl">183684.92</span>, <span class="fl">204227.59</span>, <span class="fl">203460.47</span>,</span>
-<span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span>,</span>
-<span><span class="fl">178051.11</span>, <span class="fl">162757.49</span>, <span class="fl">199849.32</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dar_mon_ex</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span>col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Month"</span>, </span>
-<span>                             <span class="st">"Gross Charges"</span>, </span>
-<span>                             <span class="st">"Ending AR Balance"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">25</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="10%">
+<col width="10%">
+<col width="8%">
+<col width="10%">
+<col width="8%">
+<col width="10%">
+<col width="10%">
+<col width="10%">
+<col width="7%">
+<col width="10%">
+</colgroup>
 <thead><tr class="header">
-<th align="left">Month</th>
-<th align="right">Gross Charges</th>
-<th align="right">Ending AR Balance</th>
+<th align="left">dos</th>
+<th align="left">dor</th>
+<th align="right">prov_lag</th>
+<th align="left">dtos</th>
+<th align="right">bill_lag</th>
+<th align="left">dtoa</th>
+<th align="right">accept_lag</th>
+<th align="left">dtad</th>
+<th align="right">pay_lag</th>
+<th align="right">days_in_ar</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">2022-01-01</td>
-<td align="right">325982.2</td>
-<td align="right">288432.5</td>
+<td align="left">2021-01-01</td>
+<td align="left">2021-01-15</td>
+<td align="right">14</td>
+<td align="left">2021-01-19</td>
+<td align="right">4</td>
+<td align="left">2021-01-23</td>
+<td align="right">4</td>
+<td align="left">2021-02-25</td>
+<td align="right">33</td>
+<td align="right">41</td>
 </tr>
 <tr class="even">
-<td align="left">2022-02-01</td>
-<td align="right">297731.7</td>
-<td align="right">307871.1</td>
+<td align="left">2021-01-02</td>
+<td align="left">2021-01-18</td>
+<td align="right">16</td>
+<td align="left">2021-01-18</td>
+<td align="right">0</td>
+<td align="left">2021-01-20</td>
+<td align="right">2</td>
+<td align="left">2021-02-20</td>
+<td align="right">31</td>
+<td align="right">33</td>
 </tr>
 <tr class="odd">
-<td align="left">2022-03-01</td>
-<td align="right">198655.1</td>
-<td align="right">253976.6</td>
+<td align="left">2021-01-03</td>
+<td align="left">2021-01-20</td>
+<td align="right">17</td>
+<td align="left">2021-01-22</td>
+<td align="right">2</td>
+<td align="left">2021-01-25</td>
+<td align="right">3</td>
+<td align="left">2021-02-16</td>
+<td align="right">22</td>
+<td align="right">27</td>
 </tr>
 <tr class="even">
-<td align="left">2022-04-01</td>
-<td align="right">186047.6</td>
-<td align="right">183684.9</td>
+<td align="left">2021-01-04</td>
+<td align="left">2021-01-10</td>
+<td align="right">6</td>
+<td align="left">2021-01-10</td>
+<td align="right">0</td>
+<td align="left">2021-01-11</td>
+<td align="right">1</td>
+<td align="left">2021-02-07</td>
+<td align="right">27</td>
+<td align="right">28</td>
 </tr>
 <tr class="odd">
-<td align="left">2022-05-01</td>
-<td align="right">123654.3</td>
-<td align="right">204227.6</td>
+<td align="left">2021-01-05</td>
+<td align="left">2021-01-20</td>
+<td align="right">15</td>
+<td align="left">2021-01-26</td>
+<td align="right">6</td>
+<td align="left">2021-01-30</td>
+<td align="right">4</td>
+<td align="left">2021-03-01</td>
+<td align="right">30</td>
+<td align="right">40</td>
 </tr>
 <tr class="even">
-<td align="left">2022-06-01</td>
-<td align="right">131440.3</td>
-<td align="right">203460.5</td>
+<td align="left">2021-01-06</td>
+<td align="left">2021-01-17</td>
+<td align="right">11</td>
+<td align="left">2021-01-22</td>
+<td align="right">5</td>
+<td align="left">2021-01-26</td>
+<td align="right">4</td>
+<td align="left">2021-02-20</td>
+<td align="right">25</td>
+<td align="right">34</td>
 </tr>
 <tr class="odd">
-<td align="left">2022-07-01</td>
-<td align="right">153992.0</td>
-<td align="right">182771.3</td>
+<td align="left">2021-01-07</td>
+<td align="left">2021-01-15</td>
+<td align="right">8</td>
+<td align="left">2021-01-18</td>
+<td align="right">3</td>
+<td align="left">2021-01-22</td>
+<td align="right">4</td>
+<td align="left">2021-02-22</td>
+<td align="right">31</td>
+<td align="right">38</td>
 </tr>
 <tr class="even">
-<td align="left">2022-08-01</td>
-<td align="right">156975.5</td>
-<td align="right">169633.6</td>
+<td align="left">2021-01-08</td>
+<td align="left">2021-01-18</td>
+<td align="right">10</td>
+<td align="left">2021-01-20</td>
+<td align="right">2</td>
+<td align="left">2021-01-25</td>
+<td align="right">5</td>
+<td align="left">2021-02-21</td>
+<td align="right">27</td>
+<td align="right">34</td>
 </tr>
 <tr class="odd">
-<td align="left">2022-09-01</td>
-<td align="right">146878.1</td>
-<td align="right">179347.7</td>
+<td align="left">2021-01-09</td>
+<td align="left">2021-01-21</td>
+<td align="right">12</td>
+<td align="left">2021-01-23</td>
+<td align="right">2</td>
+<td align="left">2021-01-26</td>
+<td align="right">3</td>
+<td align="left">2021-02-21</td>
+<td align="right">26</td>
+<td align="right">31</td>
 </tr>
 <tr class="even">
-<td align="left">2022-10-01</td>
-<td align="right">163799.4</td>
-<td align="right">178051.1</td>
+<td align="left">2021-01-10</td>
+<td align="left">2021-01-26</td>
+<td align="right">16</td>
+<td align="left">2021-01-31</td>
+<td align="right">5</td>
+<td align="left">2021-02-05</td>
+<td align="right">5</td>
+<td align="left">2021-03-08</td>
+<td align="right">31</td>
+<td align="right">41</td>
 </tr>
 <tr class="odd">
-<td align="left">2022-11-01</td>
-<td align="right">151410.7</td>
-<td align="right">162757.5</td>
+<td align="left">2021-01-11</td>
+<td align="left">2021-02-02</td>
+<td align="right">22</td>
+<td align="left">2021-02-07</td>
+<td align="right">5</td>
+<td align="left">2021-02-09</td>
+<td align="right">2</td>
+<td align="left">2021-03-12</td>
+<td align="right">31</td>
+<td align="right">38</td>
 </tr>
 <tr class="even">
-<td align="left">2022-12-01</td>
-<td align="right">169094.5</td>
-<td align="right">199849.3</td>
+<td align="left">2021-01-12</td>
+<td align="left">2021-01-14</td>
+<td align="right">2</td>
+<td align="left">2021-01-16</td>
+<td align="right">2</td>
+<td align="left">2021-01-19</td>
+<td align="right">3</td>
+<td align="left">2021-02-14</td>
+<td align="right">26</td>
+<td align="right">31</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-13</td>
+<td align="left">2021-01-23</td>
+<td align="right">10</td>
+<td align="left">2021-01-28</td>
+<td align="right">5</td>
+<td align="left">2021-02-01</td>
+<td align="right">4</td>
+<td align="left">2021-03-07</td>
+<td align="right">34</td>
+<td align="right">43</td>
+</tr>
+<tr class="even">
+<td align="left">2021-01-14</td>
+<td align="left">2021-01-25</td>
+<td align="right">11</td>
+<td align="left">2021-01-25</td>
+<td align="right">0</td>
+<td align="left">2021-01-29</td>
+<td align="right">4</td>
+<td align="left">2021-02-24</td>
+<td align="right">26</td>
+<td align="right">30</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-15</td>
+<td align="left">2021-02-04</td>
+<td align="right">20</td>
+<td align="left">2021-02-06</td>
+<td align="right">2</td>
+<td align="left">2021-02-09</td>
+<td align="right">3</td>
+<td align="left">2021-03-15</td>
+<td align="right">34</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">2021-01-16</td>
+<td align="left">2021-01-28</td>
+<td align="right">12</td>
+<td align="left">2021-02-02</td>
+<td align="right">5</td>
+<td align="left">2021-02-03</td>
+<td align="right">1</td>
+<td align="left">2021-03-04</td>
+<td align="right">29</td>
+<td align="right">35</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-17</td>
+<td align="left">2021-01-18</td>
+<td align="right">1</td>
+<td align="left">2021-01-22</td>
+<td align="right">4</td>
+<td align="left">2021-01-28</td>
+<td align="right">6</td>
+<td align="left">2021-02-28</td>
+<td align="right">31</td>
+<td align="right">41</td>
+</tr>
+<tr class="even">
+<td align="left">2021-01-18</td>
+<td align="left">2021-01-26</td>
+<td align="right">8</td>
+<td align="left">2021-01-26</td>
+<td align="right">0</td>
+<td align="left">2021-01-30</td>
+<td align="right">4</td>
+<td align="left">2021-03-05</td>
+<td align="right">34</td>
+<td align="right">38</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-19</td>
+<td align="left">2021-02-12</td>
+<td align="right">24</td>
+<td align="left">2021-02-16</td>
+<td align="right">4</td>
+<td align="left">2021-02-19</td>
+<td align="right">3</td>
+<td align="left">2021-03-16</td>
+<td align="right">25</td>
+<td align="right">32</td>
+</tr>
+<tr class="even">
+<td align="left">2021-01-20</td>
+<td align="left">2021-02-03</td>
+<td align="right">14</td>
+<td align="left">2021-02-07</td>
+<td align="right">4</td>
+<td align="left">2021-02-09</td>
+<td align="right">2</td>
+<td align="left">2021-03-10</td>
+<td align="right">29</td>
+<td align="right">35</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-21</td>
+<td align="left">2021-01-29</td>
+<td align="right">8</td>
+<td align="left">2021-01-30</td>
+<td align="right">1</td>
+<td align="left">2021-02-02</td>
+<td align="right">3</td>
+<td align="left">2021-03-03</td>
+<td align="right">29</td>
+<td align="right">33</td>
+</tr>
+<tr class="even">
+<td align="left">2021-01-22</td>
+<td align="left">2021-02-01</td>
+<td align="right">10</td>
+<td align="left">2021-02-04</td>
+<td align="right">3</td>
+<td align="left">2021-02-06</td>
+<td align="right">2</td>
+<td align="left">2021-03-08</td>
+<td align="right">30</td>
+<td align="right">35</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-23</td>
+<td align="left">2021-01-26</td>
+<td align="right">3</td>
+<td align="left">2021-01-30</td>
+<td align="right">4</td>
+<td align="left">2021-02-04</td>
+<td align="right">5</td>
+<td align="left">2021-03-05</td>
+<td align="right">29</td>
+<td align="right">38</td>
+</tr>
+<tr class="even">
+<td align="left">2021-01-24</td>
+<td align="left">2021-01-31</td>
+<td align="right">7</td>
+<td align="left">2021-02-02</td>
+<td align="right">2</td>
+<td align="left">2021-02-05</td>
+<td align="right">3</td>
+<td align="left">2021-03-01</td>
+<td align="right">24</td>
+<td align="right">29</td>
+</tr>
+<tr class="odd">
+<td align="left">2021-01-25</td>
+<td align="left">2021-01-31</td>
+<td align="right">6</td>
+<td align="left">2021-02-03</td>
+<td align="right">3</td>
+<td align="left">2021-02-06</td>
+<td align="right">3</td>
+<td align="left">2021-03-13</td>
+<td align="right">35</td>
+<td align="right">41</td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<p>Using the <code><a href="reference/dar_month.html">dar_month()</a></code> function, we set the Days in AR target (<code>dart</code>) to 35 and calculate:</p>
-<p><br></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_month_2022</span> <span class="op">&lt;-</span> <span class="va">dar_mon_ex</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_month.html">dar_month</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">dos</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>avg_prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">prov_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                      avg_bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">bill_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                      avg_accept_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">accept_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                      avg_pay_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">pay_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                      avg_dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="14%">
+<col width="18%">
+<col width="18%">
+<col width="20%">
+<col width="16%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
-<th align="left">Month</th>
-<th align="right">Gross Charges</th>
-<th align="right">Ending AR</th>
-<th align="right">Target AR</th>
-<th align="right">Days in AR</th>
-<th align="left">Pass</th>
+<th align="left">month</th>
+<th align="right">avg_prov_lag</th>
+<th align="right">avg_bill_lag</th>
+<th align="right">avg_accept_lag</th>
+<th align="right">avg_pay_lag</th>
+<th align="right">avg_dar</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">January</td>
-<td align="right">325982.2</td>
-<td align="right">288432.5</td>
-<td align="right">368044.5</td>
-<td align="right">27.43</td>
-<td align="left">TRUE</td>
+<td align="right">11.65</td>
+<td align="right">2.94</td>
+<td align="right">3.35</td>
+<td align="right">29.35</td>
+<td align="right">35.65</td>
 </tr>
 <tr class="even">
 <td align="left">February</td>
-<td align="right">297731.7</td>
-<td align="right">307871.1</td>
-<td align="right">372164.7</td>
-<td align="right">28.95</td>
-<td align="left">TRUE</td>
+<td align="right">10.54</td>
+<td align="right">2.39</td>
+<td align="right">3.18</td>
+<td align="right">29.82</td>
+<td align="right">35.39</td>
 </tr>
 <tr class="odd">
 <td align="left">March</td>
-<td align="right">198655.1</td>
-<td align="right">253976.6</td>
-<td align="right">224288.1</td>
-<td align="right">39.63</td>
-<td align="left">FALSE</td>
+<td align="right">11.45</td>
+<td align="right">2.42</td>
+<td align="right">3.32</td>
+<td align="right">29.35</td>
+<td align="right">35.10</td>
 </tr>
 <tr class="even">
 <td align="left">April</td>
-<td align="right">186047.6</td>
-<td align="right">183684.9</td>
-<td align="right">217055.5</td>
-<td align="right">29.62</td>
-<td align="left">TRUE</td>
+<td align="right">11.47</td>
+<td align="right">2.53</td>
+<td align="right">2.83</td>
+<td align="right">30.17</td>
+<td align="right">35.53</td>
 </tr>
 <tr class="odd">
 <td align="left">May</td>
-<td align="right">123654.3</td>
-<td align="right">204227.6</td>
-<td align="right">139609.7</td>
-<td align="right">51.20</td>
-<td align="left">FALSE</td>
+<td align="right">10.48</td>
+<td align="right">2.23</td>
+<td align="right">3.03</td>
+<td align="right">29.23</td>
+<td align="right">34.48</td>
 </tr>
 <tr class="even">
 <td align="left">June</td>
-<td align="right">131440.3</td>
-<td align="right">203460.5</td>
-<td align="right">153347.0</td>
-<td align="right">46.44</td>
-<td align="left">FALSE</td>
+<td align="right">11.50</td>
+<td align="right">2.03</td>
+<td align="right">3.43</td>
+<td align="right">31.00</td>
+<td align="right">36.47</td>
 </tr>
 <tr class="odd">
 <td align="left">July</td>
-<td align="right">153992.0</td>
-<td align="right">182771.3</td>
-<td align="right">173861.9</td>
-<td align="right">36.79</td>
-<td align="left">FALSE</td>
+<td align="right">10.81</td>
+<td align="right">2.55</td>
+<td align="right">3.03</td>
+<td align="right">29.23</td>
+<td align="right">34.81</td>
 </tr>
 <tr class="even">
 <td align="left">August</td>
-<td align="right">156975.5</td>
-<td align="right">169633.6</td>
-<td align="right">177230.4</td>
-<td align="right">33.50</td>
-<td align="left">TRUE</td>
+<td align="right">11.32</td>
+<td align="right">2.55</td>
+<td align="right">2.94</td>
+<td align="right">28.97</td>
+<td align="right">34.45</td>
 </tr>
 <tr class="odd">
 <td align="left">September</td>
-<td align="right">146878.1</td>
-<td align="right">179347.7</td>
-<td align="right">171357.8</td>
-<td align="right">36.63</td>
-<td align="left">FALSE</td>
+<td align="right">10.40</td>
+<td align="right">2.30</td>
+<td align="right">3.27</td>
+<td align="right">29.43</td>
+<td align="right">35.00</td>
 </tr>
 <tr class="even">
 <td align="left">October</td>
-<td align="right">163799.4</td>
-<td align="right">178051.1</td>
-<td align="right">184934.9</td>
-<td align="right">33.70</td>
-<td align="left">TRUE</td>
+<td align="right">10.71</td>
+<td align="right">2.06</td>
+<td align="right">3.23</td>
+<td align="right">30.19</td>
+<td align="right">35.48</td>
 </tr>
 <tr class="odd">
 <td align="left">November</td>
-<td align="right">151410.7</td>
-<td align="right">162757.5</td>
-<td align="right">176645.9</td>
-<td align="right">32.25</td>
-<td align="left">TRUE</td>
+<td align="right">11.77</td>
+<td align="right">2.43</td>
+<td align="right">3.10</td>
+<td align="right">29.20</td>
+<td align="right">34.73</td>
 </tr>
 <tr class="even">
 <td align="left">December</td>
-<td align="right">169094.5</td>
-<td align="right">199849.3</td>
-<td align="right">190913.1</td>
-<td align="right">36.64</td>
-<td align="left">FALSE</td>
+<td align="right">11.23</td>
+<td align="right">1.97</td>
+<td align="right">2.84</td>
+<td align="right">30.19</td>
+<td align="right">35.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">dor</span>, <span class="va">dtad</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">dos</span><span class="op">)</span>, </span>
+<span>                  aging_bucket <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">days_in_ar</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span>, <span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"claims"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="left">month</th>
+<th align="left">aging_bucket</th>
+<th align="right">claims</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">January</td>
+<td align="left">(0,30]</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">January</td>
+<td align="left">(30,60]</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">February</td>
+<td align="left">(0,30]</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">February</td>
+<td align="left">(30,60]</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">March</td>
+<td align="left">(0,30]</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">March</td>
+<td align="left">(30,60]</td>
+<td align="right">28</td>
+</tr>
+<tr class="odd">
+<td align="left">April</td>
+<td align="left">(0,30]</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">April</td>
+<td align="left">(30,60]</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">May</td>
+<td align="left">(0,30]</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">May</td>
+<td align="left">(30,60]</td>
+<td align="right">29</td>
+</tr>
+<tr class="odd">
+<td align="left">June</td>
+<td align="left">(0,30]</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">June</td>
+<td align="left">(30,60]</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">July</td>
+<td align="left">(0,30]</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">July</td>
+<td align="left">(30,60]</td>
+<td align="right">25</td>
+</tr>
+<tr class="odd">
+<td align="left">August</td>
+<td align="left">(0,30]</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">August</td>
+<td align="left">(30,60]</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">September</td>
+<td align="left">(0,30]</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">September</td>
+<td align="left">(30,60]</td>
+<td align="right">27</td>
+</tr>
+<tr class="odd">
+<td align="left">October</td>
+<td align="left">(0,30]</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">October</td>
+<td align="left">(30,60]</td>
+<td align="right">29</td>
+</tr>
+<tr class="odd">
+<td align="left">November</td>
+<td align="left">(0,30]</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">November</td>
+<td align="left">(30,60]</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="left">December</td>
+<td align="left">(0,30]</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">December</td>
+<td align="left">(30,60]</td>
+<td align="right">27</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="average-days-in-ar-monthly-calculation">Average Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#average-days-in-ar-monthly-calculation"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  date <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2022</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>  gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365000.567</span>, <span class="fl">169094.46</span>, <span class="fl">297731.74</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">y</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_month.html">dar_month</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="8%">
+<col width="7%">
+<col width="4%">
+<col width="4%">
+<col width="6%">
+<col width="6%">
+<col width="6%">
+<col width="8%">
+<col width="8%">
+<col width="7%">
+<col width="6%">
+<col width="4%">
+<col width="7%">
+<col width="6%">
+<col width="8%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">date</th>
+<th align="left">month</th>
+<th align="right">nmon</th>
+<th align="right">ndip</th>
+<th align="right">gct</th>
+<th align="right">earb</th>
+<th align="right">earb_trg</th>
+<th align="right">earb_dc</th>
+<th align="right">earb_pct</th>
+<th align="right">adc</th>
+<th align="right">dar</th>
+<th align="left">pass</th>
+<th align="right">actual</th>
+<th align="right">ideal</th>
+<th align="right">radiff</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">2022-01-01</td>
+<td align="left">January</td>
+<td align="right">1</td>
+<td align="right">31</td>
+<td align="right">364998.5</td>
+<td align="right">182767.4</td>
+<td align="right">412095.1</td>
+<td align="right">-229327.68</td>
+<td align="right">-125.47513</td>
+<td align="right">11774.146</td>
+<td align="right">15.52278</td>
+<td align="left">TRUE</td>
+<td align="right">0.5007347</td>
+<td align="right">1.129032</td>
+<td align="right">-0.6282975</td>
+</tr>
+<tr class="even">
+<td align="left">2022-02-01</td>
+<td align="left">February</td>
+<td align="right">2</td>
+<td align="right">28</td>
+<td align="right">169096.1</td>
+<td align="right">169635.2</td>
+<td align="right">211370.2</td>
+<td align="right">-41734.98</td>
+<td align="right">-24.60278</td>
+<td align="right">6039.148</td>
+<td align="right">28.08926</td>
+<td align="left">TRUE</td>
+<td align="right">1.0031879</td>
+<td align="right">1.250000</td>
+<td align="right">-0.2468121</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-03-01</td>
+<td align="left">March</td>
+<td align="right">3</td>
+<td align="right">31</td>
+<td align="right">297730.2</td>
+<td align="right">179343.5</td>
+<td align="right">336147.0</td>
+<td align="right">-156803.57</td>
+<td align="right">-87.43200</td>
+<td align="right">9604.201</td>
+<td align="right">18.67344</td>
+<td align="left">TRUE</td>
+<td align="right">0.6023690</td>
+<td align="right">1.129032</td>
+<td align="right">-0.5266633</td>
+</tr>
+<tr class="even">
+<td align="left">2022-04-01</td>
+<td align="left">April</td>
+<td align="right">4</td>
+<td align="right">30</td>
+<td align="right">365003.2</td>
+<td align="right">182771.3</td>
+<td align="right">425837.1</td>
+<td align="right">-243065.79</td>
+<td align="right">-132.98906</td>
+<td align="right">12166.773</td>
+<td align="right">15.02216</td>
+<td align="left">TRUE</td>
+<td align="right">0.5007388</td>
+<td align="right">1.166667</td>
+<td align="right">-0.6659278</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-05-01</td>
+<td align="left">May</td>
+<td align="right">5</td>
+<td align="right">31</td>
+<td align="right">169094.3</td>
+<td align="right">169635.1</td>
+<td align="right">190912.9</td>
+<td align="right">-21277.86</td>
+<td align="right">-12.54331</td>
+<td align="right">5454.655</td>
+<td align="right">31.09914</td>
+<td align="left">TRUE</td>
+<td align="right">1.0031980</td>
+<td align="right">1.129032</td>
+<td align="right">-0.1258343</td>
+</tr>
+<tr class="even">
+<td align="left">2022-06-01</td>
+<td align="left">June</td>
+<td align="right">6</td>
+<td align="right">30</td>
+<td align="right">297731.9</td>
+<td align="right">179349.7</td>
+<td align="right">347353.9</td>
+<td align="right">-168004.21</td>
+<td align="right">-93.67412</td>
+<td align="right">9924.396</td>
+<td align="right">18.07159</td>
+<td align="left">TRUE</td>
+<td align="right">0.6023865</td>
+<td align="right">1.166667</td>
+<td align="right">-0.5642802</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-07-01</td>
+<td align="left">July</td>
+<td align="right">7</td>
+<td align="right">31</td>
+<td align="right">364997.9</td>
+<td align="right">182769.4</td>
+<td align="right">412094.5</td>
+<td align="right">-229325.04</td>
+<td align="right">-125.47233</td>
+<td align="right">11774.127</td>
+<td align="right">15.52297</td>
+<td align="left">TRUE</td>
+<td align="right">0.5007409</td>
+<td align="right">1.129032</td>
+<td align="right">-0.6282913</td>
+</tr>
+<tr class="even">
+<td align="left">2022-08-01</td>
+<td align="left">August</td>
+<td align="right">8</td>
+<td align="right">31</td>
+<td align="right">169093.6</td>
+<td align="right">169633.3</td>
+<td align="right">190912.1</td>
+<td align="right">-21278.76</td>
+<td align="right">-12.54397</td>
+<td align="right">5454.632</td>
+<td align="right">31.09896</td>
+<td align="left">TRUE</td>
+<td align="right">1.0031921</td>
+<td align="right">1.129032</td>
+<td align="right">-0.1258401</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-09-01</td>
+<td align="left">September</td>
+<td align="right">9</td>
+<td align="right">30</td>
+<td align="right">297728.5</td>
+<td align="right">179347.6</td>
+<td align="right">347349.9</td>
+<td align="right">-168002.27</td>
+<td align="right">-93.67411</td>
+<td align="right">9924.282</td>
+<td align="right">18.07159</td>
+<td align="left">TRUE</td>
+<td align="right">0.6023865</td>
+<td align="right">1.166667</td>
+<td align="right">-0.5642802</td>
+</tr>
+<tr class="even">
+<td align="left">2022-10-01</td>
+<td align="left">October</td>
+<td align="right">10</td>
+<td align="right">31</td>
+<td align="right">365002.3</td>
+<td align="right">182776.8</td>
+<td align="right">412099.4</td>
+<td align="right">-229322.55</td>
+<td align="right">-125.46589</td>
+<td align="right">11774.268</td>
+<td align="right">15.52341</td>
+<td align="left">TRUE</td>
+<td align="right">0.5007552</td>
+<td align="right">1.129032</td>
+<td align="right">-0.6282770</td>
+</tr>
+<tr class="odd">
+<td align="left">2022-11-01</td>
+<td align="left">November</td>
+<td align="right">11</td>
+<td align="right">30</td>
+<td align="right">169096.6</td>
+<td align="right">169630.3</td>
+<td align="right">197279.4</td>
+<td align="right">-27649.04</td>
+<td align="right">-16.29958</td>
+<td align="right">5636.554</td>
+<td align="right">30.09469</td>
+<td align="left">TRUE</td>
+<td align="right">1.0031563</td>
+<td align="right">1.166667</td>
+<td align="right">-0.1635103</td>
+</tr>
+<tr class="even">
+<td align="left">2022-12-01</td>
+<td align="left">December</td>
+<td align="right">12</td>
+<td align="right">31</td>
+<td align="right">297733.0</td>
+<td align="right">179352.7</td>
+<td align="right">336150.1</td>
+<td align="right">-156797.46</td>
+<td align="right">-87.42411</td>
+<td align="right">9604.289</td>
+<td align="right">18.67423</td>
+<td align="left">TRUE</td>
+<td align="right">0.6023944</td>
+<td align="right">1.129032</td>
+<td align="right">-0.5266379</td>
 </tr>
 </tbody>
 </table>
@@ -423,7 +1013,9 @@
 <div class="section level3">
 <h3 id="presentation-examples">Presentation Examples<a class="anchor" aria-label="anchor" href="#presentation-examples"></a>
 </h3>
-<details><summary>Click to View Code for Table</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<details><summary>
+Click to View Code for Table
+</summary><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gt_1</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span>, <span class="va">dar</span>, <span class="va">pass</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">headliner</span><span class="fu">::</span><span class="fu">add_headline_column</span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb</span>, y <span class="op">=</span> <span class="va">earb_trg</span>, </span>
@@ -455,36 +1047,11 @@
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_table_font.html" class="external-link">opt_table_font</a></span><span class="op">(</span>font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Roboto"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_align_table_header.html" class="external-link">opt_align_table_header</a></span><span class="op">(</span>align <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#gt_1 |&gt; gt::gtsave("gt_1.png", expand = 20)</span></span></code></pre></div></details><p><img src="reference/figures/gt_1.png" style="width:75.0%"></p>
-<details><summary>Click to View Code for Table</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_month_2022</span></span>
-<span><span class="co">#&gt;          date     month nmon ndip      gct     earb earb_trg   earb_dc earb_pct</span></span>
-<span><span class="co">#&gt; 1  2022-01-01   January    1   31 325982.2 288432.5 368044.5 -79611.93   -27.60</span></span>
-<span><span class="co">#&gt; 2  2022-02-01  February    2   28 297731.7 307871.1 372164.7 -64293.60   -20.88</span></span>
-<span><span class="co">#&gt; 3  2022-03-01     March    3   31 198655.1 253976.6 224288.1  29688.50    11.69</span></span>
-<span><span class="co">#&gt; 4  2022-04-01     April    4   30 186047.6 183684.9 217055.5 -33370.57   -18.17</span></span>
-<span><span class="co">#&gt; 5  2022-05-01       May    5   31 123654.3 204227.6 139609.7  64617.85    31.64</span></span>
-<span><span class="co">#&gt; 6  2022-06-01      June    6   30 131440.3 203460.5 153347.0  50113.48    24.63</span></span>
-<span><span class="co">#&gt; 7  2022-07-01      July    7   31 153992.0 182771.3 173861.9   8909.44     4.87</span></span>
-<span><span class="co">#&gt; 8  2022-08-01    August    8   31 156975.5 169633.6 177230.4  -7596.79    -4.48</span></span>
-<span><span class="co">#&gt; 9  2022-09-01 September    9   30 146878.1 179347.7 171357.8   7989.91     4.45</span></span>
-<span><span class="co">#&gt; 10 2022-10-01   October   10   31 163799.4 178051.1 184934.9  -6883.74    -3.87</span></span>
-<span><span class="co">#&gt; 11 2022-11-01  November   11   30 151410.7 162757.5 176645.9 -13888.37    -8.53</span></span>
-<span><span class="co">#&gt; 12 2022-12-01  December   12   31 169094.5 199849.3 190913.1   8936.22     4.47</span></span>
-<span><span class="co">#&gt;         adc   dar  pass actual ideal radiff</span></span>
-<span><span class="co">#&gt; 1  10515.56 27.43  TRUE   0.88  1.13  -0.25</span></span>
-<span><span class="co">#&gt; 2  10633.28 28.95  TRUE   1.03  1.25  -0.22</span></span>
-<span><span class="co">#&gt; 3   6408.23 39.63 FALSE   1.28  1.13   0.15</span></span>
-<span><span class="co">#&gt; 4   6201.59 29.62  TRUE   0.99  1.17  -0.18</span></span>
-<span><span class="co">#&gt; 5   3988.85 51.20 FALSE   1.65  1.13   0.52</span></span>
-<span><span class="co">#&gt; 6   4381.34 46.44 FALSE   1.55  1.17   0.38</span></span>
-<span><span class="co">#&gt; 7   4967.48 36.79 FALSE   1.19  1.13   0.06</span></span>
-<span><span class="co">#&gt; 8   5063.73 33.50  TRUE   1.08  1.13  -0.05</span></span>
-<span><span class="co">#&gt; 9   4895.94 36.63 FALSE   1.22  1.17   0.05</span></span>
-<span><span class="co">#&gt; 10  5283.85 33.70  TRUE   1.09  1.13  -0.04</span></span>
-<span><span class="co">#&gt; 11  5047.02 32.25  TRUE   1.07  1.17  -0.10</span></span>
-<span><span class="co">#&gt; 12  5454.66 36.64 FALSE   1.18  1.13   0.05</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<span><span class="co">#gt_1 |&gt; gt::gtsave("gt_1.png", expand = 20)</span></span></code></pre></div>
+</details><p><img src="reference/figures/gt_1.png" style="width:75.0%"></p>
+<details><summary>
+Click to View Code for Table
+</summary><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create df for gt_plt_bar_stack</span></span>
 <span><span class="va">dar_month_2022_pct</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gct_pct <span class="op">=</span> <span class="op">(</span><span class="va">gct</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>,</span>
@@ -540,261 +1107,121 @@
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Horizontal bar indicates Optimal AR, vertical bar is Actual."</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#gt_2 |&gt; gt::gtsave("gt_2.png", expand = 20)</span></span></code></pre></div></details><p><img src="reference/figures/gt_2.png" style="width:75.0%"></p>
+<span><span class="co">#gt_2 |&gt; gt::gtsave("gt_2.png", expand = 20)</span></span></code></pre></div>
+</details><p><img src="reference/figures/gt_2.png" style="width:75.0%"></p>
 <p><br></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/" class="external-link">GGally</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: ggplot2</span></span>
-<span><span class="co">#&gt; Registered S3 method overwritten by 'GGally':</span></span>
-<span><span class="co">#&gt;   method from   </span></span>
-<span><span class="co">#&gt;   +.gg   ggplot2</span></span>
-<span><span class="va">dar_month_2022</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"Ending AR"</span> <span class="op">=</span> <span class="va">earb</span>, </span>
-<span>                <span class="st">"AR Target"</span> <span class="op">=</span> <span class="va">earb_trg</span>, </span>
-<span>                <span class="st">"Gross Charges"</span> <span class="op">=</span> <span class="va">gct</span>, </span>
-<span>                <span class="st">"Days in AR"</span> <span class="op">=</span> <span class="va">dar</span>,</span>
-<span>                <span class="va">pass</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggparcoord.html" class="external-link">ggparcoord</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, </span>
-<span>             scale <span class="op">=</span> <span class="st">"uniminmax"</span>,</span>
-<span>             <span class="co">#scale = "globalminmax",</span></span>
-<span>             groupColumn <span class="op">=</span> <span class="st">"pass"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"#00BFC4"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="st">"pass"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu">theme_pander</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="100%"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ndip_31</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ndip</span>, <span class="va">ideal</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ndip</span> <span class="op">==</span> <span class="fl">31</span><span class="op">)</span></span>
-<span><span class="va">ndip_31</span> <span class="op">&lt;-</span> <span class="va">ndip_31</span><span class="op">$</span><span class="va">ideal</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">darmon2</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>trg_abline <span class="op">=</span> <span class="va">earb_trg</span> <span class="op">/</span> <span class="va">earb</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">trg_month</span> <span class="op">&lt;-</span> <span class="va">darmon2</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">trg_abline</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">jan</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">feb</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">mar</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">apr</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">may</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">jun</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">jul</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">aug</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">8</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">sep</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">9</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">oct</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">10</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">nov</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">11</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">dec</span> <span class="op">&lt;-</span> <span class="va">trg_month</span><span class="op">$</span><span class="va">trg_abline</span><span class="op">[[</span><span class="fl">12</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>scipen <span class="op">=</span> <span class="fl">999</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://allancameron.github.io/geomtextpath/" class="external-link">geomtextpath</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">darmon2</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">jan</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Jan"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    colour <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.9</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">feb</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Feb"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    colour <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.825</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">mar</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Mar"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">apr</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Apr"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    colour <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.7</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">may</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"May"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">jun</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Jun"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">jul</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Jul"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">aug</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Aug"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    colour <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.7</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">sep</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Sept"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.7</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">oct</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Oct"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    colour <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.7</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">nov</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Nov"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">2</span>, </span>
-<span>    colour <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"#00BFC4"</span>, </span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.7</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geomtextpath</span><span class="fu">::</span><span class="fu">geom_labelabline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">dec</span>, </span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>, </span>
-<span>    label <span class="op">=</span> <span class="st">"Dec"</span>, </span>
-<span>    linetype <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>    colour <span class="op">=</span> <span class="st">"red"</span>, </span>
-<span>    fill <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    boxcolour <span class="op">=</span> <span class="st">"white"</span>, </span>
-<span>    textcolour <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>    hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>    vjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb_trg</span>, y <span class="op">=</span> <span class="va">earb</span>, color <span class="op">=</span> <span class="va">pass</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu">geom_text_repel</span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb_trg</span>, y <span class="op">=</span> <span class="va">earb</span>, label <span class="op">=</span> <span class="va">month</span><span class="op">)</span>, force <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Ending AR Target"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Ending AR Balance"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu">theme_pander</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-14-1.png" width="100%"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-quarterly-calculation">Days in AR Quarterly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-quarterly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_quarter_2022</span> <span class="op">&lt;-</span> <span class="va">dar_mon_ex</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_qtr.html">dar_qtr</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_qtr.html">dar_qtr</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
+<colgroup>
+<col width="10%">
+<col width="5%">
+<col width="5%">
+<col width="8%">
+<col width="8%">
+<col width="8%">
+<col width="9%">
+<col width="8%">
+<col width="7%">
+<col width="5%">
+<col width="5%">
+<col width="6%">
+<col width="5%">
+<col width="6%">
+</colgroup>
 <thead><tr class="header">
-<th align="right">Quarter</th>
-<th align="right">Gross Charges</th>
-<th align="right">Ending AR</th>
-<th align="right">Target AR</th>
-<th align="right">Days in AR</th>
-<th align="left">Pass</th>
+<th align="left">date</th>
+<th align="right">nqtr</th>
+<th align="right">ndip</th>
+<th align="right">gct_qtr</th>
+<th align="right">earb</th>
+<th align="right">earb_trg</th>
+<th align="right">earb_dc</th>
+<th align="right">earb_pct</th>
+<th align="right">adc</th>
+<th align="right">dar</th>
+<th align="left">pass</th>
+<th align="right">actual</th>
+<th align="right">ideal</th>
+<th align="right">radiff</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="left">2022-03-01</td>
 <td align="right">1</td>
-<td align="right">822369.1</td>
-<td align="right">253976.6</td>
-<td align="right">319810.2</td>
-<td align="right">27.80</td>
+<td align="right">90</td>
+<td align="right">831824.9</td>
+<td align="right">179343.5</td>
+<td align="right">323487.5</td>
+<td align="right">-144144.0</td>
+<td align="right">-80.37</td>
+<td align="right">9242.50</td>
+<td align="right">19.40</td>
 <td align="left">TRUE</td>
+<td align="right">0.22</td>
+<td align="right">0.39</td>
+<td align="right">-0.17</td>
 </tr>
 <tr class="even">
+<td align="left">2022-06-01</td>
 <td align="right">2</td>
-<td align="right">441142.2</td>
-<td align="right">203460.5</td>
-<td align="right">169670.1</td>
-<td align="right">41.97</td>
-<td align="left">FALSE</td>
+<td align="right">91</td>
+<td align="right">831829.4</td>
+<td align="right">179349.7</td>
+<td align="right">319934.4</td>
+<td align="right">-140584.7</td>
+<td align="right">-78.39</td>
+<td align="right">9140.98</td>
+<td align="right">19.62</td>
+<td align="left">TRUE</td>
+<td align="right">0.22</td>
+<td align="right">0.38</td>
+<td align="right">-0.16</td>
 </tr>
 <tr class="odd">
+<td align="left">2022-09-01</td>
 <td align="right">3</td>
-<td align="right">457845.6</td>
-<td align="right">179347.7</td>
-<td align="right">174180.4</td>
-<td align="right">36.04</td>
-<td align="left">FALSE</td>
+<td align="right">92</td>
+<td align="right">831820.0</td>
+<td align="right">179347.6</td>
+<td align="right">316453.2</td>
+<td align="right">-137105.6</td>
+<td align="right">-76.45</td>
+<td align="right">9041.52</td>
+<td align="right">19.84</td>
+<td align="left">TRUE</td>
+<td align="right">0.22</td>
+<td align="right">0.38</td>
+<td align="right">-0.16</td>
 </tr>
 <tr class="even">
+<td align="left">2022-12-01</td>
 <td align="right">4</td>
-<td align="right">484304.6</td>
-<td align="right">199849.3</td>
-<td align="right">184246.3</td>
-<td align="right">37.96</td>
-<td align="left">FALSE</td>
+<td align="right">92</td>
+<td align="right">831831.9</td>
+<td align="right">179352.7</td>
+<td align="right">316457.8</td>
+<td align="right">-137105.1</td>
+<td align="right">-76.44</td>
+<td align="right">9041.65</td>
+<td align="right">19.84</td>
+<td align="left">TRUE</td>
+<td align="right">0.22</td>
+<td align="right">0.38</td>
+<td align="right">-0.16</td>
 </tr>
 </tbody>
 </table>
 <p><br></p>
-<details><summary>Click to View Code for Table</summary><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_quarter_2022</span></span>
-<span><span class="co">#&gt;         date nqtr ndip  gct_qtr     earb earb_trg   earb_dc earb_pct     adc</span></span>
-<span><span class="co">#&gt; 1 2022-03-01    1   90 822369.1 253976.6 319810.2 -65833.65   -25.92 9137.43</span></span>
-<span><span class="co">#&gt; 2 2022-06-01    2   91 441142.2 203460.5 169670.1  33790.40    16.61 4847.72</span></span>
-<span><span class="co">#&gt; 3 2022-09-01    3   92 457845.6 179347.7 174180.4   5167.33     2.88 4976.58</span></span>
-<span><span class="co">#&gt; 4 2022-12-01    4   92 484304.6 199849.3 184246.3  15602.99     7.81 5264.18</span></span>
-<span><span class="co">#&gt;     dar  pass actual ideal radiff</span></span>
-<span><span class="co">#&gt; 1 27.80  TRUE   0.31  0.39  -0.08</span></span>
-<span><span class="co">#&gt; 2 41.97 FALSE   0.46  0.38   0.08</span></span>
-<span><span class="co">#&gt; 3 36.04 FALSE   0.39  0.38   0.01</span></span>
-<span><span class="co">#&gt; 4 37.96 FALSE   0.41  0.38   0.03</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<details><summary>
+Click to View Code for Table
+</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create df for gt_plt_bar_stack</span></span>
 <span><span class="va">dar_qtr_2022_pct</span> <span class="op">&lt;-</span> <span class="va">dar_quarter_2022</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gct_pct <span class="op">=</span> <span class="op">(</span><span class="va">gct_qtr</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct_qtr</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>,</span>
@@ -853,27 +1280,8 @@
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Horizontal bar indicates Optimal AR, vertical bar is Actual."</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#gt_qtr_2 |&gt; gt::gtsave("gt_qtr_2.png", expand = 20)</span></span></code></pre></div></details><p><img src="reference/figures/gt_qtr_2.png" style="width:75.0%"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/" class="external-link">GGally</a></span><span class="op">)</span></span>
-<span><span class="va">dar_quarter_2022</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"Ending AR"</span> <span class="op">=</span> <span class="va">earb</span>, </span>
-<span>                <span class="st">"AR Target"</span> <span class="op">=</span> <span class="va">earb_trg</span>, </span>
-<span>                <span class="st">"Gross Charges"</span> <span class="op">=</span> <span class="va">gct_qtr</span>, </span>
-<span>                <span class="st">"Days in AR"</span> <span class="op">=</span> <span class="va">dar</span>,</span>
-<span>                <span class="va">pass</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggparcoord.html" class="external-link">ggparcoord</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, </span>
-<span>             scale <span class="op">=</span> <span class="st">"uniminmax"</span>,</span>
-<span>             <span class="co">#scale = "globalminmax",</span></span>
-<span>             groupColumn <span class="op">=</span> <span class="st">"pass"</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"#00BFC4"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="st">"pass"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu">theme_pander</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-19-1.png" width="100%"></p>
+<span><span class="co">#gt_qtr_2 |&gt; gt::gtsave("gt_qtr_2.png", expand = 20)</span></span></code></pre></div>
+</details><p><img src="reference/figures/gt_qtr_2.png" style="width:75.0%"></p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
@@ -916,7 +1324,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Andrew Bruce <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Andrew Bruce <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 </ul>
 </div>
 
@@ -929,6 +1337,7 @@
 <li><a href="https://choosealicense.com/licenses/mit/" class="external-link"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a></li>
 <li><a href="https://github.com/andrewallenbruce/forager" class="external-link"><img src="https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg" alt="code size"></a></li>
 <li><a href="https://github.com/andrewallenbruce/forager/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg" alt="last commit"></a></li>
+<li><a href="https://app.codecov.io/gh/andrewallenbruce/forager?branch=master" class="external-link"><img src="https://codecov.io/gh/andrewallenbruce/forager/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
