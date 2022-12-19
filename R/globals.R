@@ -27,5 +27,10 @@ utils::globalVariables(c(
   "dar", # <dar_qtr>
   "pass", # <dar_qtr>
   "radiff", # <dar_qtr>
+  "date_of_service", # <generate_data>
+  "date_of_release", # <generate_data>
+  "date_of_submission", # <generate_data>
+  "date_of_acceptance", # <generate_data>
+  ":=", # <count_days>
   NULL
 ))

@@ -86,45 +86,46 @@ Calculate:
    * Days in AR: Days between Date of Release (`dor`) and Date of Adjudication (`dtad`)
 
 ```{r results='asis', echo=TRUE}
-x <- tibble::tibble(
-  dos = seq(clock::date_build(2021, 1, 1), 
-  clock::date_build(2021, 12, 31), by = 1),
-  dor = dos + round(abs(rnorm(365, 11, 4))),
-  prov_lag = clock::date_count_between(dos, dor, "day"),
-  dtos = dor + round(abs(rnorm(365, 2, 2))),
-  bill_lag = clock::date_count_between(dor, dtos, "day"),
-  dtoa = dtos + round(abs(rnorm(365, 3, 2))),
-  accept_lag = clock::date_count_between(dtos, dtoa, "day"),
-  dtad = dtoa + round(abs(rnorm(365, 30, 3))),
-  pay_lag = clock::date_count_between(dtoa, dtad, "day"),
-  days_in_ar = clock::date_count_between(dor, dtad, "day"),
-)
+x <- forager::generate_data(1500)
 
 x |> head(n = 25) |> gluedown::md_table()
 ```
 <br>
 
 ```{r results='asis', echo=TRUE}
-x |> dplyr::group_by(month = clock::date_month_factor(dos)) |> 
-     dplyr::summarise(avg_prov_lag = round(mean(prov_lag), 2),
-                      avg_bill_lag = round(mean(bill_lag), 2),
-                      avg_accept_lag = round(mean(accept_lag), 2),
-                      avg_pay_lag = round(mean(pay_lag), 2),
-                      avg_dar = round(mean(days_in_ar), 2)) |> 
-     gluedown::md_table()
+x |> 
+  count_days(date_of_service, date_of_release, provider_lag) |> 
+  count_days(date_of_release, date_of_submission, billing_lag) |> 
+  count_days(date_of_submission, date_of_acceptance, processing_lag) |> 
+  count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
+  count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
+  dplyr::group_by(month = clock::date_month_factor(date_of_service)) |> 
+  dplyr::summarise(
+       no_of_claims = dplyr::n(),
+       balance_total = sum(balance),
+       avg_prov_lag = round(mean(provider_lag), 2),
+                      avg_bill_lag = round(mean(billing_lag), 2),
+                      avg_accept_lag = round(mean(processing_lag), 2),
+                      avg_pay_lag = round(mean(payer_lag), 2),
+                      avg_dar = round(mean(days_in_ar), 2), .groups = "drop") |> 
+  gluedown::md_table()
 ```
 
 ## Aging Calculation
 
 ```{r results='asis', echo=TRUE}
-x |> dplyr::select(dos, dor, dtad, days_in_ar) |> 
-  dplyr::group_by(month = clock::date_month_factor(dos), 
-                  aging_bucket = cut(days_in_ar, breaks = seq(0, 500, 30))) |> 
-  dplyr::tally(name = "claims") |> 
+x |> forager::count_days(date_of_release, 
+                         date_of_adjudication, 
+                         days_in_ar) |> 
+  dplyr::group_by(payer, 
+                  aging_bucket = cut(days_in_ar, 
+                                     breaks = seq(0, 500, 30))) |> 
+  dplyr::summarise(no_of_claims = dplyr::n(),
+                   balance_total = sum(balance), .groups = "drop") |> 
   gluedown::md_table()
 ```
 
-## Average Days in AR Monthly Calculation
+## Days in AR Monthly Calculation
 
 ```{r results='asis', echo=TRUE}
 y <- tibble::tibble(
@@ -135,6 +136,15 @@ y <- tibble::tibble(
 y |> 
   forager::dar_month(date, gct, earb, dart = 35) |> 
   gluedown::md_table()
+```
+
+<br>
+
+## Days in AR Quarterly Calculation
+
+```{r results='asis', echo=TRUE}
+y |> forager::dar_qtr(date, gct, earb, 35) |> 
+     gluedown::md_table()
 ```
 
 <br>
@@ -254,15 +264,6 @@ gt_2 <- dar_month_2022_gt |>
 
 
 ![](man/figures/gt_2.png){width="75%"}
-
-<br>
-
-## Days in AR Quarterly Calculation
-
-```{r results='asis', echo=TRUE}
-y |> forager::dar_qtr(date, gct, earb, 35) |> 
-     gluedown::md_table()
-```
 
 <br>
 

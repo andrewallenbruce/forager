@@ -14,7 +14,9 @@ Imports:
     dplyr,
     janitor,
     lubridate,
-    clock
+    clock,
+    fixtuRes,
+    wakefield
 Suggests:
     tibble,
     tidyr,
