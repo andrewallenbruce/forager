@@ -85,15 +85,19 @@ Calculate:
    * Payment Lag: Days between Date of Acceptance (`dtoa`) and Date of Adjudication (`dtad`)
    * Days in AR: Days between Date of Release (`dor`) and Date of Adjudication (`dtad`)
 
-```{r results='asis', echo=TRUE}
-x <- forager::generate_data(1500)
+```{r results='markup', echo=TRUE}
+x <- forager::generate_data(15000)
+x |> head(n = 10)
+```
+<br>
 
-x |> head(n = 25) |> gluedown::md_table()
+```{r results='markup', echo=TRUE}
+x |> tidyr::unnest(dates) |> head(n = 10) |> gluedown::md_table()
 ```
 <br>
 
 ```{r results='asis', echo=TRUE}
-x |> 
+x |> tidyr::unnest(dates) |> 
   count_days(date_of_service, date_of_release, provider_lag) |> 
   count_days(date_of_release, date_of_submission, billing_lag) |> 
   count_days(date_of_submission, date_of_acceptance, processing_lag) |> 
@@ -114,7 +118,9 @@ x |>
 ## Aging Calculation
 
 ```{r results='asis', echo=TRUE}
-x |> forager::count_days(date_of_release, 
+x |> 
+  tidyr::unnest(dates) |> 
+  forager::count_days(date_of_release, 
                          date_of_adjudication, 
                          days_in_ar) |> 
   dplyr::group_by(payer, 
