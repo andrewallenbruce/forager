@@ -39,6 +39,7 @@ generate_data <- function(rows = 100){
 #' @export
 #' @examples
 #' generate_data(rows = 5) |>
+#' tidyr::unnest(dates) |>
 #' count_days(date_of_service, date_of_release, provider_lag)
 count_days <- function(df, start, end, name) {
   df |>

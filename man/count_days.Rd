@@ -23,5 +23,6 @@ Count days between two dates
 }
 \examples{
 generate_data(rows = 5) |>
+tidyr::unnest(dates) |>
 count_days(date_of_service, date_of_release, provider_lag)
 }

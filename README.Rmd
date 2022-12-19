@@ -75,15 +75,26 @@ remotes::install_github("andrewallenbruce/forager")
 library(forager)
 ```
 
-## Usage
+## Foundation: Time Measurement
 
-Calculate: 
+Everything in a Healthcare RCM workflow is built upon the bedrock of time measurement. 
+   -  Task $a$ is created at time $t$.
+   -  Subtask $a_1$ is assigned at time $t_1$ to responsible party $x_1$.
+   -  Subtask $a_2$ is assigned at time $t_2$ to responsible party $x_2$.
+   -  So on, and so forth until...
+   -  Task $a_i$ is completed at time $t_i$.
+   
+Measuring the amount of time between each step becomes crucial in identifying workflow issues.
 
-   * Provider Lag: Days between Date of Service (`dos`) and Date of Release (`dor`)
-   * Billing Lag:  Days between Date of Release (`dor`) and Date of Submission (`dtos`)
-   * Acceptance Lag:  Days between Date of Submission (`dtos`) and Date of Acceptance (`dtoa`)
-   * Payment Lag: Days between Date of Acceptance (`dtoa`) and Date of Adjudication (`dtad`)
-   * Days in AR: Days between Date of Release (`dor`) and Date of Adjudication (`dtad`)
+### Example: The Lifecycle of a Claim 
+
+   * **Provider Lag**: Days between *Date of Service* and *Date of Release*
+   * **Billing Lag**:  Days between *Date of Release* and *Date of Submission*
+   * **Acceptance Lag**:  Days between *Date of Submission* and *Date of Acceptance*
+   * **Payment Lag**: Days between *Date of Acceptance* and *Date of Adjudication*
+   * **Days in AR**: Days between *Date of Release* and *Date of Adjudication*
+
+<br>
 
 ```{r results='markup', echo=TRUE}
 x <- forager::generate_data(15000)
@@ -91,8 +102,10 @@ x |> head(n = 10)
 ```
 <br>
 
-```{r results='markup', echo=TRUE}
-x |> tidyr::unnest(dates) |> head(n = 10) |> gluedown::md_table()
+```{r results='asis', echo=TRUE}
+x |> tidyr::unnest(dates) |> 
+     head(n = 10) |> 
+     gluedown::md_table()
 ```
 <br>
 
@@ -120,12 +133,8 @@ x |> tidyr::unnest(dates) |>
 ```{r results='asis', echo=TRUE}
 x |> 
   tidyr::unnest(dates) |> 
-  forager::count_days(date_of_release, 
-                         date_of_adjudication, 
-                         days_in_ar) |> 
-  dplyr::group_by(payer, 
-                  aging_bucket = cut(days_in_ar, 
-                                     breaks = seq(0, 500, 30))) |> 
+  forager:::count_days(date_of_service, date_of_adjudication, days_in_ar) |> 
+  dplyr::group_by(aging_bucket = cut(days_in_ar, breaks = seq(0, 500, by = 30))) |> 
   dplyr::summarise(no_of_claims = dplyr::n(),
                    balance_total = sum(balance), .groups = "drop") |> 
   gluedown::md_table()
@@ -157,11 +166,7 @@ y |> forager::dar_qtr(date, gct, earb, 35) |>
 
 ### Presentation Examples
 
-<details>
-
-<summary>Click to View Code for Table</summary>
-
-```{r eval=FALSE}
+```{r eval=FALSE, include=FALSE, echo=FALSE}
 gt_1 <- dar_month_2022 |> 
   dplyr::select(month, gct, earb, earb_trg, dar, pass) |> 
   headliner::add_headline_column(x = earb, y = earb_trg, 
@@ -196,18 +201,13 @@ gt_1 <- dar_month_2022 |>
 #gt_1 |> gt::gtsave("gt_1.png", expand = 20)
 ```
 
-</details>
-
 
 ![](man/figures/gt_1.png){width="75%"}
 
 
+<br>
 
-<details>
-
-<summary>Click to View Code for Table</summary>
-
-```{r eval=FALSE}
+```{r eval=FALSE, include=FALSE, echo=FALSE}
 # Create df for gt_plt_bar_stack
 dar_month_2022_pct <- dar_month_2022 |>
   dplyr::mutate(gct_pct = (gct / (gct + earb) * 100),
@@ -266,18 +266,12 @@ gt_2 <- dar_month_2022_gt |>
 #gt_2 |> gt::gtsave("gt_2.png", expand = 20)
 ```
 
-</details>
-
 
 ![](man/figures/gt_2.png){width="75%"}
 
 <br>
 
-<details>
-
-<summary>Click to View Code for Table</summary>
-
-```{r eval=FALSE}
+```{r eval=FALSE, include=FALSE, echo=FALSE}
 # Create df for gt_plt_bar_stack
 dar_qtr_2022_pct <- dar_quarter_2022 |>
   dplyr::mutate(gct_pct = (gct_qtr / (gct_qtr + earb) * 100),
@@ -339,7 +333,6 @@ gt_qtr_2 <- dar_qtr_2022_gt |>
 #gt_qtr_2 |> gt::gtsave("gt_qtr_2.png", expand = 20)
 ```
 
-</details>
 
 ![](man/figures/gt_qtr_2.png){width="75%"}
 
