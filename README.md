@@ -62,10 +62,13 @@ library(forager)
 ## Foundation: Time Measurement
 
 Everything in a Healthcare RCM workflow is built upon the bedrock of
-time measurement. - Task $a$ is created at time $t$. - Subtask $a_1$ is
-assigned at time $t_1$ to responsible party $x_1$. - Subtask $a_2$ is
-assigned at time $t_2$ to responsible party $x_2$. - So on, and so forth
-until… - Task $a_i$ is completed at time $t_i$.
+time measurement.
+
+- Task $a$ is created at time $t$.
+- Subtask $a_1$ is assigned at time $t_1$ to responsible party $x_1$.
+- Subtask $a_2$ is assigned at time $t_2$ to responsible party $x_2$.
+- So on, and so forth until…
+- Task $a_i$ is completed at time $t_i$.
 
 Measuring the amount of time between each step becomes crucial in
 identifying workflow issues.
@@ -88,40 +91,43 @@ identifying workflow issues.
 x <- forager::generate_data(15000)
 x |> head(n = 10)
 #> # A tibble: 10 × 5
-#>    claim_id   payer    ins_class balance    dates           
-#>    <variable> <chr>    <chr>     <variable> <list>          
-#>  1 00001      Humana   Secondary  57.72710  <tibble [1 × 5]>
-#>  2 00002      Anthem   Secondary 118.55183  <tibble [1 × 5]>
-#>  3 00003      Anthem   Secondary 186.56057  <tibble [1 × 5]>
-#>  4 00004      Anthem   Primary    88.28117  <tibble [1 × 5]>
-#>  5 00005      Medicaid Primary   142.11783  <tibble [1 × 5]>
-#>  6 00006      BCBS     Secondary 121.06323  <tibble [1 × 5]>
-#>  7 00007      Humana   Primary    45.65637  <tibble [1 × 5]>
-#>  8 00008      Humana   Primary   211.97337  <tibble [1 × 5]>
-#>  9 00009      Cigna    Secondary 106.63790  <tibble [1 × 5]>
-#> 10 00010      Medicare Secondary 411.03690  <tibble [1 × 5]>
+#>    claim_id   payer        ins_class balance    dates           
+#>    <variable> <chr>        <chr>     <variable> <list>          
+#>  1 00001      Medicaid     Secondary 152.85747  <tibble [1 × 5]>
+#>  2 00002      UnitedHealth Secondary  36.05447  <tibble [1 × 5]>
+#>  3 00003      Centene      Secondary  90.33910  <tibble [1 × 5]>
+#>  4 00004      UnitedHealth Secondary  51.64573  <tibble [1 × 5]>
+#>  5 00005      Medicaid     Secondary 154.65047  <tibble [1 × 5]>
+#>  6 00006      Humana       Secondary 132.19150  <tibble [1 × 5]>
+#>  7 00007      Centene      Primary    77.79067  <tibble [1 × 5]>
+#>  8 00008      Humana       Secondary 139.89570  <tibble [1 × 5]>
+#>  9 00009      Anthem       Primary    71.28777  <tibble [1 × 5]>
+#> 10 00010      Centene      Secondary 141.13423  <tibble [1 × 5]>
 ```
 
 <br>
 
 ``` r
 x |> tidyr::unnest(dates) |> 
-     head(n = 10) |> 
-     gluedown::md_table()
+     tidyr::pivot_longer(cols = tidyr::starts_with("date"), 
+                         names_to = "date_type", 
+                         values_to = "date") |> 
+                         head(n = 10) |> 
+                         gluedown::md_table()
 ```
 
-| claim_id | payer    | ins_class |   balance | date_of_service | date_of_release | date_of_submission | date_of_acceptance | date_of_adjudication |
-|:---------|:---------|:----------|----------:|:----------------|:----------------|:-------------------|:-------------------|:---------------------|
-| 00001    | Humana   | Secondary |  57.72710 | 2020-05-18      | 2020-05-26      | 2020-05-31         | 2020-06-02         | 2020-06-28           |
-| 00002    | Anthem   | Secondary | 118.55183 | 2020-12-18      | 2020-12-28      | 2021-01-02         | 2021-01-07         | 2021-02-05           |
-| 00003    | Anthem   | Secondary | 186.56057 | 2020-10-18      | 2020-10-23      | 2020-10-26         | 2020-10-29         | 2020-11-27           |
-| 00004    | Anthem   | Primary   |  88.28117 | 2020-11-18      | 2020-11-29      | 2020-12-03         | 2020-12-04         | 2021-01-02           |
-| 00005    | Medicaid | Primary   | 142.11783 | 2020-08-18      | 2020-08-28      | 2020-08-31         | 2020-09-03         | 2020-10-02           |
-| 00006    | BCBS     | Secondary | 121.06323 | 2020-04-18      | 2020-04-26      | 2020-04-30         | 2020-05-01         | 2020-05-30           |
-| 00007    | Humana   | Primary   |  45.65637 | 2020-05-18      | 2020-05-31      | 2020-06-02         | 2020-06-02         | 2020-06-29           |
-| 00008    | Humana   | Primary   | 211.97337 | 2020-03-18      | 2020-03-21      | 2020-03-24         | 2020-03-26         | 2020-04-28           |
-| 00009    | Cigna    | Secondary | 106.63790 | 2020-09-18      | 2020-10-01      | 2020-10-03         | 2020-10-04         | 2020-11-02           |
-| 00010    | Medicare | Secondary | 411.03690 | 2020-02-18      | 2020-02-24      | 2020-02-26         | 2020-02-26         | 2020-03-26           |
+| claim_id | payer        | ins_class |   balance | date_type            | date       |
+|:---------|:-------------|:----------|----------:|:---------------------|:-----------|
+| 00001    | Medicaid     | Secondary | 152.85747 | date_of_service      | 2020-09-19 |
+| 00001    | Medicaid     | Secondary | 152.85747 | date_of_release      | 2020-09-30 |
+| 00001    | Medicaid     | Secondary | 152.85747 | date_of_submission   | 2020-10-02 |
+| 00001    | Medicaid     | Secondary | 152.85747 | date_of_acceptance   | 2020-10-05 |
+| 00001    | Medicaid     | Secondary | 152.85747 | date_of_adjudication | 2020-11-09 |
+| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_service      | 2020-07-19 |
+| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_release      | 2020-08-02 |
+| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_submission   | 2020-08-04 |
+| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_acceptance   | 2020-08-04 |
+| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_adjudication | 2020-09-09 |
 
 <br>
 
@@ -133,31 +139,54 @@ x |> tidyr::unnest(dates) |>
   count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
   count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
   dplyr::group_by(month = clock::date_month_factor(date_of_service)) |> 
-  dplyr::summarise(
-       no_of_claims = dplyr::n(),
-       balance_total = sum(balance),
-       avg_prov_lag = round(mean(provider_lag), 2),
-                      avg_bill_lag = round(mean(billing_lag), 2),
-                      avg_accept_lag = round(mean(processing_lag), 2),
-                      avg_pay_lag = round(mean(payer_lag), 2),
-                      avg_dar = round(mean(days_in_ar), 2), .groups = "drop") |> 
+  dplyr::summarise(no_of_claims = dplyr::n(), 
+                   balance_total = sum(balance),
+                   avg_prov_lag = round(mean(provider_lag), 2), 
+                   avg_bill_lag = round(mean(billing_lag), 2),
+                   avg_accept_lag = round(mean(processing_lag), 2),
+                   avg_pay_lag = round(mean(payer_lag), 2),
+                   avg_days_in_ar = round(mean(days_in_ar), 2), .groups = "drop") |> 
   gluedown::md_table()
 ```
 
-| month     | no_of_claims | balance_total | avg_prov_lag | avg_bill_lag | avg_accept_lag | avg_pay_lag | avg_dar |
-|:----------|-------------:|--------------:|-------------:|-------------:|---------------:|------------:|--------:|
-| January   |         1250 |      171000.4 |        10.87 |         2.32 |           3.02 |       33.13 |   35.45 |
-| February  |         1209 |      160242.5 |        11.11 |         2.35 |           3.11 |       33.01 |   35.37 |
-| March     |         1255 |      165428.0 |        10.94 |         2.38 |           3.09 |       33.03 |   35.40 |
-| April     |         1273 |      173028.7 |        10.96 |         2.31 |           3.15 |       33.12 |   35.43 |
-| May       |         1281 |      168504.3 |        10.91 |         2.35 |           3.06 |       32.99 |   35.34 |
-| June      |         1209 |      165268.4 |        10.84 |         2.40 |           3.11 |       33.11 |   35.50 |
-| July      |         1303 |      170262.2 |        10.71 |         2.31 |           3.07 |       32.96 |   35.27 |
-| August    |         1210 |      161511.9 |        10.95 |         2.27 |           3.05 |       33.11 |   35.38 |
-| September |         1291 |      170885.8 |        11.30 |         2.35 |           3.22 |       33.12 |   35.47 |
-| October   |         1229 |      159483.2 |        11.09 |         2.35 |           3.07 |       33.11 |   35.46 |
-| November  |         1235 |      167641.6 |        10.97 |         2.31 |           3.04 |       33.19 |   35.51 |
-| December  |         1255 |      166323.3 |        11.00 |         2.31 |           3.10 |       33.01 |   35.32 |
+| month     | no_of_claims | balance_total | avg_prov_lag | avg_bill_lag | avg_accept_lag | avg_pay_lag | avg_days_in_ar |
+|:----------|-------------:|--------------:|-------------:|-------------:|---------------:|------------:|---------------:|
+| January   |         1277 |      174559.7 |        10.79 |         2.20 |           3.05 |       33.18 |          35.37 |
+| February  |         1263 |      171249.5 |        11.22 |         2.32 |           3.11 |       33.01 |          35.34 |
+| March     |         1225 |      156436.5 |        11.05 |         2.31 |           3.14 |       33.05 |          35.36 |
+| April     |         1257 |      168064.5 |        11.11 |         2.39 |           3.08 |       33.19 |          35.58 |
+| May       |         1281 |      167327.5 |        11.22 |         2.31 |           3.09 |       33.20 |          35.51 |
+| June      |         1251 |      163328.0 |        10.84 |         2.28 |           3.20 |       33.26 |          35.54 |
+| July      |         1238 |      166397.6 |        10.92 |         2.31 |           3.06 |       33.17 |          35.47 |
+| August    |         1239 |      162255.0 |        10.82 |         2.32 |           3.09 |       33.10 |          35.41 |
+| September |         1281 |      173373.6 |        10.99 |         2.22 |           3.12 |       33.09 |          35.31 |
+| October   |         1200 |      160917.7 |        11.12 |         2.28 |           3.09 |       33.25 |          35.53 |
+| November  |         1236 |      165392.2 |        11.00 |         2.35 |           3.16 |       33.16 |          35.51 |
+| December  |         1252 |      167007.3 |        10.92 |         2.39 |           3.11 |       33.21 |          35.60 |
+
+<br>
+
+``` r
+x |> tidyr::unnest(dates) |> 
+  count_days(date_of_service, date_of_release, provider_lag) |> 
+  count_days(date_of_release, date_of_submission, billing_lag) |> 
+  count_days(date_of_submission, date_of_acceptance, processing_lag) |> 
+  count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
+  count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
+  dplyr::group_by(qtr = lubridate::quarter(date_of_service)) |> 
+  dplyr::summarise(no_of_claims = dplyr::n(), balance_total = sum(balance), avg_prov_lag = round(mean(provider_lag), 2), avg_bill_lag = round(mean(billing_lag), 2),
+                   avg_accept_lag = round(mean(processing_lag), 2),
+                      avg_pay_lag = round(mean(payer_lag), 2),
+                      avg_days_in_ar = round(mean(days_in_ar), 2), .groups = "drop") |> 
+  gluedown::md_table()
+```
+
+| qtr | no_of_claims | balance_total | avg_prov_lag | avg_bill_lag | avg_accept_lag | avg_pay_lag | avg_days_in_ar |
+|----:|-------------:|--------------:|-------------:|-------------:|---------------:|------------:|---------------:|
+|   1 |         3765 |      502245.7 |        11.02 |         2.28 |           3.10 |       33.08 |          35.36 |
+|   2 |         3789 |      498720.0 |        11.06 |         2.33 |           3.12 |       33.22 |          35.54 |
+|   3 |         3758 |      502026.2 |        10.91 |         2.28 |           3.09 |       33.12 |          35.40 |
+|   4 |         3688 |      493317.2 |        11.01 |         2.34 |           3.12 |       33.21 |          35.55 |
 
 ## Aging Calculation
 
@@ -173,9 +202,9 @@ x |>
 
 | aging_bucket | no_of_claims | balance_total |
 |:-------------|-------------:|--------------:|
-| (0,30\]      |           25 |      3875.296 |
-| (30,60\]     |        14891 |   1982482.138 |
-| (60,90\]     |           84 |     13222.939 |
+| (0,30\]      |           19 |      2776.459 |
+| (30,60\]     |        14899 |   1984261.643 |
+| (60,90\]     |           82 |      9271.023 |
 
 ## Days in AR Monthly Calculation
 
@@ -192,18 +221,18 @@ y |>
 
 | date       | month     | nmon | ndip |      gct |     earb | earb_trg |    earb_dc |   earb_pct |       adc |      dar | pass |    actual |    ideal |     radiff |
 |:-----------|:----------|-----:|-----:|---------:|---------:|---------:|-----------:|-----------:|----------:|---------:|:-----|----------:|---------:|-----------:|
-| 2022-01-01 | January   |    1 |   31 | 365002.6 | 182769.8 | 412099.7 | -229329.93 | -125.47474 | 11774.278 | 15.52280 | TRUE | 0.5007356 | 1.129032 | -0.6282967 |
-| 2022-02-01 | February  |    2 |   28 | 169096.7 | 169635.0 | 211370.9 |  -41735.89 |  -24.60334 |  6039.169 | 28.08913 | TRUE | 1.0031834 | 1.250000 | -0.2468166 |
-| 2022-03-01 | March     |    3 |   31 | 297736.7 | 179349.1 | 336154.3 | -156805.21 |  -87.43016 |  9604.409 | 18.67362 | TRUE | 0.6023749 | 1.129032 | -0.5266573 |
-| 2022-04-01 | April     |    4 |   30 | 364999.9 | 182770.4 | 425833.2 | -243062.80 | -132.98807 | 12166.662 | 15.02223 | TRUE | 0.5007409 | 1.166667 | -0.6659257 |
-| 2022-05-01 | May       |    5 |   31 | 169093.4 | 169632.2 | 190911.9 |  -21279.73 |  -12.54463 |  5454.627 | 31.09877 | TRUE | 1.0031863 | 1.129032 | -0.1258460 |
-| 2022-06-01 | June      |    6 |   30 | 297735.9 | 179345.4 | 347358.5 | -168013.08 |  -93.68127 |  9924.529 | 18.07093 | TRUE | 0.6023642 | 1.166667 | -0.5643024 |
-| 2022-07-01 | July      |    7 |   31 | 364999.2 | 182770.2 | 412095.9 | -229325.66 | -125.47213 | 11774.167 | 15.52298 | TRUE | 0.5007414 | 1.129032 | -0.6282909 |
-| 2022-08-01 | August    |    8 |   31 | 169089.1 | 169634.2 | 190907.0 |  -21272.83 |  -12.54042 |  5454.487 | 31.09994 | TRUE | 1.0032238 | 1.129032 | -0.1258084 |
-| 2022-09-01 | September |    9 |   30 | 297732.5 | 179346.9 | 347354.6 | -168007.70 |  -93.67749 |  9924.418 | 18.07128 | TRUE | 0.6023760 | 1.166667 | -0.5642907 |
-| 2022-10-01 | October   |   10 |   31 | 365001.8 | 182771.2 | 412098.9 | -229327.67 | -125.47255 | 11774.253 | 15.52295 | TRUE | 0.5007404 | 1.129032 | -0.6282918 |
-| 2022-11-01 | November  |   11 |   30 | 169093.9 | 169634.7 | 197276.2 |  -27641.55 |  -16.29475 |  5636.464 | 30.09594 | TRUE | 1.0031980 | 1.166667 | -0.1634687 |
-| 2022-12-01 | December  |   12 |   31 | 297728.8 | 179340.8 | 336145.4 | -156804.57 |  -87.43385 |  9604.154 | 18.67325 | TRUE | 0.6023631 | 1.129032 | -0.5266692 |
+| 2022-01-01 | January   |    1 |   31 | 365000.5 | 182770.0 | 412097.3 | -229327.35 | -125.47319 | 11774.210 | 15.52291 | TRUE | 0.5007390 | 1.129032 | -0.6282932 |
+| 2022-02-01 | February  |    2 |   28 | 169090.8 | 169632.9 | 211363.5 |  -41730.61 |  -24.60054 |  6038.958 | 28.08977 | TRUE | 1.0032060 | 1.250000 | -0.2467940 |
+| 2022-03-01 | March     |    3 |   31 | 297734.2 | 179348.2 | 336151.6 | -156803.34 |  -87.42955 |  9604.330 | 18.67368 | TRUE | 0.6023769 | 1.129032 | -0.5266554 |
+| 2022-04-01 | April     |    4 |   30 | 364997.1 | 182774.3 | 425829.9 | -243055.66 | -132.98132 | 12166.570 | 15.02266 | TRUE | 0.5007554 | 1.166667 | -0.6659112 |
+| 2022-05-01 | May       |    5 |   31 | 169096.5 | 169633.6 | 190915.4 |  -21281.81 |  -12.54576 |  5454.725 | 31.09846 | TRUE | 1.0031762 | 1.129032 | -0.1258560 |
+| 2022-06-01 | June      |    6 |   30 | 297726.8 | 179345.0 | 347347.9 | -168002.94 |  -93.67584 |  9924.227 | 18.07143 | TRUE | 0.6023811 | 1.166667 | -0.5642856 |
+| 2022-07-01 | July      |    7 |   31 | 365002.2 | 182771.0 | 412099.3 | -229328.24 | -125.47298 | 11774.264 | 15.52292 | TRUE | 0.5007395 | 1.129032 | -0.6282928 |
+| 2022-08-01 | August    |    8 |   31 | 169092.2 | 169627.4 | 190910.6 |  -21283.18 |  -12.54702 |  5454.588 | 31.09811 | TRUE | 1.0031650 | 1.129032 | -0.1258673 |
+| 2022-09-01 | September |    9 |   30 | 297729.7 | 179344.1 | 347351.3 | -168007.25 |  -93.67872 |  9924.324 | 18.07116 | TRUE | 0.6023722 | 1.166667 | -0.5642945 |
+| 2022-10-01 | October   |   10 |   31 | 364999.9 | 182773.2 | 412096.7 | -229323.51 | -125.46892 | 11774.191 | 15.52320 | TRUE | 0.5007485 | 1.129032 | -0.6282837 |
+| 2022-11-01 | November  |   11 |   30 | 169094.4 | 169636.7 | 197276.8 |  -27640.12 |  -16.29372 |  5636.479 | 30.09621 | TRUE | 1.0032069 | 1.166667 | -0.1634597 |
+| 2022-12-01 | December  |   12 |   31 | 297725.8 | 179346.6 | 336142.0 | -156795.39 |  -87.42591 |  9604.057 | 18.67405 | TRUE | 0.6023886 | 1.129032 | -0.5266437 |
 
 <br>
 
@@ -216,10 +245,10 @@ y |> forager::dar_qtr(date, gct, earb, 35) |>
 
 | date       | nqtr | ndip |  gct_qtr |     earb | earb_trg |   earb_dc | earb_pct |     adc |   dar | pass | actual | ideal | radiff |
 |:-----------|-----:|-----:|---------:|---------:|---------:|----------:|---------:|--------:|------:|:-----|-------:|------:|-------:|
-| 2022-03-01 |    1 |   90 | 831836.0 | 179349.1 | 323491.8 | -144142.7 |   -80.37 | 9242.62 | 19.40 | TRUE |   0.22 |  0.39 |  -0.17 |
-| 2022-06-01 |    2 |   91 | 831829.2 | 179345.4 | 319934.3 | -140588.9 |   -78.39 | 9140.98 | 19.62 | TRUE |   0.22 |  0.38 |  -0.16 |
-| 2022-09-01 |    3 |   92 | 831820.8 | 179346.9 | 316453.6 | -137106.6 |   -76.45 | 9041.53 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
-| 2022-12-01 |    4 |   92 | 831824.5 | 179340.8 | 316455.0 | -137114.2 |   -76.45 | 9041.57 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
+| 2022-03-01 |    1 |   90 | 831825.6 | 179348.2 | 323487.7 | -144139.5 |   -80.37 | 9242.51 | 19.40 | TRUE |   0.22 |  0.39 |  -0.17 |
+| 2022-06-01 |    2 |   91 | 831820.4 | 179345.0 | 319930.9 | -140585.9 |   -78.39 | 9140.88 | 19.62 | TRUE |   0.22 |  0.38 |  -0.16 |
+| 2022-09-01 |    3 |   92 | 831824.2 | 179344.1 | 316454.8 | -137110.7 |   -76.45 | 9041.57 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
+| 2022-12-01 |    4 |   92 | 831820.1 | 179346.6 | 316453.3 | -137106.7 |   -76.45 | 9041.52 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
 
 <br>
 

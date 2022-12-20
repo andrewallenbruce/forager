@@ -78,11 +78,12 @@ library(forager)
 ## Foundation: Time Measurement
 
 Everything in a Healthcare RCM workflow is built upon the bedrock of time measurement. 
-   -  Task $a$ is created at time $t$.
-   -  Subtask $a_1$ is assigned at time $t_1$ to responsible party $x_1$.
-   -  Subtask $a_2$ is assigned at time $t_2$ to responsible party $x_2$.
-   -  So on, and so forth until...
-   -  Task $a_i$ is completed at time $t_i$.
+
+   *  Task $a$ is created at time $t$.
+   *  Subtask $a_1$ is assigned at time $t_1$ to responsible party $x_1$.
+   *  Subtask $a_2$ is assigned at time $t_2$ to responsible party $x_2$.
+   *  So on, and so forth until...
+   *  Task $a_i$ is completed at time $t_i$.
    
 Measuring the amount of time between each step becomes crucial in identifying workflow issues.
 
@@ -96,7 +97,7 @@ Measuring the amount of time between each step becomes crucial in identifying wo
 
 <br>
 
-```{r results='markup', echo=TRUE}
+```{r, echo=TRUE}
 x <- forager::generate_data(15000)
 x |> head(n = 10)
 ```
@@ -104,8 +105,11 @@ x |> head(n = 10)
 
 ```{r results='asis', echo=TRUE}
 x |> tidyr::unnest(dates) |> 
-     head(n = 10) |> 
-     gluedown::md_table()
+     tidyr::pivot_longer(cols = tidyr::starts_with("date"), 
+                         names_to = "date_type", 
+                         values_to = "date") |> 
+                         head(n = 10) |> 
+                         gluedown::md_table()
 ```
 <br>
 
@@ -117,16 +121,33 @@ x |> tidyr::unnest(dates) |>
   count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
   count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
   dplyr::group_by(month = clock::date_month_factor(date_of_service)) |> 
-  dplyr::summarise(
-       no_of_claims = dplyr::n(),
-       balance_total = sum(balance),
-       avg_prov_lag = round(mean(provider_lag), 2),
-                      avg_bill_lag = round(mean(billing_lag), 2),
-                      avg_accept_lag = round(mean(processing_lag), 2),
-                      avg_pay_lag = round(mean(payer_lag), 2),
-                      avg_dar = round(mean(days_in_ar), 2), .groups = "drop") |> 
+  dplyr::summarise(no_of_claims = dplyr::n(), 
+                   balance_total = sum(balance),
+                   avg_prov_lag = round(mean(provider_lag), 2), 
+                   avg_bill_lag = round(mean(billing_lag), 2),
+                   avg_accept_lag = round(mean(processing_lag), 2),
+                   avg_pay_lag = round(mean(payer_lag), 2),
+                   avg_days_in_ar = round(mean(days_in_ar), 2), .groups = "drop") |> 
   gluedown::md_table()
 ```
+
+<br>
+
+```{r results='asis', echo=TRUE}
+x |> tidyr::unnest(dates) |> 
+  count_days(date_of_service, date_of_release, provider_lag) |> 
+  count_days(date_of_release, date_of_submission, billing_lag) |> 
+  count_days(date_of_submission, date_of_acceptance, processing_lag) |> 
+  count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
+  count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
+  dplyr::group_by(qtr = lubridate::quarter(date_of_service)) |> 
+  dplyr::summarise(no_of_claims = dplyr::n(), balance_total = sum(balance), avg_prov_lag = round(mean(provider_lag), 2), avg_bill_lag = round(mean(billing_lag), 2),
+                   avg_accept_lag = round(mean(processing_lag), 2),
+                      avg_pay_lag = round(mean(payer_lag), 2),
+                      avg_days_in_ar = round(mean(days_in_ar), 2), .groups = "drop") |> 
+  gluedown::md_table()
+```
+
 
 ## Aging Calculation
 
