@@ -151,35 +151,4 @@ gt_2
 
 <br><br>
 
-## {GGally} Parallel Coordinates Comparison
-
-```{r message=FALSE, warning=FALSE}
-library(GGally)
-library(hrbrthemes)
-
-gg_1 <- dar_month_2022 |> 
-  dplyr::select(earb, 
-                earb_trg, 
-                gct, 
-                dar,
-                pass) |> 
-  ggparcoord(columns = 1:4, 
-             scale = "uniminmax",
-             #scale = "globalminmax",
-             groupColumn = "pass") + 
-  ggplot2::scale_color_manual(values = c("red", "#00BFC4")) +
-  ggplot2::xlab("") +
-  ggplot2::ylab("") +
-  ggplot2::coord_flip() +
-  ggplot2::facet_wrap("pass") +
-  ggplot2::theme(legend.position = "none") +
-  hrbrthemes::theme_ipsum_rc()
-```
-
-```{r echo=FALSE, fig.cap="Mercury Vapour", out.width="75%", fig.class="center", dpi=300}
-gg_1
-```
-
-<br><br>
-
 
