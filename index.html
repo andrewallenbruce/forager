@@ -138,7 +138,14 @@
 <div class="section level2">
 <h2 id="foundation-time-measurement">Foundation: Time Measurement<a class="anchor" aria-label="anchor" href="#foundation-time-measurement"></a>
 </h2>
-<p>Everything in a Healthcare RCM workflow is built upon the bedrock of time measurement. - Task <span class="math inline"><em>a</em></span> is created at time <span class="math inline"><em>t</em></span>. - Subtask <span class="math inline"><em>a</em><sub>1</sub></span> is assigned at time <span class="math inline"><em>t</em><sub>1</sub></span> to responsible party <span class="math inline"><em>x</em><sub>1</sub></span>. - Subtask <span class="math inline"><em>a</em><sub>2</sub></span> is assigned at time <span class="math inline"><em>t</em><sub>2</sub></span> to responsible party <span class="math inline"><em>x</em><sub>2</sub></span>. - So on, and so forth until… - Task <span class="math inline"><em>a</em><sub><em>i</em></sub></span> is completed at time <span class="math inline"><em>t</em><sub><em>i</em></sub></span>.</p>
+<p>Everything in a Healthcare RCM workflow is built upon the bedrock of time measurement.</p>
+<ul>
+<li>Task <span class="math inline"><em>a</em></span> is created at time <span class="math inline"><em>t</em></span>.</li>
+<li>Subtask <span class="math inline"><em>a</em><sub>1</sub></span> is assigned at time <span class="math inline"><em>t</em><sub>1</sub></span> to responsible party <span class="math inline"><em>x</em><sub>1</sub></span>.</li>
+<li>Subtask <span class="math inline"><em>a</em><sub>2</sub></span> is assigned at time <span class="math inline"><em>t</em><sub>2</sub></span> to responsible party <span class="math inline"><em>x</em><sub>2</sub></span>.</li>
+<li>So on, and so forth until…</li>
+<li>Task <span class="math inline"><em>a</em><sub><em>i</em></sub></span> is completed at time <span class="math inline"><em>t</em><sub><em>i</em></sub></span>.</li>
+</ul>
 <p>Measuring the amount of time between each step becomes crucial in identifying workflow issues.</p>
 <div class="section level3">
 <h3 id="example-the-lifecycle-of-a-claim">Example: The Lifecycle of a Claim<a class="anchor" aria-label="anchor" href="#example-the-lifecycle-of-a-claim"></a>
@@ -165,33 +172,33 @@
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 10 × 5</span></span>
-<span><span class="co">#&gt;    claim_id   payer    ins_class balance    dates           </span></span>
-<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;list&gt;          </span></span>
-<span><span class="co">#&gt;  1 00001      Humana   Secondary  57.72710  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  2 00002      Anthem   Secondary 118.55183  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  3 00003      Anthem   Secondary 186.56057  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  4 00004      Anthem   Primary    88.28117  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  5 00005      Medicaid Primary   142.11783  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  6 00006      BCBS     Secondary 121.06323  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  7 00007      Humana   Primary    45.65637  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  8 00008      Humana   Primary   211.97337  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  9 00009      Cigna    Secondary 106.63790  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt; 10 00010      Medicare Secondary 411.03690  &lt;tibble [1 × 5]&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;    claim_id   payer        ins_class balance    dates           </span></span>
+<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;variable&gt; &lt;list&gt;          </span></span>
+<span><span class="co">#&gt;  1 00001      Medicaid     Secondary 152.85747  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  2 00002      UnitedHealth Secondary  36.05447  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  3 00003      Centene      Secondary  90.33910  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  4 00004      UnitedHealth Secondary  51.64573  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  5 00005      Medicaid     Secondary 154.65047  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  6 00006      Humana       Secondary 132.19150  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  7 00007      Centene      Primary    77.79067  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  8 00008      Humana       Secondary 139.89570  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  9 00009      Anthem       Primary    71.28777  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt; 10 00010      Centene      Secondary 141.13423  &lt;tibble [1 × 5]&gt;</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>     <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>     <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"date"</span><span class="op">)</span>, </span>
+<span>                         names_to <span class="op">=</span> <span class="st">"date_type"</span>, </span>
+<span>                         values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>                         <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>                         <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
-<col width="7%">
-<col width="7%">
-<col width="7%">
-<col width="7%">
 <col width="12%">
-<col width="12%">
-<col width="14%">
-<col width="14%">
+<col width="17%">
+<col width="13%">
+<col width="13%">
+<col width="27%">
 <col width="15%">
 </colgroup>
 <thead><tr class="header">
@@ -199,122 +206,89 @@
 <th align="left">payer</th>
 <th align="left">ins_class</th>
 <th align="right">balance</th>
-<th align="left">date_of_service</th>
-<th align="left">date_of_release</th>
-<th align="left">date_of_submission</th>
-<th align="left">date_of_acceptance</th>
-<th align="left">date_of_adjudication</th>
+<th align="left">date_type</th>
+<th align="left">date</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">00001</td>
-<td align="left">Humana</td>
-<td align="left">Secondary</td>
-<td align="right">57.72710</td>
-<td align="left">2020-05-18</td>
-<td align="left">2020-05-26</td>
-<td align="left">2020-05-31</td>
-<td align="left">2020-06-02</td>
-<td align="left">2020-06-28</td>
-</tr>
-<tr class="even">
-<td align="left">00002</td>
-<td align="left">Anthem</td>
-<td align="left">Secondary</td>
-<td align="right">118.55183</td>
-<td align="left">2020-12-18</td>
-<td align="left">2020-12-28</td>
-<td align="left">2021-01-02</td>
-<td align="left">2021-01-07</td>
-<td align="left">2021-02-05</td>
-</tr>
-<tr class="odd">
-<td align="left">00003</td>
-<td align="left">Anthem</td>
-<td align="left">Secondary</td>
-<td align="right">186.56057</td>
-<td align="left">2020-10-18</td>
-<td align="left">2020-10-23</td>
-<td align="left">2020-10-26</td>
-<td align="left">2020-10-29</td>
-<td align="left">2020-11-27</td>
-</tr>
-<tr class="even">
-<td align="left">00004</td>
-<td align="left">Anthem</td>
-<td align="left">Primary</td>
-<td align="right">88.28117</td>
-<td align="left">2020-11-18</td>
-<td align="left">2020-11-29</td>
-<td align="left">2020-12-03</td>
-<td align="left">2020-12-04</td>
-<td align="left">2021-01-02</td>
-</tr>
-<tr class="odd">
-<td align="left">00005</td>
 <td align="left">Medicaid</td>
-<td align="left">Primary</td>
-<td align="right">142.11783</td>
-<td align="left">2020-08-18</td>
-<td align="left">2020-08-28</td>
-<td align="left">2020-08-31</td>
-<td align="left">2020-09-03</td>
+<td align="left">Secondary</td>
+<td align="right">152.85747</td>
+<td align="left">date_of_service</td>
+<td align="left">2020-09-19</td>
+</tr>
+<tr class="even">
+<td align="left">00001</td>
+<td align="left">Medicaid</td>
+<td align="left">Secondary</td>
+<td align="right">152.85747</td>
+<td align="left">date_of_release</td>
+<td align="left">2020-09-30</td>
+</tr>
+<tr class="odd">
+<td align="left">00001</td>
+<td align="left">Medicaid</td>
+<td align="left">Secondary</td>
+<td align="right">152.85747</td>
+<td align="left">date_of_submission</td>
 <td align="left">2020-10-02</td>
 </tr>
 <tr class="even">
-<td align="left">00006</td>
-<td align="left">BCBS</td>
+<td align="left">00001</td>
+<td align="left">Medicaid</td>
 <td align="left">Secondary</td>
-<td align="right">121.06323</td>
-<td align="left">2020-04-18</td>
-<td align="left">2020-04-26</td>
-<td align="left">2020-04-30</td>
-<td align="left">2020-05-01</td>
-<td align="left">2020-05-30</td>
+<td align="right">152.85747</td>
+<td align="left">date_of_acceptance</td>
+<td align="left">2020-10-05</td>
 </tr>
 <tr class="odd">
-<td align="left">00007</td>
-<td align="left">Humana</td>
-<td align="left">Primary</td>
-<td align="right">45.65637</td>
-<td align="left">2020-05-18</td>
-<td align="left">2020-05-31</td>
-<td align="left">2020-06-02</td>
-<td align="left">2020-06-02</td>
-<td align="left">2020-06-29</td>
+<td align="left">00001</td>
+<td align="left">Medicaid</td>
+<td align="left">Secondary</td>
+<td align="right">152.85747</td>
+<td align="left">date_of_adjudication</td>
+<td align="left">2020-11-09</td>
 </tr>
 <tr class="even">
-<td align="left">00008</td>
-<td align="left">Humana</td>
-<td align="left">Primary</td>
-<td align="right">211.97337</td>
-<td align="left">2020-03-18</td>
-<td align="left">2020-03-21</td>
-<td align="left">2020-03-24</td>
-<td align="left">2020-03-26</td>
-<td align="left">2020-04-28</td>
+<td align="left">00002</td>
+<td align="left">UnitedHealth</td>
+<td align="left">Secondary</td>
+<td align="right">36.05447</td>
+<td align="left">date_of_service</td>
+<td align="left">2020-07-19</td>
 </tr>
 <tr class="odd">
-<td align="left">00009</td>
-<td align="left">Cigna</td>
+<td align="left">00002</td>
+<td align="left">UnitedHealth</td>
 <td align="left">Secondary</td>
-<td align="right">106.63790</td>
-<td align="left">2020-09-18</td>
-<td align="left">2020-10-01</td>
-<td align="left">2020-10-03</td>
-<td align="left">2020-10-04</td>
-<td align="left">2020-11-02</td>
+<td align="right">36.05447</td>
+<td align="left">date_of_release</td>
+<td align="left">2020-08-02</td>
 </tr>
 <tr class="even">
-<td align="left">00010</td>
-<td align="left">Medicare</td>
+<td align="left">00002</td>
+<td align="left">UnitedHealth</td>
 <td align="left">Secondary</td>
-<td align="right">411.03690</td>
-<td align="left">2020-02-18</td>
-<td align="left">2020-02-24</td>
-<td align="left">2020-02-26</td>
-<td align="left">2020-02-26</td>
-<td align="left">2020-03-26</td>
+<td align="right">36.05447</td>
+<td align="left">date_of_submission</td>
+<td align="left">2020-08-04</td>
+</tr>
+<tr class="odd">
+<td align="left">00002</td>
+<td align="left">UnitedHealth</td>
+<td align="left">Secondary</td>
+<td align="right">36.05447</td>
+<td align="left">date_of_acceptance</td>
+<td align="left">2020-08-04</td>
+</tr>
+<tr class="even">
+<td align="left">00002</td>
+<td align="left">UnitedHealth</td>
+<td align="left">Secondary</td>
+<td align="right">36.05447</td>
+<td align="left">date_of_adjudication</td>
+<td align="left">2020-09-09</td>
 </tr>
 </tbody>
 </table>
@@ -327,25 +301,24 @@
 <span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_adjudication</span>, <span class="va">payer_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
-<span>       no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>       balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
-<span>       avg_prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">provider_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                      avg_bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">billing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                      avg_accept_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                      avg_pay_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                      avg_dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>                   balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>                   avg_prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">provider_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, </span>
+<span>                   avg_bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">billing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                   avg_accept_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                   avg_pay_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                   avg_days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="10%">
-<col width="13%">
-<col width="14%">
-<col width="13%">
-<col width="13%">
-<col width="15%">
+<col width="9%">
 <col width="12%">
-<col width="8%">
+<col width="13%">
+<col width="12%">
+<col width="12%">
+<col width="14%">
+<col width="11%">
+<col width="14%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">month</th>
@@ -355,128 +328,206 @@
 <th align="right">avg_bill_lag</th>
 <th align="right">avg_accept_lag</th>
 <th align="right">avg_pay_lag</th>
-<th align="right">avg_dar</th>
+<th align="right">avg_days_in_ar</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">January</td>
-<td align="right">1250</td>
-<td align="right">171000.4</td>
-<td align="right">10.87</td>
-<td align="right">2.32</td>
-<td align="right">3.02</td>
-<td align="right">33.13</td>
-<td align="right">35.45</td>
+<td align="right">1277</td>
+<td align="right">174559.7</td>
+<td align="right">10.79</td>
+<td align="right">2.20</td>
+<td align="right">3.05</td>
+<td align="right">33.18</td>
+<td align="right">35.37</td>
 </tr>
 <tr class="even">
 <td align="left">February</td>
-<td align="right">1209</td>
-<td align="right">160242.5</td>
-<td align="right">11.11</td>
-<td align="right">2.35</td>
+<td align="right">1263</td>
+<td align="right">171249.5</td>
+<td align="right">11.22</td>
+<td align="right">2.32</td>
 <td align="right">3.11</td>
 <td align="right">33.01</td>
-<td align="right">35.37</td>
+<td align="right">35.34</td>
 </tr>
 <tr class="odd">
 <td align="left">March</td>
-<td align="right">1255</td>
-<td align="right">165428.0</td>
-<td align="right">10.94</td>
-<td align="right">2.38</td>
-<td align="right">3.09</td>
-<td align="right">33.03</td>
-<td align="right">35.40</td>
+<td align="right">1225</td>
+<td align="right">156436.5</td>
+<td align="right">11.05</td>
+<td align="right">2.31</td>
+<td align="right">3.14</td>
+<td align="right">33.05</td>
+<td align="right">35.36</td>
 </tr>
 <tr class="even">
 <td align="left">April</td>
-<td align="right">1273</td>
-<td align="right">173028.7</td>
-<td align="right">10.96</td>
-<td align="right">2.31</td>
-<td align="right">3.15</td>
-<td align="right">33.12</td>
-<td align="right">35.43</td>
+<td align="right">1257</td>
+<td align="right">168064.5</td>
+<td align="right">11.11</td>
+<td align="right">2.39</td>
+<td align="right">3.08</td>
+<td align="right">33.19</td>
+<td align="right">35.58</td>
 </tr>
 <tr class="odd">
 <td align="left">May</td>
 <td align="right">1281</td>
-<td align="right">168504.3</td>
-<td align="right">10.91</td>
-<td align="right">2.35</td>
-<td align="right">3.06</td>
-<td align="right">32.99</td>
-<td align="right">35.34</td>
+<td align="right">167327.5</td>
+<td align="right">11.22</td>
+<td align="right">2.31</td>
+<td align="right">3.09</td>
+<td align="right">33.20</td>
+<td align="right">35.51</td>
 </tr>
 <tr class="even">
 <td align="left">June</td>
-<td align="right">1209</td>
-<td align="right">165268.4</td>
+<td align="right">1251</td>
+<td align="right">163328.0</td>
 <td align="right">10.84</td>
-<td align="right">2.40</td>
-<td align="right">3.11</td>
-<td align="right">33.11</td>
-<td align="right">35.50</td>
+<td align="right">2.28</td>
+<td align="right">3.20</td>
+<td align="right">33.26</td>
+<td align="right">35.54</td>
 </tr>
 <tr class="odd">
 <td align="left">July</td>
-<td align="right">1303</td>
-<td align="right">170262.2</td>
-<td align="right">10.71</td>
+<td align="right">1238</td>
+<td align="right">166397.6</td>
+<td align="right">10.92</td>
 <td align="right">2.31</td>
-<td align="right">3.07</td>
-<td align="right">32.96</td>
-<td align="right">35.27</td>
-</tr>
-<tr class="even">
-<td align="left">August</td>
-<td align="right">1210</td>
-<td align="right">161511.9</td>
-<td align="right">10.95</td>
-<td align="right">2.27</td>
-<td align="right">3.05</td>
-<td align="right">33.11</td>
-<td align="right">35.38</td>
-</tr>
-<tr class="odd">
-<td align="left">September</td>
-<td align="right">1291</td>
-<td align="right">170885.8</td>
-<td align="right">11.30</td>
-<td align="right">2.35</td>
-<td align="right">3.22</td>
-<td align="right">33.12</td>
+<td align="right">3.06</td>
+<td align="right">33.17</td>
 <td align="right">35.47</td>
 </tr>
 <tr class="even">
+<td align="left">August</td>
+<td align="right">1239</td>
+<td align="right">162255.0</td>
+<td align="right">10.82</td>
+<td align="right">2.32</td>
+<td align="right">3.09</td>
+<td align="right">33.10</td>
+<td align="right">35.41</td>
+</tr>
+<tr class="odd">
+<td align="left">September</td>
+<td align="right">1281</td>
+<td align="right">173373.6</td>
+<td align="right">10.99</td>
+<td align="right">2.22</td>
+<td align="right">3.12</td>
+<td align="right">33.09</td>
+<td align="right">35.31</td>
+</tr>
+<tr class="even">
 <td align="left">October</td>
-<td align="right">1229</td>
-<td align="right">159483.2</td>
-<td align="right">11.09</td>
-<td align="right">2.35</td>
-<td align="right">3.07</td>
-<td align="right">33.11</td>
-<td align="right">35.46</td>
+<td align="right">1200</td>
+<td align="right">160917.7</td>
+<td align="right">11.12</td>
+<td align="right">2.28</td>
+<td align="right">3.09</td>
+<td align="right">33.25</td>
+<td align="right">35.53</td>
 </tr>
 <tr class="odd">
 <td align="left">November</td>
-<td align="right">1235</td>
-<td align="right">167641.6</td>
-<td align="right">10.97</td>
-<td align="right">2.31</td>
-<td align="right">3.04</td>
-<td align="right">33.19</td>
+<td align="right">1236</td>
+<td align="right">165392.2</td>
+<td align="right">11.00</td>
+<td align="right">2.35</td>
+<td align="right">3.16</td>
+<td align="right">33.16</td>
 <td align="right">35.51</td>
 </tr>
 <tr class="even">
 <td align="left">December</td>
-<td align="right">1255</td>
-<td align="right">166323.3</td>
-<td align="right">11.00</td>
-<td align="right">2.31</td>
+<td align="right">1252</td>
+<td align="right">167007.3</td>
+<td align="right">10.92</td>
+<td align="right">2.39</td>
+<td align="right">3.11</td>
+<td align="right">33.21</td>
+<td align="right">35.60</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_release</span>, <span class="va">provider_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_submission</span>, <span class="va">billing_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_acceptance</span>, <span class="va">processing_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_adjudication</span>, <span class="va">payer_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>qtr <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/quarter.html" class="external-link">quarter</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>, avg_prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">provider_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, avg_bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">billing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                   avg_accept_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                      avg_pay_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                      avg_days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="4%">
+<col width="13%">
+<col width="14%">
+<col width="13%">
+<col width="13%">
+<col width="14%">
+<col width="12%">
+<col width="14%">
+</colgroup>
+<thead><tr class="header">
+<th align="right">qtr</th>
+<th align="right">no_of_claims</th>
+<th align="right">balance_total</th>
+<th align="right">avg_prov_lag</th>
+<th align="right">avg_bill_lag</th>
+<th align="right">avg_accept_lag</th>
+<th align="right">avg_pay_lag</th>
+<th align="right">avg_days_in_ar</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3765</td>
+<td align="right">502245.7</td>
+<td align="right">11.02</td>
+<td align="right">2.28</td>
 <td align="right">3.10</td>
-<td align="right">33.01</td>
-<td align="right">35.32</td>
+<td align="right">33.08</td>
+<td align="right">35.36</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">3789</td>
+<td align="right">498720.0</td>
+<td align="right">11.06</td>
+<td align="right">2.33</td>
+<td align="right">3.12</td>
+<td align="right">33.22</td>
+<td align="right">35.54</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3758</td>
+<td align="right">502026.2</td>
+<td align="right">10.91</td>
+<td align="right">2.28</td>
+<td align="right">3.09</td>
+<td align="right">33.12</td>
+<td align="right">35.40</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">3688</td>
+<td align="right">493317.2</td>
+<td align="right">11.01</td>
+<td align="right">2.34</td>
+<td align="right">3.12</td>
+<td align="right">33.21</td>
+<td align="right">35.55</td>
 </tr>
 </tbody>
 </table>
@@ -485,7 +536,7 @@
 <div class="section level2">
 <h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">forager</span><span class="fu">:::</span><span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -502,18 +553,18 @@
 <tbody>
 <tr class="odd">
 <td align="left">(0,30]</td>
-<td align="right">25</td>
-<td align="right">3875.296</td>
+<td align="right">19</td>
+<td align="right">2776.459</td>
 </tr>
 <tr class="even">
 <td align="left">(30,60]</td>
-<td align="right">14891</td>
-<td align="right">1982482.138</td>
+<td align="right">14899</td>
+<td align="right">1984261.643</td>
 </tr>
 <tr class="odd">
 <td align="left">(60,90]</td>
-<td align="right">84</td>
-<td align="right">13222.939</td>
+<td align="right">82</td>
+<td align="right">9271.023</td>
 </tr>
 </tbody>
 </table>
@@ -521,7 +572,7 @@
 <div class="section level2">
 <h2 id="days-in-ar-monthly-calculation">Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-monthly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  date <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2022</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
 <span>  gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365000.567</span>, <span class="fl">169094.46</span>, <span class="fl">297731.74</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -571,204 +622,204 @@
 <td align="left">January</td>
 <td align="right">1</td>
 <td align="right">31</td>
-<td align="right">365002.6</td>
-<td align="right">182769.8</td>
-<td align="right">412099.7</td>
-<td align="right">-229329.93</td>
-<td align="right">-125.47474</td>
-<td align="right">11774.278</td>
-<td align="right">15.52280</td>
+<td align="right">365000.5</td>
+<td align="right">182770.0</td>
+<td align="right">412097.3</td>
+<td align="right">-229327.35</td>
+<td align="right">-125.47319</td>
+<td align="right">11774.210</td>
+<td align="right">15.52291</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007356</td>
+<td align="right">0.5007390</td>
 <td align="right">1.129032</td>
-<td align="right">-0.6282967</td>
+<td align="right">-0.6282932</td>
 </tr>
 <tr class="even">
 <td align="left">2022-02-01</td>
 <td align="left">February</td>
 <td align="right">2</td>
 <td align="right">28</td>
-<td align="right">169096.7</td>
-<td align="right">169635.0</td>
-<td align="right">211370.9</td>
-<td align="right">-41735.89</td>
-<td align="right">-24.60334</td>
-<td align="right">6039.169</td>
-<td align="right">28.08913</td>
+<td align="right">169090.8</td>
+<td align="right">169632.9</td>
+<td align="right">211363.5</td>
+<td align="right">-41730.61</td>
+<td align="right">-24.60054</td>
+<td align="right">6038.958</td>
+<td align="right">28.08977</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031834</td>
+<td align="right">1.0032060</td>
 <td align="right">1.250000</td>
-<td align="right">-0.2468166</td>
+<td align="right">-0.2467940</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-03-01</td>
 <td align="left">March</td>
 <td align="right">3</td>
 <td align="right">31</td>
-<td align="right">297736.7</td>
-<td align="right">179349.1</td>
-<td align="right">336154.3</td>
-<td align="right">-156805.21</td>
-<td align="right">-87.43016</td>
-<td align="right">9604.409</td>
-<td align="right">18.67362</td>
+<td align="right">297734.2</td>
+<td align="right">179348.2</td>
+<td align="right">336151.6</td>
+<td align="right">-156803.34</td>
+<td align="right">-87.42955</td>
+<td align="right">9604.330</td>
+<td align="right">18.67368</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023749</td>
+<td align="right">0.6023769</td>
 <td align="right">1.129032</td>
-<td align="right">-0.5266573</td>
+<td align="right">-0.5266554</td>
 </tr>
 <tr class="even">
 <td align="left">2022-04-01</td>
 <td align="left">April</td>
 <td align="right">4</td>
 <td align="right">30</td>
-<td align="right">364999.9</td>
-<td align="right">182770.4</td>
-<td align="right">425833.2</td>
-<td align="right">-243062.80</td>
-<td align="right">-132.98807</td>
-<td align="right">12166.662</td>
-<td align="right">15.02223</td>
+<td align="right">364997.1</td>
+<td align="right">182774.3</td>
+<td align="right">425829.9</td>
+<td align="right">-243055.66</td>
+<td align="right">-132.98132</td>
+<td align="right">12166.570</td>
+<td align="right">15.02266</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007409</td>
+<td align="right">0.5007554</td>
 <td align="right">1.166667</td>
-<td align="right">-0.6659257</td>
+<td align="right">-0.6659112</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-05-01</td>
 <td align="left">May</td>
 <td align="right">5</td>
 <td align="right">31</td>
-<td align="right">169093.4</td>
-<td align="right">169632.2</td>
-<td align="right">190911.9</td>
-<td align="right">-21279.73</td>
-<td align="right">-12.54463</td>
-<td align="right">5454.627</td>
-<td align="right">31.09877</td>
+<td align="right">169096.5</td>
+<td align="right">169633.6</td>
+<td align="right">190915.4</td>
+<td align="right">-21281.81</td>
+<td align="right">-12.54576</td>
+<td align="right">5454.725</td>
+<td align="right">31.09846</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031863</td>
+<td align="right">1.0031762</td>
 <td align="right">1.129032</td>
-<td align="right">-0.1258460</td>
+<td align="right">-0.1258560</td>
 </tr>
 <tr class="even">
 <td align="left">2022-06-01</td>
 <td align="left">June</td>
 <td align="right">6</td>
 <td align="right">30</td>
-<td align="right">297735.9</td>
-<td align="right">179345.4</td>
-<td align="right">347358.5</td>
-<td align="right">-168013.08</td>
-<td align="right">-93.68127</td>
-<td align="right">9924.529</td>
-<td align="right">18.07093</td>
+<td align="right">297726.8</td>
+<td align="right">179345.0</td>
+<td align="right">347347.9</td>
+<td align="right">-168002.94</td>
+<td align="right">-93.67584</td>
+<td align="right">9924.227</td>
+<td align="right">18.07143</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023642</td>
+<td align="right">0.6023811</td>
 <td align="right">1.166667</td>
-<td align="right">-0.5643024</td>
+<td align="right">-0.5642856</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-07-01</td>
 <td align="left">July</td>
 <td align="right">7</td>
 <td align="right">31</td>
-<td align="right">364999.2</td>
-<td align="right">182770.2</td>
-<td align="right">412095.9</td>
-<td align="right">-229325.66</td>
-<td align="right">-125.47213</td>
-<td align="right">11774.167</td>
-<td align="right">15.52298</td>
+<td align="right">365002.2</td>
+<td align="right">182771.0</td>
+<td align="right">412099.3</td>
+<td align="right">-229328.24</td>
+<td align="right">-125.47298</td>
+<td align="right">11774.264</td>
+<td align="right">15.52292</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007414</td>
+<td align="right">0.5007395</td>
 <td align="right">1.129032</td>
-<td align="right">-0.6282909</td>
+<td align="right">-0.6282928</td>
 </tr>
 <tr class="even">
 <td align="left">2022-08-01</td>
 <td align="left">August</td>
 <td align="right">8</td>
 <td align="right">31</td>
-<td align="right">169089.1</td>
-<td align="right">169634.2</td>
-<td align="right">190907.0</td>
-<td align="right">-21272.83</td>
-<td align="right">-12.54042</td>
-<td align="right">5454.487</td>
-<td align="right">31.09994</td>
+<td align="right">169092.2</td>
+<td align="right">169627.4</td>
+<td align="right">190910.6</td>
+<td align="right">-21283.18</td>
+<td align="right">-12.54702</td>
+<td align="right">5454.588</td>
+<td align="right">31.09811</td>
 <td align="left">TRUE</td>
-<td align="right">1.0032238</td>
+<td align="right">1.0031650</td>
 <td align="right">1.129032</td>
-<td align="right">-0.1258084</td>
+<td align="right">-0.1258673</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-09-01</td>
 <td align="left">September</td>
 <td align="right">9</td>
 <td align="right">30</td>
-<td align="right">297732.5</td>
-<td align="right">179346.9</td>
-<td align="right">347354.6</td>
-<td align="right">-168007.70</td>
-<td align="right">-93.67749</td>
-<td align="right">9924.418</td>
-<td align="right">18.07128</td>
+<td align="right">297729.7</td>
+<td align="right">179344.1</td>
+<td align="right">347351.3</td>
+<td align="right">-168007.25</td>
+<td align="right">-93.67872</td>
+<td align="right">9924.324</td>
+<td align="right">18.07116</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023760</td>
+<td align="right">0.6023722</td>
 <td align="right">1.166667</td>
-<td align="right">-0.5642907</td>
+<td align="right">-0.5642945</td>
 </tr>
 <tr class="even">
 <td align="left">2022-10-01</td>
 <td align="left">October</td>
 <td align="right">10</td>
 <td align="right">31</td>
-<td align="right">365001.8</td>
-<td align="right">182771.2</td>
-<td align="right">412098.9</td>
-<td align="right">-229327.67</td>
-<td align="right">-125.47255</td>
-<td align="right">11774.253</td>
-<td align="right">15.52295</td>
+<td align="right">364999.9</td>
+<td align="right">182773.2</td>
+<td align="right">412096.7</td>
+<td align="right">-229323.51</td>
+<td align="right">-125.46892</td>
+<td align="right">11774.191</td>
+<td align="right">15.52320</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007404</td>
+<td align="right">0.5007485</td>
 <td align="right">1.129032</td>
-<td align="right">-0.6282918</td>
+<td align="right">-0.6282837</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-11-01</td>
 <td align="left">November</td>
 <td align="right">11</td>
 <td align="right">30</td>
-<td align="right">169093.9</td>
-<td align="right">169634.7</td>
-<td align="right">197276.2</td>
-<td align="right">-27641.55</td>
-<td align="right">-16.29475</td>
-<td align="right">5636.464</td>
-<td align="right">30.09594</td>
+<td align="right">169094.4</td>
+<td align="right">169636.7</td>
+<td align="right">197276.8</td>
+<td align="right">-27640.12</td>
+<td align="right">-16.29372</td>
+<td align="right">5636.479</td>
+<td align="right">30.09621</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031980</td>
+<td align="right">1.0032069</td>
 <td align="right">1.166667</td>
-<td align="right">-0.1634687</td>
+<td align="right">-0.1634597</td>
 </tr>
 <tr class="even">
 <td align="left">2022-12-01</td>
 <td align="left">December</td>
 <td align="right">12</td>
 <td align="right">31</td>
-<td align="right">297728.8</td>
-<td align="right">179340.8</td>
-<td align="right">336145.4</td>
-<td align="right">-156804.57</td>
-<td align="right">-87.43385</td>
-<td align="right">9604.154</td>
-<td align="right">18.67325</td>
+<td align="right">297725.8</td>
+<td align="right">179346.6</td>
+<td align="right">336142.0</td>
+<td align="right">-156795.39</td>
+<td align="right">-87.42591</td>
+<td align="right">9604.057</td>
+<td align="right">18.67405</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023631</td>
+<td align="right">0.6023886</td>
 <td align="right">1.129032</td>
-<td align="right">-0.5266692</td>
+<td align="right">-0.5266437</td>
 </tr>
 </tbody>
 </table>
@@ -777,7 +828,7 @@
 <div class="section level2">
 <h2 id="days-in-ar-quarterly-calculation">Days in AR Quarterly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-quarterly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_qtr.html">dar_qtr</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -818,12 +869,12 @@
 <td align="left">2022-03-01</td>
 <td align="right">1</td>
 <td align="right">90</td>
-<td align="right">831836.0</td>
-<td align="right">179349.1</td>
-<td align="right">323491.8</td>
-<td align="right">-144142.7</td>
+<td align="right">831825.6</td>
+<td align="right">179348.2</td>
+<td align="right">323487.7</td>
+<td align="right">-144139.5</td>
 <td align="right">-80.37</td>
-<td align="right">9242.62</td>
+<td align="right">9242.51</td>
 <td align="right">19.40</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -834,12 +885,12 @@
 <td align="left">2022-06-01</td>
 <td align="right">2</td>
 <td align="right">91</td>
-<td align="right">831829.2</td>
-<td align="right">179345.4</td>
-<td align="right">319934.3</td>
-<td align="right">-140588.9</td>
+<td align="right">831820.4</td>
+<td align="right">179345.0</td>
+<td align="right">319930.9</td>
+<td align="right">-140585.9</td>
 <td align="right">-78.39</td>
-<td align="right">9140.98</td>
+<td align="right">9140.88</td>
 <td align="right">19.62</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -850,12 +901,12 @@
 <td align="left">2022-09-01</td>
 <td align="right">3</td>
 <td align="right">92</td>
-<td align="right">831820.8</td>
-<td align="right">179346.9</td>
-<td align="right">316453.6</td>
-<td align="right">-137106.6</td>
+<td align="right">831824.2</td>
+<td align="right">179344.1</td>
+<td align="right">316454.8</td>
+<td align="right">-137110.7</td>
 <td align="right">-76.45</td>
-<td align="right">9041.53</td>
+<td align="right">9041.57</td>
 <td align="right">19.84</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -866,12 +917,12 @@
 <td align="left">2022-12-01</td>
 <td align="right">4</td>
 <td align="right">92</td>
-<td align="right">831824.5</td>
-<td align="right">179340.8</td>
-<td align="right">316455.0</td>
-<td align="right">-137114.2</td>
+<td align="right">831820.1</td>
+<td align="right">179346.6</td>
+<td align="right">316453.3</td>
+<td align="right">-137106.7</td>
 <td align="right">-76.45</td>
-<td align="right">9041.57</td>
+<td align="right">9041.52</td>
 <td align="right">19.84</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
