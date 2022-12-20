@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.4/font.css" rel="stylesheet">
+<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="deps/Roboto-0.4.4/font.css" rel="stylesheet">
 <link href="deps/JetBrains_Mono-0.4.4/font.css" rel="stylesheet">
 <link href="deps/Roboto_Slab-0.4.4/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -136,47 +136,188 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrewallenbruce/forager" class="external-link">forager</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+<h2 id="foundation-time-measurement">Foundation: Time Measurement<a class="anchor" aria-label="anchor" href="#foundation-time-measurement"></a>
 </h2>
-<p>Calculate:</p>
+<p>Everything in a Healthcare RCM workflow is built upon the bedrock of time measurement. - Task <span class="math inline"><em>a</em></span> is created at time <span class="math inline"><em>t</em></span>. - Subtask <span class="math inline"><em>a</em><sub>1</sub></span> is assigned at time <span class="math inline"><em>t</em><sub>1</sub></span> to responsible party <span class="math inline"><em>x</em><sub>1</sub></span>. - Subtask <span class="math inline"><em>a</em><sub>2</sub></span> is assigned at time <span class="math inline"><em>t</em><sub>2</sub></span> to responsible party <span class="math inline"><em>x</em><sub>2</sub></span>. - So on, and so forth until… - Task <span class="math inline"><em>a</em><sub><em>i</em></sub></span> is completed at time <span class="math inline"><em>t</em><sub><em>i</em></sub></span>.</p>
+<p>Measuring the amount of time between each step becomes crucial in identifying workflow issues.</p>
+<div class="section level3">
+<h3 id="example-the-lifecycle-of-a-claim">Example: The Lifecycle of a Claim<a class="anchor" aria-label="anchor" href="#example-the-lifecycle-of-a-claim"></a>
+</h3>
 <ul>
-<li>Provider Lag: Days between Date of Service (<code>dos</code>) and Date of Release (<code>dor</code>)</li>
-<li>Billing Lag: Days between Date of Release (<code>dor</code>) and Date of Submission (<code>dtos</code>)</li>
-<li>Acceptance Lag: Days between Date of Submission (<code>dtos</code>) and Date of Acceptance (<code>dtoa</code>)</li>
-<li>Payment Lag: Days between Date of Acceptance (<code>dtoa</code>) and Date of Adjudication (<code>dtad</code>)</li>
-<li>Days in AR: Days between Date of Release (<code>dor</code>) and Date of Adjudication (<code>dtad</code>)</li>
+<li>
+<strong>Provider Lag</strong>: Days between <em>Date of Service</em> and <em>Date of Release</em>
+</li>
+<li>
+<strong>Billing Lag</strong>: Days between <em>Date of Release</em> and <em>Date of Submission</em>
+</li>
+<li>
+<strong>Acceptance Lag</strong>: Days between <em>Date of Submission</em> and <em>Date of Acceptance</em>
+</li>
+<li>
+<strong>Payment Lag</strong>: Days between <em>Date of Acceptance</em> and <em>Date of Adjudication</em>
+</li>
+<li>
+<strong>Days in AR</strong>: Days between <em>Date of Release</em> and <em>Date of Adjudication</em>
+</li>
 </ul>
+<p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 10 × 5</span></span>
-<span><span class="co">#&gt;    claim_id   payer        ins_class balance    dates           </span></span>
-<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;variable&gt; &lt;list&gt;          </span></span>
-<span><span class="co">#&gt;  1 00001      Medicare     Primary   147.28843  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  2 00002      Anthem       Secondary 334.23977  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  3 00003      BCBS         Secondary 250.32610  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  4 00004      Medicare     Primary   165.52817  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  5 00005      Humana       Primary   188.52557  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  6 00006      Medicare     Primary    38.95510  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  7 00007      Medicaid     Primary    75.20807  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  8 00008      Centene      Secondary  76.08480  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  9 00009      UnitedHealth Primary    74.54573  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt; 10 00010      Medicare     Secondary 193.73707  &lt;tibble [1 × 5]&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;    claim_id   payer    ins_class balance    dates           </span></span>
+<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;list&gt;          </span></span>
+<span><span class="co">#&gt;  1 00001      Humana   Secondary  57.72710  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  2 00002      Anthem   Secondary 118.55183  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  3 00003      Anthem   Secondary 186.56057  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  4 00004      Anthem   Primary    88.28117  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  5 00005      Medicaid Primary   142.11783  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  6 00006      BCBS     Secondary 121.06323  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  7 00007      Humana   Primary    45.65637  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  8 00008      Humana   Primary   211.97337  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt;  9 00009      Cigna    Secondary 106.63790  &lt;tibble [1 × 5]&gt;</span></span>
+<span><span class="co">#&gt; 10 00010      Medicare Secondary 411.03690  &lt;tibble [1 × 5]&gt;</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; |claim_id |payer        |ins_class |   balance|date_of_service |date_of_release |date_of_submission |date_of_acceptance |date_of_adjudication |</span></span>
-<span><span class="co">#&gt; |:--------|:------------|:---------|---------:|:---------------|:---------------|:------------------|:------------------|:--------------------|</span></span>
-<span><span class="co">#&gt; |00001    |Medicare     |Primary   | 147.28843|2020-09-18      |2020-09-20      |2020-09-21         |2020-09-24         |2020-10-25           |</span></span>
-<span><span class="co">#&gt; |00002    |Anthem       |Secondary | 334.23977|2020-05-18      |2020-06-01      |2020-06-05         |2020-06-10         |2020-07-11           |</span></span>
-<span><span class="co">#&gt; |00003    |BCBS         |Secondary | 250.32610|2020-10-18      |2020-10-30      |2020-11-03         |2020-11-04         |2020-12-07           |</span></span>
-<span><span class="co">#&gt; |00004    |Medicare     |Primary   | 165.52817|2020-04-18      |2020-04-27      |2020-04-29         |2020-05-01         |2020-06-01           |</span></span>
-<span><span class="co">#&gt; |00005    |Humana       |Primary   | 188.52557|2020-07-18      |2020-08-02      |2020-08-04         |2020-08-08         |2020-09-06           |</span></span>
-<span><span class="co">#&gt; |00006    |Medicare     |Primary   |  38.95510|2020-06-18      |2020-06-26      |2020-06-28         |2020-07-02         |2020-07-29           |</span></span>
-<span><span class="co">#&gt; |00007    |Medicaid     |Primary   |  75.20807|2020-12-18      |2020-12-28      |2020-12-31         |2021-01-03         |2021-02-02           |</span></span>
-<span><span class="co">#&gt; |00008    |Centene      |Secondary |  76.08480|2020-01-18      |2020-01-27      |2020-01-31         |2020-01-31         |2020-03-03           |</span></span>
-<span><span class="co">#&gt; |00009    |UnitedHealth |Primary   |  74.54573|2020-12-18      |2020-12-29      |2020-12-31         |2021-01-02         |2021-02-03           |</span></span>
-<span><span class="co">#&gt; |00010    |Medicare     |Secondary | 193.73707|2020-06-18      |2020-06-21      |2020-06-25         |2020-06-27         |2020-07-30           |</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>     <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="7%">
+<col width="7%">
+<col width="7%">
+<col width="7%">
+<col width="12%">
+<col width="12%">
+<col width="14%">
+<col width="14%">
+<col width="15%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">claim_id</th>
+<th align="left">payer</th>
+<th align="left">ins_class</th>
+<th align="right">balance</th>
+<th align="left">date_of_service</th>
+<th align="left">date_of_release</th>
+<th align="left">date_of_submission</th>
+<th align="left">date_of_acceptance</th>
+<th align="left">date_of_adjudication</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">00001</td>
+<td align="left">Humana</td>
+<td align="left">Secondary</td>
+<td align="right">57.72710</td>
+<td align="left">2020-05-18</td>
+<td align="left">2020-05-26</td>
+<td align="left">2020-05-31</td>
+<td align="left">2020-06-02</td>
+<td align="left">2020-06-28</td>
+</tr>
+<tr class="even">
+<td align="left">00002</td>
+<td align="left">Anthem</td>
+<td align="left">Secondary</td>
+<td align="right">118.55183</td>
+<td align="left">2020-12-18</td>
+<td align="left">2020-12-28</td>
+<td align="left">2021-01-02</td>
+<td align="left">2021-01-07</td>
+<td align="left">2021-02-05</td>
+</tr>
+<tr class="odd">
+<td align="left">00003</td>
+<td align="left">Anthem</td>
+<td align="left">Secondary</td>
+<td align="right">186.56057</td>
+<td align="left">2020-10-18</td>
+<td align="left">2020-10-23</td>
+<td align="left">2020-10-26</td>
+<td align="left">2020-10-29</td>
+<td align="left">2020-11-27</td>
+</tr>
+<tr class="even">
+<td align="left">00004</td>
+<td align="left">Anthem</td>
+<td align="left">Primary</td>
+<td align="right">88.28117</td>
+<td align="left">2020-11-18</td>
+<td align="left">2020-11-29</td>
+<td align="left">2020-12-03</td>
+<td align="left">2020-12-04</td>
+<td align="left">2021-01-02</td>
+</tr>
+<tr class="odd">
+<td align="left">00005</td>
+<td align="left">Medicaid</td>
+<td align="left">Primary</td>
+<td align="right">142.11783</td>
+<td align="left">2020-08-18</td>
+<td align="left">2020-08-28</td>
+<td align="left">2020-08-31</td>
+<td align="left">2020-09-03</td>
+<td align="left">2020-10-02</td>
+</tr>
+<tr class="even">
+<td align="left">00006</td>
+<td align="left">BCBS</td>
+<td align="left">Secondary</td>
+<td align="right">121.06323</td>
+<td align="left">2020-04-18</td>
+<td align="left">2020-04-26</td>
+<td align="left">2020-04-30</td>
+<td align="left">2020-05-01</td>
+<td align="left">2020-05-30</td>
+</tr>
+<tr class="odd">
+<td align="left">00007</td>
+<td align="left">Humana</td>
+<td align="left">Primary</td>
+<td align="right">45.65637</td>
+<td align="left">2020-05-18</td>
+<td align="left">2020-05-31</td>
+<td align="left">2020-06-02</td>
+<td align="left">2020-06-02</td>
+<td align="left">2020-06-29</td>
+</tr>
+<tr class="even">
+<td align="left">00008</td>
+<td align="left">Humana</td>
+<td align="left">Primary</td>
+<td align="right">211.97337</td>
+<td align="left">2020-03-18</td>
+<td align="left">2020-03-21</td>
+<td align="left">2020-03-24</td>
+<td align="left">2020-03-26</td>
+<td align="left">2020-04-28</td>
+</tr>
+<tr class="odd">
+<td align="left">00009</td>
+<td align="left">Cigna</td>
+<td align="left">Secondary</td>
+<td align="right">106.63790</td>
+<td align="left">2020-09-18</td>
+<td align="left">2020-10-01</td>
+<td align="left">2020-10-03</td>
+<td align="left">2020-10-04</td>
+<td align="left">2020-11-02</td>
+</tr>
+<tr class="even">
+<td align="left">00010</td>
+<td align="left">Medicare</td>
+<td align="left">Secondary</td>
+<td align="right">411.03690</td>
+<td align="left">2020-02-18</td>
+<td align="left">2020-02-24</td>
+<td align="left">2020-02-26</td>
+<td align="left">2020-02-26</td>
+<td align="left">2020-03-26</td>
+</tr>
+</tbody>
+</table>
 <p><br></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -219,126 +360,127 @@
 <tbody>
 <tr class="odd">
 <td align="left">January</td>
-<td align="right">1240</td>
-<td align="right">168147.4</td>
-<td align="right">11.16</td>
-<td align="right">2.24</td>
-<td align="right">3.12</td>
-<td align="right">33.20</td>
-<td align="right">35.44</td>
+<td align="right">1250</td>
+<td align="right">171000.4</td>
+<td align="right">10.87</td>
+<td align="right">2.32</td>
+<td align="right">3.02</td>
+<td align="right">33.13</td>
+<td align="right">35.45</td>
 </tr>
 <tr class="even">
 <td align="left">February</td>
-<td align="right">1267</td>
-<td align="right">168314.2</td>
-<td align="right">11.05</td>
-<td align="right">2.37</td>
-<td align="right">3.17</td>
-<td align="right">33.14</td>
-<td align="right">35.51</td>
+<td align="right">1209</td>
+<td align="right">160242.5</td>
+<td align="right">11.11</td>
+<td align="right">2.35</td>
+<td align="right">3.11</td>
+<td align="right">33.01</td>
+<td align="right">35.37</td>
 </tr>
 <tr class="odd">
 <td align="left">March</td>
-<td align="right">1224</td>
-<td align="right">157528.1</td>
-<td align="right">11.01</td>
+<td align="right">1255</td>
+<td align="right">165428.0</td>
+<td align="right">10.94</td>
 <td align="right">2.38</td>
-<td align="right">3.15</td>
-<td align="right">33.14</td>
-<td align="right">35.52</td>
+<td align="right">3.09</td>
+<td align="right">33.03</td>
+<td align="right">35.40</td>
 </tr>
 <tr class="even">
 <td align="left">April</td>
-<td align="right">1240</td>
-<td align="right">164739.2</td>
-<td align="right">10.81</td>
-<td align="right">2.39</td>
-<td align="right">2.99</td>
-<td align="right">32.87</td>
-<td align="right">35.25</td>
+<td align="right">1273</td>
+<td align="right">173028.7</td>
+<td align="right">10.96</td>
+<td align="right">2.31</td>
+<td align="right">3.15</td>
+<td align="right">33.12</td>
+<td align="right">35.43</td>
 </tr>
 <tr class="odd">
 <td align="left">May</td>
-<td align="right">1246</td>
-<td align="right">164501.2</td>
-<td align="right">11.07</td>
-<td align="right">2.32</td>
-<td align="right">3.11</td>
-<td align="right">32.93</td>
-<td align="right">35.26</td>
+<td align="right">1281</td>
+<td align="right">168504.3</td>
+<td align="right">10.91</td>
+<td align="right">2.35</td>
+<td align="right">3.06</td>
+<td align="right">32.99</td>
+<td align="right">35.34</td>
 </tr>
 <tr class="even">
 <td align="left">June</td>
-<td align="right">1220</td>
-<td align="right">159582.2</td>
-<td align="right">10.95</td>
-<td align="right">2.30</td>
-<td align="right">3.20</td>
-<td align="right">33.20</td>
+<td align="right">1209</td>
+<td align="right">165268.4</td>
+<td align="right">10.84</td>
+<td align="right">2.40</td>
+<td align="right">3.11</td>
+<td align="right">33.11</td>
 <td align="right">35.50</td>
 </tr>
 <tr class="odd">
 <td align="left">July</td>
-<td align="right">1274</td>
-<td align="right">165617.5</td>
-<td align="right">10.75</td>
-<td align="right">2.47</td>
-<td align="right">3.05</td>
-<td align="right">33.10</td>
-<td align="right">35.58</td>
+<td align="right">1303</td>
+<td align="right">170262.2</td>
+<td align="right">10.71</td>
+<td align="right">2.31</td>
+<td align="right">3.07</td>
+<td align="right">32.96</td>
+<td align="right">35.27</td>
 </tr>
 <tr class="even">
 <td align="left">August</td>
-<td align="right">1274</td>
-<td align="right">169146.3</td>
-<td align="right">11.10</td>
-<td align="right">2.36</td>
-<td align="right">3.14</td>
-<td align="right">33.23</td>
-<td align="right">35.58</td>
+<td align="right">1210</td>
+<td align="right">161511.9</td>
+<td align="right">10.95</td>
+<td align="right">2.27</td>
+<td align="right">3.05</td>
+<td align="right">33.11</td>
+<td align="right">35.38</td>
 </tr>
 <tr class="odd">
 <td align="left">September</td>
-<td align="right">1237</td>
-<td align="right">162958.8</td>
-<td align="right">11.07</td>
-<td align="right">2.36</td>
-<td align="right">3.17</td>
-<td align="right">33.13</td>
-<td align="right">35.50</td>
+<td align="right">1291</td>
+<td align="right">170885.8</td>
+<td align="right">11.30</td>
+<td align="right">2.35</td>
+<td align="right">3.22</td>
+<td align="right">33.12</td>
+<td align="right">35.47</td>
 </tr>
 <tr class="even">
 <td align="left">October</td>
-<td align="right">1253</td>
-<td align="right">174743.6</td>
-<td align="right">10.91</td>
-<td align="right">2.33</td>
-<td align="right">3.09</td>
-<td align="right">33.08</td>
-<td align="right">35.40</td>
+<td align="right">1229</td>
+<td align="right">159483.2</td>
+<td align="right">11.09</td>
+<td align="right">2.35</td>
+<td align="right">3.07</td>
+<td align="right">33.11</td>
+<td align="right">35.46</td>
 </tr>
 <tr class="odd">
 <td align="left">November</td>
-<td align="right">1287</td>
-<td align="right">175561.7</td>
-<td align="right">10.89</td>
-<td align="right">2.32</td>
-<td align="right">3.10</td>
-<td align="right">33.06</td>
-<td align="right">35.38</td>
+<td align="right">1235</td>
+<td align="right">167641.6</td>
+<td align="right">10.97</td>
+<td align="right">2.31</td>
+<td align="right">3.04</td>
+<td align="right">33.19</td>
+<td align="right">35.51</td>
 </tr>
 <tr class="even">
 <td align="left">December</td>
-<td align="right">1238</td>
-<td align="right">166038.7</td>
-<td align="right">10.81</td>
-<td align="right">2.34</td>
-<td align="right">3.06</td>
-<td align="right">33.06</td>
-<td align="right">35.40</td>
+<td align="right">1255</td>
+<td align="right">166323.3</td>
+<td align="right">11.00</td>
+<td align="right">2.31</td>
+<td align="right">3.10</td>
+<td align="right">33.01</td>
+<td align="right">35.32</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div class="section level2">
 <h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
@@ -346,118 +488,32 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, </span>
-<span>                         <span class="va">date_of_adjudication</span>, </span>
-<span>                         <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">payer</span>, </span>
-<span>                  aging_bucket <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">days_in_ar</span>, </span>
-<span>                                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span>, <span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">forager</span><span class="fu">:::</span><span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>aging_bucket <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">days_in_ar</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>                   balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
-<th align="left">payer</th>
 <th align="left">aging_bucket</th>
 <th align="right">no_of_claims</th>
 <th align="right">balance_total</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">Anthem</td>
 <td align="left">(0,30]</td>
-<td align="right">175</td>
-<td align="right">23667.81</td>
+<td align="right">25</td>
+<td align="right">3875.296</td>
 </tr>
 <tr class="even">
-<td align="left">Anthem</td>
 <td align="left">(30,60]</td>
-<td align="right">1688</td>
-<td align="right">222892.07</td>
+<td align="right">14891</td>
+<td align="right">1982482.138</td>
 </tr>
 <tr class="odd">
-<td align="left">BCBS</td>
-<td align="left">(0,30]</td>
-<td align="right">185</td>
-<td align="right">24424.52</td>
-</tr>
-<tr class="even">
-<td align="left">BCBS</td>
-<td align="left">(30,60]</td>
-<td align="right">1708</td>
-<td align="right">221720.28</td>
-</tr>
-<tr class="odd">
-<td align="left">Centene</td>
-<td align="left">(0,30]</td>
-<td align="right">179</td>
-<td align="right">23496.26</td>
-</tr>
-<tr class="even">
-<td align="left">Centene</td>
-<td align="left">(30,60]</td>
-<td align="right">1684</td>
-<td align="right">232993.66</td>
-</tr>
-<tr class="odd">
-<td align="left">Cigna</td>
-<td align="left">(0,30]</td>
-<td align="right">186</td>
-<td align="right">24285.49</td>
-</tr>
-<tr class="even">
-<td align="left">Cigna</td>
-<td align="left">(30,60]</td>
-<td align="right">1728</td>
-<td align="right">233376.75</td>
-</tr>
-<tr class="odd">
-<td align="left">Humana</td>
-<td align="left">(0,30]</td>
-<td align="right">184</td>
-<td align="right">26789.08</td>
-</tr>
-<tr class="even">
-<td align="left">Humana</td>
-<td align="left">(30,60]</td>
-<td align="right">1697</td>
-<td align="right">227599.51</td>
-</tr>
-<tr class="odd">
-<td align="left">Medicaid</td>
-<td align="left">(0,30]</td>
-<td align="right">195</td>
-<td align="right">26440.40</td>
-</tr>
-<tr class="even">
-<td align="left">Medicaid</td>
-<td align="left">(30,60]</td>
-<td align="right">1669</td>
-<td align="right">225010.54</td>
-</tr>
-<tr class="odd">
-<td align="left">Medicare</td>
-<td align="left">(0,30]</td>
-<td align="right">168</td>
-<td align="right">23226.05</td>
-</tr>
-<tr class="even">
-<td align="left">Medicare</td>
-<td align="left">(30,60]</td>
-<td align="right">1703</td>
-<td align="right">222655.55</td>
-</tr>
-<tr class="odd">
-<td align="left">UnitedHealth</td>
-<td align="left">(0,30]</td>
-<td align="right">183</td>
-<td align="right">23459.61</td>
-</tr>
-<tr class="even">
-<td align="left">UnitedHealth</td>
-<td align="left">(30,60]</td>
-<td align="right">1668</td>
-<td align="right">214841.29</td>
+<td align="left">(60,90]</td>
+<td align="right">84</td>
+<td align="right">13222.939</td>
 </tr>
 </tbody>
 </table>
@@ -515,204 +571,204 @@
 <td align="left">January</td>
 <td align="right">1</td>
 <td align="right">31</td>
-<td align="right">365000.1</td>
-<td align="right">182768.8</td>
-<td align="right">412096.9</td>
-<td align="right">-229328.11</td>
-<td align="right">-125.47445</td>
-<td align="right">11774.197</td>
-<td align="right">15.52282</td>
+<td align="right">365002.6</td>
+<td align="right">182769.8</td>
+<td align="right">412099.7</td>
+<td align="right">-229329.93</td>
+<td align="right">-125.47474</td>
+<td align="right">11774.278</td>
+<td align="right">15.52280</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007362</td>
+<td align="right">0.5007356</td>
 <td align="right">1.129032</td>
-<td align="right">-0.6282960</td>
+<td align="right">-0.6282967</td>
 </tr>
 <tr class="even">
 <td align="left">2022-02-01</td>
 <td align="left">February</td>
 <td align="right">2</td>
 <td align="right">28</td>
-<td align="right">169097.5</td>
-<td align="right">169634.1</td>
-<td align="right">211371.8</td>
-<td align="right">-41737.68</td>
-<td align="right">-24.60453</td>
-<td align="right">6039.195</td>
-<td align="right">28.08887</td>
+<td align="right">169096.7</td>
+<td align="right">169635.0</td>
+<td align="right">211370.9</td>
+<td align="right">-41735.89</td>
+<td align="right">-24.60334</td>
+<td align="right">6039.169</td>
+<td align="right">28.08913</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031738</td>
+<td align="right">1.0031834</td>
 <td align="right">1.250000</td>
-<td align="right">-0.2468262</td>
+<td align="right">-0.2468166</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-03-01</td>
 <td align="left">March</td>
 <td align="right">3</td>
 <td align="right">31</td>
-<td align="right">297730.2</td>
-<td align="right">179346.0</td>
-<td align="right">336147.0</td>
-<td align="right">-156801.03</td>
-<td align="right">-87.42936</td>
-<td align="right">9604.200</td>
-<td align="right">18.67370</td>
+<td align="right">297736.7</td>
+<td align="right">179349.1</td>
+<td align="right">336154.3</td>
+<td align="right">-156805.21</td>
+<td align="right">-87.43016</td>
+<td align="right">9604.409</td>
+<td align="right">18.67362</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023775</td>
+<td align="right">0.6023749</td>
 <td align="right">1.129032</td>
-<td align="right">-0.5266548</td>
+<td align="right">-0.5266573</td>
 </tr>
 <tr class="even">
 <td align="left">2022-04-01</td>
 <td align="left">April</td>
 <td align="right">4</td>
 <td align="right">30</td>
-<td align="right">365005.0</td>
-<td align="right">182775.5</td>
-<td align="right">425839.2</td>
-<td align="right">-243063.69</td>
-<td align="right">-132.98486</td>
-<td align="right">12166.833</td>
-<td align="right">15.02244</td>
+<td align="right">364999.9</td>
+<td align="right">182770.4</td>
+<td align="right">425833.2</td>
+<td align="right">-243062.80</td>
+<td align="right">-132.98807</td>
+<td align="right">12166.662</td>
+<td align="right">15.02223</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007479</td>
+<td align="right">0.5007409</td>
 <td align="right">1.166667</td>
-<td align="right">-0.6659188</td>
+<td align="right">-0.6659257</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-05-01</td>
 <td align="left">May</td>
 <td align="right">5</td>
 <td align="right">31</td>
-<td align="right">169093.6</td>
-<td align="right">169632.1</td>
-<td align="right">190912.1</td>
-<td align="right">-21280.01</td>
-<td align="right">-12.54480</td>
-<td align="right">5454.631</td>
-<td align="right">31.09873</td>
+<td align="right">169093.4</td>
+<td align="right">169632.2</td>
+<td align="right">190911.9</td>
+<td align="right">-21279.73</td>
+<td align="right">-12.54463</td>
+<td align="right">5454.627</td>
+<td align="right">31.09877</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031847</td>
+<td align="right">1.0031863</td>
 <td align="right">1.129032</td>
-<td align="right">-0.1258475</td>
+<td align="right">-0.1258460</td>
 </tr>
 <tr class="even">
 <td align="left">2022-06-01</td>
 <td align="left">June</td>
 <td align="right">6</td>
 <td align="right">30</td>
-<td align="right">297734.5</td>
-<td align="right">179346.7</td>
-<td align="right">347357.0</td>
-<td align="right">-168010.25</td>
-<td align="right">-93.67903</td>
-<td align="right">9924.484</td>
-<td align="right">18.07114</td>
+<td align="right">297735.9</td>
+<td align="right">179345.4</td>
+<td align="right">347358.5</td>
+<td align="right">-168013.08</td>
+<td align="right">-93.68127</td>
+<td align="right">9924.529</td>
+<td align="right">18.07093</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023712</td>
+<td align="right">0.6023642</td>
 <td align="right">1.166667</td>
-<td align="right">-0.5642955</td>
+<td align="right">-0.5643024</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-07-01</td>
 <td align="left">July</td>
 <td align="right">7</td>
 <td align="right">31</td>
-<td align="right">365000.7</td>
-<td align="right">182771.8</td>
-<td align="right">412097.6</td>
-<td align="right">-229325.77</td>
-<td align="right">-125.47106</td>
-<td align="right">11774.218</td>
-<td align="right">15.52306</td>
+<td align="right">364999.2</td>
+<td align="right">182770.2</td>
+<td align="right">412095.9</td>
+<td align="right">-229325.66</td>
+<td align="right">-125.47213</td>
+<td align="right">11774.167</td>
+<td align="right">15.52298</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007438</td>
+<td align="right">0.5007414</td>
 <td align="right">1.129032</td>
-<td align="right">-0.6282885</td>
+<td align="right">-0.6282909</td>
 </tr>
 <tr class="even">
 <td align="left">2022-08-01</td>
 <td align="left">August</td>
 <td align="right">8</td>
 <td align="right">31</td>
-<td align="right">169098.8</td>
-<td align="right">169633.3</td>
-<td align="right">190918.0</td>
-<td align="right">-21284.65</td>
-<td align="right">-12.54745</td>
-<td align="right">5454.799</td>
-<td align="right">31.09800</td>
+<td align="right">169089.1</td>
+<td align="right">169634.2</td>
+<td align="right">190907.0</td>
+<td align="right">-21272.83</td>
+<td align="right">-12.54042</td>
+<td align="right">5454.487</td>
+<td align="right">31.09994</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031611</td>
+<td align="right">1.0032238</td>
 <td align="right">1.129032</td>
-<td align="right">-0.1258711</td>
+<td align="right">-0.1258084</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-09-01</td>
 <td align="left">September</td>
 <td align="right">9</td>
 <td align="right">30</td>
-<td align="right">297729.5</td>
-<td align="right">179347.3</td>
-<td align="right">347351.1</td>
-<td align="right">-168003.85</td>
-<td align="right">-93.67516</td>
-<td align="right">9924.318</td>
-<td align="right">18.07150</td>
+<td align="right">297732.5</td>
+<td align="right">179346.9</td>
+<td align="right">347354.6</td>
+<td align="right">-168007.70</td>
+<td align="right">-93.67749</td>
+<td align="right">9924.418</td>
+<td align="right">18.07128</td>
 <td align="left">TRUE</td>
-<td align="right">0.6023832</td>
+<td align="right">0.6023760</td>
 <td align="right">1.166667</td>
-<td align="right">-0.5642835</td>
+<td align="right">-0.5642907</td>
 </tr>
 <tr class="even">
 <td align="left">2022-10-01</td>
 <td align="left">October</td>
 <td align="right">10</td>
 <td align="right">31</td>
-<td align="right">365003.8</td>
-<td align="right">182771.5</td>
-<td align="right">412101.0</td>
-<td align="right">-229329.52</td>
-<td align="right">-125.47336</td>
-<td align="right">11774.315</td>
-<td align="right">15.52290</td>
+<td align="right">365001.8</td>
+<td align="right">182771.2</td>
+<td align="right">412098.9</td>
+<td align="right">-229327.67</td>
+<td align="right">-125.47255</td>
+<td align="right">11774.253</td>
+<td align="right">15.52295</td>
 <td align="left">TRUE</td>
-<td align="right">0.5007387</td>
+<td align="right">0.5007404</td>
 <td align="right">1.129032</td>
-<td align="right">-0.6282936</td>
+<td align="right">-0.6282918</td>
 </tr>
 <tr class="odd">
 <td align="left">2022-11-01</td>
 <td align="left">November</td>
 <td align="right">11</td>
 <td align="right">30</td>
-<td align="right">169093.5</td>
-<td align="right">169631.7</td>
-<td align="right">197275.7</td>
-<td align="right">-27644.04</td>
-<td align="right">-16.29651</td>
-<td align="right">5636.449</td>
-<td align="right">30.09549</td>
+<td align="right">169093.9</td>
+<td align="right">169634.7</td>
+<td align="right">197276.2</td>
+<td align="right">-27641.55</td>
+<td align="right">-16.29475</td>
+<td align="right">5636.464</td>
+<td align="right">30.09594</td>
 <td align="left">TRUE</td>
-<td align="right">1.0031829</td>
+<td align="right">1.0031980</td>
 <td align="right">1.166667</td>
-<td align="right">-0.1634838</td>
+<td align="right">-0.1634687</td>
 </tr>
 <tr class="even">
 <td align="left">2022-12-01</td>
 <td align="left">December</td>
 <td align="right">12</td>
 <td align="right">31</td>
-<td align="right">297728.0</td>
-<td align="right">179353.1</td>
-<td align="right">336144.5</td>
-<td align="right">-156791.33</td>
-<td align="right">-87.42045</td>
-<td align="right">9604.128</td>
-<td align="right">18.67459</td>
+<td align="right">297728.8</td>
+<td align="right">179340.8</td>
+<td align="right">336145.4</td>
+<td align="right">-156804.57</td>
+<td align="right">-87.43385</td>
+<td align="right">9604.154</td>
+<td align="right">18.67325</td>
 <td align="left">TRUE</td>
-<td align="right">0.6024061</td>
+<td align="right">0.6023631</td>
 <td align="right">1.129032</td>
-<td align="right">-0.5266261</td>
+<td align="right">-0.5266692</td>
 </tr>
 </tbody>
 </table>
@@ -762,12 +818,12 @@
 <td align="left">2022-03-01</td>
 <td align="right">1</td>
 <td align="right">90</td>
-<td align="right">831827.8</td>
-<td align="right">179346.0</td>
-<td align="right">323488.6</td>
-<td align="right">-144142.6</td>
+<td align="right">831836.0</td>
+<td align="right">179349.1</td>
+<td align="right">323491.8</td>
+<td align="right">-144142.7</td>
 <td align="right">-80.37</td>
-<td align="right">9242.53</td>
+<td align="right">9242.62</td>
 <td align="right">19.40</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -778,12 +834,12 @@
 <td align="left">2022-06-01</td>
 <td align="right">2</td>
 <td align="right">91</td>
-<td align="right">831833.1</td>
-<td align="right">179346.7</td>
-<td align="right">319935.8</td>
-<td align="right">-140589.1</td>
+<td align="right">831829.2</td>
+<td align="right">179345.4</td>
+<td align="right">319934.3</td>
+<td align="right">-140588.9</td>
 <td align="right">-78.39</td>
-<td align="right">9141.02</td>
+<td align="right">9140.98</td>
 <td align="right">19.62</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -794,12 +850,12 @@
 <td align="left">2022-09-01</td>
 <td align="right">3</td>
 <td align="right">92</td>
-<td align="right">831829.1</td>
-<td align="right">179347.3</td>
-<td align="right">316456.7</td>
-<td align="right">-137109.4</td>
+<td align="right">831820.8</td>
+<td align="right">179346.9</td>
+<td align="right">316453.6</td>
+<td align="right">-137106.6</td>
 <td align="right">-76.45</td>
-<td align="right">9041.62</td>
+<td align="right">9041.53</td>
 <td align="right">19.84</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -810,12 +866,12 @@
 <td align="left">2022-12-01</td>
 <td align="right">4</td>
 <td align="right">92</td>
-<td align="right">831825.2</td>
-<td align="right">179353.1</td>
-<td align="right">316455.2</td>
-<td align="right">-137102.1</td>
-<td align="right">-76.44</td>
-<td align="right">9041.58</td>
+<td align="right">831824.5</td>
+<td align="right">179340.8</td>
+<td align="right">316455.0</td>
+<td align="right">-137114.2</td>
+<td align="right">-76.45</td>
+<td align="right">9041.57</td>
 <td align="right">19.84</td>
 <td align="left">TRUE</td>
 <td align="right">0.22</td>
@@ -828,166 +884,11 @@
 <div class="section level3">
 <h3 id="presentation-examples">Presentation Examples<a class="anchor" aria-label="anchor" href="#presentation-examples"></a>
 </h3>
-<details><summary>
-Click to View Code for Table
-</summary><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gt_1</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span>, <span class="va">dar</span>, <span class="va">pass</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">headliner</span><span class="fu">::</span><span class="fu">add_headline_column</span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb</span>, y <span class="op">=</span> <span class="va">earb_trg</span>, </span>
-<span>  headline <span class="op">=</span> <span class="st">"{delta_p}% {trend} than Target"</span>, </span>
-<span>  trend_phrases <span class="op">=</span> <span class="fu">headliner</span><span class="fu">::</span><span class="fu">trend_terms</span><span class="op">(</span>more <span class="op">=</span> <span class="st">"HIGHER"</span>, less <span class="op">=</span> <span class="st">"Lower"</span><span class="op">)</span>, n_decimal <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span>gct <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>                 earb <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>                 earb_trg <span class="op">=</span> <span class="st">"Target AR"</span>,</span>
-<span>                 dar <span class="op">=</span> <span class="st">"Days in AR"</span>,</span>
-<span>                 pass <span class="op">=</span> <span class="st">"Pass"</span>,</span>
-<span>                 headline <span class="op">=</span> <span class="st">"Ending AR Trend"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q4"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q3"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q2"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q1"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html" class="external-link">fmt_currency</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html" class="external-link">cell_text</a></span><span class="op">(</span>font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"IBM Plex Mono"</span><span class="op">)</span>,</span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/default_fonts.html" class="external-link">default_fonts</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span>, <span class="va">dar</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_stylize.html" class="external-link">opt_stylize</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fl">6</span>, color <span class="op">=</span> <span class="st">"cyan"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span></span>
-<span>    title <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span>, </span>
-<span>    subtitle <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest &lt;br&gt; month-to-month increase in AR &amp; highest percentage over the AR Target *(46%)*."</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_all_caps.html" class="external-link">opt_all_caps</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/grand_summary_rows.html" class="external-link">grand_summary_rows</a></span><span class="op">(</span></span>
-<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span>, <span class="va">dar</span><span class="op">)</span>,</span>
-<span>    fns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Mean <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, Median <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">.</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_table_font.html" class="external-link">opt_table_font</a></span><span class="op">(</span>font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Roboto"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/opt_align_table_header.html" class="external-link">opt_align_table_header</a></span><span class="op">(</span>align <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#gt_1 |&gt; gt::gtsave("gt_1.png", expand = 20)</span></span></code></pre></div>
-</details><p><img src="reference/figures/gt_1.png" style="width:75.0%"></p>
-<details><summary>
-Click to View Code for Table
-</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Create df for gt_plt_bar_stack</span></span>
-<span><span class="va">dar_month_2022_pct</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gct_pct <span class="op">=</span> <span class="op">(</span><span class="va">gct</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>,</span>
-<span>         earb_pct <span class="op">=</span> <span class="op">(</span><span class="va">earb</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>, <span class="va">gct_pct</span>, <span class="va">earb_pct</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">month</span>, names_to <span class="op">=</span> <span class="st">"measure"</span>, values_to <span class="op">=</span> <span class="st">"percentage"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">month</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>list_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">percentage</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Right join the two data frames</span></span>
-<span><span class="va">dar_month_2022_join</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span><span class="va">dar_month_2022</span>, </span>
-<span>                                         <span class="va">dar_month_2022_pct</span>, </span>
-<span>                                         by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create new copy cols for gt_plt_bullet</span></span>
-<span><span class="va">dar_month_2022_gt</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022_join</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">month</span>, </span>
-<span>                <span class="va">gct</span>, </span>
-<span>                <span class="va">earb</span>, </span>
-<span>                <span class="va">earb_trg</span>, </span>
-<span>                <span class="va">dar</span>, </span>
-<span>                <span class="va">pass</span>,</span>
-<span>                <span class="va">list_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>target_col <span class="op">=</span> <span class="va">earb</span>, </span>
-<span>                plot_col <span class="op">=</span> <span class="va">earb_trg</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create gt table</span></span>
-<span><span class="va">gt_2</span> <span class="op">&lt;-</span> <span class="va">dar_month_2022_gt</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span></span>
-<span>    <span class="co">#month = "Month",</span></span>
-<span>                 gct <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>                 earb <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>                 earb_trg <span class="op">=</span> <span class="st">"Optimal AR"</span>,</span>
-<span>                 dar <span class="op">=</span> <span class="st">"Days in AR"</span>,</span>
-<span>                 pass <span class="op">=</span> <span class="st">"Pass"</span>,</span>
-<span>                 plot_col <span class="op">=</span> <span class="st">"Optimal AR Threshold"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q4"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q3"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q2"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_row_group.html" class="external-link">tab_row_group</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q1"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="co">#gt::tab_options(row_group.as_column = TRUE) |&gt; </span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_theme_espn.html" class="external-link">gt_theme_espn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html" class="external-link">fmt_currency</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_trg</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="co">#gtExtras::gt_plt_dot(dar, month, palette = c("#2c3e50", "#8ca0aa")) |&gt; </span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_bullet.html" class="external-link">gt_plt_bullet</a></span><span class="op">(</span>column <span class="op">=</span> <span class="va">plot_col</span>, target <span class="op">=</span> <span class="va">target_col</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#8ca0aa"</span>, <span class="st">"black"</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">65</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_bar_stack.html" class="external-link">gt_plt_bar_stack</a></span><span class="op">(</span><span class="va">list_data</span>, width <span class="op">=</span> <span class="fl">50</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Charges (%) "</span>, <span class="st">" AR (%)"</span><span class="op">)</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2c3e50"</span>, <span class="st">"#8ca0aa"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_badge.html" class="external-link">gt_badge</a></span><span class="op">(</span><span class="va">pass</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#8ca0aa"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html" class="external-link">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#2c3e50"</span>, weight <span class="op">=</span> <span class="st">"bolder"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pass</span>, rows <span class="op">=</span> <span class="va">pass</span> <span class="op">==</span> <span class="st">"FALSE"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html" class="external-link">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#8ca0aa"</span>, weight <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pass</span>, rows <span class="op">=</span> <span class="va">pass</span> <span class="op">==</span> <span class="st">"TRUE"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/data_color.html" class="external-link">data_color</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct</span>, <span class="va">earb</span>, <span class="va">dar</span><span class="op">)</span>, colors <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/col_numeric.html" class="external-link">col_numeric</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2c3e50"</span>, <span class="st">"#8ca0aa"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="op">)</span>, domain <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Horizontal bar indicates Optimal AR, vertical bar is Actual."</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#gt_2 |&gt; gt::gtsave("gt_2.png", expand = 20)</span></span></code></pre></div>
-</details><p><img src="reference/figures/gt_2.png" style="width:75.0%"></p>
+<p><img src="reference/figures/gt_1.png" style="width:75.0%"></p>
 <p><br></p>
-<details><summary>
-Click to View Code for Table
-</summary><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Create df for gt_plt_bar_stack</span></span>
-<span><span class="va">dar_qtr_2022_pct</span> <span class="op">&lt;-</span> <span class="va">dar_quarter_2022</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gct_pct <span class="op">=</span> <span class="op">(</span><span class="va">gct_qtr</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct_qtr</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>,</span>
-<span>                earb_pct <span class="op">=</span> <span class="op">(</span><span class="va">earb</span> <span class="op">/</span> <span class="op">(</span><span class="va">gct_qtr</span> <span class="op">+</span> <span class="va">earb</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">nqtr</span>, <span class="va">gct_pct</span>, <span class="va">earb_pct</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">nqtr</span>, </span>
-<span>                      names_to <span class="op">=</span> <span class="st">"measure"</span>, </span>
-<span>                      values_to <span class="op">=</span> <span class="st">"percentage"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">nqtr</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>list_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">percentage</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Right join the two data frames</span></span>
-<span><span class="va">dar_qtr_2022_join</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">right_join</a></span><span class="op">(</span></span>
-<span>  <span class="va">dar_quarter_2022</span>, </span>
-<span>  <span class="va">dar_qtr_2022_pct</span>, </span>
-<span>  by <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create new copy cols for gt_plt_bullet</span></span>
-<span><span class="va">dar_qtr_2022_gt</span> <span class="op">&lt;-</span> <span class="va">dar_qtr_2022_join</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">nqtr</span>, </span>
-<span>                <span class="va">gct_qtr</span>, </span>
-<span>                <span class="va">earb</span>, </span>
-<span>                <span class="va">earb_trg</span>, </span>
-<span>                <span class="va">dar</span>, </span>
-<span>                <span class="va">pass</span>,</span>
-<span>                <span class="va">list_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>target_col <span class="op">=</span> <span class="va">earb</span>, </span>
-<span>                plot_col <span class="op">=</span> <span class="va">earb_trg</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create gt table</span></span>
-<span><span class="va">gt_qtr_2</span> <span class="op">&lt;-</span> <span class="va">dar_qtr_2022_gt</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt</a></span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cols_label.html" class="external-link">cols_label</a></span><span class="op">(</span></span>
-<span>    <span class="co">#month = "Month",</span></span>
-<span>                 gct_qtr <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>                 earb <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>                 earb_trg <span class="op">=</span> <span class="st">"Optimal AR"</span>,</span>
-<span>                 dar <span class="op">=</span> <span class="st">"Days in AR"</span>,</span>
-<span>                 pass <span class="op">=</span> <span class="st">"Pass"</span>,</span>
-<span>                 plot_col <span class="op">=</span> <span class="st">"Optimal AR Threshold"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="co"># gt::tab_row_group(label = "Q4", rows = c(10:12)) |&gt;</span></span>
-<span>  <span class="co"># gt::tab_row_group(label = "Q3", rows = c(7:9)) |&gt;</span></span>
-<span>  <span class="co"># gt::tab_row_group(label = "Q2", rows = c(4:6)) |&gt;</span></span>
-<span>  <span class="co"># gt::tab_row_group(label = "Q1", rows = c(1:3)) |&gt; </span></span>
-<span>  <span class="co">#gt::tab_options(row_group.as_column = TRUE) |&gt; </span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_theme_espn.html" class="external-link">gt_theme_espn</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_number.html" class="external-link">fmt_number</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_currency.html" class="external-link">fmt_currency</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct_qtr</span>, <span class="va">earb</span>, <span class="va">earb_trg</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="co">#gtExtras::gt_plt_dot(dar, month, palette = c("#2c3e50", "#8ca0aa")) |&gt; </span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_bullet.html" class="external-link">gt_plt_bullet</a></span><span class="op">(</span>column <span class="op">=</span> <span class="va">plot_col</span>, target <span class="op">=</span> <span class="va">target_col</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#8ca0aa"</span>, <span class="st">"black"</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">65</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_plt_bar_stack.html" class="external-link">gt_plt_bar_stack</a></span><span class="op">(</span><span class="va">list_data</span>, width <span class="op">=</span> <span class="fl">50</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Charges (%) "</span>, <span class="st">" AR (%)"</span><span class="op">)</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2c3e50"</span>, <span class="st">"#8ca0aa"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_badge.html" class="external-link">gt_badge</a></span><span class="op">(</span><span class="va">pass</span>, palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#8ca0aa"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html" class="external-link">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#2c3e50"</span>, weight <span class="op">=</span> <span class="st">"bolder"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pass</span>, rows <span class="op">=</span> <span class="va">pass</span> <span class="op">==</span> <span class="st">"FALSE"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cell_text.html" class="external-link">cell_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#8ca0aa"</span>, weight <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pass</span>, rows <span class="op">=</span> <span class="va">pass</span> <span class="op">==</span> <span class="st">"TRUE"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/data_color.html" class="external-link">data_color</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gct_qtr</span>, <span class="va">earb</span>, <span class="va">dar</span><span class="op">)</span>, colors <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/col_numeric.html" class="external-link">col_numeric</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2c3e50"</span>, <span class="st">"#8ca0aa"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="op">)</span>, domain <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_footnote.html" class="external-link">tab_footnote</a></span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Horizontal bar indicates Optimal AR, vertical bar is Actual."</span>, locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_column_labels.html" class="external-link">cells_column_labels</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_header.html" class="external-link">tab_header</a></span><span class="op">(</span>title <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/md.html" class="external-link">md</a></span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#gt_qtr_2 |&gt; gt::gtsave("gt_qtr_2.png", expand = 20)</span></span></code></pre></div>
-</details><p><img src="reference/figures/gt_qtr_2.png" style="width:75.0%"></p>
+<p><img src="reference/figures/gt_2.png" style="width:75.0%"></p>
+<p><br></p>
+<p><img src="reference/figures/gt_qtr_2.png" style="width:75.0%"></p>
 </div>
 </div>
 <div class="section level2">
