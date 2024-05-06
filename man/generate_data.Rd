@@ -17,4 +17,5 @@ Generate mock coding/billing data frame
 }
 \examples{
 generate_data(rows = 5)
+
 }

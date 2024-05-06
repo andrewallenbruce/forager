@@ -9,29 +9,27 @@ URL: https://github.com/andrewallenbruce/forager,
     https://andrewallenbruce.github.io/forager/
 BugReports: https://github.com/andrewallenbruce/forager/issues
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 Imports: 
     dplyr,
     janitor,
     lubridate,
     clock,
     fixtuRes,
-    wakefield
+    wakefield,
+    tidyr
 Suggests:
-    tibble,
-    tidyr,
     gt,
     gtExtras,
     testthat (>= 3.0.0),
     rmarkdown,
     covr,
-    roxyglobals (>= 0.2.1)
+    roxyglobals
+Config/roxyglobals/filename: generated-globals.R
+Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
-Roxygen: list(
-    markdown = TRUE,
-    roclets = c("collate", "namespace", "rd", "roxyglobals::global_roclet"))
-RoxygenNote: 7.2.3
-Remotes: 
-    anthonynorth/roxyglobals
+Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace", "rd",
+    "roxyglobals::global_roclet"))
+RoxygenNote: 7.3.1

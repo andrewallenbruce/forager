@@ -26,7 +26,7 @@ Calculate Number of Days Between Two Dates
 This calculation includes the end date in the sum (see example)
 }
 \examples{
-date_ex <- tibble::tibble(x = seq.Date(as.Date("2021-01-01"),
+date_ex <- dplyr::tibble(x = seq.Date(as.Date("2021-01-01"),
                           by = "month", length.out = 3),
                           y = seq.Date(as.Date("2022-01-01"),
                           by = "month", length.out = 3))
@@ -49,4 +49,5 @@ date_ex |>
 age_days(x, y, "days_between_x_y") |>
 age_days(x, lubridate::today(), "days_since_x") |>
 age_days(y, lubridate::today(), colname = "days_since_y")
+
 }
