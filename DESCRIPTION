@@ -2,8 +2,10 @@ Package: forager
 Title: Healthcare Revenue Cycle Analysis Suite
 Version: 0.0.0.9001
 Authors@R: 
-    person("Andrew", "Bruce", , "andrewbruce.himni@gmail.com", role = c("aut", "cre", "cph"))
-Description: The goal of forager is to provide a suite of analytic tools for healthcare revenue cycle management.
+    person("Andrew", "Bruce", , "andrew.bruce@northstarrevenueintegrity.com", role = c("aut", "cre", "cph"))
+Maintainer: Andrew Bruce <andrew.bruce@northstarrevenueintegrity.com>
+Description: The goal of forager is to provide a suite of analytic tools
+    for healthcare revenue cycle management.
 License: MIT + file LICENSE
 URL: https://github.com/andrewallenbruce/forager,
     https://andrewallenbruce.github.io/forager/
@@ -11,20 +13,21 @@ BugReports: https://github.com/andrewallenbruce/forager/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
+    clock,
     dplyr,
+    fixtuRes,
     janitor,
     lubridate,
-    clock,
-    fixtuRes,
-    wakefield,
-    tidyr
+    rlang,
+    tidyr,
+    wakefield
 Suggests:
+    covr,
     gt,
     gtExtras,
-    testthat (>= 3.0.0),
     rmarkdown,
-    covr,
-    roxyglobals
+    roxyglobals,
+    testthat (>= 3.0.0)
 Config/roxyglobals/filename: generated-globals.R
 Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3
