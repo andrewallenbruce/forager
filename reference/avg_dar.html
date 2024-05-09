@@ -19,10 +19,16 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/forager.html">Overview</a>
+  <a class="nav-link" href="../articles/forager.html">Getting started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -48,13 +54,13 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/aabrucehimni">
+  <a class="external-link nav-link" href="http://twitter.com/andrewallbruce">
     <span class="fab fa fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://www.linkedin.com/in/andybruce1/">
+  <a class="external-link nav-link" href="https://www.linkedin.com/in/andrewallenbruce/">
     <span class="fas fa fas fa-linkedin fa-lg"></span>
      
   </a>
@@ -120,44 +126,48 @@ gross charges column and ending Accounts Receivables balance</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">avg_dar</span><span class="op">(</span>df     <span class="op">=</span> <span class="fu"><a href="dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        date   <span class="op">=</span> <span class="va">monthdate</span>,</span></span>
+<span class="r-in"><span>        date   <span class="op">=</span> <span class="va">date</span>,</span></span>
 <span class="r-in"><span>        gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span></span>
 <span class="r-in"><span>        earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span></span>
 <span class="r-in"><span>        dart   <span class="op">=</span> <span class="fl">35</span>,</span></span>
 <span class="r-in"><span>        period <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    monthdate  gross_charges ending_ar  nmon month      nqtr  ndip    adc   dar</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-01-01       <span style="text-decoration: underline;">325</span>982.   <span style="text-decoration: underline;">288</span>433.     1 January       1    31 <span style="text-decoration: underline;">10</span>516.  27.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-02-01       <span style="text-decoration: underline;">297</span>732.   <span style="text-decoration: underline;">307</span>871.     2 February      1    29 <span style="text-decoration: underline;">10</span>267.  30.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-03-01       <span style="text-decoration: underline;">198</span>655.   <span style="text-decoration: underline;">253</span>977.     3 March         1    31  <span style="text-decoration: underline;">6</span>408.  39.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-01       <span style="text-decoration: underline;">186</span>048.   <span style="text-decoration: underline;">183</span>685.     4 April         2    30  <span style="text-decoration: underline;">6</span>202.  29.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-05-01       <span style="text-decoration: underline;">123</span>654.   <span style="text-decoration: underline;">204</span>228.     5 May           2    31  <span style="text-decoration: underline;">3</span>989.  51.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-06-01       <span style="text-decoration: underline;">131</span>440.   <span style="text-decoration: underline;">203</span>460.     6 June          2    30  <span style="text-decoration: underline;">4</span>381.  46.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-07-01       <span style="text-decoration: underline;">153</span>992.   <span style="text-decoration: underline;">182</span>771.     7 July          3    31  <span style="text-decoration: underline;">4</span>967.  36.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-08-01       <span style="text-decoration: underline;">156</span>976.   <span style="text-decoration: underline;">169</span>634.     8 August        3    31  <span style="text-decoration: underline;">5</span>064.  33.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-09-01       <span style="text-decoration: underline;">146</span>878.   <span style="text-decoration: underline;">179</span>348.     9 September     3    30  <span style="text-decoration: underline;">4</span>896.  36.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-10-01       <span style="text-decoration: underline;">163</span>799.   <span style="text-decoration: underline;">178</span>051.    10 October       4    31  <span style="text-decoration: underline;">5</span>284.  33.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: actual_ratio &lt;dbl&gt;, ideal_ratio &lt;dbl&gt;, diff_ratio &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 27</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    date       gross_charges ending_ar  nmon mon   month   nqtr  yqtr dqtr   year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-01-01       <span style="text-decoration: underline;">325</span>982.   <span style="text-decoration: underline;">288</span>433.     1 Jan   Janua…     1 <span style="text-decoration: underline;">2</span>024. 1Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-02-01       <span style="text-decoration: underline;">297</span>732.   <span style="text-decoration: underline;">307</span>871.     2 Feb   Febru…     1 <span style="text-decoration: underline;">2</span>024. 1Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-03-01       <span style="text-decoration: underline;">198</span>655.   <span style="text-decoration: underline;">253</span>977.     3 Mar   March      1 <span style="text-decoration: underline;">2</span>024. 1Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-01       <span style="text-decoration: underline;">186</span>048.   <span style="text-decoration: underline;">183</span>685.     4 Apr   April      2 <span style="text-decoration: underline;">2</span>024. 2Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-05-01       <span style="text-decoration: underline;">123</span>654.   <span style="text-decoration: underline;">204</span>228.     5 May   May        2 <span style="text-decoration: underline;">2</span>024. 2Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-06-01       <span style="text-decoration: underline;">131</span>440.   <span style="text-decoration: underline;">203</span>460.     6 Jun   June       2 <span style="text-decoration: underline;">2</span>024. 2Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-07-01       <span style="text-decoration: underline;">153</span>992.   <span style="text-decoration: underline;">182</span>771.     7 Jul   July       3 <span style="text-decoration: underline;">2</span>024. 3Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-08-01       <span style="text-decoration: underline;">156</span>976.   <span style="text-decoration: underline;">169</span>634.     8 Aug   August     3 <span style="text-decoration: underline;">2</span>024. 3Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-09-01       <span style="text-decoration: underline;">146</span>878.   <span style="text-decoration: underline;">179</span>348.     9 Sep   Septe…     3 <span style="text-decoration: underline;">2</span>024. 3Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-10-01       <span style="text-decoration: underline;">163</span>799.   <span style="text-decoration: underline;">178</span>051.    10 Oct   Octob…     4 <span style="text-decoration: underline;">2</span>024. 4Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2024-11-01       <span style="text-decoration: underline;">151</span>411.   <span style="text-decoration: underline;">162</span>757.    11 Nov   Novem…     4 <span style="text-decoration: underline;">2</span>024. 4Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2024-12-01       <span style="text-decoration: underline;">169</span>094.   <span style="text-decoration: underline;">199</span>849.    12 Dec   Decem…     4 <span style="text-decoration: underline;">2</span>024. 4Q24   <span style="text-decoration: underline;">2</span>024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 17 more variables: ymon &lt;dbl&gt;, myear &lt;chr&gt;, nhalf &lt;int&gt;, yhalf &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   dhalf &lt;chr&gt;, ndip &lt;int&gt;, adc &lt;dbl&gt;, dar &lt;dbl&gt;, dar_pass &lt;lgl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   dar_diff &lt;dbl&gt;, ratio_actual &lt;dbl&gt;, ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ending_ar_target &lt;dbl&gt;, ending_ar_dec_abs &lt;dbl&gt;, ending_ar_dec_pct &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   pass &lt;lgl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   earb_gct_diff &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">avg_dar</span><span class="op">(</span>df     <span class="op">=</span> <span class="fu"><a href="dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        date   <span class="op">=</span> <span class="va">monthdate</span>,</span></span>
+<span class="r-in"><span>        date   <span class="op">=</span> <span class="va">date</span>,</span></span>
 <span class="r-in"><span>        gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span></span>
 <span class="r-in"><span>        earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span></span>
 <span class="r-in"><span>        dart   <span class="op">=</span> <span class="fl">35</span>,</span></span>
 <span class="r-in"><span>        period <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   monthdate  ending_ar  nmon  nqtr month     gross_charges  ndip   adc   dar</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 18</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   date       ending_ar  nmon  nqtr month     gross_charges  ndip   adc   dar</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2024-03-01   <span style="text-decoration: underline;">253</span>977.     3     1 March           <span style="text-decoration: underline;">822</span>369.    91 <span style="text-decoration: underline;">9</span>037.  28.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2024-06-01   <span style="text-decoration: underline;">203</span>460.     6     2 June            <span style="text-decoration: underline;">441</span>142.    91 <span style="text-decoration: underline;">4</span>848.  42.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2024-09-01   <span style="text-decoration: underline;">179</span>348.     9     3 September       <span style="text-decoration: underline;">457</span>846.    92 <span style="text-decoration: underline;">4</span>977.  36.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2024-10-01   <span style="text-decoration: underline;">178</span>051.    10     4 October         <span style="text-decoration: underline;">163</span>799.    31 <span style="text-decoration: underline;">5</span>284.  33.7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 7 more variables: actual_ratio &lt;dbl&gt;, ideal_ratio &lt;dbl&gt;, diff_ratio &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ending_ar_target &lt;dbl&gt;, ending_ar_dec_abs &lt;dbl&gt;, ending_ar_dec_pct &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   pass &lt;lgl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 2024-12-01   <span style="text-decoration: underline;">199</span>849.    12     4 December        <span style="text-decoration: underline;">484</span>305.    92 <span style="text-decoration: underline;">5</span>264.  38.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9 more variables: dar_pass &lt;lgl&gt;, dar_diff &lt;dbl&gt;, ratio_actual &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;, ending_ar_target &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ending_ar_dec_abs &lt;dbl&gt;, ending_ar_dec_pct &lt;dbl&gt;, earb_gct_diff &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

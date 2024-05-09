@@ -19,10 +19,16 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/forager.html">Overview</a>
+  <a class="nav-link" href="../articles/forager.html">Getting started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -48,13 +54,13 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/aabrucehimni">
+  <a class="external-link nav-link" href="http://twitter.com/andrewallbruce">
     <span class="fab fa fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://www.linkedin.com/in/andybruce1/">
+  <a class="external-link nav-link" href="https://www.linkedin.com/in/andrewallenbruce/">
     <span class="fas fa fas fa-linkedin fa-lg"></span>
      
   </a>
@@ -145,9 +151,9 @@ containing the calculated number of days.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x          y          days_since_x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2021-01-01 2022-01-01         <span style="text-decoration: underline;">1</span>223</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2021-02-01 2022-02-01         <span style="text-decoration: underline;">1</span>192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2021-03-01 2022-03-01         <span style="text-decoration: underline;">1</span>164</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2021-01-01 2022-01-01         <span style="text-decoration: underline;">1</span>225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2021-02-01 2022-02-01         <span style="text-decoration: underline;">1</span>194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2021-03-01 2022-03-01         <span style="text-decoration: underline;">1</span>166</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">date_ex</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span><span class="fu">age_days</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="st">"days_between_x_y"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
@@ -156,9 +162,9 @@ containing the calculated number of days.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x          y          days_between_x_y days_since_x days_since_y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2021-01-01 2022-01-01              366         <span style="text-decoration: underline;">1</span>223          858</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2021-02-01 2022-02-01              366         <span style="text-decoration: underline;">1</span>192          827</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2021-03-01 2022-03-01              366         <span style="text-decoration: underline;">1</span>164          799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 2021-01-01 2022-01-01              366         <span style="text-decoration: underline;">1</span>225          860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2021-02-01 2022-02-01              366         <span style="text-decoration: underline;">1</span>194          829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2021-03-01 2022-03-01              366         <span style="text-decoration: underline;">1</span>166          801</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

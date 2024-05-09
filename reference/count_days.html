@@ -19,10 +19,16 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
-  <a class="nav-link" href="../articles/forager.html">Overview</a>
+  <a class="nav-link" href="../articles/forager.html">Getting started</a>
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
+  </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -48,13 +54,13 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/aabrucehimni">
+  <a class="external-link nav-link" href="http://twitter.com/andrewallbruce">
     <span class="fab fa fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://www.linkedin.com/in/andybruce1/">
+  <a class="external-link nav-link" href="https://www.linkedin.com/in/andrewallenbruce/">
     <span class="fas fa fas fa-linkedin fa-lg"></span>
      
   </a>
@@ -77,7 +83,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">count_days</span><span class="op">(</span><span class="va">df</span>, <span class="va">start</span>, <span class="va">end</span>, <span class="va">name</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">count_days</span><span class="op">(</span><span class="va">df</span>, <span class="va">start</span>, end <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">today</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">name</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -117,11 +123,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 10</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   claim_id   payer        ins_class balance    date_of_service date_of_release</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          Anthem       Secondary  59.90037  2021-11-07      2021-11-18     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          Medicare     Primary    42.31207  2021-06-07      2021-06-20     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          UnitedHealth Primary    11.16570  2022-01-07      2022-01-14     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          UnitedHealth Secondary 144.18263  2021-12-07      2021-12-20     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5          BCBS         Secondary  47.93740  2022-02-07      2022-02-19     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          Anthem       Secondary  59.90037  2021-11-09      2021-11-20     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          Medicare     Primary    42.31207  2021-06-09      2021-06-22     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          UnitedHealth Primary    11.16570  2022-01-09      2022-01-16     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          UnitedHealth Secondary 144.18263  2021-12-09      2021-12-22     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5          BCBS         Secondary  47.93740  2022-02-09      2022-02-21     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: provider_lag &lt;int&gt;, date_of_submission &lt;date&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   date_of_acceptance &lt;date&gt;, date_of_adjudication &lt;date&gt;</span></span>
 <span class="r-in"><span></span></span>

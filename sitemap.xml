@@ -13,6 +13,12 @@
     <loc>https://andrewallenbruce.github.io/forager/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://andrewallenbruce.github.io/forager/articles/getting-started.html</loc>
+  </url>
+  <url>
+    <loc>https://andrewallenbruce.github.io/forager/articles/index.html</loc>
+  </url>
+  <url>
     <loc>https://andrewallenbruce.github.io/forager/authors.html</loc>
   </url>
   <url>
@@ -28,21 +34,21 @@
     <loc>https://andrewallenbruce.github.io/forager/reference/avg_dar.html</loc>
   </url>
   <url>
+    <loc>https://andrewallenbruce.github.io/forager/reference/bin_aging.html</loc>
+  </url>
+  <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/count_days.html</loc>
   </url>
   <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/dar_ex.html</loc>
   </url>
   <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/dar_month.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/dar_qtr.html</loc>
-  </url>
-  <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/generate_data.html</loc>
   </url>
   <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://andrewallenbruce.github.io/forager/reference/load_ex.html</loc>
   </url>
 </urlset>

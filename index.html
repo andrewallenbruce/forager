@@ -46,10 +46,16 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
-  <a class="nav-link" href="articles/forager.html">Overview</a>
+  <a class="nav-link" href="articles/forager.html">Getting started</a>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/getting-started.html">Getting started</a>
+  </div>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -78,13 +84,13 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/aabrucehimni">
+  <a class="external-link nav-link" href="http://twitter.com/andrewallbruce">
     <span class="fab fa fab fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://www.linkedin.com/in/andybruce1/">
+  <a class="external-link nav-link" href="https://www.linkedin.com/in/andrewallenbruce/">
     <span class="fas fa fas fa-linkedin fa-lg"></span>
      
   </a>
@@ -579,7 +585,7 @@
 <span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">y</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_month.html">dar_month</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu">dar_month</span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -829,7 +835,7 @@
 <h2 id="days-in-ar-quarterly-calculation">Days in AR Quarterly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-quarterly-calculation"></a>
 </h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">y</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/dar_qtr.html">dar_qtr</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu">dar_qtr</span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
