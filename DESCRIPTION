@@ -16,18 +16,27 @@ Imports:
     clock,
     dplyr,
     fixtuRes,
-    janitor,
+    fs,
     lubridate,
+    pins,
     rlang,
+    santoku,
     tidyr,
     wakefield
 Suggests:
     covr,
+    fuimus,
     gt,
     gtExtras,
+    knitr,
+    qs,
     rmarkdown,
     roxyglobals,
     testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
+Remotes: 
+    github::andrewallenbruce/fuimus
 Config/roxyglobals/filename: generated-globals.R
 Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3

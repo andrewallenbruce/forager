@@ -29,14 +29,14 @@ Calculate Average Days in AR
 }
 \examples{
 avg_dar(df     = dar_ex(),
-        date   = monthdate,
+        date   = date,
         gct    = gross_charges,
         earb   = ending_ar,
         dart   = 35,
         period = "month")
 
 avg_dar(df     = dar_ex(),
-        date   = monthdate,
+        date   = date,
         gct    = gross_charges,
         earb   = ending_ar,
         dart   = 35,

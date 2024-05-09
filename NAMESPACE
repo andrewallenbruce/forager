@@ -2,8 +2,8 @@
 
 export(age_days)
 export(avg_dar)
+export(bin_aging)
 export(count_days)
 export(dar_ex)
-export(dar_month)
-export(dar_qtr)
 export(generate_data)
+export(load_ex)

@@ -34,7 +34,7 @@ navbar:
       href: index.html
     intro:
       icon: ~
-      text: Overview
+      text: Getting started
       href: articles/forager.html
     reference:
       text: Reference
@@ -49,15 +49,15 @@ navbar:
       href: https://github.com/andrewallenbruce/forager
     linkedin:
       icon: fas fa-linkedin fa-lg
-      href: https://www.linkedin.com/in/andybruce1/
+      href: https://www.linkedin.com/in/andrewallenbruce/
     twitter:
       icon: fab fa-twitter fa-lg
-      href: http://twitter.com/aabrucehimni
+      href: http://twitter.com/andrewallbruce
   opengraph:
     image:
       src: man/figures/card.png
       alt: "Forager Logo"
     twitter:
-      creator: "@aabrucehimni"
-      site: "@aabrucehimni"
+      creator: "@andrewallbruce"
+      site: "@andrewallbruce"
       card: summary_large_image

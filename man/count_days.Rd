@@ -4,7 +4,7 @@
 \alias{count_days}
 \title{Count days between two dates}
 \usage{
-count_days(df, start, end, name)
+count_days(df, start, end = lubridate::today(), name)
 }
 \arguments{
 \item{df}{data frame}

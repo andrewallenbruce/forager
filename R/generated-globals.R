@@ -5,17 +5,10 @@ utils::globalVariables(c(
   # <count_days>
   # <age_days>
   ":=",
-  # <dar_month>
-  # <dar_qtr>
-  "actual",
   # <avg_dar>
-  "actual_ratio",
-  # <avg_dar>
-  # <dar_month>
-  # <dar_qtr>
   "adc",
-  # <dar_month>
-  # <dar_qtr>
+  # <bin_aging>
+  # <avg_dar>
   "dar",
   # <generate_data>
   "date_of_acceptance",
@@ -25,43 +18,19 @@ utils::globalVariables(c(
   "date_of_service",
   # <generate_data>
   "date_of_submission",
-  # <dar_month>
-  # <dar_qtr>
-  "earb_dc",
-  # <dar_month>
-  # <dar_qtr>
-  "earb_pct",
-  # <dar_month>
-  # <dar_qtr>
-  "earb_trg",
-  # <dar_qtr>
-  "gct_qtr",
-  # <dar_month>
-  # <dar_qtr>
-  "ideal",
-  # <avg_dar>
-  "ideal_ratio",
   # <avg_dar>
   "max_nmon",
   # <avg_dar>
-  # <dar_month>
   "month",
   # <avg_dar>
-  # <dar_month>
-  # <dar_qtr>
   "ndip",
   # <avg_dar>
-  # <dar_month>
-  # <dar_qtr>
   "nmon",
   # <avg_dar>
-  # <dar_qtr>
   "nqtr",
-  # <dar_month>
-  # <dar_qtr>
-  "pass",
-  # <dar_month>
-  # <dar_qtr>
-  "radiff",
+  # <avg_dar>
+  "ratio_actual",
+  # <avg_dar>
+  "ratio_ideal",
   NULL
 ))

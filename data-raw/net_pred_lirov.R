@@ -1,5 +1,8 @@
 # https://docs.google.com/spreadsheets/d/1braeEyikhzCMGc9IfNhnBGqqKOTVSU7J/edit#gid=976015322
+# Charges * % Paid * (1 - % AR > 120 Days Old)
 
+
+# https://docs.google.com/spreadsheets/d/1Td3_6sYOEVwSOdaWdBeUl8yLUp7ztFu8tesZ6LcLlv4/edit#gid=0
 dplyr::tribble(
   ~date,        ~gross_charges, ~net_payment, ~pct_ar_gt_120_days,
   "2022-01-01", 180000,         77400,         0.21,

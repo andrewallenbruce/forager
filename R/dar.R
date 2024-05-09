@@ -18,14 +18,14 @@
 #'
 #' @examples
 #' avg_dar(df     = dar_ex(),
-#'         date   = monthdate,
+#'         date   = date,
 #'         gct    = gross_charges,
 #'         earb   = ending_ar,
 #'         dart   = 35,
 #'         period = "month")
 #'
 #' avg_dar(df     = dar_ex(),
-#'         date   = monthdate,
+#'         date   = date,
 #'         gct    = gross_charges,
 #'         earb   = ending_ar,
 #'         dart   = 35,
@@ -50,8 +50,17 @@ avg_dar <- function(df,
     df,
     "{datecol}" := clock::as_date({{ date }}),
     nmon         = lubridate::month({{ date }}, label = FALSE),
+    mon          = lubridate::month({{ date }}, label = TRUE, abbr = TRUE),
     month        = lubridate::month({{ date }}, label = TRUE, abbr = FALSE),
     nqtr         = lubridate::quarter({{ date }}),
+    yqtr         = lubridate::quarter({{ date }}, with_year = TRUE),
+    dqtr         = paste0(lubridate::quarter({{ date }}), "Q", format({{ date }}, "%y")),
+    year         = lubridate::year({{ date }}),
+    ymon         = as.numeric(format({{ date }}, "%Y.%m")),
+    myear        = format({{ date }}, "%b %Y"),
+    nhalf        = lubridate::semester({{ date }}),
+    yhalf        = lubridate::semester({{ date }}, with_year = TRUE),
+    dhalf        = paste0(lubridate::semester({{ date }}), "H", format({{ date }}, "%y")),
     ndip         = lubridate::days_in_month({{ date }})
   )
 
@@ -91,15 +100,13 @@ avg_dar <- function(df,
 
       # Days in Accounts Receivable
       dar = {{ earb }} / adc,
+      dar_pass = dplyr::case_when(dar < {{ dart }} ~ TRUE, TRUE ~ FALSE),
+      dar_diff = dar - {{ dart }},
 
-      # Actual Ratio of Ending AR to Gross Charges
-      actual_ratio = {{ earb }} / {{ gct }},
-
-      # Ideal Ratio of Ending AR to Gross Charges
-      ideal_ratio = {{ dart }} / ndip,
-
-      # Actual - Ideal Ratio
-      diff_ratio = actual_ratio - ideal_ratio,
+      # Ratios: Ending AR to Gross Charges
+      ratio_actual = {{ earb }} / {{ gct }},
+      ratio_ideal = {{ dart }} / ndip,
+      ratio_diff = ratio_actual - ratio_ideal,
 
       # Ending AR Target
       "{{ earb }}_target" := ({{ gct }} * {{ dart }}) / ndip,
@@ -110,29 +117,9 @@ avg_dar <- function(df,
       # Ending AR Percentage Decrease Needed
       "{{ earb }}_dec_pct" := !!earb_dc_col / {{ earb }},
 
-      # <lgl> indicating whether DAR was under/over DARt
-      pass = dplyr::case_when(dar < {{ dart }} ~ TRUE, TRUE ~ FALSE))
-  # |>
-  #   dplyr::select(
-  #     dplyr::any_of(
-  #       c("date",
-  #         "month",
-  #         "nmon",
-  #         "nqtr",
-  #         "ndip",
-  #         "gct",
-  #         "earb",
-  #         "earb_trg",
-  #         "earb_dc",
-  #         "earb_pct",
-  #         "adc",
-  #         "dar",
-  #         "pass",
-  #         "actual",
-  #         "ideal",
-  #         "radiff")
-  #     )
-  #   )
+      earb_gct_diff = {{ earb }} - {{ gct }},
+
+      )
 }
 
 #' Days in AR Example Data
@@ -145,10 +132,10 @@ avg_dar <- function(df,
 dar_ex <- function() {
 
   dplyr::tibble(
-    monthdate = seq(
+    date = seq(
       as.Date("2024-01-01"),
       by = "month",
-      length.out = 10
+      length.out = 12
     ),
 
     gross_charges = c(
@@ -161,9 +148,9 @@ dar_ex <- function() {
       153991.95,
       156975.52,
       146878.12,
-      163799.44
-      # 151410.74,
-      # 169094.46
+      163799.44,
+      151410.74,
+      169094.46
     ),
 
     ending_ar = c(
@@ -176,9 +163,9 @@ dar_ex <- function() {
       182771.32,
       169633.64,
       179347.72,
-      178051.11
-      # 162757.49,
-      # 199849.32
+      178051.11,
+      162757.49,
+      199849.32
     )
   )
 }

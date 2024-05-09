@@ -1,0 +1,57 @@
+---
+title: "Getting started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse  = FALSE,
+  echo      = TRUE,
+  message   = FALSE, 
+  warning   = FALSE,
+  error     = TRUE,
+  comment   = "#>",
+  dpi       = 600, 
+  out.width = "100%"
+  )
+
+library(forager)
+library(dplyr)
+library(tidyr)
+library(gt)
+```
+
+## Introduction
+
+The `forager` package is a collection of functions that are useful for healthcare revenue cycle analysis. 
+
+## DAR
+
+Days in Accounts Receivable (also known as Days in AR or simply DAR) is a common financial metric belonging to a group of ratios called **efficiency ratios**. The calculation measures the average amount of time it takes for a business to collect money owed from the responsible party for services rendered and billed.
+
+As its name implies, the unit of measurement employed by this particular metric is days, or rather the average number of days from the moment a physician provides a service until the patient or guarantor pays for that service. This number can tell you much about the financial health of the business.
+
+The formula for calculating DAR is: 
+
+```{r}
+dar_ex()
+```
+
+
+
+```{r}
+avg_dar(
+  df     = dar_ex(),
+  date   = date,
+  gct    = gross_charges,
+  earb   = ending_ar,
+  dart   = 35,
+  period = "month"
+) |> 
+  gt()
+```
+
