@@ -35,7 +35,7 @@ navbar:
     intro:
       icon: ~
       text: Getting started
-      href: articles/forager.html
+      href: articles/getting-started.html
     reference:
       text: Reference
       href: reference/index.html

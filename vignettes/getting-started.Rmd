@@ -55,3 +55,73 @@ avg_dar(
   gt()
 ```
 
+```{r}
+avg_dar(
+  df     = dar_ex(),
+  date   = date,
+  gct    = gross_charges,
+  earb   = ending_ar,
+  dart   = 39,
+  period = "quarter"
+) |> 
+  gt()
+```
+
+## Aging Bins
+
+```{r}
+binned <- bin_aging(
+  df = load_ex(),
+  date = dos
+  ) |>
+  dplyr::select(
+    dos:ins_class,
+    dar:aging_bin
+    )
+
+binned
+```
+
+```{r}
+binned |>
+   dplyr::arrange(aging_bin) |>
+   dplyr::summarise(n_claims = dplyr::n(),
+                    balance = sum(charges),
+                    .by = aging_bin) |>
+   dplyr::mutate(
+     pct_claims = n_claims / sum(n_claims),
+     pct_balance = balance / sum(balance)) |> 
+  gt() |> 
+  fmt_percent(columns = pct_claims:pct_balance)
+```
+
+
+```{r}
+binned |>
+  dplyr::arrange(aging_bin, ins_name) |>
+  dplyr::summarise(
+    n_claims = dplyr::n(),
+    balance = sum(charges),
+    .by = c(aging_bin, ins_name)
+  ) |>
+  dplyr::mutate(pct_claims = n_claims / sum(n_claims),
+                pct_balance = balance / sum(balance)) |>
+  gt() |>
+  fmt_percent(columns = pct_claims:pct_balance)
+```
+
+
+```{r}
+binned |>
+  dplyr::arrange(ins_name, aging_bin) |>
+  dplyr::summarise(
+    n_claims = dplyr::n(),
+    balance = sum(charges),
+    .by = c(aging_bin, ins_name)
+  ) |>
+  dplyr::mutate(pct_claims = n_claims / sum(n_claims),
+                pct_balance = balance / sum(balance),
+                .by = ins_name) |>
+  gt() |>
+  fmt_percent(columns = pct_claims:pct_balance)
+```
