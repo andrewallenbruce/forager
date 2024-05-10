@@ -71,7 +71,7 @@ avg_dar(
 
 ```{r}
 binned <- bin_aging(
-  df = load_ex(),
+  df = load_ex("aging_ex"),
   date = dos
   ) |>
   dplyr::select(
