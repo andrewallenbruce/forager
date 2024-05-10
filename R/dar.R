@@ -1,20 +1,19 @@
 #' Calculate Average Days in AR
 #'
-#' @param df `<data.frame>` or `<tibble>` with three required columns: date,
-#'   gross charges column and ending Accounts Receivables balance
+#' @template args-df-default
 #'
-#' @param date column of `<date>`s
+#' @template args-date-col
 #'
-#' @param gct `<dbl>` column of Gross Charges
+#' @template args-gct-col
 #'
-#' @param earb `<dbl>` column of Ending AR balances
+#' @template args-earb-col
 #'
 #' @param dart `<dbl>` Target Days in AR, default is `35` days
 #'
 #' @param period `<chr>` string specifying the calculation period; one of
 #'   `"month"`, `"quarter"`, or `"year"`; defaults to `"month"`
 #'
-#' @returns a [tibble][tibble::tibble-package]
+#' @template returns-default
 #'
 #' @examples
 #' avg_dar(df     = dar_ex(),

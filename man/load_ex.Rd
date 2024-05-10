@@ -4,7 +4,7 @@
 \alias{load_ex}
 \title{Load example data}
 \usage{
-load_ex(name = "aging_ex")
+load_ex(name)
 }
 \arguments{
 \item{name}{\verb{<chr>} name of example dataset}

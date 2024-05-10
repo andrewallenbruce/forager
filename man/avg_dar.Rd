@@ -7,14 +7,11 @@
 avg_dar(df, date, gct, earb, dart = 35, period = c("month", "quarter"))
 }
 \arguments{
-\item{df}{\verb{<data.frame>} or \verb{<tibble>} with three required columns: date,
-gross charges column and ending Accounts Receivables balance}
+\item{df}{\verb{<data.frame>} or \verb{<tibble>}}
 
 \item{date}{column of \verb{<date>}s}
 
-\item{gct}{\verb{<dbl>} column of Gross Charges}
-
-\item{earb}{\verb{<dbl>} column of Ending AR balances}
+\item{gct}{\verb{<dbl>} column of total Gross Charges}
 
 \item{dart}{\verb{<dbl>} Target Days in AR, default is \code{35} days}
 

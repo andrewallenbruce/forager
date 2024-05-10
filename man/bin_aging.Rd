@@ -4,12 +4,14 @@
 \alias{bin_aging}
 \title{Apply 30-Day Aging Bins}
 \usage{
-bin_aging(df, date)
+bin_aging(df, date, bin_type = NULL)
 }
 \arguments{
-\item{df}{\verb{<data.frame>} or \verb{<tibble>} with a required date column}
+\item{df}{\verb{<data.frame>} or \verb{<tibble>}}
 
 \item{date}{column of \verb{<date>}s}
+
+\item{bin_type}{\verb{<chr>} string specifying the bin type; one of "chop", "cut" or "ivs"}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
@@ -19,7 +21,7 @@ Apply 30-Day Aging Bins
 }
 \examples{
 binned <- bin_aging(
-  df = load_ex(),
+  df = load_ex("aging_ex"),
   date = dos
 ) |>
   dplyr::select(

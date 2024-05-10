@@ -1,14 +1,16 @@
 #' Apply 30-Day Aging Bins
 #'
-#' @param df `<data.frame>` or `<tibble>` with a required date column
+#' @template args-df-default
 #'
-#' @param date column of `<date>`s
+#' @template args-date-col
 #'
-#' @returns a [tibble][tibble::tibble-package]
+#' @param bin_type `<chr>` string specifying the bin type; one of "chop", "cut" or "ivs"
+#'
+#' @template returns-default
 #'
 #' @examples
 #' binned <- bin_aging(
-#'   df = load_ex(),
+#'   df = load_ex("aging_ex"),
 #'   date = dos
 #' ) |>
 #'   dplyr::select(
@@ -62,14 +64,19 @@
 #' @autoglobal
 #'
 #' @export
-bin_aging <- function(df, date) {
+bin_aging <- function(df, date, bin_type = NULL) {
 
-  df |>
+  df <- df |>
     dplyr::mutate(
       dar = clock::date_count_between(
         {{ date }},
         lubridate::today(),
-        "day"),
+        "day"))
+
+  if (bin_type == "chop") {
+
+  df <- df |>
+    dplyr::mutate(
       aging_bin = santoku::chop_width(
         dar,
         30,
@@ -78,4 +85,18 @@ bin_aging <- function(df, date) {
         close_end = FALSE
       )
     )
+  }
+
+  # if (bin_type == "ivs") {
+  #   start <- seq(0, 120, 30)
+  #   end <- start + 30
+  #   end[5] <- 1000
+  #
+  #   df <- df |>
+  #     dplyr::mutate(
+  #       aging_bin = ivs::iv(start, end)
+  #     )
+  # }
+
+  return(df)
 }

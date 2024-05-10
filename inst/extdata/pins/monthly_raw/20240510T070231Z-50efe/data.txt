@@ -1,0 +1,10 @@
+file: monthly_raw.qs
+file_size: 969
+pin_hash: 50efe57e8bec7176
+type: qs
+title: Raw Monthly Data
+description: Raw Monthly Data
+tags: ~
+urls: ~
+created: 20240510T070231Z
+api_version: 1

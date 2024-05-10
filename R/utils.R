@@ -66,7 +66,7 @@ list_pins <- function(...) {
 #' @keywords internal
 #'
 #' @export
-load_ex <- function(name = "aging_ex") {
+load_ex <- function(name) {
 
   get_pin(name)
 

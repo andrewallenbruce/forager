@@ -18,16 +18,34 @@ utils::globalVariables(c(
   "date_of_service",
   # <generate_data>
   "date_of_submission",
+  # <predict_net>
+  "earb_gt120",
+  # <predict_net>
+  "earb_lt120",
+  # <net_ex>
+  "ending_ar",
+  # <net_ex>
+  "gross_charges",
   # <avg_dar>
   "max_nmon",
   # <avg_dar>
   "month",
   # <avg_dar>
   "ndip",
+  # <predict_net>
+  "net_diff",
+  # <net_ex>
+  "net_payment",
+  # <predict_net>
+  "net_pred",
   # <avg_dar>
   "nmon",
   # <avg_dar>
   "nqtr",
+  # <predict_net>
+  "parl_120",
+  # <predict_net>
+  "pct_paid",
   # <avg_dar>
   "ratio_actual",
   # <avg_dar>

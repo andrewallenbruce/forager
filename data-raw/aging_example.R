@@ -63,3 +63,37 @@ binned |>
     n_claims = dplyr::n(),
     balance = sum(charges),
     .by = c(aging_bin, ins_name))
+
+
+dplyr::tribble(
+  ~start, ~end,
+  0,     30,
+  30,     60,
+  60,     90,
+  90,    120,
+  120,    150,
+  150,    180,
+  180,    210
+) |>
+  dplyr::mutate(
+    aging_bin = ivs::iv(start, end),
+    .keep = "unused"
+  )
+
+ranges |>
+  dplyr::arrange(start) |>
+  dplyr::mutate(range = ivs::iv(start, end), .keep = "unused")
+
+
+start <- vctrs::vec_c(0, 30, 60, 90, 120, 150, 180, 210)
+end <- start + 30
+
+bin_aging(load_ex(), dos)
+
+start <- seq(0, 120, 30)
+end <- start + 30
+end[5] <- 1000
+
+dplyr::tibble(aging_bin = ivs::iv(start, end))
+
+ivs::iv(120, 1000)
