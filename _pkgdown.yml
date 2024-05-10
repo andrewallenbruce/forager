@@ -32,10 +32,6 @@ navbar:
       icon: fas fa-home fa-lg
       text: ""
       href: index.html
-    intro:
-      icon: ~
-      text: Getting started
-      href: articles/getting-started.html
     reference:
       text: Reference
       href: reference/index.html

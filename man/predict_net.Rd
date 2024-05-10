@@ -13,6 +13,8 @@ predict_net(df, date, gct, earb, net, parb_120)
 
 \item{gct}{\verb{<dbl>} column of total Gross Charges}
 
+\item{earb}{\verb{<dbl>} column of ending accounts receivable balances}
+
 \item{net}{column of net payments}
 
 \item{parb_120}{column of percentage of AR beyond 120 days old}

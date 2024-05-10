@@ -13,6 +13,8 @@ avg_dar(df, date, gct, earb, dart = 35, period = c("month", "quarter"))
 
 \item{gct}{\verb{<dbl>} column of total Gross Charges}
 
+\item{earb}{\verb{<dbl>} column of ending accounts receivable balances}
+
 \item{dart}{\verb{<dbl>} Target Days in AR, default is \code{35} days}
 
 \item{period}{\verb{<chr>} string specifying the calculation period; one of

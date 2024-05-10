@@ -4,7 +4,7 @@
 \alias{bin_aging}
 \title{Apply 30-Day Aging Bins}
 \usage{
-bin_aging(df, date, bin_type = NULL)
+bin_aging(df, date, bin_type = "chop")
 }
 \arguments{
 \item{df}{\verb{<data.frame>} or \verb{<tibble>}}

@@ -64,7 +64,7 @@
 #' @autoglobal
 #'
 #' @export
-bin_aging <- function(df, date, bin_type = NULL) {
+bin_aging <- function(df, date, bin_type = "chop") {
 
   df <- df |>
     dplyr::mutate(
