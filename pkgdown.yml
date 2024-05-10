@@ -3,7 +3,7 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   getting-started: getting-started.html
-last_built: 2024-05-09T05:27Z
+last_built: 2024-05-10T10:13Z
 urls:
   reference: https://andrewallenbruce.github.io/forager/reference
   article: https://andrewallenbruce.github.io/forager/articles
