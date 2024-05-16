@@ -37,13 +37,25 @@ As its name implies, the unit of measurement employed by this particular metric 
 
 The formula for calculating DAR is: 
 
-$$
-{\textrm{Days in AR}} = \dfrac {\textrm{Ending AR Balance}} {{\textrm{Gross Charges}} \div {\textrm{Number of Days in Period}}}
-$$
+${\textrm{Days in AR}} = \dfrac {\textrm{Ending AR Balance}} {{\textrm{Gross Charges}} \div {\textrm{Number of Days in Period}}}$
 
-```{r}
-dar_ex()
-```
+
+| **Variable**  | **Description**      |
+:--------------:|:---------------------|
+| $n_{days}$    | Days in Period       |
+| $gc_t$        | Total Gross Charges  |
+| $ear$         | Ending AR Balance    |
+| $adc$         | Average Daily Charge |
+| $dar$         | Days in AR           |
+| $dart$        | Days in AR Target    |
+| $eart$        | Ending AR Target       |
+
+: DAR Formula Components.
+
+
+   * Ending AR Target: $earb_{target} = (dar_{target} \times gct) \div n_{days}$
+   * Gross Charges Target: $gct_{target} = (earb \times n_{days}) \div dar_{target}$
+   * Days in Period Target: $n_{days} = (dar_{target} \times gct) \div earb$
 
 
 
@@ -203,12 +215,26 @@ binned |>
    dplyr::mutate(
      pct_claims = n_claims / sum(n_claims),
      pct_balance = balance / sum(balance)) |> 
-  gt() |> 
+  gt(rowname_col = "aging_bin") |> 
   opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
-  fmt_percent(columns = pct_claims:pct_balance) |> 
+  fmt_percent(columns = pct_claims:pct_balance, decimals = 0) |> 
   fmt_currency(columns = balance) |> 
   fmt_number(columns = n_claims, decimals = 0) |> 
-  opt_stylize()
+  opt_stylize() |> 
+  cols_label(
+    n_claims = "Claims",
+    pct_claims = "%",
+    balance = "Charges",
+    pct_balance = "%"
+  ) |>
+  cols_move_to_start(c(n_claims, pct_claims, balance, pct_balance)) |> 
+  tab_header(
+    title = "Aging Report",
+  ) |>
+  tab_options(
+    heading.align = "left",
+    quarto.disable_processing = TRUE
+  )
 ```
 
 

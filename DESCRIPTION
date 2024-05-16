@@ -38,6 +38,7 @@ VignetteBuilder:
     knitr
 Remotes: 
     github::andrewallenbruce/fuimus
+    github::rstudio/gt
 Config/roxyglobals/filename: generated-globals.R
 Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3
