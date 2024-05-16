@@ -29,13 +29,17 @@ library(gt)
 
 The `forager` package is a collection of functions that are useful for healthcare revenue cycle analysis. 
 
-## DAR
+## Days in Accounts Receivable
 
 Days in Accounts Receivable (also known as Days in AR or simply DAR) is a common financial metric belonging to a group of ratios called **efficiency ratios**. The calculation measures the average amount of time it takes for a business to collect money owed from the responsible party for services rendered and billed.
 
 As its name implies, the unit of measurement employed by this particular metric is days, or rather the average number of days from the moment a physician provides a service until the patient or guarantor pays for that service. This number can tell you much about the financial health of the business.
 
 The formula for calculating DAR is: 
+
+$$
+{\textrm{Days in AR}} = \dfrac {\textrm{Ending AR Balance}} {{\textrm{Gross Charges}} \div {\textrm{Number of Days in Period}}}
+$$
 
 ```{r}
 dar_ex()
@@ -52,7 +56,66 @@ avg_dar(
   dart   = 35,
   period = "month"
 ) |> 
-  gt()
+  gt(rowname_col = "mon") |> 
+  cols_hide(c(date, 
+              nmon, 
+              month, 
+              nqtr, 
+              yqtr, 
+              dqtr, 
+              year, 
+              ymon, 
+              myear, 
+              nhalf, 
+              yhalf, 
+              dhalf, 
+              ndip,
+              ending_ar_target,
+              dar_diff,
+              ratio_ideal,
+              ratio_actual)) |> 
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  fmt_currency(columns = c(gross_charges, 
+                           ending_ar, 
+                           adc, 
+                           ending_ar_target, 
+                           ending_ar_dec_abs, 
+                           earb_gct_diff)) |> 
+  fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
+  fmt_percent(columns = c(ending_ar_dec_pct)) |> 
+  fmt_number(columns = c(dar, 
+                         dar_diff, 
+                         ratio_actual, 
+                         ratio_ideal, 
+                         ratio_diff)) |> 
+  cols_move_to_start(c(mon, 
+                       gross_charges, 
+                       ending_ar, 
+                       earb_gct_diff,
+                       adc, 
+                       dar_pass, 
+                       dar, 
+                       dar_diff, 
+                       ratio_actual, 
+                       ratio_ideal, 
+                       ratio_diff, 
+                       ending_ar_target, 
+                       ending_ar_dec_abs, 
+                       ending_ar_dec_pct
+                       )) |> 
+  cols_label(
+    mon = "Month",
+    gross_charges = "Gross Charges",
+    ending_ar = "Ending AR",
+    adc = "ADC",
+    dar_pass = "",
+    dar = "DAR",
+    ratio_diff = "AR:GC Diff",
+    ending_ar_dec_abs = "AR Decrease Needed",
+    ending_ar_dec_pct = "%",
+    earb_gct_diff = "AR - GC"
+  ) |> 
+  opt_stylize()
 ```
 
 ```{r}
@@ -64,7 +127,56 @@ avg_dar(
   dart   = 39,
   period = "quarter"
 ) |> 
-  gt()
+  gt(rowname_col = "nqtr") |> 
+  cols_hide(c(date, 
+              nmon, 
+              month,
+              ndip,
+              ending_ar_target,
+              dar_diff,
+              ratio_ideal,
+              ratio_actual)) |> 
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  fmt_currency(columns = c(gross_charges, 
+                           ending_ar, 
+                           adc, 
+                           ending_ar_target, 
+                           ending_ar_dec_abs, 
+                           earb_gct_diff)) |> 
+  fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
+  fmt_percent(columns = c(ending_ar_dec_pct)) |> 
+  fmt_number(columns = c(dar, 
+                         dar_diff, 
+                         ratio_actual, 
+                         ratio_ideal, 
+                         ratio_diff)) |> 
+  cols_move_to_start(c(nqtr, 
+                       gross_charges, 
+                       ending_ar, 
+                       earb_gct_diff,
+                       adc, 
+                       dar_pass, 
+                       dar, 
+                       dar_diff, 
+                       ratio_actual, 
+                       ratio_ideal, 
+                       ratio_diff, 
+                       ending_ar_target, 
+                       ending_ar_dec_abs, 
+                       ending_ar_dec_pct
+                       )) |> 
+  cols_label(
+    gross_charges = "Gross Charges",
+    ending_ar = "Ending AR",
+    adc = "ADC",
+    dar_pass = "",
+    dar = "DAR",
+    ratio_diff = "AR:GC Diff",
+    ending_ar_dec_abs = "AR Decrease Needed",
+    ending_ar_dec_pct = "%",
+    earb_gct_diff = "AR - GC"
+  ) |> 
+  opt_stylize()
 ```
 
 ## Aging Bins
@@ -92,7 +204,11 @@ binned |>
      pct_claims = n_claims / sum(n_claims),
      pct_balance = balance / sum(balance)) |> 
   gt() |> 
-  fmt_percent(columns = pct_claims:pct_balance)
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  fmt_percent(columns = pct_claims:pct_balance) |> 
+  fmt_currency(columns = balance) |> 
+  fmt_number(columns = n_claims, decimals = 0) |> 
+  opt_stylize()
 ```
 
 
@@ -107,7 +223,10 @@ binned |>
   dplyr::mutate(pct_claims = n_claims / sum(n_claims),
                 pct_balance = balance / sum(balance)) |>
   gt() |>
-  fmt_percent(columns = pct_claims:pct_balance)
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  fmt_percent(columns = pct_claims:pct_balance) |> 
+  fmt_currency(columns = balance) |> 
+  fmt_number(columns = n_claims, decimals = 0)
 ```
 
 
@@ -123,5 +242,8 @@ binned |>
                 pct_balance = balance / sum(balance),
                 .by = ins_name) |>
   gt() |>
-  fmt_percent(columns = pct_claims:pct_balance)
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  fmt_percent(columns = pct_claims:pct_balance) |> 
+  fmt_currency(columns = balance) |> 
+  fmt_number(columns = n_claims, decimals = 0)
 ```
