@@ -133,28 +133,58 @@ moment a physician provides a service until the patient or guarantor
 pays for that service. This number can tell you much about the financial
 health of the business.</p>
 <p>The formula for calculating DAR is:</p>
-<p><span class="math display">\[
-{\textrm{Days in AR}} = \dfrac {\textrm{Ending AR Balance}}
-{{\textrm{Gross Charges}} \div {\textrm{Number of Days in Period}}}
-\]</span></p>
+<p><span class="math inline">\({\textrm{Days in AR}} = \dfrac
+{\textrm{Ending AR Balance}} {{\textrm{Gross Charges}} \div
+{\textrm{Number of Days in Period}}}\)</span></p>
+<table class="table">
+<caption>DAR Formula Components.</caption>
+<thead><tr class="header">
+<th align="center"><strong>Variable</strong></th>
+<th align="left"><strong>Description</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(n_{days}\)</span></td>
+<td align="left">Days in Period</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(gc_t\)</span></td>
+<td align="left">Total Gross Charges</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(ear\)</span></td>
+<td align="left">Ending AR Balance</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(adc\)</span></td>
+<td align="left">Average Daily Charge</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(dar\)</span></td>
+<td align="left">Days in AR</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(dart\)</span></td>
+<td align="left">Days in AR Target</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(eart\)</span></td>
+<td align="left">Ending AR Target</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Ending AR Target: <span class="math inline">\(earb_{target} =
+(dar_{target} \times gct) \div n_{days}\)</span>
+</li>
+<li>Gross Charges Target: <span class="math inline">\(gct_{target} =
+(earb \times n_{days}) \div dar_{target}\)</span>
+</li>
+<li>Days in Period Target: <span class="math inline">\(n_{days} =
+(dar_{target} \times gct) \div earb\)</span>
+</li>
+</ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 3</span></span></span>
-<span><span class="co">#&gt;    date       gross_charges ending_ar</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01       <span style="text-decoration: underline;">325</span>982.   <span style="text-decoration: underline;">288</span>433.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01       <span style="text-decoration: underline;">297</span>732.   <span style="text-decoration: underline;">307</span>871.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01       <span style="text-decoration: underline;">198</span>655.   <span style="text-decoration: underline;">253</span>977.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01       <span style="text-decoration: underline;">186</span>048.   <span style="text-decoration: underline;">183</span>685.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01       <span style="text-decoration: underline;">123</span>654.   <span style="text-decoration: underline;">204</span>228.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01       <span style="text-decoration: underline;">131</span>440.   <span style="text-decoration: underline;">203</span>460.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01       <span style="text-decoration: underline;">153</span>992.   <span style="text-decoration: underline;">182</span>771.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01       <span style="text-decoration: underline;">156</span>976.   <span style="text-decoration: underline;">169</span>634.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01       <span style="text-decoration: underline;">146</span>878.   <span style="text-decoration: underline;">179</span>348.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01       <span style="text-decoration: underline;">163</span>799.   <span style="text-decoration: underline;">178</span>051.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01       <span style="text-decoration: underline;">151</span>411.   <span style="text-decoration: underline;">162</span>757.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01       <span style="text-decoration: underline;">169</span>094.   <span style="text-decoration: underline;">199</span>849.</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
@@ -188,7 +218,7 @@ health of the business.</p>
 <span>                           <span class="va">ending_ar_target</span>, </span>
 <span>                           <span class="va">ending_ar_dec_abs</span>, </span>
 <span>                           <span class="va">earb_gct_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_tf</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar_pass</span><span class="op">)</span>, tf_style <span class="op">=</span> <span class="st">"check-mark"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |&gt; </span></span>
 <span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, </span>
 <span>                         <span class="va">dar_diff</span>, </span>
@@ -217,116 +247,11 @@ health of the business.</p>
 <span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
 <span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
 <span>    dar <span class="op">=</span> <span class="st">"DAR"</span>,</span>
-<span>    ratio_diff <span class="op">=</span> <span class="st">"AR:GC Diff"</span>,</span>
+<span>    ratio_diff <span class="op">=</span> <span class="st">"AR/GC Diff"</span>,</span>
 <span>    ending_ar_dec_abs <span class="op">=</span> <span class="st">"AR Decrease Needed"</span>,</span>
 <span>    ending_ar_dec_pct <span class="op">=</span> <span class="st">"%"</span>,</span>
 <span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Error in fmt_tf(fmt_currency(opt_table_font(cols_hide(gt(avg_dar(df = dar_ex(), : could not find function "fmt_tf"</span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
-<span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
-<span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
-<span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
-<span>  dart   <span class="op">=</span> <span class="fl">39</span>,</span>
-<span>  period <span class="op">=</span> <span class="st">"quarter"</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cols_hide</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, </span>
-<span>              <span class="va">nmon</span>, </span>
-<span>              <span class="va">month</span>,</span>
-<span>              <span class="va">ndip</span>,</span>
-<span>              <span class="va">ending_ar_target</span>,</span>
-<span>              <span class="va">dar_diff</span>,</span>
-<span>              <span class="va">ratio_ideal</span>,</span>
-<span>              <span class="va">ratio_actual</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, </span>
-<span>                           <span class="va">ending_ar</span>, </span>
-<span>                           <span class="va">adc</span>, </span>
-<span>                           <span class="va">ending_ar_target</span>, </span>
-<span>                           <span class="va">ending_ar_dec_abs</span>, </span>
-<span>                           <span class="va">earb_gct_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_tf</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar_pass</span><span class="op">)</span>, tf_style <span class="op">=</span> <span class="st">"check-mark"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, </span>
-<span>                         <span class="va">dar_diff</span>, </span>
-<span>                         <span class="va">ratio_actual</span>, </span>
-<span>                         <span class="va">ratio_ideal</span>, </span>
-<span>                         <span class="va">ratio_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">nqtr</span>, </span>
-<span>                       <span class="va">gross_charges</span>, </span>
-<span>                       <span class="va">ending_ar</span>, </span>
-<span>                       <span class="va">earb_gct_diff</span>,</span>
-<span>                       <span class="va">adc</span>, </span>
-<span>                       <span class="va">dar_pass</span>, </span>
-<span>                       <span class="va">dar</span>, </span>
-<span>                       <span class="va">dar_diff</span>, </span>
-<span>                       <span class="va">ratio_actual</span>, </span>
-<span>                       <span class="va">ratio_ideal</span>, </span>
-<span>                       <span class="va">ratio_diff</span>, </span>
-<span>                       <span class="va">ending_ar_target</span>, </span>
-<span>                       <span class="va">ending_ar_dec_abs</span>, </span>
-<span>                       <span class="va">ending_ar_dec_pct</span></span>
-<span>                       <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
-<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
-<span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    dar <span class="op">=</span> <span class="st">"DAR"</span>,</span>
-<span>    ratio_diff <span class="op">=</span> <span class="st">"AR:GC Diff"</span>,</span>
-<span>    ending_ar_dec_abs <span class="op">=</span> <span class="st">"AR Decrease Needed"</span>,</span>
-<span>    ending_ar_dec_pct <span class="op">=</span> <span class="st">"%"</span>,</span>
-<span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Error in fmt_tf(fmt_currency(opt_table_font(cols_hide(gt(avg_dar(df = dar_ex(), : could not find function "fmt_tf"</span></span></code></pre>
-</div>
-<div class="section level2">
-<h2 id="aging-bins">Aging Bins<a class="anchor" aria-label="anchor" href="#aging-bins"></a>
-</h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bin_aging.html">bin_aging</a></span><span class="op">(</span></span>
-<span>  df <span class="op">=</span> <span class="fu"><a href="../reference/load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span>,</span>
-<span>  date <span class="op">=</span> <span class="va">dos</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span>    <span class="va">dos</span><span class="op">:</span><span class="va">ins_class</span>,</span>
-<span>    <span class="va">dar</span><span class="op">:</span><span class="va">aging_bin</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span><span class="va">binned</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,618 × 6</span></span></span>
-<span><span class="co">#&gt;    dos        charges ins_name   ins_class   dar aging_bin </span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare   Primary     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient    Patient     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross Primary     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA      Primary     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross Primary     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA      Secondary   141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient    Patient     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare   Primary     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross Secondary   141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient    Patient     141 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
-<span>                    .by <span class="op">=</span> <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>     pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
-<span>     pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -771,66 +696,224 @@ health of the business.</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="aging_bin">aging_bin</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n_claims">n_claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="balance">balance</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pct_claims">pct_claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pct_balance">pct_balance</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Gross Charges">Gross Charges</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ending AR">Ending AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="AR - GC">AR - GC</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ADC">ADC</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="DAR">DAR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="AR/GC Diff">AR/GC Diff</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="AR Decrease Needed">AR Decrease Needed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="%">%</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="n_claims" class="gt_row gt_right">1,102</td>
-<td headers="balance" class="gt_row gt_right">$536,776.58</td>
-<td headers="pct_claims" class="gt_row gt_right">42.09%</td>
-<td headers="pct_balance" class="gt_row gt_right">41.26%</td>
+<th id="stub_1_1" scope="row" class="gt_row gt_center gt_stub">Jan</th>
+<td headers="stub_1_1 gross_charges" class="gt_row gt_right">$325,982.23</td>
+<td headers="stub_1_1 ending_ar" class="gt_row gt_right">$288,432.52</td>
+<td headers="stub_1_1 earb_gct_diff" class="gt_row gt_right">−$37,549.71</td>
+<td headers="stub_1_1 adc" class="gt_row gt_right">$10,515.56</td>
+<td headers="stub_1_1 dar_pass" class="gt_row gt_center">TRUE</td>
+<td headers="stub_1_1 dar" class="gt_row gt_right">27.43</td>
+<td headers="stub_1_1 ratio_diff" class="gt_row gt_right">−0.24</td>
+<td headers="stub_1_1 ending_ar_dec_abs" class="gt_row gt_right">−$79,611.93</td>
+<td headers="stub_1_1 ending_ar_dec_pct" class="gt_row gt_right">−27.60%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center gt_striped">(30, 60]</td>
-<td headers="n_claims" class="gt_row gt_right gt_striped">377</td>
-<td headers="balance" class="gt_row gt_right gt_striped">$191,201.57</td>
-<td headers="pct_claims" class="gt_row gt_right gt_striped">14.40%</td>
-<td headers="pct_balance" class="gt_row gt_right gt_striped">14.70%</td>
+<th id="stub_1_2" scope="row" class="gt_row gt_center gt_stub">Feb</th>
+<td headers="stub_1_2 gross_charges" class="gt_row gt_right gt_striped">$297,731.74</td>
+<td headers="stub_1_2 ending_ar" class="gt_row gt_right gt_striped">$307,871.08</td>
+<td headers="stub_1_2 earb_gct_diff" class="gt_row gt_right gt_striped">$10,139.34</td>
+<td headers="stub_1_2 adc" class="gt_row gt_right gt_striped">$10,266.61</td>
+<td headers="stub_1_2 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="stub_1_2 dar" class="gt_row gt_right gt_striped">29.99</td>
+<td headers="stub_1_2 ratio_diff" class="gt_row gt_right gt_striped">−0.17</td>
+<td headers="stub_1_2 ending_ar_dec_abs" class="gt_row gt_right gt_striped">−$51,460.33</td>
+<td headers="stub_1_2 ending_ar_dec_pct" class="gt_row gt_right gt_striped">−16.71%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="n_claims" class="gt_row gt_right">444</td>
-<td headers="balance" class="gt_row gt_right">$215,686.34</td>
-<td headers="pct_claims" class="gt_row gt_right">16.96%</td>
-<td headers="pct_balance" class="gt_row gt_right">16.58%</td>
+<th id="stub_1_3" scope="row" class="gt_row gt_center gt_stub">Mar</th>
+<td headers="stub_1_3 gross_charges" class="gt_row gt_right">$198,655.14</td>
+<td headers="stub_1_3 ending_ar" class="gt_row gt_right">$253,976.56</td>
+<td headers="stub_1_3 earb_gct_diff" class="gt_row gt_right">$55,321.42</td>
+<td headers="stub_1_3 adc" class="gt_row gt_right">$6,408.23</td>
+<td headers="stub_1_3 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="stub_1_3 dar" class="gt_row gt_right">39.63</td>
+<td headers="stub_1_3 ratio_diff" class="gt_row gt_right">0.15</td>
+<td headers="stub_1_3 ending_ar_dec_abs" class="gt_row gt_right">$29,688.50</td>
+<td headers="stub_1_3 ending_ar_dec_pct" class="gt_row gt_right">11.69%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center gt_striped">(90, 120]</td>
-<td headers="n_claims" class="gt_row gt_right gt_striped">420</td>
-<td headers="balance" class="gt_row gt_right gt_striped">$211,555.27</td>
-<td headers="pct_claims" class="gt_row gt_right gt_striped">16.04%</td>
-<td headers="pct_balance" class="gt_row gt_right gt_striped">16.26%</td>
+<th id="stub_1_4" scope="row" class="gt_row gt_center gt_stub">Apr</th>
+<td headers="stub_1_4 gross_charges" class="gt_row gt_right gt_striped">$186,047.56</td>
+<td headers="stub_1_4 ending_ar" class="gt_row gt_right gt_striped">$183,684.92</td>
+<td headers="stub_1_4 earb_gct_diff" class="gt_row gt_right gt_striped">−$2,362.64</td>
+<td headers="stub_1_4 adc" class="gt_row gt_right gt_striped">$6,201.59</td>
+<td headers="stub_1_4 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="stub_1_4 dar" class="gt_row gt_right gt_striped">29.62</td>
+<td headers="stub_1_4 ratio_diff" class="gt_row gt_right gt_striped">−0.18</td>
+<td headers="stub_1_4 ending_ar_dec_abs" class="gt_row gt_right gt_striped">−$33,370.57</td>
+<td headers="stub_1_4 ending_ar_dec_pct" class="gt_row gt_right gt_striped">−18.17%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="n_claims" class="gt_row gt_right">275</td>
-<td headers="balance" class="gt_row gt_right">$145,721.86</td>
-<td headers="pct_claims" class="gt_row gt_right">10.50%</td>
-<td headers="pct_balance" class="gt_row gt_right">11.20%</td>
+<th id="stub_1_5" scope="row" class="gt_row gt_center gt_stub">May</th>
+<td headers="stub_1_5 gross_charges" class="gt_row gt_right">$123,654.34</td>
+<td headers="stub_1_5 ending_ar" class="gt_row gt_right">$204,227.59</td>
+<td headers="stub_1_5 earb_gct_diff" class="gt_row gt_right">$80,573.25</td>
+<td headers="stub_1_5 adc" class="gt_row gt_right">$3,988.85</td>
+<td headers="stub_1_5 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="stub_1_5 dar" class="gt_row gt_right">51.20</td>
+<td headers="stub_1_5 ratio_diff" class="gt_row gt_right">0.52</td>
+<td headers="stub_1_5 ending_ar_dec_abs" class="gt_row gt_right">$64,617.85</td>
+<td headers="stub_1_5 ending_ar_dec_pct" class="gt_row gt_right">31.64%</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_center gt_stub">Jun</th>
+<td headers="stub_1_6 gross_charges" class="gt_row gt_right gt_striped">$131,440.28</td>
+<td headers="stub_1_6 ending_ar" class="gt_row gt_right gt_striped">$203,460.47</td>
+<td headers="stub_1_6 earb_gct_diff" class="gt_row gt_right gt_striped">$72,020.19</td>
+<td headers="stub_1_6 adc" class="gt_row gt_right gt_striped">$4,381.34</td>
+<td headers="stub_1_6 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
+<td headers="stub_1_6 dar" class="gt_row gt_right gt_striped">46.44</td>
+<td headers="stub_1_6 ratio_diff" class="gt_row gt_right gt_striped">0.38</td>
+<td headers="stub_1_6 ending_ar_dec_abs" class="gt_row gt_right gt_striped">$50,113.48</td>
+<td headers="stub_1_6 ending_ar_dec_pct" class="gt_row gt_right gt_striped">24.63%</td>
+</tr>
+<tr>
+<th id="stub_1_7" scope="row" class="gt_row gt_center gt_stub">Jul</th>
+<td headers="stub_1_7 gross_charges" class="gt_row gt_right">$153,991.95</td>
+<td headers="stub_1_7 ending_ar" class="gt_row gt_right">$182,771.32</td>
+<td headers="stub_1_7 earb_gct_diff" class="gt_row gt_right">$28,779.37</td>
+<td headers="stub_1_7 adc" class="gt_row gt_right">$4,967.48</td>
+<td headers="stub_1_7 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="stub_1_7 dar" class="gt_row gt_right">36.79</td>
+<td headers="stub_1_7 ratio_diff" class="gt_row gt_right">0.06</td>
+<td headers="stub_1_7 ending_ar_dec_abs" class="gt_row gt_right">$8,909.44</td>
+<td headers="stub_1_7 ending_ar_dec_pct" class="gt_row gt_right">4.87%</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_center gt_stub">Aug</th>
+<td headers="stub_1_8 gross_charges" class="gt_row gt_right gt_striped">$156,975.52</td>
+<td headers="stub_1_8 ending_ar" class="gt_row gt_right gt_striped">$169,633.64</td>
+<td headers="stub_1_8 earb_gct_diff" class="gt_row gt_right gt_striped">$12,658.12</td>
+<td headers="stub_1_8 adc" class="gt_row gt_right gt_striped">$5,063.73</td>
+<td headers="stub_1_8 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="stub_1_8 dar" class="gt_row gt_right gt_striped">33.50</td>
+<td headers="stub_1_8 ratio_diff" class="gt_row gt_right gt_striped">−0.05</td>
+<td headers="stub_1_8 ending_ar_dec_abs" class="gt_row gt_right gt_striped">−$7,596.79</td>
+<td headers="stub_1_8 ending_ar_dec_pct" class="gt_row gt_right gt_striped">−4.48%</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_center gt_stub">Sep</th>
+<td headers="stub_1_9 gross_charges" class="gt_row gt_right">$146,878.12</td>
+<td headers="stub_1_9 ending_ar" class="gt_row gt_right">$179,347.72</td>
+<td headers="stub_1_9 earb_gct_diff" class="gt_row gt_right">$32,469.60</td>
+<td headers="stub_1_9 adc" class="gt_row gt_right">$4,895.94</td>
+<td headers="stub_1_9 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="stub_1_9 dar" class="gt_row gt_right">36.63</td>
+<td headers="stub_1_9 ratio_diff" class="gt_row gt_right">0.05</td>
+<td headers="stub_1_9 ending_ar_dec_abs" class="gt_row gt_right">$7,989.91</td>
+<td headers="stub_1_9 ending_ar_dec_pct" class="gt_row gt_right">4.45%</td>
+</tr>
+<tr>
+<th id="stub_1_10" scope="row" class="gt_row gt_center gt_stub">Oct</th>
+<td headers="stub_1_10 gross_charges" class="gt_row gt_right gt_striped">$163,799.44</td>
+<td headers="stub_1_10 ending_ar" class="gt_row gt_right gt_striped">$178,051.11</td>
+<td headers="stub_1_10 earb_gct_diff" class="gt_row gt_right gt_striped">$14,251.67</td>
+<td headers="stub_1_10 adc" class="gt_row gt_right gt_striped">$5,283.85</td>
+<td headers="stub_1_10 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="stub_1_10 dar" class="gt_row gt_right gt_striped">33.70</td>
+<td headers="stub_1_10 ratio_diff" class="gt_row gt_right gt_striped">−0.04</td>
+<td headers="stub_1_10 ending_ar_dec_abs" class="gt_row gt_right gt_striped">−$6,883.74</td>
+<td headers="stub_1_10 ending_ar_dec_pct" class="gt_row gt_right gt_striped">−3.87%</td>
+</tr>
+<tr>
+<th id="stub_1_11" scope="row" class="gt_row gt_center gt_stub">Nov</th>
+<td headers="stub_1_11 gross_charges" class="gt_row gt_right">$151,410.74</td>
+<td headers="stub_1_11 ending_ar" class="gt_row gt_right">$162,757.49</td>
+<td headers="stub_1_11 earb_gct_diff" class="gt_row gt_right">$11,346.75</td>
+<td headers="stub_1_11 adc" class="gt_row gt_right">$5,047.02</td>
+<td headers="stub_1_11 dar_pass" class="gt_row gt_center">TRUE</td>
+<td headers="stub_1_11 dar" class="gt_row gt_right">32.25</td>
+<td headers="stub_1_11 ratio_diff" class="gt_row gt_right">−0.09</td>
+<td headers="stub_1_11 ending_ar_dec_abs" class="gt_row gt_right">−$13,888.37</td>
+<td headers="stub_1_11 ending_ar_dec_pct" class="gt_row gt_right">−8.53%</td>
+</tr>
+<tr>
+<th id="stub_1_12" scope="row" class="gt_row gt_center gt_stub">Dec</th>
+<td headers="stub_1_12 gross_charges" class="gt_row gt_right gt_striped">$169,094.46</td>
+<td headers="stub_1_12 ending_ar" class="gt_row gt_right gt_striped">$199,849.32</td>
+<td headers="stub_1_12 earb_gct_diff" class="gt_row gt_right gt_striped">$30,754.86</td>
+<td headers="stub_1_12 adc" class="gt_row gt_right gt_striped">$5,454.66</td>
+<td headers="stub_1_12 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
+<td headers="stub_1_12 dar" class="gt_row gt_right gt_striped">36.64</td>
+<td headers="stub_1_12 ratio_diff" class="gt_row gt_right gt_striped">0.05</td>
+<td headers="stub_1_12 ending_ar_dec_abs" class="gt_row gt_right gt_striped">$8,936.22</td>
+<td headers="stub_1_12 ending_ar_dec_pct" class="gt_row gt_right gt_striped">4.47%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
-<span>    n_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
-<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
-<span>                pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
+<span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
+<span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
+<span>  dart   <span class="op">=</span> <span class="fl">39</span>,</span>
+<span>  period <span class="op">=</span> <span class="st">"quarter"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_hide</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, </span>
+<span>              <span class="va">nmon</span>, </span>
+<span>              <span class="va">month</span>,</span>
+<span>              <span class="va">ndip</span>,</span>
+<span>              <span class="va">ending_ar_target</span>,</span>
+<span>              <span class="va">dar_diff</span>,</span>
+<span>              <span class="va">ratio_ideal</span>,</span>
+<span>              <span class="va">ratio_actual</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, </span>
+<span>                           <span class="va">ending_ar</span>, </span>
+<span>                           <span class="va">adc</span>, </span>
+<span>                           <span class="va">ending_ar_target</span>, </span>
+<span>                           <span class="va">ending_ar_dec_abs</span>, </span>
+<span>                           <span class="va">earb_gct_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |&gt; </span></span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, </span>
+<span>                         <span class="va">dar_diff</span>, </span>
+<span>                         <span class="va">ratio_actual</span>, </span>
+<span>                         <span class="va">ratio_ideal</span>, </span>
+<span>                         <span class="va">ratio_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">nqtr</span>, </span>
+<span>                       <span class="va">gross_charges</span>, </span>
+<span>                       <span class="va">ending_ar</span>, </span>
+<span>                       <span class="va">earb_gct_diff</span>,</span>
+<span>                       <span class="va">adc</span>, </span>
+<span>                       <span class="va">dar_pass</span>, </span>
+<span>                       <span class="va">dar</span>, </span>
+<span>                       <span class="va">dar_diff</span>, </span>
+<span>                       <span class="va">ratio_actual</span>, </span>
+<span>                       <span class="va">ratio_ideal</span>, </span>
+<span>                       <span class="va">ratio_diff</span>, </span>
+<span>                       <span class="va">ending_ar_target</span>, </span>
+<span>                       <span class="va">ending_ar_dec_abs</span>, </span>
+<span>                       <span class="va">ending_ar_dec_pct</span></span>
+<span>                       <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
+<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
+<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
+<span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
+<span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
+<span>    dar <span class="op">=</span> <span class="st">"DAR"</span>,</span>
+<span>    ratio_diff <span class="op">=</span> <span class="st">"AR/GC Diff"</span>,</span>
+<span>    ending_ar_dec_abs <span class="op">=</span> <span class="st">"AR Decrease Needed"</span>,</span>
+<span>    ending_ar_dec_pct <span class="op">=</span> <span class="st">"%"</span>,</span>
+<span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 #eexombwkke table {
@@ -862,13 +945,13 @@ health of the business.</p>
   width: auto;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #A8A8A8;
+  border-top-color: #004D80;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
+  border-bottom-color: #004D80;
   border-left-style: none;
   border-left-width: 2px;
   border-left-color: #D3D3D3;
@@ -918,16 +1001,16 @@ health of the business.</p>
 #eexombwkke .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #eexombwkke .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -979,7 +1062,7 @@ health of the business.</p>
 #eexombwkke .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1004,10 +1087,10 @@ health of the business.</p>
   text-transform: inherit;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1026,10 +1109,10 @@ health of the business.</p>
   font-weight: initial;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   vertical-align: middle;
 }
 
@@ -1047,28 +1130,28 @@ health of the business.</p>
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 1px;
-  border-top-color: #D3D3D3;
+  border-top-color: #89D3FE;
   border-left-style: none;
   border-left-width: 1px;
-  border-left-color: #D3D3D3;
+  border-left-color: #89D3FE;
   border-right-style: none;
   border-right-width: 1px;
-  border-right-color: #D3D3D3;
+  border-right-color: #89D3FE;
   vertical-align: middle;
   overflow-x: hidden;
 }
 
 #eexombwkke .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
+  color: #FFFFFF;
+  background-color: #0076BA;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-right-style: solid;
   border-right-width: 2px;
-  border-right-color: #D3D3D3;
+  border-right-color: #0076BA;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -1107,7 +1190,7 @@ health of the business.</p>
 
 #eexombwkke .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
 }
 
 #eexombwkke .gt_first_summary_row.thick {
@@ -1121,12 +1204,12 @@ health of the business.</p>
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #eexombwkke .gt_grand_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #89D3FE;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1141,7 +1224,7 @@ health of the business.</p>
   padding-right: 5px;
   border-top-style: double;
   border-top-width: 6px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
 }
 
 #eexombwkke .gt_last_grand_summary_row_top {
@@ -1151,20 +1234,20 @@ health of the business.</p>
   padding-right: 5px;
   border-bottom-style: double;
   border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #eexombwkke .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
+  background-color: #F4F4F4;
 }
 
 #eexombwkke .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #eexombwkke .gt_footnotes {
@@ -1274,273 +1357,119 @@ health of the business.</p>
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="aging_bin">aging_bin</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="ins_name">ins_name</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n_claims">n_claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="balance">balance</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pct_claims">pct_claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pct_balance">pct_balance</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Gross Charges">Gross Charges</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ending AR">Ending AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="AR - GC">AR - GC</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ADC">ADC</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="DAR">DAR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="AR/GC Diff">AR/GC Diff</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="AR Decrease Needed">AR Decrease Needed</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="%">%</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">89</td>
-<td headers="balance" class="gt_row gt_right">$41,721.53</td>
-<td headers="pct_claims" class="gt_row gt_right">3.40%</td>
-<td headers="pct_balance" class="gt_row gt_right">3.21%</td>
+<th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">1</th>
+<td headers="stub_1_1 gross_charges" class="gt_row gt_right">$822,369.11</td>
+<td headers="stub_1_1 ending_ar" class="gt_row gt_right">$253,976.56</td>
+<td headers="stub_1_1 earb_gct_diff" class="gt_row gt_right">−$568,392.55</td>
+<td headers="stub_1_1 adc" class="gt_row gt_right">$9,037.02</td>
+<td headers="stub_1_1 dar_pass" class="gt_row gt_center">TRUE</td>
+<td headers="stub_1_1 dar" class="gt_row gt_right">28.10</td>
+<td headers="stub_1_1 ratio_diff" class="gt_row gt_right">−0.12</td>
+<td headers="stub_1_1 ending_ar_dec_abs" class="gt_row gt_right">−$98,467.34</td>
+<td headers="stub_1_1 ending_ar_dec_pct" class="gt_row gt_right">−38.77%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">234</td>
-<td headers="balance" class="gt_row gt_right">$115,999.69</td>
-<td headers="pct_claims" class="gt_row gt_right">8.94%</td>
-<td headers="pct_balance" class="gt_row gt_right">8.92%</td>
+<th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">2</th>
+<td headers="stub_1_2 gross_charges" class="gt_row gt_right gt_striped">$441,142.18</td>
+<td headers="stub_1_2 ending_ar" class="gt_row gt_right gt_striped">$203,460.47</td>
+<td headers="stub_1_2 earb_gct_diff" class="gt_row gt_right gt_striped">−$237,681.71</td>
+<td headers="stub_1_2 adc" class="gt_row gt_right gt_striped">$4,847.72</td>
+<td headers="stub_1_2 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
+<td headers="stub_1_2 dar" class="gt_row gt_right gt_striped">41.97</td>
+<td headers="stub_1_2 ratio_diff" class="gt_row gt_right gt_striped">0.03</td>
+<td headers="stub_1_2 ending_ar_dec_abs" class="gt_row gt_right gt_striped">$14,399.54</td>
+<td headers="stub_1_2 ending_ar_dec_pct" class="gt_row gt_right gt_striped">7.08%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">126</td>
-<td headers="balance" class="gt_row gt_right">$57,349.33</td>
-<td headers="pct_claims" class="gt_row gt_right">4.81%</td>
-<td headers="pct_balance" class="gt_row gt_right">4.41%</td>
+<th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">3</th>
+<td headers="stub_1_3 gross_charges" class="gt_row gt_right">$457,845.59</td>
+<td headers="stub_1_3 ending_ar" class="gt_row gt_right">$179,347.72</td>
+<td headers="stub_1_3 earb_gct_diff" class="gt_row gt_right">−$278,497.87</td>
+<td headers="stub_1_3 adc" class="gt_row gt_right">$4,976.58</td>
+<td headers="stub_1_3 dar_pass" class="gt_row gt_center">TRUE</td>
+<td headers="stub_1_3 dar" class="gt_row gt_right">36.04</td>
+<td headers="stub_1_3 ratio_diff" class="gt_row gt_right">−0.03</td>
+<td headers="stub_1_3 ending_ar_dec_abs" class="gt_row gt_right">−$14,739.00</td>
+<td headers="stub_1_3 ending_ar_dec_pct" class="gt_row gt_right">−8.22%</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">13</td>
-<td headers="balance" class="gt_row gt_right">$5,729.13</td>
-<td headers="pct_claims" class="gt_row gt_right">0.50%</td>
-<td headers="pct_balance" class="gt_row gt_right">0.44%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">208</td>
-<td headers="balance" class="gt_row gt_right">$99,546.91</td>
-<td headers="pct_claims" class="gt_row gt_right">7.94%</td>
-<td headers="pct_balance" class="gt_row gt_right">7.65%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">432</td>
-<td headers="balance" class="gt_row gt_right">$216,429.99</td>
-<td headers="pct_claims" class="gt_row gt_right">16.50%</td>
-<td headers="pct_balance" class="gt_row gt_right">16.64%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">39</td>
-<td headers="balance" class="gt_row gt_right">$23,473.42</td>
-<td headers="pct_claims" class="gt_row gt_right">1.49%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.80%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">75</td>
-<td headers="balance" class="gt_row gt_right">$37,612.68</td>
-<td headers="pct_claims" class="gt_row gt_right">2.86%</td>
-<td headers="pct_balance" class="gt_row gt_right">2.89%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">40</td>
-<td headers="balance" class="gt_row gt_right">$17,055.02</td>
-<td headers="pct_claims" class="gt_row gt_right">1.53%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.31%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">3</td>
-<td headers="balance" class="gt_row gt_right">$1,809.83</td>
-<td headers="pct_claims" class="gt_row gt_right">0.11%</td>
-<td headers="pct_balance" class="gt_row gt_right">0.14%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">71</td>
-<td headers="balance" class="gt_row gt_right">$34,779.30</td>
-<td headers="pct_claims" class="gt_row gt_right">2.71%</td>
-<td headers="pct_balance" class="gt_row gt_right">2.67%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">149</td>
-<td headers="balance" class="gt_row gt_right">$76,471.32</td>
-<td headers="pct_claims" class="gt_row gt_right">5.69%</td>
-<td headers="pct_balance" class="gt_row gt_right">5.88%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">46</td>
-<td headers="balance" class="gt_row gt_right">$25,859.38</td>
-<td headers="pct_claims" class="gt_row gt_right">1.76%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.99%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">87</td>
-<td headers="balance" class="gt_row gt_right">$39,479.85</td>
-<td headers="pct_claims" class="gt_row gt_right">3.32%</td>
-<td headers="pct_balance" class="gt_row gt_right">3.03%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">46</td>
-<td headers="balance" class="gt_row gt_right">$20,355.42</td>
-<td headers="pct_claims" class="gt_row gt_right">1.76%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.56%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">8</td>
-<td headers="balance" class="gt_row gt_right">$3,913.90</td>
-<td headers="pct_claims" class="gt_row gt_right">0.31%</td>
-<td headers="pct_balance" class="gt_row gt_right">0.30%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">82</td>
-<td headers="balance" class="gt_row gt_right">$39,791.96</td>
-<td headers="pct_claims" class="gt_row gt_right">3.13%</td>
-<td headers="pct_balance" class="gt_row gt_right">3.06%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">175</td>
-<td headers="balance" class="gt_row gt_right">$86,285.83</td>
-<td headers="pct_claims" class="gt_row gt_right">6.68%</td>
-<td headers="pct_balance" class="gt_row gt_right">6.63%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">51</td>
-<td headers="balance" class="gt_row gt_right">$29,401.61</td>
-<td headers="pct_claims" class="gt_row gt_right">1.95%</td>
-<td headers="pct_balance" class="gt_row gt_right">2.26%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">75</td>
-<td headers="balance" class="gt_row gt_right">$40,579.23</td>
-<td headers="pct_claims" class="gt_row gt_right">2.86%</td>
-<td headers="pct_balance" class="gt_row gt_right">3.12%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">35</td>
-<td headers="balance" class="gt_row gt_right">$17,784.97</td>
-<td headers="pct_claims" class="gt_row gt_right">1.34%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.37%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">5</td>
-<td headers="balance" class="gt_row gt_right">$3,361.90</td>
-<td headers="pct_claims" class="gt_row gt_right">0.19%</td>
-<td headers="pct_balance" class="gt_row gt_right">0.26%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">88</td>
-<td headers="balance" class="gt_row gt_right">$42,437.35</td>
-<td headers="pct_claims" class="gt_row gt_right">3.36%</td>
-<td headers="pct_balance" class="gt_row gt_right">3.26%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">166</td>
-<td headers="balance" class="gt_row gt_right">$77,990.21</td>
-<td headers="pct_claims" class="gt_row gt_right">6.34%</td>
-<td headers="pct_balance" class="gt_row gt_right">5.99%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">29</td>
-<td headers="balance" class="gt_row gt_right">$13,842.14</td>
-<td headers="pct_claims" class="gt_row gt_right">1.11%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.06%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">64</td>
-<td headers="balance" class="gt_row gt_right">$36,370.13</td>
-<td headers="pct_claims" class="gt_row gt_right">2.44%</td>
-<td headers="pct_balance" class="gt_row gt_right">2.80%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">32</td>
-<td headers="balance" class="gt_row gt_right">$19,199.69</td>
-<td headers="pct_claims" class="gt_row gt_right">1.22%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.48%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">1</td>
-<td headers="balance" class="gt_row gt_right">$925.67</td>
-<td headers="pct_claims" class="gt_row gt_right">0.04%</td>
-<td headers="pct_balance" class="gt_row gt_right">0.07%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">48</td>
-<td headers="balance" class="gt_row gt_right">$21,822.34</td>
-<td headers="pct_claims" class="gt_row gt_right">1.83%</td>
-<td headers="pct_balance" class="gt_row gt_right">1.68%</td>
-</tr>
-<tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">101</td>
-<td headers="balance" class="gt_row gt_right">$53,561.89</td>
-<td headers="pct_claims" class="gt_row gt_right">3.86%</td>
-<td headers="pct_balance" class="gt_row gt_right">4.12%</td>
+<th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">4</th>
+<td headers="stub_1_4 gross_charges" class="gt_row gt_right gt_striped">$484,304.64</td>
+<td headers="stub_1_4 ending_ar" class="gt_row gt_right gt_striped">$199,849.32</td>
+<td headers="stub_1_4 earb_gct_diff" class="gt_row gt_right gt_striped">−$284,455.32</td>
+<td headers="stub_1_4 adc" class="gt_row gt_right gt_striped">$5,264.18</td>
+<td headers="stub_1_4 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="stub_1_4 dar" class="gt_row gt_right gt_striped">37.96</td>
+<td headers="stub_1_4 ratio_diff" class="gt_row gt_right gt_striped">−0.01</td>
+<td headers="stub_1_4 ending_ar_dec_abs" class="gt_row gt_right gt_striped">−$5,453.73</td>
+<td headers="stub_1_4 ending_ar_dec_pct" class="gt_row gt_right gt_striped">−2.73%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">ins_name</span>, <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
-<span>    n_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
-<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span></span>
+</div>
+<div class="section level2">
+<h2 id="aging-bins">Aging Bins<a class="anchor" aria-label="anchor" href="#aging-bins"></a>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bin_aging.html">bin_aging</a></span><span class="op">(</span></span>
+<span>  df <span class="op">=</span> <span class="fu"><a href="../reference/load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span>,</span>
+<span>  date <span class="op">=</span> <span class="va">dos</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
-<span>                pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
-<span>                .by <span class="op">=</span> <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">dos</span><span class="op">:</span><span class="va">ins_class</span>,</span>
+<span>    <span class="va">dar</span><span class="op">:</span><span class="va">aging_bin</span></span>
+<span>    <span class="op">)</span></span>
+<span></span>
+<span><span class="va">binned</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,618 × 6</span></span></span>
+<span><span class="co">#&gt;    dos        charges ins_name   ins_class   dar aging_bin </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare   Primary     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient    Patient     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross Primary     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA      Primary     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross Primary     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA      Secondary   145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient    Patient     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare   Primary     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross Secondary   145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient    Patient     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
+<span>            .by <span class="op">=</span> <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
+<span>         pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"aging_bin"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="st">"Claims"</span>, balance <span class="op">=</span> <span class="st">"Charges"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span>, <span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Aging Report"</span>, <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_options</span><span class="op">(</span>heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>              quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 #ulbfdpbcyv table {
@@ -1572,13 +1501,13 @@ health of the business.</p>
   width: auto;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #A8A8A8;
+  border-top-color: #004D80;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
+  border-bottom-color: #004D80;
   border-left-style: none;
   border-left-width: 2px;
   border-left-color: #D3D3D3;
@@ -1615,7 +1544,7 @@ health of the business.</p>
 
 #ulbfdpbcyv .gt_heading {
   background-color: #FFFFFF;
-  text-align: center;
+  text-align: left;
   border-bottom-color: #FFFFFF;
   border-left-style: none;
   border-left-width: 1px;
@@ -1628,16 +1557,16 @@ health of the business.</p>
 #ulbfdpbcyv .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #ulbfdpbcyv .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1689,7 +1618,7 @@ health of the business.</p>
 #ulbfdpbcyv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1714,10 +1643,10 @@ health of the business.</p>
   text-transform: inherit;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1736,10 +1665,10 @@ health of the business.</p>
   font-weight: initial;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
   vertical-align: middle;
 }
 
@@ -1757,28 +1686,28 @@ health of the business.</p>
   padding-left: 5px;
   padding-right: 5px;
   margin: 10px;
-  border-top-style: solid;
+  border-top-style: none;
   border-top-width: 1px;
-  border-top-color: #D3D3D3;
+  border-top-color: #89D3FE;
   border-left-style: none;
   border-left-width: 1px;
-  border-left-color: #D3D3D3;
+  border-left-color: #89D3FE;
   border-right-style: none;
   border-right-width: 1px;
-  border-right-color: #D3D3D3;
+  border-right-color: #89D3FE;
   vertical-align: middle;
   overflow-x: hidden;
 }
 
 #ulbfdpbcyv .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
+  color: #FFFFFF;
+  background-color: #0076BA;
   font-size: 100%;
   font-weight: initial;
   text-transform: inherit;
   border-right-style: solid;
   border-right-width: 2px;
-  border-right-color: #D3D3D3;
+  border-right-color: #0076BA;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -1817,7 +1746,7 @@ health of the business.</p>
 
 #ulbfdpbcyv .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
 }
 
 #ulbfdpbcyv .gt_first_summary_row.thick {
@@ -1831,12 +1760,12 @@ health of the business.</p>
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #ulbfdpbcyv .gt_grand_summary_row {
   color: #333333;
-  background-color: #FFFFFF;
+  background-color: #89D3FE;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1851,7 +1780,7 @@ health of the business.</p>
   padding-right: 5px;
   border-top-style: double;
   border-top-width: 6px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
 }
 
 #ulbfdpbcyv .gt_last_grand_summary_row_top {
@@ -1861,20 +1790,20 @@ health of the business.</p>
   padding-right: 5px;
   border-bottom-style: double;
   border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #ulbfdpbcyv .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
+  background-color: #F4F4F4;
 }
 
 #ulbfdpbcyv .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #D3D3D3;
+  border-top-color: #0076BA;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
+  border-bottom-color: #0076BA;
 }
 
 #ulbfdpbcyv .gt_footnotes {
@@ -1982,255 +1911,1313 @@ health of the business.</p>
   text-indent: 25px;
 }
 </style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="aging_bin">aging_bin</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="ins_name">ins_name</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="n_claims">n_claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="balance">balance</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pct_claims">pct_claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="pct_balance">pct_balance</th>
-    </tr></thead>
+<table class="table gt_table" data-quarto-disable-processing="true" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Aging Report</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Claims">Claims</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Charges">Charges</th>
+    </tr>
+</thead>
 <tbody class="gt_table_body">
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">89</td>
-<td headers="balance" class="gt_row gt_right">$41,721.53</td>
-<td headers="pct_claims" class="gt_row gt_right">35.04%</td>
-<td headers="pct_balance" class="gt_row gt_right">31.07%</td>
+<th id="stub_1_1" scope="row" class="gt_row gt_center gt_stub">(0, 30]</th>
+<td headers="stub_1_1 n_claims" class="gt_row gt_right">1,037 (40%)</td>
+<td headers="stub_1_1 balance" class="gt_row gt_right">$503,294 (39%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">39</td>
-<td headers="balance" class="gt_row gt_right">$23,473.42</td>
-<td headers="pct_claims" class="gt_row gt_right">15.35%</td>
-<td headers="pct_balance" class="gt_row gt_right">17.48%</td>
+<th id="stub_1_2" scope="row" class="gt_row gt_center gt_stub">(30, 60]</th>
+<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">385 (15%)</td>
+<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$198,115 (15%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">46</td>
-<td headers="balance" class="gt_row gt_right">$25,859.38</td>
-<td headers="pct_claims" class="gt_row gt_right">18.11%</td>
-<td headers="pct_balance" class="gt_row gt_right">19.26%</td>
+<th id="stub_1_3" scope="row" class="gt_row gt_center gt_stub">(60, 90]</th>
+<td headers="stub_1_3 n_claims" class="gt_row gt_right">455 (17%)</td>
+<td headers="stub_1_3 balance" class="gt_row gt_right">$220,866 (17%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">51</td>
-<td headers="balance" class="gt_row gt_right">$29,401.61</td>
-<td headers="pct_claims" class="gt_row gt_right">20.08%</td>
-<td headers="pct_balance" class="gt_row gt_right">21.89%</td>
+<th id="stub_1_4" scope="row" class="gt_row gt_center gt_stub">(90, 120]</th>
+<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">419 (16%)</td>
+<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$210,766 (16%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">AETNA</td>
-<td headers="n_claims" class="gt_row gt_right">29</td>
-<td headers="balance" class="gt_row gt_right">$13,842.14</td>
-<td headers="pct_claims" class="gt_row gt_right">11.42%</td>
-<td headers="pct_balance" class="gt_row gt_right">10.31%</td>
+<th id="stub_1_5" scope="row" class="gt_row gt_center gt_stub">(120, 150]</th>
+<td headers="stub_1_5 n_claims" class="gt_row gt_right">322 (12%)</td>
+<td headers="stub_1_5 balance" class="gt_row gt_right">$167,902 (13%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
+<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
+<span>         pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt</span><span class="op">(</span>groupname_col <span class="op">=</span> <span class="st">"aging_bin"</span>, rowname_col <span class="op">=</span> <span class="st">"ins_name"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="st">"Claims"</span>, balance <span class="op">=</span> <span class="st">"Charges"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#kgufivjubq table {
+  font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kgufivjubq thead, #kgufivjubq tbody, #kgufivjubq tfoot, #kgufivjubq tr, #kgufivjubq td, #kgufivjubq th {
+  border-style: none;
+}
+
+#kgufivjubq p {
+  margin: 0;
+  padding: 0;
+}
+
+#kgufivjubq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #004D80;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #004D80;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kgufivjubq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kgufivjubq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kgufivjubq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kgufivjubq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kgufivjubq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#kgufivjubq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kgufivjubq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kgufivjubq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kgufivjubq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kgufivjubq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kgufivjubq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kgufivjubq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kgufivjubq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kgufivjubq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  vertical-align: middle;
+}
+
+#kgufivjubq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kgufivjubq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kgufivjubq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #89D3FE;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #89D3FE;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #89D3FE;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kgufivjubq .gt_stub {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #0076BA;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgufivjubq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kgufivjubq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kgufivjubq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kgufivjubq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgufivjubq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #0076BA;
+}
+
+#kgufivjubq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kgufivjubq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#kgufivjubq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #89D3FE;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgufivjubq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #0076BA;
+}
+
+#kgufivjubq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #0076BA;
+}
+
+#kgufivjubq .gt_striped {
+  background-color: #F4F4F4;
+}
+
+#kgufivjubq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#kgufivjubq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kgufivjubq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgufivjubq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kgufivjubq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kgufivjubq .gt_left {
+  text-align: left;
+}
+
+#kgufivjubq .gt_center {
+  text-align: center;
+}
+
+#kgufivjubq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kgufivjubq .gt_font_normal {
+  font-weight: normal;
+}
+
+#kgufivjubq .gt_font_bold {
+  font-weight: bold;
+}
+
+#kgufivjubq .gt_font_italic {
+  font-style: italic;
+}
+
+#kgufivjubq .gt_super {
+  font-size: 65%;
+}
+
+#kgufivjubq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kgufivjubq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kgufivjubq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kgufivjubq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kgufivjubq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kgufivjubq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kgufivjubq .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Claims">Claims</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Charges">Charges</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(0, 30]">(0, 30]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(0, 30] stub_1_1 n_claims" class="gt_row gt_right">84 (3.21%)</td>
+<td headers="(0, 30] stub_1_1 balance" class="gt_row gt_right">$38,134 (2.93%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">234</td>
-<td headers="balance" class="gt_row gt_right">$115,999.69</td>
-<td headers="pct_claims" class="gt_row gt_right">43.74%</td>
-<td headers="pct_balance" class="gt_row gt_right">42.96%</td>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(0, 30] stub_1_2 n_claims" class="gt_row gt_right gt_striped">216 (8.25%)</td>
+<td headers="(0, 30] stub_1_2 balance" class="gt_row gt_right gt_striped">$105,110 (8.08%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">75</td>
-<td headers="balance" class="gt_row gt_right">$37,612.68</td>
-<td headers="pct_claims" class="gt_row gt_right">14.02%</td>
-<td headers="pct_balance" class="gt_row gt_right">13.93%</td>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(0, 30] stub_1_3 n_claims" class="gt_row gt_right">119 (4.55%)</td>
+<td headers="(0, 30] stub_1_3 balance" class="gt_row gt_right">$53,824 (4.14%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">87</td>
-<td headers="balance" class="gt_row gt_right">$39,479.85</td>
-<td headers="pct_claims" class="gt_row gt_right">16.26%</td>
-<td headers="pct_balance" class="gt_row gt_right">14.62%</td>
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(0, 30] stub_1_4 n_claims" class="gt_row gt_right gt_striped">11 (0.42%)</td>
+<td headers="(0, 30] stub_1_4 balance" class="gt_row gt_right gt_striped">$5,000 (0.38%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">75</td>
-<td headers="balance" class="gt_row gt_right">$40,579.23</td>
-<td headers="pct_claims" class="gt_row gt_right">14.02%</td>
-<td headers="pct_balance" class="gt_row gt_right">15.03%</td>
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(0, 30] stub_1_5 n_claims" class="gt_row gt_right">194 (7.41%)</td>
+<td headers="(0, 30] stub_1_5 balance" class="gt_row gt_right">$93,725 (7.20%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Blue Cross</td>
-<td headers="n_claims" class="gt_row gt_right">64</td>
-<td headers="balance" class="gt_row gt_right">$36,370.13</td>
-<td headers="pct_claims" class="gt_row gt_right">11.96%</td>
-<td headers="pct_balance" class="gt_row gt_right">13.47%</td>
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(0, 30] stub_1_6 n_claims" class="gt_row gt_right gt_striped">413 (15.78%)</td>
+<td headers="(0, 30] stub_1_6 balance" class="gt_row gt_right gt_striped">$207,501 (15.95%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(30, 60]">(30, 60]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(30, 60] stub_1_7 n_claims" class="gt_row gt_right">34 (1.30%)</td>
+<td headers="(30, 60] stub_1_7 balance" class="gt_row gt_right">$21,596 (1.66%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">126</td>
-<td headers="balance" class="gt_row gt_right">$57,349.33</td>
-<td headers="pct_claims" class="gt_row gt_right">45.16%</td>
-<td headers="pct_balance" class="gt_row gt_right">43.53%</td>
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(30, 60] stub_1_8 n_claims" class="gt_row gt_right gt_striped">84 (3.21%)</td>
+<td headers="(30, 60] stub_1_8 balance" class="gt_row gt_right gt_striped">$44,957 (3.46%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">40</td>
-<td headers="balance" class="gt_row gt_right">$17,055.02</td>
-<td headers="pct_claims" class="gt_row gt_right">14.34%</td>
-<td headers="pct_balance" class="gt_row gt_right">12.95%</td>
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(30, 60] stub_1_9 n_claims" class="gt_row gt_right">38 (1.45%)</td>
+<td headers="(30, 60] stub_1_9 balance" class="gt_row gt_right">$17,780 (1.37%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">46</td>
-<td headers="balance" class="gt_row gt_right">$20,355.42</td>
-<td headers="pct_claims" class="gt_row gt_right">16.49%</td>
-<td headers="pct_balance" class="gt_row gt_right">15.45%</td>
+<th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(30, 60] stub_1_10 n_claims" class="gt_row gt_right gt_striped">4 (0.15%)</td>
+<td headers="(30, 60] stub_1_10 balance" class="gt_row gt_right gt_striped">$2,101 (0.16%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">35</td>
-<td headers="balance" class="gt_row gt_right">$17,784.97</td>
-<td headers="pct_claims" class="gt_row gt_right">12.54%</td>
-<td headers="pct_balance" class="gt_row gt_right">13.50%</td>
+<th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(30, 60] stub_1_11 n_claims" class="gt_row gt_right">73 (2.79%)</td>
+<td headers="(30, 60] stub_1_11 balance" class="gt_row gt_right">$35,336 (2.72%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">CIGNA</td>
-<td headers="n_claims" class="gt_row gt_right">32</td>
-<td headers="balance" class="gt_row gt_right">$19,199.69</td>
-<td headers="pct_claims" class="gt_row gt_right">11.47%</td>
-<td headers="pct_balance" class="gt_row gt_right">14.57%</td>
+<th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(30, 60] stub_1_12 n_claims" class="gt_row gt_right gt_striped">152 (5.81%)</td>
+<td headers="(30, 60] stub_1_12 balance" class="gt_row gt_right gt_striped">$76,345 (5.87%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(60, 90]">(60, 90]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_13" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(60, 90] stub_1_13 n_claims" class="gt_row gt_right">51 (1.95%)</td>
+<td headers="(60, 90] stub_1_13 balance" class="gt_row gt_right">$29,480 (2.27%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">13</td>
-<td headers="balance" class="gt_row gt_right">$5,729.13</td>
-<td headers="pct_claims" class="gt_row gt_right">43.33%</td>
-<td headers="pct_balance" class="gt_row gt_right">36.40%</td>
+<th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(60, 90] stub_1_14 n_claims" class="gt_row gt_right gt_striped">91 (3.48%)</td>
+<td headers="(60, 90] stub_1_14 balance" class="gt_row gt_right gt_striped">$40,815 (3.14%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">3</td>
-<td headers="balance" class="gt_row gt_right">$1,809.83</td>
-<td headers="pct_claims" class="gt_row gt_right">10.00%</td>
-<td headers="pct_balance" class="gt_row gt_right">11.50%</td>
+<th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(60, 90] stub_1_15 n_claims" class="gt_row gt_right">49 (1.87%)</td>
+<td headers="(60, 90] stub_1_15 balance" class="gt_row gt_right">$20,624 (1.59%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">8</td>
-<td headers="balance" class="gt_row gt_right">$3,913.90</td>
-<td headers="pct_claims" class="gt_row gt_right">26.67%</td>
-<td headers="pct_balance" class="gt_row gt_right">24.87%</td>
+<th id="stub_1_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(60, 90] stub_1_16 n_claims" class="gt_row gt_right gt_striped">8 (0.31%)</td>
+<td headers="(60, 90] stub_1_16 balance" class="gt_row gt_right gt_striped">$3,471 (0.27%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">5</td>
-<td headers="balance" class="gt_row gt_right">$3,361.90</td>
-<td headers="pct_claims" class="gt_row gt_right">16.67%</td>
-<td headers="pct_balance" class="gt_row gt_right">21.36%</td>
+<th id="stub_1_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(60, 90] stub_1_17 n_claims" class="gt_row gt_right">82 (3.13%)</td>
+<td headers="(60, 90] stub_1_17 balance" class="gt_row gt_right">$39,106 (3.01%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Coventry</td>
-<td headers="n_claims" class="gt_row gt_right">1</td>
-<td headers="balance" class="gt_row gt_right">$925.67</td>
-<td headers="pct_claims" class="gt_row gt_right">3.33%</td>
-<td headers="pct_balance" class="gt_row gt_right">5.88%</td>
+<th id="stub_1_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(60, 90] stub_1_18 n_claims" class="gt_row gt_right gt_striped">174 (6.65%)</td>
+<td headers="(60, 90] stub_1_18 balance" class="gt_row gt_right gt_striped">$87,370 (6.72%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(90, 120]">(90, 120]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_19" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(90, 120] stub_1_19 n_claims" class="gt_row gt_right">54 (2.06%)</td>
+<td headers="(90, 120] stub_1_19 balance" class="gt_row gt_right">$30,425 (2.34%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">208</td>
-<td headers="balance" class="gt_row gt_right">$99,546.91</td>
-<td headers="pct_claims" class="gt_row gt_right">41.85%</td>
-<td headers="pct_balance" class="gt_row gt_right">41.76%</td>
+<th id="stub_1_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(90, 120] stub_1_20 n_claims" class="gt_row gt_right gt_striped">70 (2.67%)</td>
+<td headers="(90, 120] stub_1_20 balance" class="gt_row gt_right gt_striped">$37,922 (2.91%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">71</td>
-<td headers="balance" class="gt_row gt_right">$34,779.30</td>
-<td headers="pct_claims" class="gt_row gt_right">14.29%</td>
-<td headers="pct_balance" class="gt_row gt_right">14.59%</td>
+<th id="stub_1_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(90, 120] stub_1_21 n_claims" class="gt_row gt_right">33 (1.26%)</td>
+<td headers="(90, 120] stub_1_21 balance" class="gt_row gt_right">$16,327 (1.26%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">82</td>
-<td headers="balance" class="gt_row gt_right">$39,791.96</td>
-<td headers="pct_claims" class="gt_row gt_right">16.50%</td>
-<td headers="pct_balance" class="gt_row gt_right">16.69%</td>
+<th id="stub_1_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(90, 120] stub_1_22 n_claims" class="gt_row gt_right gt_striped">6 (0.23%)</td>
+<td headers="(90, 120] stub_1_22 balance" class="gt_row gt_right gt_striped">$4,243 (0.33%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">88</td>
-<td headers="balance" class="gt_row gt_right">$42,437.35</td>
-<td headers="pct_claims" class="gt_row gt_right">17.71%</td>
-<td headers="pct_balance" class="gt_row gt_right">17.80%</td>
+<th id="stub_1_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(90, 120] stub_1_23 n_claims" class="gt_row gt_right">87 (3.32%)</td>
+<td headers="(90, 120] stub_1_23 balance" class="gt_row gt_right">$43,873 (3.37%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Medicare</td>
-<td headers="n_claims" class="gt_row gt_right">48</td>
-<td headers="balance" class="gt_row gt_right">$21,822.34</td>
-<td headers="pct_claims" class="gt_row gt_right">9.66%</td>
-<td headers="pct_balance" class="gt_row gt_right">9.15%</td>
+<th id="stub_1_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(90, 120] stub_1_24 n_claims" class="gt_row gt_right gt_striped">169 (6.46%)</td>
+<td headers="(90, 120] stub_1_24 balance" class="gt_row gt_right gt_striped">$77,976 (5.99%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(120, 150]">(120, 150]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_25" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(120, 150] stub_1_25 n_claims" class="gt_row gt_right">31 (1.18%)</td>
+<td headers="(120, 150] stub_1_25 balance" class="gt_row gt_right">$14,663 (1.13%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(0, 30]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">432</td>
-<td headers="balance" class="gt_row gt_right">$216,429.99</td>
-<td headers="pct_claims" class="gt_row gt_right">42.23%</td>
-<td headers="pct_balance" class="gt_row gt_right">42.38%</td>
+<th id="stub_1_26" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(120, 150] stub_1_26 n_claims" class="gt_row gt_right gt_striped">74 (2.83%)</td>
+<td headers="(120, 150] stub_1_26 balance" class="gt_row gt_right gt_striped">$41,238 (3.17%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(30, 60]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">149</td>
-<td headers="balance" class="gt_row gt_right">$76,471.32</td>
-<td headers="pct_claims" class="gt_row gt_right">14.57%</td>
-<td headers="pct_balance" class="gt_row gt_right">14.97%</td>
+<th id="stub_1_27" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(120, 150] stub_1_27 n_claims" class="gt_row gt_right">40 (1.53%)</td>
+<td headers="(120, 150] stub_1_27 balance" class="gt_row gt_right">$23,188 (1.78%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(60, 90]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">175</td>
-<td headers="balance" class="gt_row gt_right">$86,285.83</td>
-<td headers="pct_claims" class="gt_row gt_right">17.11%</td>
-<td headers="pct_balance" class="gt_row gt_right">16.89%</td>
+<th id="stub_1_28" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(120, 150] stub_1_28 n_claims" class="gt_row gt_right gt_striped">1 (0.04%)</td>
+<td headers="(120, 150] stub_1_28 balance" class="gt_row gt_right gt_striped">$926 (0.07%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(90, 120]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">166</td>
-<td headers="balance" class="gt_row gt_right">$77,990.21</td>
-<td headers="pct_claims" class="gt_row gt_right">16.23%</td>
-<td headers="pct_balance" class="gt_row gt_right">15.27%</td>
+<th id="stub_1_29" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(120, 150] stub_1_29 n_claims" class="gt_row gt_right">61 (2.33%)</td>
+<td headers="(120, 150] stub_1_29 balance" class="gt_row gt_right">$26,338 (2.02%)</td>
 </tr>
 <tr>
-<td headers="aging_bin" class="gt_row gt_center">(120, 150]</td>
-<td headers="ins_name" class="gt_row gt_left">Patient</td>
-<td headers="n_claims" class="gt_row gt_right">101</td>
-<td headers="balance" class="gt_row gt_right">$53,561.89</td>
-<td headers="pct_claims" class="gt_row gt_right">9.87%</td>
-<td headers="pct_balance" class="gt_row gt_right">10.49%</td>
+<th id="stub_1_30" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(120, 150] stub_1_30 n_claims" class="gt_row gt_right gt_striped">115 (4.39%)</td>
+<td headers="(120, 150] stub_1_30 balance" class="gt_row gt_right gt_striped">$61,548 (4.73%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">ins_name</span>, <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
+<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
+<span>                pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>                .by <span class="op">=</span> <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt</span><span class="op">(</span>groupname_col <span class="op">=</span> <span class="st">"aging_bin"</span>, rowname_col <span class="op">=</span> <span class="st">"ins_name"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="st">"Claims"</span>, balance <span class="op">=</span> <span class="st">"Charges"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="txvafbsnay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#txvafbsnay table {
+  font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#txvafbsnay thead, #txvafbsnay tbody, #txvafbsnay tfoot, #txvafbsnay tr, #txvafbsnay td, #txvafbsnay th {
+  border-style: none;
+}
+
+#txvafbsnay p {
+  margin: 0;
+  padding: 0;
+}
+
+#txvafbsnay .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #004D80;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #004D80;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#txvafbsnay .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#txvafbsnay .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#txvafbsnay .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#txvafbsnay .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#txvafbsnay .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#txvafbsnay .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#txvafbsnay .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#txvafbsnay .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#txvafbsnay .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#txvafbsnay .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#txvafbsnay .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  vertical-align: middle;
+}
+
+#txvafbsnay .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#txvafbsnay .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#txvafbsnay .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #89D3FE;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #89D3FE;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #89D3FE;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#txvafbsnay .gt_stub {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #0076BA;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#txvafbsnay .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #0076BA;
+}
+
+#txvafbsnay .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#txvafbsnay .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#txvafbsnay .gt_grand_summary_row {
+  color: #333333;
+  background-color: #89D3FE;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #0076BA;
+}
+
+#txvafbsnay .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #0076BA;
+}
+
+#txvafbsnay .gt_striped {
+  background-color: #F4F4F4;
+}
+
+#txvafbsnay .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#txvafbsnay .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#txvafbsnay .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#txvafbsnay .gt_left {
+  text-align: left;
+}
+
+#txvafbsnay .gt_center {
+  text-align: center;
+}
+
+#txvafbsnay .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#txvafbsnay .gt_font_normal {
+  font-weight: normal;
+}
+
+#txvafbsnay .gt_font_bold {
+  font-weight: bold;
+}
+
+#txvafbsnay .gt_font_italic {
+  font-style: italic;
+}
+
+#txvafbsnay .gt_super {
+  font-size: 65%;
+}
+
+#txvafbsnay .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#txvafbsnay .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#txvafbsnay .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#txvafbsnay .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#txvafbsnay .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#txvafbsnay .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#txvafbsnay .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Claims">Claims</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Charges">Charges</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(0, 30]">(0, 30]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(0, 30] stub_1_1 n_claims" class="gt_row gt_right">84 (33.07%)</td>
+<td headers="(0, 30] stub_1_1 balance" class="gt_row gt_right">$38,133.60 (28.39%)</td>
+</tr>
+<tr>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(0, 30] stub_1_2 n_claims" class="gt_row gt_right gt_striped">216 (40.37%)</td>
+<td headers="(0, 30] stub_1_2 balance" class="gt_row gt_right gt_striped">$105,110.12 (38.92%)</td>
+</tr>
+<tr>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(0, 30] stub_1_3 n_claims" class="gt_row gt_right">119 (42.65%)</td>
+<td headers="(0, 30] stub_1_3 balance" class="gt_row gt_right">$53,824.03 (40.85%)</td>
+</tr>
+<tr>
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(0, 30] stub_1_4 n_claims" class="gt_row gt_right gt_striped">11 (36.67%)</td>
+<td headers="(0, 30] stub_1_4 balance" class="gt_row gt_right gt_striped">$5,000.05 (31.77%)</td>
+</tr>
+<tr>
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(0, 30] stub_1_5 n_claims" class="gt_row gt_right">194 (39.03%)</td>
+<td headers="(0, 30] stub_1_5 balance" class="gt_row gt_right">$93,725.11 (39.32%)</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(0, 30] stub_1_6 n_claims" class="gt_row gt_right gt_striped">413 (40.37%)</td>
+<td headers="(0, 30] stub_1_6 balance" class="gt_row gt_right gt_striped">$207,500.60 (40.63%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(30, 60]">(30, 60]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(30, 60] stub_1_7 n_claims" class="gt_row gt_right">34 (13.39%)</td>
+<td headers="(30, 60] stub_1_7 balance" class="gt_row gt_right">$21,595.55 (16.08%)</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(30, 60] stub_1_8 n_claims" class="gt_row gt_right gt_striped">84 (15.70%)</td>
+<td headers="(30, 60] stub_1_8 balance" class="gt_row gt_right gt_striped">$44,956.54 (16.65%)</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(30, 60] stub_1_9 n_claims" class="gt_row gt_right">38 (13.62%)</td>
+<td headers="(30, 60] stub_1_9 balance" class="gt_row gt_right">$17,780.42 (13.50%)</td>
+</tr>
+<tr>
+<th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(30, 60] stub_1_10 n_claims" class="gt_row gt_right gt_striped">4 (13.33%)</td>
+<td headers="(30, 60] stub_1_10 balance" class="gt_row gt_right gt_striped">$2,101.21 (13.35%)</td>
+</tr>
+<tr>
+<th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(30, 60] stub_1_11 n_claims" class="gt_row gt_right">73 (14.69%)</td>
+<td headers="(30, 60] stub_1_11 balance" class="gt_row gt_right">$35,335.80 (14.82%)</td>
+</tr>
+<tr>
+<th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(30, 60] stub_1_12 n_claims" class="gt_row gt_right gt_striped">152 (14.86%)</td>
+<td headers="(30, 60] stub_1_12 balance" class="gt_row gt_right gt_striped">$76,345.21 (14.95%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(60, 90]">(60, 90]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_13" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(60, 90] stub_1_13 n_claims" class="gt_row gt_right">51 (20.08%)</td>
+<td headers="(60, 90] stub_1_13 balance" class="gt_row gt_right">$29,480.23 (21.95%)</td>
+</tr>
+<tr>
+<th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(60, 90] stub_1_14 n_claims" class="gt_row gt_right gt_striped">91 (17.01%)</td>
+<td headers="(60, 90] stub_1_14 balance" class="gt_row gt_right gt_striped">$40,814.99 (15.11%)</td>
+</tr>
+<tr>
+<th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(60, 90] stub_1_15 n_claims" class="gt_row gt_right">49 (17.56%)</td>
+<td headers="(60, 90] stub_1_15 balance" class="gt_row gt_right">$20,624.13 (15.65%)</td>
+</tr>
+<tr>
+<th id="stub_1_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(60, 90] stub_1_16 n_claims" class="gt_row gt_right gt_striped">8 (26.67%)</td>
+<td headers="(60, 90] stub_1_16 balance" class="gt_row gt_right gt_striped">$3,470.67 (22.05%)</td>
+</tr>
+<tr>
+<th id="stub_1_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(60, 90] stub_1_17 n_claims" class="gt_row gt_right">82 (16.50%)</td>
+<td headers="(60, 90] stub_1_17 balance" class="gt_row gt_right">$39,105.78 (16.40%)</td>
+</tr>
+<tr>
+<th id="stub_1_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(60, 90] stub_1_18 n_claims" class="gt_row gt_right gt_striped">174 (17.01%)</td>
+<td headers="(60, 90] stub_1_18 balance" class="gt_row gt_right gt_striped">$87,369.89 (17.11%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(90, 120]">(90, 120]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_19" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(90, 120] stub_1_19 n_claims" class="gt_row gt_right">54 (21.26%)</td>
+<td headers="(90, 120] stub_1_19 balance" class="gt_row gt_right">$30,425.42 (22.66%)</td>
+</tr>
+<tr>
+<th id="stub_1_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(90, 120] stub_1_20 n_claims" class="gt_row gt_right gt_striped">70 (13.08%)</td>
+<td headers="(90, 120] stub_1_20 balance" class="gt_row gt_right gt_striped">$37,921.94 (14.04%)</td>
+</tr>
+<tr>
+<th id="stub_1_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(90, 120] stub_1_21 n_claims" class="gt_row gt_right">33 (11.83%)</td>
+<td headers="(90, 120] stub_1_21 balance" class="gt_row gt_right">$16,327.43 (12.39%)</td>
+</tr>
+<tr>
+<th id="stub_1_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(90, 120] stub_1_22 n_claims" class="gt_row gt_right gt_striped">6 (20.00%)</td>
+<td headers="(90, 120] stub_1_22 balance" class="gt_row gt_right gt_striped">$4,242.83 (26.95%)</td>
+</tr>
+<tr>
+<th id="stub_1_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(90, 120] stub_1_23 n_claims" class="gt_row gt_right">87 (17.51%)</td>
+<td headers="(90, 120] stub_1_23 balance" class="gt_row gt_right">$43,872.97 (18.40%)</td>
+</tr>
+<tr>
+<th id="stub_1_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(90, 120] stub_1_24 n_claims" class="gt_row gt_right gt_striped">169 (16.52%)</td>
+<td headers="(90, 120] stub_1_24 balance" class="gt_row gt_right gt_striped">$77,975.54 (15.27%)</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="3" class="gt_group_heading" scope="colgroup" id="(120, 150]">(120, 150]</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_25" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
+<td headers="(120, 150] stub_1_25 n_claims" class="gt_row gt_right">31 (12.20%)</td>
+<td headers="(120, 150] stub_1_25 balance" class="gt_row gt_right">$14,663.28 (10.92%)</td>
+</tr>
+<tr>
+<th id="stub_1_26" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
+<td headers="(120, 150] stub_1_26 n_claims" class="gt_row gt_right gt_striped">74 (13.83%)</td>
+<td headers="(120, 150] stub_1_26 balance" class="gt_row gt_right gt_striped">$41,237.99 (15.27%)</td>
+</tr>
+<tr>
+<th id="stub_1_27" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
+<td headers="(120, 150] stub_1_27 n_claims" class="gt_row gt_right">40 (14.34%)</td>
+<td headers="(120, 150] stub_1_27 balance" class="gt_row gt_right">$23,188.42 (17.60%)</td>
+</tr>
+<tr>
+<th id="stub_1_28" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
+<td headers="(120, 150] stub_1_28 n_claims" class="gt_row gt_right gt_striped">1 (3.33%)</td>
+<td headers="(120, 150] stub_1_28 balance" class="gt_row gt_right gt_striped">$925.67 (5.88%)</td>
+</tr>
+<tr>
+<th id="stub_1_29" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
+<td headers="(120, 150] stub_1_29 n_claims" class="gt_row gt_right">61 (12.27%)</td>
+<td headers="(120, 150] stub_1_29 balance" class="gt_row gt_right">$26,338.20 (11.05%)</td>
+</tr>
+<tr>
+<th id="stub_1_30" scope="row" class="gt_row gt_left gt_stub">Patient</th>
+<td headers="(120, 150] stub_1_30 n_claims" class="gt_row gt_right gt_striped">115 (11.24%)</td>
+<td headers="(120, 150] stub_1_30 balance" class="gt_row gt_right gt_striped">$61,548.00 (12.05%)</td>
 </tr>
 </tbody>
 </table>
