@@ -93,7 +93,7 @@ avg_dar(
                            ending_ar_target, 
                            ending_ar_dec_abs, 
                            earb_gct_diff)) |> 
-  fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
+  # fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
   fmt_percent(columns = c(ending_ar_dec_pct)) |> 
   fmt_number(columns = c(dar, 
                          dar_diff, 
@@ -122,7 +122,7 @@ avg_dar(
     adc = "ADC",
     dar_pass = "",
     dar = "DAR",
-    ratio_diff = "AR:GC Diff",
+    ratio_diff = "AR/GC Diff",
     ending_ar_dec_abs = "AR Decrease Needed",
     ending_ar_dec_pct = "%",
     earb_gct_diff = "AR - GC"
@@ -155,7 +155,7 @@ avg_dar(
                            ending_ar_target, 
                            ending_ar_dec_abs, 
                            earb_gct_diff)) |> 
-  fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
+  # fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
   fmt_percent(columns = c(ending_ar_dec_pct)) |> 
   fmt_number(columns = c(dar, 
                          dar_diff, 
@@ -183,7 +183,7 @@ avg_dar(
     adc = "ADC",
     dar_pass = "",
     dar = "DAR",
-    ratio_diff = "AR:GC Diff",
+    ratio_diff = "AR/GC Diff",
     ending_ar_dec_abs = "AR Decrease Needed",
     ending_ar_dec_pct = "%",
     earb_gct_diff = "AR - GC"
@@ -208,68 +208,68 @@ binned
 
 ```{r}
 binned |>
-   dplyr::arrange(aging_bin) |>
-   dplyr::summarise(n_claims = dplyr::n(),
-                    balance = sum(charges),
-                    .by = aging_bin) |>
-   dplyr::mutate(
-     pct_claims = n_claims / sum(n_claims),
-     pct_balance = balance / sum(balance)) |> 
-  gt(rowname_col = "aging_bin") |> 
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
-  fmt_percent(columns = pct_claims:pct_balance, decimals = 0) |> 
-  fmt_currency(columns = balance) |> 
-  fmt_number(columns = n_claims, decimals = 0) |> 
-  opt_stylize() |> 
-  cols_label(
-    n_claims = "Claims",
-    pct_claims = "%",
-    balance = "Charges",
-    pct_balance = "%"
-  ) |>
-  cols_move_to_start(c(n_claims, pct_claims, balance, pct_balance)) |> 
-  tab_header(
-    title = "Aging Report",
-  ) |>
-  tab_options(
-    heading.align = "left",
-    quarto.disable_processing = TRUE
-  )
+  arrange(aging_bin) |>
+  summarise(n_claims = n(),
+            balance = sum(charges),
+            .by = aging_bin) |>
+  mutate(pct_claims = n_claims / sum(n_claims),
+         pct_balance = balance / sum(balance)) |>
+  gt(rowname_col = "aging_bin") |>
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |>
+  fmt_percent(columns = pct_claims:pct_balance, decimals = 0) |>
+  fmt_currency(columns = balance, decimals = 0) |>
+  fmt_number(columns = n_claims, decimals = 0) |>
+  opt_stylize() |>
+  cols_label(n_claims = "Claims", balance = "Charges") |>
+  cols_move_to_start(c(n_claims, pct_claims, balance, pct_balance)) |>
+  cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
+  cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
+  tab_header(title = "Aging Report", ) |>
+  tab_options(heading.align = "left",
+              quarto.disable_processing = TRUE)
 ```
 
 
 ```{r}
 binned |>
-  dplyr::arrange(aging_bin, ins_name) |>
-  dplyr::summarise(
-    n_claims = dplyr::n(),
+  arrange(aging_bin, ins_name) |>
+  summarise(
+    n_claims = n(),
     balance = sum(charges),
     .by = c(aging_bin, ins_name)
   ) |>
-  dplyr::mutate(pct_claims = n_claims / sum(n_claims),
-                pct_balance = balance / sum(balance)) |>
-  gt() |>
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
-  fmt_percent(columns = pct_claims:pct_balance) |> 
-  fmt_currency(columns = balance) |> 
-  fmt_number(columns = n_claims, decimals = 0)
+  mutate(pct_claims = n_claims / sum(n_claims),
+         pct_balance = balance / sum(balance)) |>
+  gt(groupname_col = "aging_bin", rowname_col = "ins_name") |>
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |>
+  fmt_percent(columns = pct_claims:pct_balance) |>
+  fmt_currency(columns = balance, decimals = 0) |>
+  fmt_number(columns = n_claims, decimals = 0) |>
+  cols_label(n_claims = "Claims", balance = "Charges") |>
+  cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
+  cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
+  opt_stylize()
 ```
 
 
 ```{r}
 binned |>
-  dplyr::arrange(ins_name, aging_bin) |>
-  dplyr::summarise(
-    n_claims = dplyr::n(),
+  arrange(ins_name, aging_bin) |>
+  summarise(
+    n_claims = n(),
     balance = sum(charges),
     .by = c(aging_bin, ins_name)
   ) |>
-  dplyr::mutate(pct_claims = n_claims / sum(n_claims),
+  mutate(pct_claims = n_claims / sum(n_claims),
                 pct_balance = balance / sum(balance),
                 .by = ins_name) |>
-  gt() |>
+  gt(groupname_col = "aging_bin", rowname_col = "ins_name") |>
   opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
   fmt_percent(columns = pct_claims:pct_balance) |> 
   fmt_currency(columns = balance) |> 
-  fmt_number(columns = n_claims, decimals = 0)
+  fmt_number(columns = n_claims, decimals = 0) |> 
+  cols_label(n_claims = "Claims", balance = "Charges") |>
+  cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
+  cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
+  opt_stylize()
 ```
