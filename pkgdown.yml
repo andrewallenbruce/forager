@@ -2,8 +2,10 @@ pandoc: 3.1.11
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
+  aging-of_accounts: aging-of_accounts.html
+  dar-formulas: dar-formulas.html
   getting-started: getting-started.html
-last_built: 2024-05-20T19:33Z
+last_built: 2024-05-21T02:33Z
 urls:
   reference: https://andrewallenbruce.github.io/forager/reference
   article: https://andrewallenbruce.github.io/forager/articles

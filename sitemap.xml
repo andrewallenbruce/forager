@@ -13,6 +13,12 @@
     <loc>https://andrewallenbruce.github.io/forager/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://andrewallenbruce.github.io/forager/articles/aging-of_accounts.html</loc>
+  </url>
+  <url>
+    <loc>https://andrewallenbruce.github.io/forager/articles/dar-formulas.html</loc>
+  </url>
+  <url>
     <loc>https://andrewallenbruce.github.io/forager/articles/getting-started.html</loc>
   </url>
   <url>
@@ -56,5 +62,8 @@
   </url>
   <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/predict_net.html</loc>
+  </url>
+  <url>
+    <loc>https://andrewallenbruce.github.io/forager/reference/sorted_bars.html</loc>
   </url>
 </urlset>

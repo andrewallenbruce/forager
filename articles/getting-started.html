@@ -51,6 +51,8 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/aging-of_accounts.html">Aging of Accounts</a>
+    <a class="dropdown-item" href="../articles/dar-formulas.html">DAR Formulas</a>
     <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
   </div>
 </li>
@@ -122,77 +124,34 @@ are useful for healthcare revenue cycle analysis.</p>
 <div class="section level2">
 <h2 id="days-in-accounts-receivable">Days in Accounts Receivable<a class="anchor" aria-label="anchor" href="#days-in-accounts-receivable"></a>
 </h2>
-<p>Days in Accounts Receivable (also known as Days in AR or simply DAR)
-is a common financial metric belonging to a group of ratios called
-<strong>efficiency ratios</strong>. The calculation measures the average
-amount of time it takes for a business to collect money owed from the
-responsible party for services rendered and billed.</p>
-<p>As its name implies, the unit of measurement employed by this
-particular metric is days, or rather the average number of days from the
-moment a physician provides a service until the patient or guarantor
-pays for that service. This number can tell you much about the financial
-health of the business.</p>
-<p>The formula for calculating DAR is:</p>
-<p><span class="math inline">\({\textrm{Days in AR}} = \dfrac
-{\textrm{Ending AR Balance}} {{\textrm{Gross Charges}} \div
-{\textrm{Number of Days in Period}}}\)</span></p>
-<table class="table">
-<caption>DAR Formula Components.</caption>
-<thead><tr class="header">
-<th align="center"><strong>Variable</strong></th>
-<th align="left"><strong>Description</strong></th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="center"><span class="math inline">\(n_{days}\)</span></td>
-<td align="left">Days in Period</td>
-</tr>
-<tr class="even">
-<td align="center"><span class="math inline">\(gc_t\)</span></td>
-<td align="left">Total Gross Charges</td>
-</tr>
-<tr class="odd">
-<td align="center"><span class="math inline">\(ear\)</span></td>
-<td align="left">Ending AR Balance</td>
-</tr>
-<tr class="even">
-<td align="center"><span class="math inline">\(adc\)</span></td>
-<td align="left">Average Daily Charge</td>
-</tr>
-<tr class="odd">
-<td align="center"><span class="math inline">\(dar\)</span></td>
-<td align="left">Days in AR</td>
-</tr>
-<tr class="even">
-<td align="center"><span class="math inline">\(dart\)</span></td>
-<td align="left">Days in AR Target</td>
-</tr>
-<tr class="odd">
-<td align="center"><span class="math inline">\(eart\)</span></td>
-<td align="left">Ending AR Target</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>Ending AR Target: <span class="math inline">\(earb_{target} =
-(dar_{target} \times gct) \div n_{days}\)</span>
-</li>
-<li>Gross Charges Target: <span class="math inline">\(gct_{target} =
-(earb \times n_{days}) \div dar_{target}\)</span>
-</li>
-<li>Days in Period Target: <span class="math inline">\(n_{days} =
-(dar_{target} \times gct) \div earb\)</span>
-</li>
-</ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 3</span></span></span>
+<span><span class="co">#&gt;    date       gross_charges ending_ar</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01       <span style="text-decoration: underline;">325</span>982.   <span style="text-decoration: underline;">288</span>433.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01       <span style="text-decoration: underline;">297</span>732.   <span style="text-decoration: underline;">307</span>871.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01       <span style="text-decoration: underline;">198</span>655.   <span style="text-decoration: underline;">253</span>977.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01       <span style="text-decoration: underline;">186</span>048.   <span style="text-decoration: underline;">183</span>685.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01       <span style="text-decoration: underline;">123</span>654.   <span style="text-decoration: underline;">204</span>228.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01       <span style="text-decoration: underline;">131</span>440.   <span style="text-decoration: underline;">203</span>460.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01       <span style="text-decoration: underline;">153</span>992.   <span style="text-decoration: underline;">182</span>771.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01       <span style="text-decoration: underline;">156</span>976.   <span style="text-decoration: underline;">169</span>634.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01       <span style="text-decoration: underline;">146</span>878.   <span style="text-decoration: underline;">179</span>348.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01       <span style="text-decoration: underline;">163</span>799.   <span style="text-decoration: underline;">178</span>051.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01       <span style="text-decoration: underline;">151</span>411.   <span style="text-decoration: underline;">162</span>757.</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01       <span style="text-decoration: underline;">169</span>094.   <span style="text-decoration: underline;">199</span>849.</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
 <span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
 <span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
 <span>  dart   <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>  period <span class="op">=</span> <span class="st">"month"</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"mon"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">cols_hide</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, </span>
 <span>              <span class="va">nmon</span>, </span>
@@ -218,7 +177,6 @@ health of the business.</p>
 <span>                           <span class="va">ending_ar_target</span>, </span>
 <span>                           <span class="va">ending_ar_dec_abs</span>, </span>
 <span>                           <span class="va">earb_gct_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="co"># fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |&gt; </span></span>
 <span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, </span>
 <span>                         <span class="va">dar_diff</span>, </span>
@@ -855,7 +813,48 @@ health of the business.</p>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mon</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># geom_point() +</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Days in AR by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">ending_ar</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
+<span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">ending_ar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Days in AR by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">month</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_ratio</span> <span class="op">&lt;-</span> <span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">mon</span>, <span class="va">ratio_ideal</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gross_charges</span>, y <span class="op">=</span> <span class="va">ending_ar</span><span class="op">)</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span></span>
+<span>    slope <span class="op">=</span> <span class="va">dar_ratio</span><span class="op">$</span><span class="va">ratio_ideal</span>,</span>
+<span>    intercept <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">month</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
+<span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">ending_ar</span><span class="op">)</span></span>
+<span>                     <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
+<span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">gross_charges</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_shape_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="st">"Total Gross Charges"</span>, y <span class="op">=</span> <span class="st">"Ending AR Balance"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
@@ -1424,7 +1423,7 @@ health of the business.</p>
 <div class="section level2">
 <h2 id="aging-bins">Aging Bins<a class="anchor" aria-label="anchor" href="#aging-bins"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bin_aging.html">bin_aging</a></span><span class="op">(</span></span>
 <span>  df <span class="op">=</span> <span class="fu"><a href="../reference/load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span>,</span>
 <span>  date <span class="op">=</span> <span class="va">dos</span></span>
@@ -1438,18 +1437,23 @@ health of the business.</p>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,618 × 6</span></span></span>
 <span><span class="co">#&gt;    dos        charges ins_name   ins_class   dar aging_bin </span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare   Primary     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient    Patient     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross Primary     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA      Primary     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross Primary     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA      Secondary   145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient    Patient     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare   Primary     145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross Secondary   145 (120, 150]</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient    Patient     145 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare   Primary     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient    Patient     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross Primary     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA      Primary     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross Primary     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA      Secondary   146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient    Patient     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare   Primary     146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross Secondary   146 (120, 150]</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient    Patient     146 (120, 150]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/sorted_bars.html">sorted_bars</a></span><span class="op">(</span><span class="va">ins_name</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
@@ -1925,33 +1929,33 @@ health of the business.</p>
 <tbody class="gt_table_body">
 <tr>
 <th id="stub_1_1" scope="row" class="gt_row gt_center gt_stub">(0, 30]</th>
-<td headers="stub_1_1 n_claims" class="gt_row gt_right">1,037 (40%)</td>
-<td headers="stub_1_1 balance" class="gt_row gt_right">$503,294 (39%)</td>
+<td headers="stub_1_1 n_claims" class="gt_row gt_right">1,025 (39%)</td>
+<td headers="stub_1_1 balance" class="gt_row gt_right">$497,139 (38%)</td>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_center gt_stub">(30, 60]</th>
-<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">385 (15%)</td>
-<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$198,115 (15%)</td>
+<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">384 (15%)</td>
+<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$196,405 (15%)</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_center gt_stub">(60, 90]</th>
-<td headers="stub_1_3 n_claims" class="gt_row gt_right">455 (17%)</td>
-<td headers="stub_1_3 balance" class="gt_row gt_right">$220,866 (17%)</td>
+<td headers="stub_1_3 n_claims" class="gt_row gt_right">454 (17%)</td>
+<td headers="stub_1_3 balance" class="gt_row gt_right">$221,211 (17%)</td>
 </tr>
 <tr>
 <th id="stub_1_4" scope="row" class="gt_row gt_center gt_stub">(90, 120]</th>
-<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">419 (16%)</td>
-<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$210,766 (16%)</td>
+<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">424 (16%)</td>
+<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$213,213 (16%)</td>
 </tr>
 <tr>
 <th id="stub_1_5" scope="row" class="gt_row gt_center gt_stub">(120, 150]</th>
-<td headers="stub_1_5 n_claims" class="gt_row gt_right">322 (12%)</td>
-<td headers="stub_1_5 balance" class="gt_row gt_right">$167,902 (13%)</td>
+<td headers="stub_1_5 n_claims" class="gt_row gt_right">331 (13%)</td>
+<td headers="stub_1_5 balance" class="gt_row gt_right">$172,974 (13%)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
@@ -2428,13 +2432,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(0, 30] stub_1_2 n_claims" class="gt_row gt_right gt_striped">216 (8.25%)</td>
-<td headers="(0, 30] stub_1_2 balance" class="gt_row gt_right gt_striped">$105,110 (8.08%)</td>
+<td headers="(0, 30] stub_1_2 n_claims" class="gt_row gt_right gt_striped">214 (8.17%)</td>
+<td headers="(0, 30] stub_1_2 balance" class="gt_row gt_right gt_striped">$103,954 (7.99%)</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(0, 30] stub_1_3 n_claims" class="gt_row gt_right">119 (4.55%)</td>
-<td headers="(0, 30] stub_1_3 balance" class="gt_row gt_right">$53,824 (4.14%)</td>
+<td headers="(0, 30] stub_1_3 n_claims" class="gt_row gt_right">117 (4.47%)</td>
+<td headers="(0, 30] stub_1_3 balance" class="gt_row gt_right">$53,397 (4.10%)</td>
 </tr>
 <tr>
 <th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -2443,13 +2447,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="(0, 30] stub_1_5 n_claims" class="gt_row gt_right">194 (7.41%)</td>
-<td headers="(0, 30] stub_1_5 balance" class="gt_row gt_right">$93,725 (7.20%)</td>
+<td headers="(0, 30] stub_1_5 n_claims" class="gt_row gt_right">193 (7.37%)</td>
+<td headers="(0, 30] stub_1_5 balance" class="gt_row gt_right">$92,957 (7.15%)</td>
 </tr>
 <tr>
 <th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(0, 30] stub_1_6 n_claims" class="gt_row gt_right gt_striped">413 (15.78%)</td>
-<td headers="(0, 30] stub_1_6 balance" class="gt_row gt_right gt_striped">$207,501 (15.95%)</td>
+<td headers="(0, 30] stub_1_6 n_claims" class="gt_row gt_right gt_striped">406 (15.51%)</td>
+<td headers="(0, 30] stub_1_6 balance" class="gt_row gt_right gt_striped">$203,697 (15.66%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(30, 60]">(30, 60]</th>
@@ -2461,13 +2465,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(30, 60] stub_1_8 n_claims" class="gt_row gt_right gt_striped">84 (3.21%)</td>
-<td headers="(30, 60] stub_1_8 balance" class="gt_row gt_right gt_striped">$44,957 (3.46%)</td>
+<td headers="(30, 60] stub_1_8 n_claims" class="gt_row gt_right gt_striped">83 (3.17%)</td>
+<td headers="(30, 60] stub_1_8 balance" class="gt_row gt_right gt_striped">$44,154 (3.39%)</td>
 </tr>
 <tr>
 <th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
 <td headers="(30, 60] stub_1_9 n_claims" class="gt_row gt_right">38 (1.45%)</td>
-<td headers="(30, 60] stub_1_9 balance" class="gt_row gt_right">$17,780 (1.37%)</td>
+<td headers="(30, 60] stub_1_9 balance" class="gt_row gt_right">$16,874 (1.30%)</td>
 </tr>
 <tr>
 <th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -2477,12 +2481,12 @@ health of the business.</p>
 <tr>
 <th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
 <td headers="(30, 60] stub_1_11 n_claims" class="gt_row gt_right">73 (2.79%)</td>
-<td headers="(30, 60] stub_1_11 balance" class="gt_row gt_right">$35,336 (2.72%)</td>
+<td headers="(30, 60] stub_1_11 balance" class="gt_row gt_right">$35,197 (2.71%)</td>
 </tr>
 <tr>
 <th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
 <td headers="(30, 60] stub_1_12 n_claims" class="gt_row gt_right gt_striped">152 (5.81%)</td>
-<td headers="(30, 60] stub_1_12 balance" class="gt_row gt_right gt_striped">$76,345 (5.87%)</td>
+<td headers="(30, 60] stub_1_12 balance" class="gt_row gt_right gt_striped">$76,484 (5.88%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(60, 90]">(60, 90]</th>
@@ -2494,13 +2498,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(60, 90] stub_1_14 n_claims" class="gt_row gt_right gt_striped">91 (3.48%)</td>
-<td headers="(60, 90] stub_1_14 balance" class="gt_row gt_right gt_striped">$40,815 (3.14%)</td>
+<td headers="(60, 90] stub_1_14 n_claims" class="gt_row gt_right gt_striped">90 (3.44%)</td>
+<td headers="(60, 90] stub_1_14 balance" class="gt_row gt_right gt_striped">$41,039 (3.15%)</td>
 </tr>
 <tr>
 <th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(60, 90] stub_1_15 n_claims" class="gt_row gt_right">49 (1.87%)</td>
-<td headers="(60, 90] stub_1_15 balance" class="gt_row gt_right">$20,624 (1.59%)</td>
+<td headers="(60, 90] stub_1_15 n_claims" class="gt_row gt_right">50 (1.91%)</td>
+<td headers="(60, 90] stub_1_15 balance" class="gt_row gt_right">$21,144 (1.63%)</td>
 </tr>
 <tr>
 <th id="stub_1_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -2510,12 +2514,12 @@ health of the business.</p>
 <tr>
 <th id="stub_1_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
 <td headers="(60, 90] stub_1_17 n_claims" class="gt_row gt_right">82 (3.13%)</td>
-<td headers="(60, 90] stub_1_17 balance" class="gt_row gt_right">$39,106 (3.01%)</td>
+<td headers="(60, 90] stub_1_17 balance" class="gt_row gt_right">$39,652 (3.05%)</td>
 </tr>
 <tr>
 <th id="stub_1_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(60, 90] stub_1_18 n_claims" class="gt_row gt_right gt_striped">174 (6.65%)</td>
-<td headers="(60, 90] stub_1_18 balance" class="gt_row gt_right gt_striped">$87,370 (6.72%)</td>
+<td headers="(60, 90] stub_1_18 n_claims" class="gt_row gt_right gt_striped">173 (6.61%)</td>
+<td headers="(60, 90] stub_1_18 balance" class="gt_row gt_right gt_striped">$86,424 (6.64%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(90, 120]">(90, 120]</th>
@@ -2527,13 +2531,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(90, 120] stub_1_20 n_claims" class="gt_row gt_right gt_striped">70 (2.67%)</td>
-<td headers="(90, 120] stub_1_20 balance" class="gt_row gt_right gt_striped">$37,922 (2.91%)</td>
+<td headers="(90, 120] stub_1_20 n_claims" class="gt_row gt_right gt_striped">72 (2.75%)</td>
+<td headers="(90, 120] stub_1_20 balance" class="gt_row gt_right gt_striped">$38,325 (2.95%)</td>
 </tr>
 <tr>
 <th id="stub_1_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(90, 120] stub_1_21 n_claims" class="gt_row gt_right">33 (1.26%)</td>
-<td headers="(90, 120] stub_1_21 balance" class="gt_row gt_right">$16,327 (1.26%)</td>
+<td headers="(90, 120] stub_1_21 n_claims" class="gt_row gt_right">32 (1.22%)</td>
+<td headers="(90, 120] stub_1_21 balance" class="gt_row gt_right">$15,885 (1.22%)</td>
 </tr>
 <tr>
 <th id="stub_1_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -2542,13 +2546,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="(90, 120] stub_1_23 n_claims" class="gt_row gt_right">87 (3.32%)</td>
-<td headers="(90, 120] stub_1_23 balance" class="gt_row gt_right">$43,873 (3.37%)</td>
+<td headers="(90, 120] stub_1_23 n_claims" class="gt_row gt_right">86 (3.28%)</td>
+<td headers="(90, 120] stub_1_23 balance" class="gt_row gt_right">$42,967 (3.30%)</td>
 </tr>
 <tr>
 <th id="stub_1_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(90, 120] stub_1_24 n_claims" class="gt_row gt_right gt_striped">169 (6.46%)</td>
-<td headers="(90, 120] stub_1_24 balance" class="gt_row gt_right gt_striped">$77,976 (5.99%)</td>
+<td headers="(90, 120] stub_1_24 n_claims" class="gt_row gt_right gt_striped">174 (6.65%)</td>
+<td headers="(90, 120] stub_1_24 balance" class="gt_row gt_right gt_striped">$81,368 (6.25%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(120, 150]">(120, 150]</th>
@@ -2560,13 +2564,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_26" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(120, 150] stub_1_26 n_claims" class="gt_row gt_right gt_striped">74 (2.83%)</td>
-<td headers="(120, 150] stub_1_26 balance" class="gt_row gt_right gt_striped">$41,238 (3.17%)</td>
+<td headers="(120, 150] stub_1_26 n_claims" class="gt_row gt_right gt_striped">76 (2.90%)</td>
+<td headers="(120, 150] stub_1_26 balance" class="gt_row gt_right gt_striped">$42,570 (3.27%)</td>
 </tr>
 <tr>
 <th id="stub_1_27" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(120, 150] stub_1_27 n_claims" class="gt_row gt_right">40 (1.53%)</td>
-<td headers="(120, 150] stub_1_27 balance" class="gt_row gt_right">$23,188 (1.78%)</td>
+<td headers="(120, 150] stub_1_27 n_claims" class="gt_row gt_right">42 (1.60%)</td>
+<td headers="(120, 150] stub_1_27 balance" class="gt_row gt_right">$24,445 (1.88%)</td>
 </tr>
 <tr>
 <th id="stub_1_28" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -2575,18 +2579,18 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_29" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="(120, 150] stub_1_29 n_claims" class="gt_row gt_right">61 (2.33%)</td>
-<td headers="(120, 150] stub_1_29 balance" class="gt_row gt_right">$26,338 (2.02%)</td>
+<td headers="(120, 150] stub_1_29 n_claims" class="gt_row gt_right">63 (2.41%)</td>
+<td headers="(120, 150] stub_1_29 balance" class="gt_row gt_right">$27,604 (2.12%)</td>
 </tr>
 <tr>
 <th id="stub_1_30" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(120, 150] stub_1_30 n_claims" class="gt_row gt_right gt_striped">115 (4.39%)</td>
-<td headers="(120, 150] stub_1_30 balance" class="gt_row gt_right gt_striped">$61,548 (4.73%)</td>
+<td headers="(120, 150] stub_1_30 n_claims" class="gt_row gt_right gt_striped">118 (4.51%)</td>
+<td headers="(120, 150] stub_1_30 balance" class="gt_row gt_right gt_striped">$62,766 (4.82%)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">ins_name</span>, <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
@@ -3064,13 +3068,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(0, 30] stub_1_2 n_claims" class="gt_row gt_right gt_striped">216 (40.37%)</td>
-<td headers="(0, 30] stub_1_2 balance" class="gt_row gt_right gt_striped">$105,110.12 (38.92%)</td>
+<td headers="(0, 30] stub_1_2 n_claims" class="gt_row gt_right gt_striped">214 (40.00%)</td>
+<td headers="(0, 30] stub_1_2 balance" class="gt_row gt_right gt_striped">$103,953.82 (38.50%)</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(0, 30] stub_1_3 n_claims" class="gt_row gt_right">119 (42.65%)</td>
-<td headers="(0, 30] stub_1_3 balance" class="gt_row gt_right">$53,824.03 (40.85%)</td>
+<td headers="(0, 30] stub_1_3 n_claims" class="gt_row gt_right">117 (41.94%)</td>
+<td headers="(0, 30] stub_1_3 balance" class="gt_row gt_right">$53,396.69 (40.53%)</td>
 </tr>
 <tr>
 <th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3079,13 +3083,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="(0, 30] stub_1_5 n_claims" class="gt_row gt_right">194 (39.03%)</td>
-<td headers="(0, 30] stub_1_5 balance" class="gt_row gt_right">$93,725.11 (39.32%)</td>
+<td headers="(0, 30] stub_1_5 n_claims" class="gt_row gt_right">193 (38.83%)</td>
+<td headers="(0, 30] stub_1_5 balance" class="gt_row gt_right">$92,957.12 (39.00%)</td>
 </tr>
 <tr>
 <th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(0, 30] stub_1_6 n_claims" class="gt_row gt_right gt_striped">413 (40.37%)</td>
-<td headers="(0, 30] stub_1_6 balance" class="gt_row gt_right gt_striped">$207,500.60 (40.63%)</td>
+<td headers="(0, 30] stub_1_6 n_claims" class="gt_row gt_right gt_striped">406 (39.69%)</td>
+<td headers="(0, 30] stub_1_6 balance" class="gt_row gt_right gt_striped">$203,697.31 (39.88%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(30, 60]">(30, 60]</th>
@@ -3097,13 +3101,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(30, 60] stub_1_8 n_claims" class="gt_row gt_right gt_striped">84 (15.70%)</td>
-<td headers="(30, 60] stub_1_8 balance" class="gt_row gt_right gt_striped">$44,956.54 (16.65%)</td>
+<td headers="(30, 60] stub_1_8 n_claims" class="gt_row gt_right gt_striped">83 (15.51%)</td>
+<td headers="(30, 60] stub_1_8 balance" class="gt_row gt_right gt_striped">$44,153.78 (16.35%)</td>
 </tr>
 <tr>
 <th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
 <td headers="(30, 60] stub_1_9 n_claims" class="gt_row gt_right">38 (13.62%)</td>
-<td headers="(30, 60] stub_1_9 balance" class="gt_row gt_right">$17,780.42 (13.50%)</td>
+<td headers="(30, 60] stub_1_9 balance" class="gt_row gt_right">$16,873.57 (12.81%)</td>
 </tr>
 <tr>
 <th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3113,12 +3117,12 @@ health of the business.</p>
 <tr>
 <th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
 <td headers="(30, 60] stub_1_11 n_claims" class="gt_row gt_right">73 (14.69%)</td>
-<td headers="(30, 60] stub_1_11 balance" class="gt_row gt_right">$35,335.80 (14.82%)</td>
+<td headers="(30, 60] stub_1_11 balance" class="gt_row gt_right">$35,197.23 (14.77%)</td>
 </tr>
 <tr>
 <th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
 <td headers="(30, 60] stub_1_12 n_claims" class="gt_row gt_right gt_striped">152 (14.86%)</td>
-<td headers="(30, 60] stub_1_12 balance" class="gt_row gt_right gt_striped">$76,345.21 (14.95%)</td>
+<td headers="(30, 60] stub_1_12 balance" class="gt_row gt_right gt_striped">$76,483.98 (14.98%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(60, 90]">(60, 90]</th>
@@ -3130,13 +3134,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(60, 90] stub_1_14 n_claims" class="gt_row gt_right gt_striped">91 (17.01%)</td>
-<td headers="(60, 90] stub_1_14 balance" class="gt_row gt_right gt_striped">$40,814.99 (15.11%)</td>
+<td headers="(60, 90] stub_1_14 n_claims" class="gt_row gt_right gt_striped">90 (16.82%)</td>
+<td headers="(60, 90] stub_1_14 balance" class="gt_row gt_right gt_striped">$41,038.73 (15.20%)</td>
 </tr>
 <tr>
 <th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(60, 90] stub_1_15 n_claims" class="gt_row gt_right">49 (17.56%)</td>
-<td headers="(60, 90] stub_1_15 balance" class="gt_row gt_right">$20,624.13 (15.65%)</td>
+<td headers="(60, 90] stub_1_15 n_claims" class="gt_row gt_right">50 (17.92%)</td>
+<td headers="(60, 90] stub_1_15 balance" class="gt_row gt_right">$21,144.32 (16.05%)</td>
 </tr>
 <tr>
 <th id="stub_1_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3146,12 +3150,12 @@ health of the business.</p>
 <tr>
 <th id="stub_1_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
 <td headers="(60, 90] stub_1_17 n_claims" class="gt_row gt_right">82 (16.50%)</td>
-<td headers="(60, 90] stub_1_17 balance" class="gt_row gt_right">$39,105.78 (16.40%)</td>
+<td headers="(60, 90] stub_1_17 balance" class="gt_row gt_right">$39,652.43 (16.63%)</td>
 </tr>
 <tr>
 <th id="stub_1_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(60, 90] stub_1_18 n_claims" class="gt_row gt_right gt_striped">174 (17.01%)</td>
-<td headers="(60, 90] stub_1_18 balance" class="gt_row gt_right gt_striped">$87,369.89 (17.11%)</td>
+<td headers="(60, 90] stub_1_18 n_claims" class="gt_row gt_right gt_striped">173 (16.91%)</td>
+<td headers="(60, 90] stub_1_18 balance" class="gt_row gt_right gt_striped">$86,424.16 (16.92%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(90, 120]">(90, 120]</th>
@@ -3163,13 +3167,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(90, 120] stub_1_20 n_claims" class="gt_row gt_right gt_striped">70 (13.08%)</td>
-<td headers="(90, 120] stub_1_20 balance" class="gt_row gt_right gt_striped">$37,921.94 (14.04%)</td>
+<td headers="(90, 120] stub_1_20 n_claims" class="gt_row gt_right gt_striped">72 (13.46%)</td>
+<td headers="(90, 120] stub_1_20 balance" class="gt_row gt_right gt_striped">$38,325.45 (14.19%)</td>
 </tr>
 <tr>
 <th id="stub_1_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(90, 120] stub_1_21 n_claims" class="gt_row gt_right">33 (11.83%)</td>
-<td headers="(90, 120] stub_1_21 balance" class="gt_row gt_right">$16,327.43 (12.39%)</td>
+<td headers="(90, 120] stub_1_21 n_claims" class="gt_row gt_right">32 (11.47%)</td>
+<td headers="(90, 120] stub_1_21 balance" class="gt_row gt_right">$15,884.60 (12.06%)</td>
 </tr>
 <tr>
 <th id="stub_1_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3178,13 +3182,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="(90, 120] stub_1_23 n_claims" class="gt_row gt_right">87 (17.51%)</td>
-<td headers="(90, 120] stub_1_23 balance" class="gt_row gt_right">$43,872.97 (18.40%)</td>
+<td headers="(90, 120] stub_1_23 n_claims" class="gt_row gt_right">86 (17.30%)</td>
+<td headers="(90, 120] stub_1_23 balance" class="gt_row gt_right">$42,967.05 (18.02%)</td>
 </tr>
 <tr>
 <th id="stub_1_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(90, 120] stub_1_24 n_claims" class="gt_row gt_right gt_striped">169 (16.52%)</td>
-<td headers="(90, 120] stub_1_24 balance" class="gt_row gt_right gt_striped">$77,975.54 (15.27%)</td>
+<td headers="(90, 120] stub_1_24 n_claims" class="gt_row gt_right gt_striped">174 (17.01%)</td>
+<td headers="(90, 120] stub_1_24 balance" class="gt_row gt_right gt_striped">$81,367.80 (15.93%)</td>
 </tr>
 <tr class="gt_group_heading_row">
 <th colspan="3" class="gt_group_heading" scope="colgroup" id="(120, 150]">(120, 150]</th>
@@ -3196,13 +3200,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_26" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="(120, 150] stub_1_26 n_claims" class="gt_row gt_right gt_striped">74 (13.83%)</td>
-<td headers="(120, 150] stub_1_26 balance" class="gt_row gt_right gt_striped">$41,237.99 (15.27%)</td>
+<td headers="(120, 150] stub_1_26 n_claims" class="gt_row gt_right gt_striped">76 (14.21%)</td>
+<td headers="(120, 150] stub_1_26 balance" class="gt_row gt_right gt_striped">$42,569.80 (15.76%)</td>
 </tr>
 <tr>
 <th id="stub_1_27" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="(120, 150] stub_1_27 n_claims" class="gt_row gt_right">40 (14.34%)</td>
-<td headers="(120, 150] stub_1_27 balance" class="gt_row gt_right">$23,188.42 (17.60%)</td>
+<td headers="(120, 150] stub_1_27 n_claims" class="gt_row gt_right">42 (15.05%)</td>
+<td headers="(120, 150] stub_1_27 balance" class="gt_row gt_right">$24,445.25 (18.56%)</td>
 </tr>
 <tr>
 <th id="stub_1_28" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3211,13 +3215,13 @@ health of the business.</p>
 </tr>
 <tr>
 <th id="stub_1_29" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="(120, 150] stub_1_29 n_claims" class="gt_row gt_right">61 (12.27%)</td>
-<td headers="(120, 150] stub_1_29 balance" class="gt_row gt_right">$26,338.20 (11.05%)</td>
+<td headers="(120, 150] stub_1_29 n_claims" class="gt_row gt_right">63 (12.68%)</td>
+<td headers="(120, 150] stub_1_29 balance" class="gt_row gt_right">$27,604.03 (11.58%)</td>
 </tr>
 <tr>
 <th id="stub_1_30" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="(120, 150] stub_1_30 n_claims" class="gt_row gt_right gt_striped">115 (11.24%)</td>
-<td headers="(120, 150] stub_1_30 balance" class="gt_row gt_right gt_striped">$61,548.00 (12.05%)</td>
+<td headers="(120, 150] stub_1_30 n_claims" class="gt_row gt_right gt_striped">118 (11.53%)</td>
+<td headers="(120, 150] stub_1_30 balance" class="gt_row gt_right gt_striped">$62,765.99 (12.29%)</td>
 </tr>
 </tbody>
 </table>
