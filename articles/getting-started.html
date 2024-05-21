@@ -860,63 +860,57 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
 <span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
 <span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
-<span>  dart   <span class="op">=</span> <span class="fl">39</span>,</span>
-<span>  period <span class="op">=</span> <span class="st">"quarter"</span></span>
+<span>  dart   <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>  period <span class="op">=</span> <span class="st">"month"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cols_hide</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, </span>
-<span>              <span class="va">nmon</span>, </span>
-<span>              <span class="va">month</span>,</span>
-<span>              <span class="va">ndip</span>,</span>
-<span>              <span class="va">ending_ar_target</span>,</span>
-<span>              <span class="va">dar_diff</span>,</span>
-<span>              <span class="va">ratio_ideal</span>,</span>
-<span>              <span class="va">ratio_actual</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, </span>
-<span>                           <span class="va">ending_ar</span>, </span>
-<span>                           <span class="va">adc</span>, </span>
-<span>                           <span class="va">ending_ar_target</span>, </span>
-<span>                           <span class="va">ending_ar_dec_abs</span>, </span>
-<span>                           <span class="va">earb_gct_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="co"># fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |&gt; </span></span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, </span>
-<span>                         <span class="va">dar_diff</span>, </span>
-<span>                         <span class="va">ratio_actual</span>, </span>
-<span>                         <span class="va">ratio_ideal</span>, </span>
-<span>                         <span class="va">ratio_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">nqtr</span>, </span>
-<span>                       <span class="va">gross_charges</span>, </span>
-<span>                       <span class="va">ending_ar</span>, </span>
-<span>                       <span class="va">earb_gct_diff</span>,</span>
-<span>                       <span class="va">adc</span>, </span>
-<span>                       <span class="va">dar_pass</span>, </span>
-<span>                       <span class="va">dar</span>, </span>
-<span>                       <span class="va">dar_diff</span>, </span>
-<span>                       <span class="va">ratio_actual</span>, </span>
-<span>                       <span class="va">ratio_ideal</span>, </span>
-<span>                       <span class="va">ratio_diff</span>, </span>
-<span>                       <span class="va">ending_ar_target</span>, </span>
-<span>                       <span class="va">ending_ar_dec_abs</span>, </span>
-<span>                       <span class="va">ending_ar_dec_pct</span></span>
-<span>                       <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span></span>
+<span>    <span class="va">month</span>,</span>
+<span>    <span class="va">gross_charges</span>,</span>
+<span>    <span class="va">ending_ar</span>,</span>
+<span>    <span class="va">ending_ar_target</span>,</span>
+<span>    <span class="va">dar</span>,</span>
+<span>    <span class="va">dar_pass</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">headliner</span><span class="fu">::</span><span class="fu"><a href="https://rjake.github.io/headliner/reference/add_headline_column.html" class="external-link">add_headline_column</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">ending_ar</span>, </span>
+<span>    y <span class="op">=</span> <span class="va">ending_ar_target</span>, </span>
+<span>    headline <span class="op">=</span> <span class="st">"{delta_p}% {trend} than Target"</span>, </span>
+<span>    trend_phrases <span class="op">=</span> <span class="fu">headliner</span><span class="fu">::</span><span class="fu"><a href="https://rjake.github.io/headliner/reference/trend_terms.html" class="external-link">trend_terms</a></span><span class="op">(</span>more <span class="op">=</span> <span class="st">"HIGHER"</span>, less <span class="op">=</span> <span class="st">"Lower"</span><span class="op">)</span>, </span>
+<span>    n_decimal <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">cols_label</span><span class="op">(</span></span>
-<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
-<span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    dar <span class="op">=</span> <span class="st">"DAR"</span>,</span>
-<span>    ratio_diff <span class="op">=</span> <span class="st">"AR/GC Diff"</span>,</span>
-<span>    ending_ar_dec_abs <span class="op">=</span> <span class="st">"AR Decrease Needed"</span>,</span>
-<span>    ending_ar_dec_pct <span class="op">=</span> <span class="st">"%"</span>,</span>
-<span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>, </span>
+<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>, </span>
+<span>    ending_ar_target <span class="op">=</span> <span class="st">"Target AR"</span>, </span>
+<span>    dar <span class="op">=</span> <span class="st">"Days in AR"</span>, </span>
+<span>    dar_pass <span class="op">=</span> <span class="st">"Pass"</span>, </span>
+<span>    headline <span class="op">=</span> <span class="st">"Ending AR Trend"</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q4"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q3"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q2"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q1"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, <span class="va">ending_ar</span>, <span class="va">ending_ar_target</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_style</span><span class="op">(</span>style <span class="op">=</span> <span class="fu">cell_text</span><span class="op">(</span>font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"IBM Plex Mono"</span><span class="op">)</span>,</span>
+<span>    <span class="fu">default_fonts</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    locations <span class="op">=</span> <span class="fu">cells_body</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, <span class="va">ending_ar</span>, <span class="va">ending_ar_target</span>, <span class="va">dar</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span>style <span class="op">=</span> <span class="fl">6</span>, color <span class="op">=</span> <span class="st">"cyan"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_header</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span>, </span>
+<span>    subtitle <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest &lt;br&gt; month-to-month increase in AR &amp; highest percentage over the AR Target *(46%)*."</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_all_caps</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">grand_summary_rows</span><span class="op">(</span></span>
+<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, <span class="va">ending_ar</span>, <span class="va">ending_ar_target</span>, <span class="va">dar</span><span class="op">)</span>,</span>
+<span>    fns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Mean <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, Median <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">.</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Roboto"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_align_table_header</span><span class="op">(</span>align <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span></span></code></pre></div>
 <div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+<style>@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 #eexombwkke table {
-  font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family: Roboto, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -944,13 +938,13 @@ are useful for healthcare revenue cycle analysis.</p>
   width: auto;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #004D80;
+  border-top-color: #5F5F5F;
   border-right-style: none;
   border-right-width: 2px;
   border-right-color: #D3D3D3;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #004D80;
+  border-bottom-color: #5F5F5F;
   border-left-style: none;
   border-left-width: 2px;
   border-left-color: #D3D3D3;
@@ -987,7 +981,7 @@ are useful for healthcare revenue cycle analysis.</p>
 
 #eexombwkke .gt_heading {
   background-color: #FFFFFF;
-  text-align: center;
+  text-align: left;
   border-bottom-color: #FFFFFF;
   border-left-style: none;
   border-left-width: 1px;
@@ -1000,16 +994,16 @@ are useful for healthcare revenue cycle analysis.</p>
 #eexombwkke .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
 }
 
 #eexombwkke .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #0076BA;
+  border-top-color: #5F5F5F;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1019,11 +1013,11 @@ are useful for healthcare revenue cycle analysis.</p>
 }
 
 #eexombwkke .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1039,11 +1033,11 @@ are useful for healthcare revenue cycle analysis.</p>
 }
 
 #eexombwkke .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
   padding-top: 0;
   padding-bottom: 0;
   padding-left: 4px;
@@ -1061,7 +1055,7 @@ are useful for healthcare revenue cycle analysis.</p>
 #eexombwkke .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
   vertical-align: bottom;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1081,15 +1075,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
   color: #333333;
   background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #0076BA;
+  border-top-color: #5F5F5F;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
   border-left-style: none;
   border-left-width: 1px;
   border-left-color: #D3D3D3;
@@ -1104,14 +1098,14 @@ are useful for healthcare revenue cycle analysis.</p>
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
+  font-size: 80%;
+  font-weight: bolder;
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #0076BA;
+  border-top-color: #5F5F5F;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
   vertical-align: middle;
 }
 
@@ -1131,26 +1125,26 @@ are useful for healthcare revenue cycle analysis.</p>
   margin: 10px;
   border-top-style: none;
   border-top-width: 1px;
-  border-top-color: #89D3FE;
+  border-top-color: #D5D5D5;
   border-left-style: none;
   border-left-width: 1px;
-  border-left-color: #89D3FE;
+  border-left-color: #D5D5D5;
   border-right-style: none;
   border-right-width: 1px;
-  border-right-color: #89D3FE;
+  border-right-color: #D5D5D5;
   vertical-align: middle;
   overflow-x: hidden;
 }
 
 #eexombwkke .gt_stub {
-  color: #FFFFFF;
-  background-color: #0076BA;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
+  color: #333333;
+  background-color: #A5FEF2;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
   border-right-style: solid;
   border-right-width: 2px;
-  border-right-color: #0076BA;
+  border-right-color: #D5D5D5;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -1189,7 +1183,7 @@ are useful for healthcare revenue cycle analysis.</p>
 
 #eexombwkke .gt_first_summary_row {
   border-top-style: solid;
-  border-top-color: #0076BA;
+  border-top-color: #5F5F5F;
 }
 
 #eexombwkke .gt_first_summary_row.thick {
@@ -1203,12 +1197,12 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
 }
 
 #eexombwkke .gt_grand_summary_row {
   color: #333333;
-  background-color: #89D3FE;
+  background-color: #D5D5D5;
   text-transform: inherit;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -1223,7 +1217,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
   border-top-style: double;
   border-top-width: 6px;
-  border-top-color: #0076BA;
+  border-top-color: #5F5F5F;
 }
 
 #eexombwkke .gt_last_grand_summary_row_top {
@@ -1233,20 +1227,20 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
   border-bottom-style: double;
   border-bottom-width: 6px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
 }
 
 #eexombwkke .gt_striped {
-  background-color: #F4F4F4;
+  background-color: #EBFBF9;
 }
 
 #eexombwkke .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
-  border-top-color: #0076BA;
+  border-top-color: #5F5F5F;
   border-bottom-style: solid;
   border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
+  border-bottom-color: #5F5F5F;
 }
 
 #eexombwkke .gt_footnotes {
@@ -1355,6 +1349,754 @@ are useful for healthcare revenue cycle analysis.</p>
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_title gt_font_normal" style>Example <strong>Days in AR Analysis</strong> with the <strong>{forager}</strong> Package</td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="7" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>
+<strong>May</strong> saw the <em>highest</em> Days in AR of 2022 <em>(51.2)</em>. This coincided with the largest <br> month-to-month increase in AR &amp; highest percentage over the AR Target <em>(46%)</em>.</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Gross Charges">Gross Charges</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ending AR">Ending AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Target AR">Target AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Days in AR">Days in AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Pass">Pass</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="Ending AR Trend">Ending AR Trend</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="7" class="gt_group_heading" scope="colgroup" id="Q1">Q1</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_center gt_stub">January</th>
+<td headers="Q1 stub_1_1 gross_charges" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$325,982.23</td>
+<td headers="Q1 stub_1_1 ending_ar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$288,432.52</td>
+<td headers="Q1 stub_1_1 ending_ar_target" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$368,044.45</td>
+<td headers="Q1 stub_1_1 dar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">27.43</td>
+<td headers="Q1 stub_1_1 dar_pass" class="gt_row gt_center">TRUE</td>
+<td headers="Q1 stub_1_1 headline" class="gt_row gt_left">22% Lower than Target</td>
+</tr>
+<tr>
+<th id="stub_1_2" scope="row" class="gt_row gt_center gt_stub">February</th>
+<td headers="Q1 stub_1_2 gross_charges" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$297,731.74</td>
+<td headers="Q1 stub_1_2 ending_ar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$307,871.08</td>
+<td headers="Q1 stub_1_2 ending_ar_target" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$359,331.41</td>
+<td headers="Q1 stub_1_2 dar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">29.99</td>
+<td headers="Q1 stub_1_2 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="Q1 stub_1_2 headline" class="gt_row gt_left gt_striped">14% Lower than Target</td>
+</tr>
+<tr>
+<th id="stub_1_3" scope="row" class="gt_row gt_center gt_stub">March</th>
+<td headers="Q1 stub_1_3 gross_charges" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$198,655.14</td>
+<td headers="Q1 stub_1_3 ending_ar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$253,976.56</td>
+<td headers="Q1 stub_1_3 ending_ar_target" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$224,288.06</td>
+<td headers="Q1 stub_1_3 dar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">39.63</td>
+<td headers="Q1 stub_1_3 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="Q1 stub_1_3 headline" class="gt_row gt_left">13% HIGHER than Target</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="7" class="gt_group_heading" scope="colgroup" id="Q2">Q2</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_4" scope="row" class="gt_row gt_center gt_stub">April</th>
+<td headers="Q2 stub_1_4 gross_charges" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$186,047.56</td>
+<td headers="Q2 stub_1_4 ending_ar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$183,684.92</td>
+<td headers="Q2 stub_1_4 ending_ar_target" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$217,055.49</td>
+<td headers="Q2 stub_1_4 dar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">29.62</td>
+<td headers="Q2 stub_1_4 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="Q2 stub_1_4 headline" class="gt_row gt_left gt_striped">15% Lower than Target</td>
+</tr>
+<tr>
+<th id="stub_1_5" scope="row" class="gt_row gt_center gt_stub">May</th>
+<td headers="Q2 stub_1_5 gross_charges" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$123,654.34</td>
+<td headers="Q2 stub_1_5 ending_ar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$204,227.59</td>
+<td headers="Q2 stub_1_5 ending_ar_target" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$139,609.74</td>
+<td headers="Q2 stub_1_5 dar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">51.20</td>
+<td headers="Q2 stub_1_5 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="Q2 stub_1_5 headline" class="gt_row gt_left">46% HIGHER than Target</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_center gt_stub">June</th>
+<td headers="Q2 stub_1_6 gross_charges" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$131,440.28</td>
+<td headers="Q2 stub_1_6 ending_ar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$203,460.47</td>
+<td headers="Q2 stub_1_6 ending_ar_target" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$153,346.99</td>
+<td headers="Q2 stub_1_6 dar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">46.44</td>
+<td headers="Q2 stub_1_6 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
+<td headers="Q2 stub_1_6 headline" class="gt_row gt_left gt_striped">33% HIGHER than Target</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="7" class="gt_group_heading" scope="colgroup" id="Q3">Q3</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_7" scope="row" class="gt_row gt_center gt_stub">July</th>
+<td headers="Q3 stub_1_7 gross_charges" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$153,991.95</td>
+<td headers="Q3 stub_1_7 ending_ar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$182,771.32</td>
+<td headers="Q3 stub_1_7 ending_ar_target" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$173,861.88</td>
+<td headers="Q3 stub_1_7 dar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">36.79</td>
+<td headers="Q3 stub_1_7 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="Q3 stub_1_7 headline" class="gt_row gt_left">5% HIGHER than Target</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_center gt_stub">August</th>
+<td headers="Q3 stub_1_8 gross_charges" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$156,975.52</td>
+<td headers="Q3 stub_1_8 ending_ar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$169,633.64</td>
+<td headers="Q3 stub_1_8 ending_ar_target" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$177,230.43</td>
+<td headers="Q3 stub_1_8 dar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">33.50</td>
+<td headers="Q3 stub_1_8 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="Q3 stub_1_8 headline" class="gt_row gt_left gt_striped">4% Lower than Target</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_center gt_stub">September</th>
+<td headers="Q3 stub_1_9 gross_charges" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$146,878.12</td>
+<td headers="Q3 stub_1_9 ending_ar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$179,347.72</td>
+<td headers="Q3 stub_1_9 ending_ar_target" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$171,357.81</td>
+<td headers="Q3 stub_1_9 dar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">36.63</td>
+<td headers="Q3 stub_1_9 dar_pass" class="gt_row gt_center">FALSE</td>
+<td headers="Q3 stub_1_9 headline" class="gt_row gt_left">5% HIGHER than Target</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="7" class="gt_group_heading" scope="colgroup" id="Q4">Q4</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_10" scope="row" class="gt_row gt_center gt_stub">October</th>
+<td headers="Q4 stub_1_10 gross_charges" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$163,799.44</td>
+<td headers="Q4 stub_1_10 ending_ar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$178,051.11</td>
+<td headers="Q4 stub_1_10 ending_ar_target" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$184,934.85</td>
+<td headers="Q4 stub_1_10 dar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">33.70</td>
+<td headers="Q4 stub_1_10 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
+<td headers="Q4 stub_1_10 headline" class="gt_row gt_left gt_striped">4% Lower than Target</td>
+</tr>
+<tr>
+<th id="stub_1_11" scope="row" class="gt_row gt_center gt_stub">November</th>
+<td headers="Q4 stub_1_11 gross_charges" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$151,410.74</td>
+<td headers="Q4 stub_1_11 ending_ar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$162,757.49</td>
+<td headers="Q4 stub_1_11 ending_ar_target" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$176,645.86</td>
+<td headers="Q4 stub_1_11 dar" class="gt_row gt_right" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">32.25</td>
+<td headers="Q4 stub_1_11 dar_pass" class="gt_row gt_center">TRUE</td>
+<td headers="Q4 stub_1_11 headline" class="gt_row gt_left">8% Lower than Target</td>
+</tr>
+<tr>
+<th id="stub_1_12" scope="row" class="gt_row gt_center gt_stub">December</th>
+<td headers="Q4 stub_1_12 gross_charges" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$169,094.46</td>
+<td headers="Q4 stub_1_12 ending_ar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$199,849.32</td>
+<td headers="Q4 stub_1_12 ending_ar_target" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">$190,913.10</td>
+<td headers="Q4 stub_1_12 dar" class="gt_row gt_right gt_striped" style="font-family: 'IBM Plex Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';">36.64</td>
+<td headers="Q4 stub_1_12 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
+<td headers="Q4 stub_1_12 headline" class="gt_row gt_left gt_striped">5% HIGHER than Target</td>
+</tr>
+<tr>
+<th id="grand_summary_stub_1" scope="row" class="gt_row gt_left gt_stub gt_grand_summary_row gt_first_grand_summary_row">Mean</th>
+<td headers="grand_summary_stub_1 gross_charges" class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row">183805.1</td>
+<td headers="grand_summary_stub_1 ending_ar" class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row">209505.3</td>
+<td headers="grand_summary_stub_1 ending_ar_target" class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row">211385.0</td>
+<td headers="grand_summary_stub_1 dar" class="gt_row gt_right gt_grand_summary_row gt_first_grand_summary_row">36.15126</td>
+<td headers="grand_summary_stub_1 dar_pass" class="gt_row gt_center gt_grand_summary_row gt_first_grand_summary_row">—</td>
+<td headers="grand_summary_stub_1 headline" class="gt_row gt_left gt_grand_summary_row gt_first_grand_summary_row">—</td>
+</tr>
+<tr>
+<th id="grand_summary_stub_2" scope="row" class="gt_row gt_left gt_stub gt_grand_summary_row gt_last_summary_row">Median</th>
+<td headers="grand_summary_stub_2 gross_charges" class="gt_row gt_right gt_grand_summary_row gt_last_summary_row">160387.5</td>
+<td headers="grand_summary_stub_2 ending_ar" class="gt_row gt_right gt_grand_summary_row gt_last_summary_row">191767.1</td>
+<td headers="grand_summary_stub_2 ending_ar_target" class="gt_row gt_right gt_grand_summary_row gt_last_summary_row">181082.6</td>
+<td headers="grand_summary_stub_2 dar" class="gt_row gt_right gt_grand_summary_row gt_last_summary_row">35.16458</td>
+<td headers="grand_summary_stub_2 dar_pass" class="gt_row gt_center gt_grand_summary_row gt_last_summary_row">—</td>
+<td headers="grand_summary_stub_2 headline" class="gt_row gt_left gt_grand_summary_row gt_last_summary_row">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_month</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
+<span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
+<span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
+<span>  dart   <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>  period <span class="op">=</span> <span class="st">"month"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create df for gt_plt_bar_stack</span></span>
+<span><span class="va">dar_month_pct</span> <span class="op">&lt;-</span> <span class="va">dar_month</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    gct_pct <span class="op">=</span> <span class="op">(</span><span class="va">gross_charges</span> <span class="op">/</span> <span class="op">(</span><span class="va">gross_charges</span> <span class="op">+</span> <span class="va">ending_ar</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span>,</span>
+<span>    earb_pct <span class="op">=</span> <span class="op">(</span><span class="va">ending_ar</span> <span class="op">/</span> <span class="op">(</span><span class="va">gross_charges</span> <span class="op">+</span> <span class="va">ending_ar</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">month</span>, <span class="va">gct_pct</span>, <span class="va">earb_pct</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">month</span>, names_to <span class="op">=</span> <span class="st">"measure"</span>, values_to <span class="op">=</span> <span class="st">"percentage"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">month</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarize</span><span class="op">(</span>list_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">percentage</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Right join data frames</span></span>
+<span><span class="va">dar_month_join</span> <span class="op">&lt;-</span> <span class="fu">right_join</span><span class="op">(</span></span>
+<span>  <span class="va">dar_month</span>, </span>
+<span>  <span class="va">dar_month_pct</span>, </span>
+<span>  by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create new copy cols for gt_plt_bullet</span></span>
+<span><span class="va">dar_month_gt</span> <span class="op">&lt;-</span> <span class="va">dar_month_join</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span></span>
+<span>    <span class="va">month</span>, </span>
+<span>    <span class="va">gross_charges</span>, </span>
+<span>    <span class="va">ending_ar</span>, </span>
+<span>    <span class="va">ending_ar_target</span>,</span>
+<span>    <span class="va">dar</span>, </span>
+<span>    <span class="va">dar_pass</span>,</span>
+<span>    <span class="va">list_data</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    target_col <span class="op">=</span> <span class="va">ending_ar</span>, </span>
+<span>    plot_col <span class="op">=</span> <span class="va">ending_ar_target</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create gt table</span></span>
+<span><span class="va">dar_month_gt</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
+<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
+<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
+<span>    ending_ar_target <span class="op">=</span> <span class="st">"Optimal AR"</span>,</span>
+<span>    dar <span class="op">=</span> <span class="st">"Days in AR"</span>,</span>
+<span>    dar_pass <span class="op">=</span> <span class="st">"Pass"</span>,</span>
+<span>    plot_col <span class="op">=</span> <span class="st">"Optimal AR Threshold"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q4"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q3"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q2"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_row_group</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"Q1"</span>, rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt_theme_nytimes</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, <span class="va">ending_ar</span>, <span class="va">ending_ar_target</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt_plt_bullet</span><span class="op">(</span>column <span class="op">=</span> <span class="va">plot_col</span>, </span>
+<span>                target <span class="op">=</span> <span class="va">target_col</span>, </span>
+<span>                palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#8ca0aa"</span>, <span class="st">"black"</span><span class="op">)</span>, </span>
+<span>                width <span class="op">=</span> <span class="fl">65</span></span>
+<span>                <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt_plt_bar_stack</span><span class="op">(</span><span class="va">list_data</span>, </span>
+<span>                   width <span class="op">=</span> <span class="fl">50</span>, </span>
+<span>                   labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Charges (%) "</span>, <span class="st">" AR (%)"</span><span class="op">)</span>, </span>
+<span>                   palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2c3e50"</span>, <span class="st">"#8ca0aa"</span><span class="op">)</span></span>
+<span>                   <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">gt_badge</span><span class="op">(</span><span class="va">dar_pass</span>, </span>
+<span>           palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#8ca0aa"</span><span class="op">)</span></span>
+<span>           <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_style</span><span class="op">(</span>style <span class="op">=</span> <span class="fu">cell_text</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#2c3e50"</span>, weight <span class="op">=</span> <span class="st">"bolder"</span><span class="op">)</span>, </span>
+<span>            locations <span class="op">=</span> <span class="fu">cells_body</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar_pass</span>, rows <span class="op">=</span> <span class="va">dar_pass</span> <span class="op">==</span> <span class="st">"FALSE"</span><span class="op">)</span></span>
+<span>            <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_style</span><span class="op">(</span>style <span class="op">=</span> <span class="fu">cell_text</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"#8ca0aa"</span>, weight <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span>, </span>
+<span>            locations <span class="op">=</span> <span class="fu">cells_body</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">dar_pass</span>, rows <span class="op">=</span> <span class="va">dar_pass</span> <span class="op">==</span> <span class="st">"TRUE"</span><span class="op">)</span></span>
+<span>            <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">data_color</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, <span class="va">ending_ar</span>, <span class="va">dar</span><span class="op">)</span>, </span>
+<span>             colors <span class="op">=</span> <span class="fu">col_numeric</span><span class="op">(</span>palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2c3e50"</span>, <span class="st">"#8ca0aa"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>                                    <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>                                  domain <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span>             <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_footnote</span><span class="op">(</span>footnote <span class="op">=</span> <span class="st">"Horizontal bar indicates Optimal AR, vertical bar is Actual."</span>, </span>
+<span>               locations <span class="op">=</span> <span class="fu">cells_column_labels</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span></span>
+<span>               <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error in loadNamespace(x): there is no package called 'svglite'</span></span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
+<span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
+<span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
+<span>  dart   <span class="op">=</span> <span class="fl">39</span>,</span>
+<span>  period <span class="op">=</span> <span class="st">"quarter"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_hide</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, </span>
+<span>              <span class="va">nmon</span>, </span>
+<span>              <span class="va">month</span>,</span>
+<span>              <span class="va">ndip</span>,</span>
+<span>              <span class="va">ending_ar_target</span>,</span>
+<span>              <span class="va">dar_diff</span>,</span>
+<span>              <span class="va">ratio_ideal</span>,</span>
+<span>              <span class="va">ratio_actual</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">google_font</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"JetBrains Mono"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">gross_charges</span>, </span>
+<span>                           <span class="va">ending_ar</span>, </span>
+<span>                           <span class="va">adc</span>, </span>
+<span>                           <span class="va">ending_ar_target</span>, </span>
+<span>                           <span class="va">ending_ar_dec_abs</span>, </span>
+<span>                           <span class="va">earb_gct_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |&gt; </span></span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, </span>
+<span>                         <span class="va">dar_diff</span>, </span>
+<span>                         <span class="va">ratio_actual</span>, </span>
+<span>                         <span class="va">ratio_ideal</span>, </span>
+<span>                         <span class="va">ratio_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">nqtr</span>, </span>
+<span>                       <span class="va">gross_charges</span>, </span>
+<span>                       <span class="va">ending_ar</span>, </span>
+<span>                       <span class="va">earb_gct_diff</span>,</span>
+<span>                       <span class="va">adc</span>, </span>
+<span>                       <span class="va">dar_pass</span>, </span>
+<span>                       <span class="va">dar</span>, </span>
+<span>                       <span class="va">dar_diff</span>, </span>
+<span>                       <span class="va">ratio_actual</span>, </span>
+<span>                       <span class="va">ratio_ideal</span>, </span>
+<span>                       <span class="va">ratio_diff</span>, </span>
+<span>                       <span class="va">ending_ar_target</span>, </span>
+<span>                       <span class="va">ending_ar_dec_abs</span>, </span>
+<span>                       <span class="va">ending_ar_dec_pct</span></span>
+<span>                       <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
+<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
+<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
+<span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
+<span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
+<span>    dar <span class="op">=</span> <span class="st">"DAR"</span>,</span>
+<span>    ratio_diff <span class="op">=</span> <span class="st">"AR/GC Diff"</span>,</span>
+<span>    ending_ar_dec_abs <span class="op">=</span> <span class="st">"AR Decrease Needed"</span>,</span>
+<span>    ending_ar_dec_pct <span class="op">=</span> <span class="st">"%"</span>,</span>
+<span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div id="ivjubqtxva" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#ivjubqtxva table {
+  font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ivjubqtxva thead, #ivjubqtxva tbody, #ivjubqtxva tfoot, #ivjubqtxva tr, #ivjubqtxva td, #ivjubqtxva th {
+  border-style: none;
+}
+
+#ivjubqtxva p {
+  margin: 0;
+  padding: 0;
+}
+
+#ivjubqtxva .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #004D80;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #004D80;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ivjubqtxva .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ivjubqtxva .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ivjubqtxva .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ivjubqtxva .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ivjubqtxva .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#ivjubqtxva .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ivjubqtxva .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ivjubqtxva .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ivjubqtxva .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ivjubqtxva .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ivjubqtxva .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ivjubqtxva .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ivjubqtxva .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ivjubqtxva .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+  vertical-align: middle;
+}
+
+#ivjubqtxva .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ivjubqtxva .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ivjubqtxva .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #89D3FE;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #89D3FE;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #89D3FE;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ivjubqtxva .gt_stub {
+  color: #FFFFFF;
+  background-color: #0076BA;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #0076BA;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ivjubqtxva .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ivjubqtxva .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ivjubqtxva .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ivjubqtxva .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ivjubqtxva .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #0076BA;
+}
+
+#ivjubqtxva .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ivjubqtxva .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#ivjubqtxva .gt_grand_summary_row {
+  color: #333333;
+  background-color: #89D3FE;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ivjubqtxva .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #0076BA;
+}
+
+#ivjubqtxva .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #0076BA;
+}
+
+#ivjubqtxva .gt_striped {
+  background-color: #F4F4F4;
+}
+
+#ivjubqtxva .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #0076BA;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #0076BA;
+}
+
+#ivjubqtxva .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ivjubqtxva .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ivjubqtxva .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ivjubqtxva .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ivjubqtxva .gt_left {
+  text-align: left;
+}
+
+#ivjubqtxva .gt_center {
+  text-align: center;
+}
+
+#ivjubqtxva .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ivjubqtxva .gt_font_normal {
+  font-weight: normal;
+}
+
+#ivjubqtxva .gt_font_bold {
+  font-weight: bold;
+}
+
+#ivjubqtxva .gt_font_italic {
+  font-style: italic;
+}
+
+#ivjubqtxva .gt_super {
+  font-size: 65%;
+}
+
+#ivjubqtxva .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ivjubqtxva .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ivjubqtxva .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ivjubqtxva .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ivjubqtxva .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ivjubqtxva .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ivjubqtxva .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
 <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Gross Charges">Gross Charges</th>
@@ -1423,7 +2165,7 @@ are useful for healthcare revenue cycle analysis.</p>
 <div class="section level2">
 <h2 id="aging-bins">Aging Bins<a class="anchor" aria-label="anchor" href="#aging-bins"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bin_aging.html">bin_aging</a></span><span class="op">(</span></span>
 <span>  df <span class="op">=</span> <span class="fu"><a href="../reference/load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span>,</span>
 <span>  date <span class="op">=</span> <span class="va">dos</span></span>
@@ -1448,12 +2190,12 @@ are useful for healthcare revenue cycle analysis.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross Secondary   146 (120, 150]</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient    Patient     146 (120, 150]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/sorted_bars.html">sorted_bars</a></span><span class="op">(</span><span class="va">ins_name</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<p><img src="getting-started_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
@@ -1474,24 +2216,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Aging Report"</span>, <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tab_options</span><span class="op">(</span>heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
 <span>              quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="fbsnayoreh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ulbfdpbcyv table {
+#fbsnayoreh table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ulbfdpbcyv thead, #ulbfdpbcyv tbody, #ulbfdpbcyv tfoot, #ulbfdpbcyv tr, #ulbfdpbcyv td, #ulbfdpbcyv th {
+#fbsnayoreh thead, #fbsnayoreh tbody, #fbsnayoreh tfoot, #fbsnayoreh tr, #fbsnayoreh td, #fbsnayoreh th {
   border-style: none;
 }
 
-#ulbfdpbcyv p {
+#fbsnayoreh p {
   margin: 0;
   padding: 0;
 }
 
-#ulbfdpbcyv .gt_table {
+#fbsnayoreh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1517,12 +2259,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_caption {
+#fbsnayoreh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ulbfdpbcyv .gt_title {
+#fbsnayoreh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1534,7 +2276,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#ulbfdpbcyv .gt_subtitle {
+#fbsnayoreh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1546,7 +2288,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#ulbfdpbcyv .gt_heading {
+#fbsnayoreh .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1558,13 +2300,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_bottom_border {
+#fbsnayoreh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#ulbfdpbcyv .gt_col_headings {
+#fbsnayoreh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -1579,7 +2321,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_col_heading {
+#fbsnayoreh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1599,7 +2341,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#ulbfdpbcyv .gt_column_spanner_outer {
+#fbsnayoreh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1611,15 +2353,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#ulbfdpbcyv .gt_column_spanner_outer:first-child {
+#fbsnayoreh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ulbfdpbcyv .gt_column_spanner_outer:last-child {
+#fbsnayoreh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ulbfdpbcyv .gt_column_spanner {
+#fbsnayoreh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -1631,11 +2373,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#ulbfdpbcyv .gt_spanner_row {
+#fbsnayoreh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ulbfdpbcyv .gt_group_heading {
+#fbsnayoreh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1661,7 +2403,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#ulbfdpbcyv .gt_empty_group_heading {
+#fbsnayoreh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1676,15 +2418,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#ulbfdpbcyv .gt_from_md > :first-child {
+#fbsnayoreh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ulbfdpbcyv .gt_from_md > :last-child {
+#fbsnayoreh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ulbfdpbcyv .gt_row {
+#fbsnayoreh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1703,7 +2445,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#ulbfdpbcyv .gt_stub {
+#fbsnayoreh .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -1716,7 +2458,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_stub_row_group {
+#fbsnayoreh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1730,15 +2472,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#ulbfdpbcyv .gt_row_group_first td {
+#fbsnayoreh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ulbfdpbcyv .gt_row_group_first th {
+#fbsnayoreh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ulbfdpbcyv .gt_summary_row {
+#fbsnayoreh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1748,16 +2490,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_first_summary_row {
+#fbsnayoreh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#ulbfdpbcyv .gt_first_summary_row.thick {
+#fbsnayoreh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ulbfdpbcyv .gt_last_summary_row {
+#fbsnayoreh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1767,7 +2509,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#ulbfdpbcyv .gt_grand_summary_row {
+#fbsnayoreh .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -1777,7 +2519,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_first_grand_summary_row {
+#fbsnayoreh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1787,7 +2529,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#ulbfdpbcyv .gt_last_grand_summary_row_top {
+#fbsnayoreh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1797,11 +2539,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#ulbfdpbcyv .gt_striped {
+#fbsnayoreh .gt_striped {
   background-color: #F4F4F4;
 }
 
-#ulbfdpbcyv .gt_table_body {
+#fbsnayoreh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -1810,7 +2552,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#ulbfdpbcyv .gt_footnotes {
+#fbsnayoreh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1824,7 +2566,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_footnote {
+#fbsnayoreh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1833,7 +2575,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_sourcenotes {
+#fbsnayoreh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1847,7 +2589,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ulbfdpbcyv .gt_sourcenote {
+#fbsnayoreh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1855,63 +2597,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ulbfdpbcyv .gt_left {
+#fbsnayoreh .gt_left {
   text-align: left;
 }
 
-#ulbfdpbcyv .gt_center {
+#fbsnayoreh .gt_center {
   text-align: center;
 }
 
-#ulbfdpbcyv .gt_right {
+#fbsnayoreh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ulbfdpbcyv .gt_font_normal {
+#fbsnayoreh .gt_font_normal {
   font-weight: normal;
 }
 
-#ulbfdpbcyv .gt_font_bold {
+#fbsnayoreh .gt_font_bold {
   font-weight: bold;
 }
 
-#ulbfdpbcyv .gt_font_italic {
+#fbsnayoreh .gt_font_italic {
   font-style: italic;
 }
 
-#ulbfdpbcyv .gt_super {
+#fbsnayoreh .gt_super {
   font-size: 65%;
 }
 
-#ulbfdpbcyv .gt_footnote_marks {
+#fbsnayoreh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ulbfdpbcyv .gt_asterisk {
+#fbsnayoreh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ulbfdpbcyv .gt_indent_1 {
+#fbsnayoreh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ulbfdpbcyv .gt_indent_2 {
+#fbsnayoreh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ulbfdpbcyv .gt_indent_3 {
+#fbsnayoreh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ulbfdpbcyv .gt_indent_4 {
+#fbsnayoreh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ulbfdpbcyv .gt_indent_5 {
+#fbsnayoreh .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1955,7 +2697,7 @@ are useful for healthcare revenue cycle analysis.</p>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
@@ -1974,24 +2716,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="kgufivjubq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="alspkzcbwj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#kgufivjubq table {
+#alspkzcbwj table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kgufivjubq thead, #kgufivjubq tbody, #kgufivjubq tfoot, #kgufivjubq tr, #kgufivjubq td, #kgufivjubq th {
+#alspkzcbwj thead, #alspkzcbwj tbody, #alspkzcbwj tfoot, #alspkzcbwj tr, #alspkzcbwj td, #alspkzcbwj th {
   border-style: none;
 }
 
-#kgufivjubq p {
+#alspkzcbwj p {
   margin: 0;
   padding: 0;
 }
 
-#kgufivjubq .gt_table {
+#alspkzcbwj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2017,12 +2759,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_caption {
+#alspkzcbwj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kgufivjubq .gt_title {
+#alspkzcbwj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2034,7 +2776,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#kgufivjubq .gt_subtitle {
+#alspkzcbwj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2046,7 +2788,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#kgufivjubq .gt_heading {
+#alspkzcbwj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2058,13 +2800,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_bottom_border {
+#alspkzcbwj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#kgufivjubq .gt_col_headings {
+#alspkzcbwj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2079,7 +2821,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_col_heading {
+#alspkzcbwj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2099,7 +2841,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#kgufivjubq .gt_column_spanner_outer {
+#alspkzcbwj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2111,15 +2853,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#kgufivjubq .gt_column_spanner_outer:first-child {
+#alspkzcbwj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kgufivjubq .gt_column_spanner_outer:last-child {
+#alspkzcbwj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kgufivjubq .gt_column_spanner {
+#alspkzcbwj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -2131,11 +2873,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#kgufivjubq .gt_spanner_row {
+#alspkzcbwj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kgufivjubq .gt_group_heading {
+#alspkzcbwj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2161,7 +2903,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#kgufivjubq .gt_empty_group_heading {
+#alspkzcbwj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2176,15 +2918,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#kgufivjubq .gt_from_md > :first-child {
+#alspkzcbwj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kgufivjubq .gt_from_md > :last-child {
+#alspkzcbwj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kgufivjubq .gt_row {
+#alspkzcbwj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2203,7 +2945,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#kgufivjubq .gt_stub {
+#alspkzcbwj .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -2216,7 +2958,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_stub_row_group {
+#alspkzcbwj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2230,15 +2972,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#kgufivjubq .gt_row_group_first td {
+#alspkzcbwj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kgufivjubq .gt_row_group_first th {
+#alspkzcbwj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kgufivjubq .gt_summary_row {
+#alspkzcbwj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2248,16 +2990,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_first_summary_row {
+#alspkzcbwj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#kgufivjubq .gt_first_summary_row.thick {
+#alspkzcbwj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kgufivjubq .gt_last_summary_row {
+#alspkzcbwj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2267,7 +3009,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#kgufivjubq .gt_grand_summary_row {
+#alspkzcbwj .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -2277,7 +3019,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_first_grand_summary_row {
+#alspkzcbwj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2287,7 +3029,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#kgufivjubq .gt_last_grand_summary_row_top {
+#alspkzcbwj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2297,11 +3039,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#kgufivjubq .gt_striped {
+#alspkzcbwj .gt_striped {
   background-color: #F4F4F4;
 }
 
-#kgufivjubq .gt_table_body {
+#alspkzcbwj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2310,7 +3052,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#kgufivjubq .gt_footnotes {
+#alspkzcbwj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2324,7 +3066,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_footnote {
+#alspkzcbwj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2333,7 +3075,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_sourcenotes {
+#alspkzcbwj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2347,7 +3089,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#kgufivjubq .gt_sourcenote {
+#alspkzcbwj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2355,63 +3097,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#kgufivjubq .gt_left {
+#alspkzcbwj .gt_left {
   text-align: left;
 }
 
-#kgufivjubq .gt_center {
+#alspkzcbwj .gt_center {
   text-align: center;
 }
 
-#kgufivjubq .gt_right {
+#alspkzcbwj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kgufivjubq .gt_font_normal {
+#alspkzcbwj .gt_font_normal {
   font-weight: normal;
 }
 
-#kgufivjubq .gt_font_bold {
+#alspkzcbwj .gt_font_bold {
   font-weight: bold;
 }
 
-#kgufivjubq .gt_font_italic {
+#alspkzcbwj .gt_font_italic {
   font-style: italic;
 }
 
-#kgufivjubq .gt_super {
+#alspkzcbwj .gt_super {
   font-size: 65%;
 }
 
-#kgufivjubq .gt_footnote_marks {
+#alspkzcbwj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kgufivjubq .gt_asterisk {
+#alspkzcbwj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kgufivjubq .gt_indent_1 {
+#alspkzcbwj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kgufivjubq .gt_indent_2 {
+#alspkzcbwj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kgufivjubq .gt_indent_3 {
+#alspkzcbwj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kgufivjubq .gt_indent_4 {
+#alspkzcbwj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kgufivjubq .gt_indent_5 {
+#alspkzcbwj .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2590,7 +3332,7 @@ are useful for healthcare revenue cycle analysis.</p>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">ins_name</span>, <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
@@ -2610,24 +3352,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="txvafbsnay" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="cfdjagfvsy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#txvafbsnay table {
+#cfdjagfvsy table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#txvafbsnay thead, #txvafbsnay tbody, #txvafbsnay tfoot, #txvafbsnay tr, #txvafbsnay td, #txvafbsnay th {
+#cfdjagfvsy thead, #cfdjagfvsy tbody, #cfdjagfvsy tfoot, #cfdjagfvsy tr, #cfdjagfvsy td, #cfdjagfvsy th {
   border-style: none;
 }
 
-#txvafbsnay p {
+#cfdjagfvsy p {
   margin: 0;
   padding: 0;
 }
 
-#txvafbsnay .gt_table {
+#cfdjagfvsy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2653,12 +3395,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_caption {
+#cfdjagfvsy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#txvafbsnay .gt_title {
+#cfdjagfvsy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2670,7 +3412,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#txvafbsnay .gt_subtitle {
+#cfdjagfvsy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2682,7 +3424,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#txvafbsnay .gt_heading {
+#cfdjagfvsy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2694,13 +3436,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_bottom_border {
+#cfdjagfvsy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#txvafbsnay .gt_col_headings {
+#cfdjagfvsy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2715,7 +3457,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_col_heading {
+#cfdjagfvsy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2735,7 +3477,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#txvafbsnay .gt_column_spanner_outer {
+#cfdjagfvsy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2747,15 +3489,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#txvafbsnay .gt_column_spanner_outer:first-child {
+#cfdjagfvsy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#txvafbsnay .gt_column_spanner_outer:last-child {
+#cfdjagfvsy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#txvafbsnay .gt_column_spanner {
+#cfdjagfvsy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -2767,11 +3509,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#txvafbsnay .gt_spanner_row {
+#cfdjagfvsy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#txvafbsnay .gt_group_heading {
+#cfdjagfvsy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2797,7 +3539,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#txvafbsnay .gt_empty_group_heading {
+#cfdjagfvsy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2812,15 +3554,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#txvafbsnay .gt_from_md > :first-child {
+#cfdjagfvsy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#txvafbsnay .gt_from_md > :last-child {
+#cfdjagfvsy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#txvafbsnay .gt_row {
+#cfdjagfvsy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2839,7 +3581,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#txvafbsnay .gt_stub {
+#cfdjagfvsy .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -2852,7 +3594,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_stub_row_group {
+#cfdjagfvsy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2866,15 +3608,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#txvafbsnay .gt_row_group_first td {
+#cfdjagfvsy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#txvafbsnay .gt_row_group_first th {
+#cfdjagfvsy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#txvafbsnay .gt_summary_row {
+#cfdjagfvsy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2884,16 +3626,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_first_summary_row {
+#cfdjagfvsy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#txvafbsnay .gt_first_summary_row.thick {
+#cfdjagfvsy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#txvafbsnay .gt_last_summary_row {
+#cfdjagfvsy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2903,7 +3645,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#txvafbsnay .gt_grand_summary_row {
+#cfdjagfvsy .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -2913,7 +3655,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_first_grand_summary_row {
+#cfdjagfvsy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2923,7 +3665,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#txvafbsnay .gt_last_grand_summary_row_top {
+#cfdjagfvsy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2933,11 +3675,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#txvafbsnay .gt_striped {
+#cfdjagfvsy .gt_striped {
   background-color: #F4F4F4;
 }
 
-#txvafbsnay .gt_table_body {
+#cfdjagfvsy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2946,7 +3688,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#txvafbsnay .gt_footnotes {
+#cfdjagfvsy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2960,7 +3702,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_footnote {
+#cfdjagfvsy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2969,7 +3711,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_sourcenotes {
+#cfdjagfvsy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2983,7 +3725,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#txvafbsnay .gt_sourcenote {
+#cfdjagfvsy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2991,63 +3733,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#txvafbsnay .gt_left {
+#cfdjagfvsy .gt_left {
   text-align: left;
 }
 
-#txvafbsnay .gt_center {
+#cfdjagfvsy .gt_center {
   text-align: center;
 }
 
-#txvafbsnay .gt_right {
+#cfdjagfvsy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#txvafbsnay .gt_font_normal {
+#cfdjagfvsy .gt_font_normal {
   font-weight: normal;
 }
 
-#txvafbsnay .gt_font_bold {
+#cfdjagfvsy .gt_font_bold {
   font-weight: bold;
 }
 
-#txvafbsnay .gt_font_italic {
+#cfdjagfvsy .gt_font_italic {
   font-style: italic;
 }
 
-#txvafbsnay .gt_super {
+#cfdjagfvsy .gt_super {
   font-size: 65%;
 }
 
-#txvafbsnay .gt_footnote_marks {
+#cfdjagfvsy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#txvafbsnay .gt_asterisk {
+#cfdjagfvsy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#txvafbsnay .gt_indent_1 {
+#cfdjagfvsy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#txvafbsnay .gt_indent_2 {
+#cfdjagfvsy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#txvafbsnay .gt_indent_3 {
+#cfdjagfvsy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#txvafbsnay .gt_indent_4 {
+#cfdjagfvsy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#txvafbsnay .gt_indent_5 {
+#cfdjagfvsy .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

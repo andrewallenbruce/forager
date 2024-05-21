@@ -103,8 +103,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.svg" class="logo" alt=""><h1 id="forager-">
-<code>forager</code> 
+<img src="logo.svg" class="logo" alt=""><h1 id="forager-">forager 
 <a class="anchor" aria-label="anchor" href="#forager-"></a>
 </h1>
 </div>
@@ -119,26 +118,18 @@
 <p><br></p>
 <!-- badges: start -->
 
-<p><code>forager</code> is a work-in-progress, the goal of which is to become a suite of integrated analytics tools focused on a comprehensive overview of a healthcare organization’s operational and financial performance areas. Build your own rule-based, automated reporting pipeline to monitor:</p>
-<ul>
-<li>Patient Scheduling</li>
-<li>Coding / Billing</li>
-<li>Productivity</li>
-<li>Collections &amp; A/R</li>
-<li>Denial Management</li>
-</ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the development version of <code>forager</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrewallenbruce/forager" class="external-link">forager</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://clock.r-lib.org" class="external-link">clock</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrewallenbruce/forager" class="external-link">forager</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://andrewallenbruce.github.io/fuimus/" class="external-link">fuimus</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="foundation-time-measurement">Foundation: Time Measurement<a class="anchor" aria-label="anchor" href="#foundation-time-measurement"></a>
@@ -176,777 +167,191 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 × 5</span></span>
-<span><span class="co">#&gt;    claim_id   payer        ins_class balance    dates           </span></span>
-<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;variable&gt; &lt;list&gt;          </span></span>
-<span><span class="co">#&gt;  1 00001      Medicaid     Secondary 152.85747  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  2 00002      UnitedHealth Secondary  36.05447  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  3 00003      Centene      Secondary  90.33910  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  4 00004      UnitedHealth Secondary  51.64573  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  5 00005      Medicaid     Secondary 154.65047  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  6 00006      Humana       Secondary 132.19150  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  7 00007      Centene      Primary    77.79067  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  8 00008      Humana       Secondary 139.89570  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt;  9 00009      Anthem       Primary    71.28777  &lt;tibble [1 × 5]&gt;</span></span>
-<span><span class="co">#&gt; 10 00010      Centene      Secondary 141.13423  &lt;tibble [1 × 5]&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 10 × 9</span></span>
+<span><span class="co">#&gt;    claim_id   date_of_service payer    ins_class balance    date_of_release</span></span>
+<span><span class="co">#&gt;    &lt;variable&gt; &lt;date&gt;          &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;date&gt;         </span></span>
+<span><span class="co">#&gt;  1 00001      2022-06-20      Medicaid Secondary 191.92213  2022-07-05     </span></span>
+<span><span class="co">#&gt;  2 00002      2022-12-20      BCBS     Primary   239.44870  2022-12-29     </span></span>
+<span><span class="co">#&gt;  3 00003      2022-06-20      Cigna    Secondary 150.90283  2022-07-04     </span></span>
+<span><span class="co">#&gt;  4 00004      2023-02-20      BCBS     Primary   100.98583  2023-03-03     </span></span>
+<span><span class="co">#&gt;  5 00005      2023-03-20      Medicaid Secondary 103.16400  2023-04-02     </span></span>
+<span><span class="co">#&gt;  6 00006      2022-10-20      BCBS     Primary    26.85437  2022-11-06     </span></span>
+<span><span class="co">#&gt;  7 00007      2022-07-20      Cigna    Secondary 116.19070  2022-08-01     </span></span>
+<span><span class="co">#&gt;  8 00008      2022-12-20      Humana   Secondary 180.63007  2022-12-30     </span></span>
+<span><span class="co">#&gt;  9 00009      2022-06-20      Medicare Secondary 179.69207  2022-07-02     </span></span>
+<span><span class="co">#&gt; 10 00010      2022-10-20      Anthem   Primary   141.31267  2022-11-06     </span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: date_of_submission &lt;date&gt;, date_of_acceptance &lt;date&gt;,</span></span>
+<span><span class="co">#&gt; #   date_of_adjudication &lt;date&gt;</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>     <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"date"</span><span class="op">)</span>, </span>
-<span>                         names_to <span class="op">=</span> <span class="st">"date_type"</span>, </span>
-<span>                         values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>                         <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>                         <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="12%">
-<col width="17%">
-<col width="13%">
-<col width="13%">
-<col width="27%">
-<col width="15%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">claim_id</th>
-<th align="left">payer</th>
-<th align="left">ins_class</th>
-<th align="right">balance</th>
-<th align="left">date_type</th>
-<th align="left">date</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">00001</td>
-<td align="left">Medicaid</td>
-<td align="left">Secondary</td>
-<td align="right">152.85747</td>
-<td align="left">date_of_service</td>
-<td align="left">2020-09-19</td>
-</tr>
-<tr class="even">
-<td align="left">00001</td>
-<td align="left">Medicaid</td>
-<td align="left">Secondary</td>
-<td align="right">152.85747</td>
-<td align="left">date_of_release</td>
-<td align="left">2020-09-30</td>
-</tr>
-<tr class="odd">
-<td align="left">00001</td>
-<td align="left">Medicaid</td>
-<td align="left">Secondary</td>
-<td align="right">152.85747</td>
-<td align="left">date_of_submission</td>
-<td align="left">2020-10-02</td>
-</tr>
-<tr class="even">
-<td align="left">00001</td>
-<td align="left">Medicaid</td>
-<td align="left">Secondary</td>
-<td align="right">152.85747</td>
-<td align="left">date_of_acceptance</td>
-<td align="left">2020-10-05</td>
-</tr>
-<tr class="odd">
-<td align="left">00001</td>
-<td align="left">Medicaid</td>
-<td align="left">Secondary</td>
-<td align="right">152.85747</td>
-<td align="left">date_of_adjudication</td>
-<td align="left">2020-11-09</td>
-</tr>
-<tr class="even">
-<td align="left">00002</td>
-<td align="left">UnitedHealth</td>
-<td align="left">Secondary</td>
-<td align="right">36.05447</td>
-<td align="left">date_of_service</td>
-<td align="left">2020-07-19</td>
-</tr>
-<tr class="odd">
-<td align="left">00002</td>
-<td align="left">UnitedHealth</td>
-<td align="left">Secondary</td>
-<td align="right">36.05447</td>
-<td align="left">date_of_release</td>
-<td align="left">2020-08-02</td>
-</tr>
-<tr class="even">
-<td align="left">00002</td>
-<td align="left">UnitedHealth</td>
-<td align="left">Secondary</td>
-<td align="right">36.05447</td>
-<td align="left">date_of_submission</td>
-<td align="left">2020-08-04</td>
-</tr>
-<tr class="odd">
-<td align="left">00002</td>
-<td align="left">UnitedHealth</td>
-<td align="left">Secondary</td>
-<td align="right">36.05447</td>
-<td align="left">date_of_acceptance</td>
-<td align="left">2020-08-04</td>
-</tr>
-<tr class="even">
-<td align="left">00002</td>
-<td align="left">UnitedHealth</td>
-<td align="left">Secondary</td>
-<td align="right">36.05447</td>
-<td align="left">date_of_adjudication</td>
-<td align="left">2020-09-09</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span></span>
+<span>    cols      <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"date"</span><span class="op">)</span>, </span>
+<span>    names_to  <span class="op">=</span> <span class="st">"date_type"</span>, </span>
+<span>    values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>days_diff <span class="op">=</span> <span class="fu">lead</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">-</span> <span class="va">date</span>,</span>
+<span>         .by <span class="op">=</span> <span class="va">claim_id</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 75,000 × 7</span></span>
+<span><span class="co">#&gt;    claim_id   payer    ins_class balance    date_type       date       days_diff</span></span>
+<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;chr&gt;           &lt;date&gt;     &lt;drtn&gt;   </span></span>
+<span><span class="co">#&gt;  1 00001      Medicaid Secondary 191.9221   date_of_service 2022-06-20 15 days  </span></span>
+<span><span class="co">#&gt;  2 00001      Medicaid Secondary 191.9221   date_of_release 2022-07-05  4 days  </span></span>
+<span><span class="co">#&gt;  3 00001      Medicaid Secondary 191.9221   date_of_submis… 2022-07-09  1 days  </span></span>
+<span><span class="co">#&gt;  4 00001      Medicaid Secondary 191.9221   date_of_accept… 2022-07-10 31 days  </span></span>
+<span><span class="co">#&gt;  5 00001      Medicaid Secondary 191.9221   date_of_adjudi… 2022-08-10 NA days  </span></span>
+<span><span class="co">#&gt;  6 00002      BCBS     Primary   239.4487   date_of_service 2022-12-20  9 days  </span></span>
+<span><span class="co">#&gt;  7 00002      BCBS     Primary   239.4487   date_of_release 2022-12-29  1 days  </span></span>
+<span><span class="co">#&gt;  8 00002      BCBS     Primary   239.4487   date_of_submis… 2022-12-30  5 days  </span></span>
+<span><span class="co">#&gt;  9 00002      BCBS     Primary   239.4487   date_of_accept… 2023-01-04 27 days  </span></span>
+<span><span class="co">#&gt; 10 00002      BCBS     Primary   239.4487   date_of_adjudi… 2023-01-31 NA days  </span></span>
+<span><span class="co">#&gt; # ℹ 74,990 more rows</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_release</span>, <span class="va">provider_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_submission</span>, <span class="va">billing_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_acceptance</span>, <span class="va">processing_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_adjudication</span>, <span class="va">payer_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, </span>
-<span>                   balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
-<span>                   avg_prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">provider_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, </span>
-<span>                   avg_bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">billing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                   avg_accept_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                   avg_pay_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                   avg_days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="9%">
-<col width="12%">
-<col width="13%">
-<col width="12%">
-<col width="12%">
-<col width="14%">
-<col width="11%">
-<col width="14%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">month</th>
-<th align="right">no_of_claims</th>
-<th align="right">balance_total</th>
-<th align="right">avg_prov_lag</th>
-<th align="right">avg_bill_lag</th>
-<th align="right">avg_accept_lag</th>
-<th align="right">avg_pay_lag</th>
-<th align="right">avg_days_in_ar</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">January</td>
-<td align="right">1277</td>
-<td align="right">174559.7</td>
-<td align="right">10.79</td>
-<td align="right">2.20</td>
-<td align="right">3.05</td>
-<td align="right">33.18</td>
-<td align="right">35.37</td>
-</tr>
-<tr class="even">
-<td align="left">February</td>
-<td align="right">1263</td>
-<td align="right">171249.5</td>
-<td align="right">11.22</td>
-<td align="right">2.32</td>
-<td align="right">3.11</td>
-<td align="right">33.01</td>
-<td align="right">35.34</td>
-</tr>
-<tr class="odd">
-<td align="left">March</td>
-<td align="right">1225</td>
-<td align="right">156436.5</td>
-<td align="right">11.05</td>
-<td align="right">2.31</td>
-<td align="right">3.14</td>
-<td align="right">33.05</td>
-<td align="right">35.36</td>
-</tr>
-<tr class="even">
-<td align="left">April</td>
-<td align="right">1257</td>
-<td align="right">168064.5</td>
-<td align="right">11.11</td>
-<td align="right">2.39</td>
-<td align="right">3.08</td>
-<td align="right">33.19</td>
-<td align="right">35.58</td>
-</tr>
-<tr class="odd">
-<td align="left">May</td>
-<td align="right">1281</td>
-<td align="right">167327.5</td>
-<td align="right">11.22</td>
-<td align="right">2.31</td>
-<td align="right">3.09</td>
-<td align="right">33.20</td>
-<td align="right">35.51</td>
-</tr>
-<tr class="even">
-<td align="left">June</td>
-<td align="right">1251</td>
-<td align="right">163328.0</td>
-<td align="right">10.84</td>
-<td align="right">2.28</td>
-<td align="right">3.20</td>
-<td align="right">33.26</td>
-<td align="right">35.54</td>
-</tr>
-<tr class="odd">
-<td align="left">July</td>
-<td align="right">1238</td>
-<td align="right">166397.6</td>
-<td align="right">10.92</td>
-<td align="right">2.31</td>
-<td align="right">3.06</td>
-<td align="right">33.17</td>
-<td align="right">35.47</td>
-</tr>
-<tr class="even">
-<td align="left">August</td>
-<td align="right">1239</td>
-<td align="right">162255.0</td>
-<td align="right">10.82</td>
-<td align="right">2.32</td>
-<td align="right">3.09</td>
-<td align="right">33.10</td>
-<td align="right">35.41</td>
-</tr>
-<tr class="odd">
-<td align="left">September</td>
-<td align="right">1281</td>
-<td align="right">173373.6</td>
-<td align="right">10.99</td>
-<td align="right">2.22</td>
-<td align="right">3.12</td>
-<td align="right">33.09</td>
-<td align="right">35.31</td>
-</tr>
-<tr class="even">
-<td align="left">October</td>
-<td align="right">1200</td>
-<td align="right">160917.7</td>
-<td align="right">11.12</td>
-<td align="right">2.28</td>
-<td align="right">3.09</td>
-<td align="right">33.25</td>
-<td align="right">35.53</td>
-</tr>
-<tr class="odd">
-<td align="left">November</td>
-<td align="right">1236</td>
-<td align="right">165392.2</td>
-<td align="right">11.00</td>
-<td align="right">2.35</td>
-<td align="right">3.16</td>
-<td align="right">33.16</td>
-<td align="right">35.51</td>
-</tr>
-<tr class="even">
-<td align="left">December</td>
-<td align="right">1252</td>
-<td align="right">167007.3</td>
-<td align="right">10.92</td>
-<td align="right">2.39</td>
-<td align="right">3.11</td>
-<td align="right">33.21</td>
-<td align="right">35.60</td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
+<code class="sourceCode R"><span><span class="va">x_days</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_release</span>, <span class="va">prov_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_submission</span>, <span class="va">bill_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_acceptance</span>, <span class="va">proc_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_adjudication</span>, <span class="va">payer_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_adjudication</span>, <span class="va">dar</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_release</span>, <span class="va">provider_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_submission</span>, <span class="va">billing_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_acceptance</span>, <span class="va">processing_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_adjudication</span>, <span class="va">payer_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>qtr <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/quarter.html" class="external-link">quarter</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>, avg_prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">provider_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, avg_bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">billing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                   avg_accept_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processing_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                      avg_pay_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                      avg_days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="4%">
-<col width="13%">
-<col width="14%">
-<col width="13%">
-<col width="13%">
-<col width="14%">
-<col width="12%">
-<col width="14%">
-</colgroup>
-<thead><tr class="header">
-<th align="right">qtr</th>
-<th align="right">no_of_claims</th>
-<th align="right">balance_total</th>
-<th align="right">avg_prov_lag</th>
-<th align="right">avg_bill_lag</th>
-<th align="right">avg_accept_lag</th>
-<th align="right">avg_pay_lag</th>
-<th align="right">avg_days_in_ar</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">1</td>
-<td align="right">3765</td>
-<td align="right">502245.7</td>
-<td align="right">11.02</td>
-<td align="right">2.28</td>
-<td align="right">3.10</td>
-<td align="right">33.08</td>
-<td align="right">35.36</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">3789</td>
-<td align="right">498720.0</td>
-<td align="right">11.06</td>
-<td align="right">2.33</td>
-<td align="right">3.12</td>
-<td align="right">33.22</td>
-<td align="right">35.54</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">3758</td>
-<td align="right">502026.2</td>
-<td align="right">10.91</td>
-<td align="right">2.28</td>
-<td align="right">3.09</td>
-<td align="right">33.12</td>
-<td align="right">35.40</td>
-</tr>
-<tr class="even">
-<td align="right">4</td>
-<td align="right">3688</td>
-<td align="right">493317.2</td>
-<td align="right">11.01</td>
-<td align="right">2.34</td>
-<td align="right">3.12</td>
-<td align="right">33.21</td>
-<td align="right">35.55</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="va">x_days</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span>month <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>    prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">prov_lag</span><span class="op">)</span>, </span>
+<span>    bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">bill_lag</span><span class="op">)</span>,</span>
+<span>    proc_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">proc_lag</span><span class="op">)</span>,</span>
+<span>    payer_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>,</span>
+<span>    dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dar</span><span class="op">)</span>, </span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 12 × 8</span></span>
+<span><span class="co">#&gt;    month     n_claims balance prov_lag bill_lag proc_lag payer_lag   dar</span></span>
+<span><span class="co">#&gt;    &lt;ord&gt;        &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 January       1190 163636.     11.1     2.34     3.06      33.1  35.4</span></span>
+<span><span class="co">#&gt;  2 February      1262 161645.     11.0     2.24     3.12      33.0  35.3</span></span>
+<span><span class="co">#&gt;  3 March         1339 171348.     10.9     2.33     3.22      33.3  35.7</span></span>
+<span><span class="co">#&gt;  4 April         1164 162699.     11.0     2.41     3.13      33.2  35.6</span></span>
+<span><span class="co">#&gt;  5 May           1203 161203.     11.0     2.32     3.13      33.0  35.3</span></span>
+<span><span class="co">#&gt;  6 June          1269 173170.     10.9     2.36     3.03      33.1  35.5</span></span>
+<span><span class="co">#&gt;  7 July          1284 174301.     11.2     2.31     3.25      33.2  35.6</span></span>
+<span><span class="co">#&gt;  8 August        1243 163962.     10.9     2.39     3.12      33.2  35.5</span></span>
+<span><span class="co">#&gt;  9 September     1237 167538.     11.0     2.33     3.14      33.1  35.4</span></span>
+<span><span class="co">#&gt; 10 October       1287 176752.     11.0     2.31     3.10      33.2  35.5</span></span>
+<span><span class="co">#&gt; 11 November      1252 166784.     11.1     2.28     3.13      33.2  35.5</span></span>
+<span><span class="co">#&gt; 12 December      1270 167237.     11.3     2.35     3.12      33.2  35.6</span></span></code></pre></div>
+<p><br></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x_days</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span>qtr <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>    prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">prov_lag</span><span class="op">)</span>, </span>
+<span>    bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">bill_lag</span><span class="op">)</span>,</span>
+<span>    proc_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">proc_lag</span><span class="op">)</span>,</span>
+<span>    payer_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>,</span>
+<span>    dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dar</span><span class="op">)</span>, </span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 8</span></span>
+<span><span class="co">#&gt;     qtr n_claims balance prov_lag bill_lag proc_lag payer_lag   dar</span></span>
+<span><span class="co">#&gt;   &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1     1     3791 496629.     11.0     2.31     3.14      33.1  35.4</span></span>
+<span><span class="co">#&gt; 2     2     3636 497072.     11.0     2.36     3.09      33.1  35.5</span></span>
+<span><span class="co">#&gt; 3     3     3764 505800.     11.0     2.34     3.17      33.2  35.5</span></span>
+<span><span class="co">#&gt; 4     4     3809 510773.     11.1     2.31     3.12      33.2  35.5</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">forager</span><span class="fu">:::</span><span class="fu"><a href="reference/count_days.html">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_adjudication</span>, <span class="va">days_in_ar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span>aging_bucket <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">days_in_ar</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>no_of_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                   balance_total <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">aging_bucket</th>
-<th align="right">no_of_claims</th>
-<th align="right">balance_total</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">(0,30]</td>
-<td align="right">19</td>
-<td align="right">2776.459</td>
-</tr>
-<tr class="even">
-<td align="left">(30,60]</td>
-<td align="right">14899</td>
-<td align="right">1984261.643</td>
-</tr>
-<tr class="odd">
-<td align="left">(60,90]</td>
-<td align="right">82</td>
-<td align="right">9271.023</td>
-</tr>
-</tbody>
-</table>
+<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_adjudication</span>, <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span>aging_bin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">dar</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span><span class="co">#&gt;   aging_bin n_claims  balance</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;        &lt;int&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 (0,30]          16    2836.</span></span>
+<span><span class="co">#&gt; 2 (30,60]      14880 1994347.</span></span>
+<span><span class="co">#&gt; 3 (60,90]        104   13091.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 15,000 × 11</span></span>
+<span><span class="co">#&gt;    claim_id   date_of_service payer    ins_class balance    date_of_release</span></span>
+<span><span class="co">#&gt;    &lt;variable&gt; &lt;date&gt;          &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;date&gt;         </span></span>
+<span><span class="co">#&gt;  1 00001      2022-06-20      Medicaid Secondary 191.92213  2022-07-05     </span></span>
+<span><span class="co">#&gt;  2 00002      2022-12-20      BCBS     Primary   239.44870  2022-12-29     </span></span>
+<span><span class="co">#&gt;  3 00003      2022-06-20      Cigna    Secondary 150.90283  2022-07-04     </span></span>
+<span><span class="co">#&gt;  4 00004      2023-02-20      BCBS     Primary   100.98583  2023-03-03     </span></span>
+<span><span class="co">#&gt;  5 00005      2023-03-20      Medicaid Secondary 103.16400  2023-04-02     </span></span>
+<span><span class="co">#&gt;  6 00006      2022-10-20      BCBS     Primary    26.85437  2022-11-06     </span></span>
+<span><span class="co">#&gt;  7 00007      2022-07-20      Cigna    Secondary 116.19070  2022-08-01     </span></span>
+<span><span class="co">#&gt;  8 00008      2022-12-20      Humana   Secondary 180.63007  2022-12-30     </span></span>
+<span><span class="co">#&gt;  9 00009      2022-06-20      Medicare Secondary 179.69207  2022-07-02     </span></span>
+<span><span class="co">#&gt; 10 00010      2022-10-20      Anthem   Primary   141.31267  2022-11-06     </span></span>
+<span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 5 more variables: date_of_submission &lt;date&gt;, date_of_acceptance &lt;date&gt;,</span></span>
+<span><span class="co">#&gt; #   date_of_adjudication &lt;date&gt;, dar &lt;int&gt;, aging_bin &lt;fct&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-monthly-calculation">Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-monthly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  date <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2022</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
 <span>  gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365000.567</span>, <span class="fl">169094.46</span>, <span class="fl">297731.74</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">y</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">forager</span><span class="fu">::</span><span class="fu">dar_month</span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="8%">
-<col width="7%">
-<col width="4%">
-<col width="4%">
-<col width="6%">
-<col width="6%">
-<col width="6%">
-<col width="8%">
-<col width="8%">
-<col width="7%">
-<col width="6%">
-<col width="4%">
-<col width="7%">
-<col width="6%">
-<col width="8%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">date</th>
-<th align="left">month</th>
-<th align="right">nmon</th>
-<th align="right">ndip</th>
-<th align="right">gct</th>
-<th align="right">earb</th>
-<th align="right">earb_trg</th>
-<th align="right">earb_dc</th>
-<th align="right">earb_pct</th>
-<th align="right">adc</th>
-<th align="right">dar</th>
-<th align="left">pass</th>
-<th align="right">actual</th>
-<th align="right">ideal</th>
-<th align="right">radiff</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">2022-01-01</td>
-<td align="left">January</td>
-<td align="right">1</td>
-<td align="right">31</td>
-<td align="right">365000.5</td>
-<td align="right">182770.0</td>
-<td align="right">412097.3</td>
-<td align="right">-229327.35</td>
-<td align="right">-125.47319</td>
-<td align="right">11774.210</td>
-<td align="right">15.52291</td>
-<td align="left">TRUE</td>
-<td align="right">0.5007390</td>
-<td align="right">1.129032</td>
-<td align="right">-0.6282932</td>
-</tr>
-<tr class="even">
-<td align="left">2022-02-01</td>
-<td align="left">February</td>
-<td align="right">2</td>
-<td align="right">28</td>
-<td align="right">169090.8</td>
-<td align="right">169632.9</td>
-<td align="right">211363.5</td>
-<td align="right">-41730.61</td>
-<td align="right">-24.60054</td>
-<td align="right">6038.958</td>
-<td align="right">28.08977</td>
-<td align="left">TRUE</td>
-<td align="right">1.0032060</td>
-<td align="right">1.250000</td>
-<td align="right">-0.2467940</td>
-</tr>
-<tr class="odd">
-<td align="left">2022-03-01</td>
-<td align="left">March</td>
-<td align="right">3</td>
-<td align="right">31</td>
-<td align="right">297734.2</td>
-<td align="right">179348.2</td>
-<td align="right">336151.6</td>
-<td align="right">-156803.34</td>
-<td align="right">-87.42955</td>
-<td align="right">9604.330</td>
-<td align="right">18.67368</td>
-<td align="left">TRUE</td>
-<td align="right">0.6023769</td>
-<td align="right">1.129032</td>
-<td align="right">-0.5266554</td>
-</tr>
-<tr class="even">
-<td align="left">2022-04-01</td>
-<td align="left">April</td>
-<td align="right">4</td>
-<td align="right">30</td>
-<td align="right">364997.1</td>
-<td align="right">182774.3</td>
-<td align="right">425829.9</td>
-<td align="right">-243055.66</td>
-<td align="right">-132.98132</td>
-<td align="right">12166.570</td>
-<td align="right">15.02266</td>
-<td align="left">TRUE</td>
-<td align="right">0.5007554</td>
-<td align="right">1.166667</td>
-<td align="right">-0.6659112</td>
-</tr>
-<tr class="odd">
-<td align="left">2022-05-01</td>
-<td align="left">May</td>
-<td align="right">5</td>
-<td align="right">31</td>
-<td align="right">169096.5</td>
-<td align="right">169633.6</td>
-<td align="right">190915.4</td>
-<td align="right">-21281.81</td>
-<td align="right">-12.54576</td>
-<td align="right">5454.725</td>
-<td align="right">31.09846</td>
-<td align="left">TRUE</td>
-<td align="right">1.0031762</td>
-<td align="right">1.129032</td>
-<td align="right">-0.1258560</td>
-</tr>
-<tr class="even">
-<td align="left">2022-06-01</td>
-<td align="left">June</td>
-<td align="right">6</td>
-<td align="right">30</td>
-<td align="right">297726.8</td>
-<td align="right">179345.0</td>
-<td align="right">347347.9</td>
-<td align="right">-168002.94</td>
-<td align="right">-93.67584</td>
-<td align="right">9924.227</td>
-<td align="right">18.07143</td>
-<td align="left">TRUE</td>
-<td align="right">0.6023811</td>
-<td align="right">1.166667</td>
-<td align="right">-0.5642856</td>
-</tr>
-<tr class="odd">
-<td align="left">2022-07-01</td>
-<td align="left">July</td>
-<td align="right">7</td>
-<td align="right">31</td>
-<td align="right">365002.2</td>
-<td align="right">182771.0</td>
-<td align="right">412099.3</td>
-<td align="right">-229328.24</td>
-<td align="right">-125.47298</td>
-<td align="right">11774.264</td>
-<td align="right">15.52292</td>
-<td align="left">TRUE</td>
-<td align="right">0.5007395</td>
-<td align="right">1.129032</td>
-<td align="right">-0.6282928</td>
-</tr>
-<tr class="even">
-<td align="left">2022-08-01</td>
-<td align="left">August</td>
-<td align="right">8</td>
-<td align="right">31</td>
-<td align="right">169092.2</td>
-<td align="right">169627.4</td>
-<td align="right">190910.6</td>
-<td align="right">-21283.18</td>
-<td align="right">-12.54702</td>
-<td align="right">5454.588</td>
-<td align="right">31.09811</td>
-<td align="left">TRUE</td>
-<td align="right">1.0031650</td>
-<td align="right">1.129032</td>
-<td align="right">-0.1258673</td>
-</tr>
-<tr class="odd">
-<td align="left">2022-09-01</td>
-<td align="left">September</td>
-<td align="right">9</td>
-<td align="right">30</td>
-<td align="right">297729.7</td>
-<td align="right">179344.1</td>
-<td align="right">347351.3</td>
-<td align="right">-168007.25</td>
-<td align="right">-93.67872</td>
-<td align="right">9924.324</td>
-<td align="right">18.07116</td>
-<td align="left">TRUE</td>
-<td align="right">0.6023722</td>
-<td align="right">1.166667</td>
-<td align="right">-0.5642945</td>
-</tr>
-<tr class="even">
-<td align="left">2022-10-01</td>
-<td align="left">October</td>
-<td align="right">10</td>
-<td align="right">31</td>
-<td align="right">364999.9</td>
-<td align="right">182773.2</td>
-<td align="right">412096.7</td>
-<td align="right">-229323.51</td>
-<td align="right">-125.46892</td>
-<td align="right">11774.191</td>
-<td align="right">15.52320</td>
-<td align="left">TRUE</td>
-<td align="right">0.5007485</td>
-<td align="right">1.129032</td>
-<td align="right">-0.6282837</td>
-</tr>
-<tr class="odd">
-<td align="left">2022-11-01</td>
-<td align="left">November</td>
-<td align="right">11</td>
-<td align="right">30</td>
-<td align="right">169094.4</td>
-<td align="right">169636.7</td>
-<td align="right">197276.8</td>
-<td align="right">-27640.12</td>
-<td align="right">-16.29372</td>
-<td align="right">5636.479</td>
-<td align="right">30.09621</td>
-<td align="left">TRUE</td>
-<td align="right">1.0032069</td>
-<td align="right">1.166667</td>
-<td align="right">-0.1634597</td>
-</tr>
-<tr class="even">
-<td align="left">2022-12-01</td>
-<td align="left">December</td>
-<td align="right">12</td>
-<td align="right">31</td>
-<td align="right">297725.8</td>
-<td align="right">179346.6</td>
-<td align="right">336142.0</td>
-<td align="right">-156795.39</td>
-<td align="right">-87.42591</td>
-<td align="right">9604.057</td>
-<td align="right">18.67405</td>
-<td align="left">TRUE</td>
-<td align="right">0.6023886</td>
-<td align="right">1.129032</td>
-<td align="right">-0.5266437</td>
-</tr>
-</tbody>
-</table>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>    <span class="va">date</span>, </span>
+<span>    <span class="va">gct</span>, </span>
+<span>    <span class="va">earb</span>, </span>
+<span>    dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 12 × 27</span></span>
+<span><span class="co">#&gt;    date           gct    earb  nmon mon   month     nqtr  yqtr dqtr   year  ymon</span></span>
+<span><span class="co">#&gt;    &lt;date&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;ord&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2024-01-01 364999. 182771.     1 Jan   January      1 2024. 1Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  2 2024-02-01 169097. 169635.     2 Feb   February     1 2024. 1Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  3 2024-03-01 297734. 179347.     3 Mar   March        1 2024. 1Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  4 2024-04-01 365001. 182773.     4 Apr   April        2 2024. 2Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  5 2024-05-01 169093. 169632.     5 May   May          2 2024. 2Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  6 2024-06-01 297731. 179344.     6 Jun   June         2 2024. 2Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  7 2024-07-01 365000. 182773.     7 Jul   July         3 2024. 3Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  8 2024-08-01 169092. 169635.     8 Aug   August       3 2024. 3Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  9 2024-09-01 297731. 179348.     9 Sep   Septemb…     3 2024. 3Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; 10 2024-10-01 365002. 182771.    10 Oct   October      4 2024. 4Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; 11 2024-11-01 169094. 169631.    11 Nov   November     4 2024. 4Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; 12 2024-12-01 297729. 179347.    12 Dec   December     4 2024. 4Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; # ℹ 16 more variables: myear &lt;chr&gt;, nhalf &lt;int&gt;, yhalf &lt;dbl&gt;, dhalf &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   ndip &lt;int&gt;, adc &lt;dbl&gt;, dar &lt;dbl&gt;, dar_pass &lt;lgl&gt;, dar_diff &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   ratio_actual &lt;dbl&gt;, ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   earb_dec_abs &lt;dbl&gt;, earb_dec_pct &lt;dbl&gt;, earb_gct_diff &lt;dbl&gt;</span></span></code></pre></div>
 <p><br></p>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-quarterly-calculation">Days in AR Quarterly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-quarterly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">y</span> <span class="op">|&gt;</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu">dar_qtr</span><span class="op">(</span><span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="fl">35</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>     <span class="fu">gluedown</span><span class="fu">::</span><span class="fu">md_table</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="10%">
-<col width="5%">
-<col width="5%">
-<col width="8%">
-<col width="8%">
-<col width="8%">
-<col width="9%">
-<col width="8%">
-<col width="7%">
-<col width="5%">
-<col width="5%">
-<col width="6%">
-<col width="5%">
-<col width="6%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">date</th>
-<th align="right">nqtr</th>
-<th align="right">ndip</th>
-<th align="right">gct_qtr</th>
-<th align="right">earb</th>
-<th align="right">earb_trg</th>
-<th align="right">earb_dc</th>
-<th align="right">earb_pct</th>
-<th align="right">adc</th>
-<th align="right">dar</th>
-<th align="left">pass</th>
-<th align="right">actual</th>
-<th align="right">ideal</th>
-<th align="right">radiff</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">2022-03-01</td>
-<td align="right">1</td>
-<td align="right">90</td>
-<td align="right">831825.6</td>
-<td align="right">179348.2</td>
-<td align="right">323487.7</td>
-<td align="right">-144139.5</td>
-<td align="right">-80.37</td>
-<td align="right">9242.51</td>
-<td align="right">19.40</td>
-<td align="left">TRUE</td>
-<td align="right">0.22</td>
-<td align="right">0.39</td>
-<td align="right">-0.17</td>
-</tr>
-<tr class="even">
-<td align="left">2022-06-01</td>
-<td align="right">2</td>
-<td align="right">91</td>
-<td align="right">831820.4</td>
-<td align="right">179345.0</td>
-<td align="right">319930.9</td>
-<td align="right">-140585.9</td>
-<td align="right">-78.39</td>
-<td align="right">9140.88</td>
-<td align="right">19.62</td>
-<td align="left">TRUE</td>
-<td align="right">0.22</td>
-<td align="right">0.38</td>
-<td align="right">-0.16</td>
-</tr>
-<tr class="odd">
-<td align="left">2022-09-01</td>
-<td align="right">3</td>
-<td align="right">92</td>
-<td align="right">831824.2</td>
-<td align="right">179344.1</td>
-<td align="right">316454.8</td>
-<td align="right">-137110.7</td>
-<td align="right">-76.45</td>
-<td align="right">9041.57</td>
-<td align="right">19.84</td>
-<td align="left">TRUE</td>
-<td align="right">0.22</td>
-<td align="right">0.38</td>
-<td align="right">-0.16</td>
-</tr>
-<tr class="even">
-<td align="left">2022-12-01</td>
-<td align="right">4</td>
-<td align="right">92</td>
-<td align="right">831820.1</td>
-<td align="right">179346.6</td>
-<td align="right">316453.3</td>
-<td align="right">-137106.7</td>
-<td align="right">-76.45</td>
-<td align="right">9041.52</td>
-<td align="right">19.84</td>
-<td align="left">TRUE</td>
-<td align="right">0.22</td>
-<td align="right">0.38</td>
-<td align="right">-0.16</td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<div class="section level3">
-<h3 id="presentation-examples">Presentation Examples<a class="anchor" aria-label="anchor" href="#presentation-examples"></a>
-</h3>
-<p><img src="reference/figures/gt_1.png" style="width:75.0%"></p>
-<p><br></p>
-<p><img src="reference/figures/gt_2.png" style="width:75.0%"></p>
-<p><br></p>
-<p><img src="reference/figures/gt_qtr_2.png" style="width:75.0%"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>  gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365000.567</span>, <span class="fl">169094.46</span>, <span class="fl">297731.74</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/avg_dar.html">avg_dar</a></span><span class="op">(</span><span class="va">date</span>, </span>
+<span>          <span class="va">gct</span>, </span>
+<span>          <span class="va">earb</span>, </span>
+<span>          dart <span class="op">=</span> <span class="fl">35</span>, </span>
+<span>          period <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
+<div class="section level1">
+<h1 id="a-tibble-4--18">A tibble: 4 × 18<a class="anchor" aria-label="anchor" href="#a-tibble-4--18"></a>
+</h1>
+<p>date earb nmon nqtr month gct ndip adc dar dar_pass dar_diff <date><dbl><dbl><int><ord><dbl><int><dbl><dbl><lgl><dbl> 1 2024-03-01 1.79e5 3 1 March 8.32e5 91 9141. 19.6 TRUE -15.4 2 2024-06-01 1.79e5 6 2 June 8.32e5 91 9141. 19.6 TRUE -15.4 3 2024-09-01 1.79e5 9 3 Sept… 8.32e5 92 9042. 19.8 TRUE -15.2 4 2024-12-01 1.79e5 12 4 Dece… 8.32e5 92 9042. 19.8 TRUE -15.2 # ℹ 7 more variables: ratio_actual <dbl>, ratio_ideal <dbl>, ratio_diff <dbl>, # earb_target <dbl>, earb_dec_abs <dbl>, earb_dec_pct <dbl>, # earb_gct_diff <dbl></dbl></dbl></dbl></dbl></dbl></dbl></dbl></dbl></lgl></dbl></dbl></int></dbl></ord></int></dbl></dbl></date></p>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
@@ -996,8 +401,6 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="lifecycle"></a></li>
-<li><a href="https://www.repostatus.org/#wip" class="external-link"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="repo status: WIP"></a></li>
 <li><a href="https://choosealicense.com/licenses/mit/" class="external-link"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a></li>
 <li><a href="https://github.com/andrewallenbruce/forager" class="external-link"><img src="https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg" alt="code size"></a></li>
 <li><a href="https://github.com/andrewallenbruce/forager/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg" alt="last commit"></a></li>
