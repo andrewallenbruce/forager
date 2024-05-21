@@ -823,38 +823,65 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">ending_ar</span><span class="op">)</span>,</span>
+<span>            alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>            linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">gross_charges</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">1.5</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># geom_point(aes(x = date, y = ending_ar), size = 2) +</span></span>
+<span>  <span class="co"># geom_point(aes(x = date, y = gross_charges), color = "red", size = 2) +</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 month"</span>, date_labels <span class="op">=</span> <span class="st">"%b"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">ending_ar</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
-<span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">ending_ar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">gross_charges</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Days in AR by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">month</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span> <span class="op">~</span> <span class="va">month</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_ratio</span> <span class="op">&lt;-</span> <span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">mon</span>, <span class="va">ratio_ideal</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gross_charges</span>, y <span class="op">=</span> <span class="va">ending_ar</span><span class="op">)</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gross_charges</span>, y <span class="op">=</span> <span class="va">ending_ar</span><span class="op">)</span>,</span>
+<span>             group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">dar_mon</span>,</span>
+<span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gross_charges</span>, y <span class="op">=</span> <span class="va">ending_ar_target</span><span class="op">)</span>,</span>
+<span>    group <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"red"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>,</span>
+<span>              <span class="fu">aes</span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="va">ratio_ideal</span><span class="op">)</span>,</span>
+<span>              color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_abline</span><span class="op">(</span></span>
-<span>    slope <span class="op">=</span> <span class="va">dar_ratio</span><span class="op">$</span><span class="va">ratio_ideal</span>,</span>
-<span>    intercept <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>    color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">month</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
-<span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">ending_ar</span><span class="op">)</span></span>
-<span>                     <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
-<span>                     limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">gross_charges</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    data <span class="op">=</span> <span class="va">dar_mon</span>,</span>
+<span>    <span class="fu">aes</span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="va">ratio_actual</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"blue"</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.25</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span> <span class="op">~</span> <span class="va">month</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">ending_ar</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">ending_ar_target</span><span class="op">)</span></span>
+<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">gross_charges</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_shape_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="st">"Total Gross Charges"</span>, y <span class="op">=</span> <span class="st">"Ending AR Balance"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="getting-started_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
@@ -1509,7 +1536,7 @@ are useful for healthcare revenue cycle analysis.</p>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dar_month</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
@@ -1595,7 +1622,656 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>               locations <span class="op">=</span> <span class="fu">cells_column_labels</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">plot_col</span><span class="op">)</span></span>
 <span>               <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"Example **Days in AR Analysis** with the **{forager}** Package"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; Error in loadNamespace(x): there is no package called 'svglite'</span></span></code></pre>
+<div id="dpbcyvkguf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#dpbcyvkguf table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dpbcyvkguf thead, #dpbcyvkguf tbody, #dpbcyvkguf tfoot, #dpbcyvkguf tr, #dpbcyvkguf td, #dpbcyvkguf th {
+  border-style: none;
+}
+
+#dpbcyvkguf p {
+  margin: 0;
+  padding: 0;
+}
+
+#dpbcyvkguf .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dpbcyvkguf .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dpbcyvkguf .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dpbcyvkguf .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_bottom_border {
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_col_headings {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: none;
+  border-bottom-width: 1px;
+  border-bottom-color: #334422;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 12px;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dpbcyvkguf .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 12px;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dpbcyvkguf .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dpbcyvkguf .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dpbcyvkguf .gt_column_spanner {
+  border-bottom-style: none;
+  border-bottom-width: 1px;
+  border-bottom-color: #334422;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dpbcyvkguf .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dpbcyvkguf .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dpbcyvkguf .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dpbcyvkguf .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dpbcyvkguf .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dpbcyvkguf .gt_row {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dpbcyvkguf .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpbcyvkguf .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dpbcyvkguf .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dpbcyvkguf .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dpbcyvkguf .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpbcyvkguf .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dpbcyvkguf .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpbcyvkguf .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dpbcyvkguf .gt_table_body {
+  border-top-style: none;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #FFFFFF;
+}
+
+#dpbcyvkguf .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpbcyvkguf .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dpbcyvkguf .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dpbcyvkguf .gt_left {
+  text-align: left;
+}
+
+#dpbcyvkguf .gt_center {
+  text-align: center;
+}
+
+#dpbcyvkguf .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dpbcyvkguf .gt_font_normal {
+  font-weight: normal;
+}
+
+#dpbcyvkguf .gt_font_bold {
+  font-weight: bold;
+}
+
+#dpbcyvkguf .gt_font_italic {
+  font-style: italic;
+}
+
+#dpbcyvkguf .gt_super {
+  font-size: 65%;
+}
+
+#dpbcyvkguf .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dpbcyvkguf .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dpbcyvkguf .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dpbcyvkguf .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dpbcyvkguf .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dpbcyvkguf .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dpbcyvkguf .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="8" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="font-family: 'Libre Franklin'; font-weight: 800;">Example <strong>Days in AR Analysis</strong> with the <strong>{forager}</strong> Package</td>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Gross Charges">Gross Charges</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Ending AR">Ending AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Optimal AR">Optimal AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Days in AR">Days in AR</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Pass">Pass</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="&lt;span style='color:#2c3e50'&gt;&lt;b&gt;Charges (%) &lt;/b&gt;&lt;/span&gt;||&lt;span style='color:#8ca0aa'&gt;&lt;b&gt; AR (%)&lt;/b&gt;&lt;/span&gt;">
+<span style="color:#2c3e50"><b>Charges (%) </b></span>||<span style="color:#8ca0aa"><b> AR (%)</b></span>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id='Optimal AR Threshold&lt;span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;'>Optimal AR Threshold<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span>
+</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" scope="colgroup" id="Q1">Q1</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_1" scope="row" class="gt_row gt_center gt_stub">January</th>
+<td headers="Q1 stub_1_1 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #8CA0AA;">$325,982.23</td>
+<td headers="Q1 stub_1_1 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #7E929D;">$288,432.52</td>
+<td headers="Q1 stub_1_1 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$368,044.45</td>
+<td headers="Q1 stub_1_1 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #2C3E50;">27.43</td>
+<td headers="Q1 stub_1_1 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: normal; color: #8CA0AA;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:NA;">TRUE</div></td>
+<td headers="Q1 stub_1_1 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="75.20" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="75.20" y="0.0000000000000018" width="66.54" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="37.60" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">53.1</text><text x="108.46" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">46.9</text></g></svg>
+</td>
+<td headers="Q1 stub_1_1 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="160.22" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="125.56" y1="14.17" x2="125.56" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_2" scope="row" class="gt_row gt_center gt_stub">February</th>
+<td headers="Q1 stub_1_2 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #7E919D;">$297,731.74</td>
+<td headers="Q1 stub_1_2 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #8CA0AA;">$307,871.08</td>
+<td headers="Q1 stub_1_2 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$359,331.41</td>
+<td headers="Q1 stub_1_2 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #364859;">29.99</td>
+<td headers="Q1 stub_1_2 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: normal; color: #8CA0AA;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:NA;">TRUE</div></td>
+<td headers="Q1 stub_1_2 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="69.68" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="69.68" y="0.0000000000000018" width="72.05" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="34.84" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">49.2</text><text x="105.71" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">50.8</text></g></svg>
+</td>
+<td headers="Q1 stub_1_2 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="156.43" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="134.02" y1="14.17" x2="134.02" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_3" scope="row" class="gt_row gt_center gt_stub">March</th>
+<td headers="Q1 stub_1_3 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #4E6070;">$198,655.14</td>
+<td headers="Q1 stub_1_3 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #677A87;">$253,976.56</td>
+<td headers="Q1 stub_1_3 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$224,288.06</td>
+<td headers="Q1 stub_1_3 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #5C6E7D;">39.63</td>
+<td headers="Q1 stub_1_3 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: bolder; color: #2C3E50;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:#8CA0AA33;">FALSE</div></td>
+<td headers="Q1 stub_1_3 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="62.20" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="62.20" y="0.0000000000000018" width="79.53" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="31.10" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">44</text><text x="101.97" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">56</text></g></svg>
+</td>
+<td headers="Q1 stub_1_3 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="97.64" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="110.56" y1="14.17" x2="110.56" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" scope="colgroup" id="Q2">Q2</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_4" scope="row" class="gt_row gt_center gt_stub">April</th>
+<td headers="Q2 stub_1_4 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #485A6B;">$186,047.56</td>
+<td headers="Q2 stub_1_4 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #394B5C;">$183,684.92</td>
+<td headers="Q2 stub_1_4 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$217,055.49</td>
+<td headers="Q2 stub_1_4 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #344658;">29.62</td>
+<td headers="Q2 stub_1_4 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: normal; color: #8CA0AA;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:NA;">TRUE</div></td>
+<td headers="Q2 stub_1_4 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="71.32" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="71.32" y="0.0000000000000018" width="70.41" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="35.66" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="25.67px" lengthadjust="spacingAndGlyphs">50.32</text><text x="106.53" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="25.67px" lengthadjust="spacingAndGlyphs">49.68</text></g></svg>
+</td>
+<td headers="Q2 stub_1_4 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="94.49" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="79.96" y1="14.17" x2="79.96" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_5" scope="row" class="gt_row gt_center gt_stub">May</th>
+<td headers="Q2 stub_1_5 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #2C3E50;">$123,654.34</td>
+<td headers="Q2 stub_1_5 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #465869;">$204,227.59</td>
+<td headers="Q2 stub_1_5 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$139,609.74</td>
+<td headers="Q2 stub_1_5 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #8CA0AA;">51.20</td>
+<td headers="Q2 stub_1_5 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: bolder; color: #2C3E50;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:#8CA0AA33;">FALSE</div></td>
+<td headers="Q2 stub_1_5 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="53.45" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="53.45" y="0.0000000000000018" width="88.28" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="26.73" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">38</text><text x="97.59" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">62</text></g></svg>
+</td>
+<td headers="Q2 stub_1_5 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="60.78" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="88.91" y1="14.17" x2="88.91" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_center gt_stub">June</th>
+<td headers="Q2 stub_1_6 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #2F4153;">$131,440.28</td>
+<td headers="Q2 stub_1_6 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #465868;">$203,460.47</td>
+<td headers="Q2 stub_1_6 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$153,346.99</td>
+<td headers="Q2 stub_1_6 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #788B97;">46.44</td>
+<td headers="Q2 stub_1_6 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: bolder; color: #2C3E50;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:#8CA0AA33;">FALSE</div></td>
+<td headers="Q2 stub_1_6 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="55.63" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="55.63" y="0.0000000000000018" width="86.11" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="27.81" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">39</text><text x="98.68" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">61</text></g></svg>
+</td>
+<td headers="Q2 stub_1_6 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="66.76" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="88.57" y1="14.17" x2="88.57" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" scope="colgroup" id="Q3">Q3</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_7" scope="row" class="gt_row gt_center gt_stub">July</th>
+<td headers="Q3 stub_1_7 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #3A4C5D;">$153,991.95</td>
+<td headers="Q3 stub_1_7 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #394A5C;">$182,771.32</td>
+<td headers="Q3 stub_1_7 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$173,861.88</td>
+<td headers="Q3 stub_1_7 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #506372;">36.79</td>
+<td headers="Q3 stub_1_7 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: bolder; color: #2C3E50;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:#8CA0AA33;">FALSE</div></td>
+<td headers="Q3 stub_1_7 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="64.81" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="64.81" y="0.0000000000000018" width="76.92" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="32.41" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">45.7</text><text x="103.27" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">54.3</text></g></svg>
+</td>
+<td headers="Q3 stub_1_7 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="75.69" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="79.57" y1="14.17" x2="79.57" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_center gt_stub">August</th>
+<td headers="Q3 stub_1_8 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #3B4D5E;">$156,975.52</td>
+<td headers="Q3 stub_1_8 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #304254;">$169,633.64</td>
+<td headers="Q3 stub_1_8 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$177,230.43</td>
+<td headers="Q3 stub_1_8 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #435566;">33.50</td>
+<td headers="Q3 stub_1_8 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: normal; color: #8CA0AA;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:NA;">TRUE</div></td>
+<td headers="Q3 stub_1_8 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="68.12" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="68.12" y="0.0000000000000018" width="73.61" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="34.06" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">48.1</text><text x="104.93" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">51.9</text></g></svg>
+</td>
+<td headers="Q3 stub_1_8 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="77.15" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="73.85" y1="14.17" x2="73.85" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_center gt_stub">September</th>
+<td headers="Q3 stub_1_9 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #36485A;">$146,878.12</td>
+<td headers="Q3 stub_1_9 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #36485A;">$179,347.72</td>
+<td headers="Q3 stub_1_9 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$171,357.81</td>
+<td headers="Q3 stub_1_9 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #506271;">36.63</td>
+<td headers="Q3 stub_1_9 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: bolder; color: #2C3E50;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:#8CA0AA33;">FALSE</div></td>
+<td headers="Q3 stub_1_9 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="63.81" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="63.81" y="0.0000000000000018" width="77.92" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="31.91" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">45</text><text x="102.77" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="10.27px" lengthadjust="spacingAndGlyphs">55</text></g></svg>
+</td>
+<td headers="Q3 stub_1_9 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="74.60" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="78.07" y1="14.17" x2="78.07" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr class="gt_group_heading_row">
+<th colspan="8" class="gt_group_heading" scope="colgroup" id="Q4">Q4</th>
+    </tr>
+<tr class="gt_row_group_first">
+<th id="stub_1_10" scope="row" class="gt_row gt_center gt_stub">October</th>
+<td headers="Q4 stub_1_10 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #3E5061;">$163,799.44</td>
+<td headers="Q4 stub_1_10 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #364859;">$178,051.11</td>
+<td headers="Q4 stub_1_10 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$184,934.85</td>
+<td headers="Q4 stub_1_10 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #445667;">33.70</td>
+<td headers="Q4 stub_1_10 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: normal; color: #8CA0AA;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:NA;">TRUE</div></td>
+<td headers="Q4 stub_1_10 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="67.91" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="67.91" y="0.0000000000000018" width="73.82" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="33.96" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">47.9</text><text x="104.82" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">52.1</text></g></svg>
+</td>
+<td headers="Q4 stub_1_10 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="80.51" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="77.51" y1="14.17" x2="77.51" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_11" scope="row" class="gt_row gt_center gt_stub">November</th>
+<td headers="Q4 stub_1_11 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #394A5C;">$151,410.74</td>
+<td headers="Q4 stub_1_11 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #2C3E50;">$162,757.49</td>
+<td headers="Q4 stub_1_11 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$176,645.86</td>
+<td headers="Q4 stub_1_11 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #3F5061;">32.25</td>
+<td headers="Q4 stub_1_11 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: normal; color: #8CA0AA;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:NA;">TRUE</div></td>
+<td headers="Q4 stub_1_11 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="68.31" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="68.31" y="0.0000000000000018" width="73.43" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="34.15" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">48.2</text><text x="105.02" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">51.8</text></g></svg>
+</td>
+<td headers="Q4 stub_1_11 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="76.90" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="70.85" y1="14.17" x2="70.85" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+<tr>
+<th id="stub_1_12" scope="row" class="gt_row gt_center gt_stub">December</th>
+<td headers="Q4 stub_1_12 gross_charges" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #415363;">$169,094.46</td>
+<td headers="Q4 stub_1_12 ending_ar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #435566;">$199,849.32</td>
+<td headers="Q4 stub_1_12 ending_ar_target" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$190,913.10</td>
+<td headers="Q4 stub_1_12 dar" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400; color: #FFFFFF; background-color: #506271;">36.64</td>
+<td headers="Q4 stub_1_12 dar_pass" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: bolder; color: #2C3E50;"><div style="display: inline-block; padding: 2px 12px; border-radius: 15px; font-weight: 600; font-size: 12px; background:#8CA0AA33;">FALSE</div></td>
+<td headers="Q4 stub_1_12 list_data" class="gt_row gt_center" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="141.73pt" height="14.17pt" viewbox="0 0 141.73 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="141.73" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxNDEuNzN8MC4wMHwxNC4xNw==)"><rect x="0.00" y="0.0000000000000018" width="64.96" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #2C3E50;"></rect><rect x="64.96" y="0.0000000000000018" width="76.77" height="14.17" style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><text x="32.48" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">45.8</text><text x="103.35" y="10.20" text-anchor="middle" style='font-size: 8.54px;fill: #FFFFFF; font-family: "Nimbus Mono PS";' textlength="20.53px" lengthadjust="spacingAndGlyphs">54.2</text></g></svg>
+</td>
+<td headers="Q4 stub_1_12 plot_col" class="gt_row gt_left" style="font-family: 'Source Sans Pro'; font-weight: 400;">
+<?xml version='1.0' encoding='UTF-8' ?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="184.25pt" height="14.17pt" viewbox="0 0 184.25 14.17"><defs><style type="text/css"><![CDATA[    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {      fill: none;      stroke: #000000;      stroke-linecap: round;      stroke-linejoin: round;      stroke-miterlimit: 10.00;    }    .svglite text {      white-space: pre;    }  ]]></style></defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw=="><rect x="0.00" y="0.00" width="184.25" height="14.17"></rect></clippath></defs><g clip-path="url(#cpMC4wMHwxODQuMjV8MC4wMHwxNC4xNw==)"><rect x="0.00" y="3.54" width="83.11" height="7.09" style="stroke-width: 1.07; stroke: #8CA0AA; stroke-linecap: butt; stroke-linejoin: miter; fill: #8CA0AA;"></rect><line x1="87.00" y1="14.17" x2="87.00" y2="0.0000000000000018" style="stroke-width: 3.20; stroke: #000000; stroke-opacity: 0.70; stroke-linecap: butt;"></line><line x1="0.00" y1="14.17" x2="0.00" y2="0.0000000000000018" style="stroke-width: 2.13; stroke-linecap: butt;"></line></g></svg>
+</td>
+</tr>
+</tbody>
+<tfoot class="gt_footnotes"><tr>
+<td class="gt_footnote" colspan="8">
+<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Horizontal bar indicates Optimal AR, vertical bar is Actual.</td>
+    </tr></tfoot>
+</table>
+</div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -1655,24 +2331,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="ivjubqtxva" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="jubqtxvafb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ivjubqtxva table {
+#jubqtxvafb table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ivjubqtxva thead, #ivjubqtxva tbody, #ivjubqtxva tfoot, #ivjubqtxva tr, #ivjubqtxva td, #ivjubqtxva th {
+#jubqtxvafb thead, #jubqtxvafb tbody, #jubqtxvafb tfoot, #jubqtxvafb tr, #jubqtxvafb td, #jubqtxvafb th {
   border-style: none;
 }
 
-#ivjubqtxva p {
+#jubqtxvafb p {
   margin: 0;
   padding: 0;
 }
 
-#ivjubqtxva .gt_table {
+#jubqtxvafb .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1698,12 +2374,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#ivjubqtxva .gt_caption {
+#jubqtxvafb .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ivjubqtxva .gt_title {
+#jubqtxvafb .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1715,7 +2391,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#ivjubqtxva .gt_subtitle {
+#jubqtxvafb .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1727,7 +2403,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#ivjubqtxva .gt_heading {
+#jubqtxvafb .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1739,13 +2415,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ivjubqtxva .gt_bottom_border {
+#jubqtxvafb .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#ivjubqtxva .gt_col_headings {
+#jubqtxvafb .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -1760,7 +2436,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ivjubqtxva .gt_col_heading {
+#jubqtxvafb .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1780,7 +2456,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#ivjubqtxva .gt_column_spanner_outer {
+#jubqtxvafb .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1792,15 +2468,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#ivjubqtxva .gt_column_spanner_outer:first-child {
+#jubqtxvafb .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ivjubqtxva .gt_column_spanner_outer:last-child {
+#jubqtxvafb .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ivjubqtxva .gt_column_spanner {
+#jubqtxvafb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -1812,11 +2488,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#ivjubqtxva .gt_spanner_row {
+#jubqtxvafb .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ivjubqtxva .gt_group_heading {
+#jubqtxvafb .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1842,7 +2518,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#ivjubqtxva .gt_empty_group_heading {
+#jubqtxvafb .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1857,15 +2533,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#ivjubqtxva .gt_from_md > :first-child {
+#jubqtxvafb .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ivjubqtxva .gt_from_md > :last-child {
+#jubqtxvafb .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ivjubqtxva .gt_row {
+#jubqtxvafb .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1884,7 +2560,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#ivjubqtxva .gt_stub {
+#jubqtxvafb .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -1897,7 +2573,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ivjubqtxva .gt_stub_row_group {
+#jubqtxvafb .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1911,15 +2587,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#ivjubqtxva .gt_row_group_first td {
+#jubqtxvafb .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ivjubqtxva .gt_row_group_first th {
+#jubqtxvafb .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ivjubqtxva .gt_summary_row {
+#jubqtxvafb .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1929,16 +2605,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ivjubqtxva .gt_first_summary_row {
+#jubqtxvafb .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#ivjubqtxva .gt_first_summary_row.thick {
+#jubqtxvafb .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ivjubqtxva .gt_last_summary_row {
+#jubqtxvafb .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1948,7 +2624,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#ivjubqtxva .gt_grand_summary_row {
+#jubqtxvafb .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -1958,7 +2634,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ivjubqtxva .gt_first_grand_summary_row {
+#jubqtxvafb .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1968,7 +2644,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#ivjubqtxva .gt_last_grand_summary_row_top {
+#jubqtxvafb .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1978,11 +2654,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#ivjubqtxva .gt_striped {
+#jubqtxvafb .gt_striped {
   background-color: #F4F4F4;
 }
 
-#ivjubqtxva .gt_table_body {
+#jubqtxvafb .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -1991,7 +2667,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#ivjubqtxva .gt_footnotes {
+#jubqtxvafb .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2005,7 +2681,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ivjubqtxva .gt_footnote {
+#jubqtxvafb .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2014,7 +2690,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ivjubqtxva .gt_sourcenotes {
+#jubqtxvafb .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2028,7 +2704,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#ivjubqtxva .gt_sourcenote {
+#jubqtxvafb .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2036,63 +2712,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#ivjubqtxva .gt_left {
+#jubqtxvafb .gt_left {
   text-align: left;
 }
 
-#ivjubqtxva .gt_center {
+#jubqtxvafb .gt_center {
   text-align: center;
 }
 
-#ivjubqtxva .gt_right {
+#jubqtxvafb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ivjubqtxva .gt_font_normal {
+#jubqtxvafb .gt_font_normal {
   font-weight: normal;
 }
 
-#ivjubqtxva .gt_font_bold {
+#jubqtxvafb .gt_font_bold {
   font-weight: bold;
 }
 
-#ivjubqtxva .gt_font_italic {
+#jubqtxvafb .gt_font_italic {
   font-style: italic;
 }
 
-#ivjubqtxva .gt_super {
+#jubqtxvafb .gt_super {
   font-size: 65%;
 }
 
-#ivjubqtxva .gt_footnote_marks {
+#jubqtxvafb .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ivjubqtxva .gt_asterisk {
+#jubqtxvafb .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ivjubqtxva .gt_indent_1 {
+#jubqtxvafb .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ivjubqtxva .gt_indent_2 {
+#jubqtxvafb .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ivjubqtxva .gt_indent_3 {
+#jubqtxvafb .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ivjubqtxva .gt_indent_4 {
+#jubqtxvafb .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ivjubqtxva .gt_indent_5 {
+#jubqtxvafb .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2194,7 +2870,7 @@ are useful for healthcare revenue cycle analysis.</p>
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/sorted_bars.html">sorted_bars</a></span><span class="op">(</span><span class="va">ins_name</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
+<p><img src="getting-started_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -2216,24 +2892,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Aging Report"</span>, <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tab_options</span><span class="op">(</span>heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
 <span>              quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div id="fbsnayoreh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="snayorehal" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#fbsnayoreh table {
+#snayorehal table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fbsnayoreh thead, #fbsnayoreh tbody, #fbsnayoreh tfoot, #fbsnayoreh tr, #fbsnayoreh td, #fbsnayoreh th {
+#snayorehal thead, #snayorehal tbody, #snayorehal tfoot, #snayorehal tr, #snayorehal td, #snayorehal th {
   border-style: none;
 }
 
-#fbsnayoreh p {
+#snayorehal p {
   margin: 0;
   padding: 0;
 }
 
-#fbsnayoreh .gt_table {
+#snayorehal .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2259,12 +2935,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#fbsnayoreh .gt_caption {
+#snayorehal .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fbsnayoreh .gt_title {
+#snayorehal .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2276,7 +2952,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#fbsnayoreh .gt_subtitle {
+#snayorehal .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2288,7 +2964,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#fbsnayoreh .gt_heading {
+#snayorehal .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -2300,13 +2976,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#fbsnayoreh .gt_bottom_border {
+#snayorehal .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#fbsnayoreh .gt_col_headings {
+#snayorehal .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2321,7 +2997,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#fbsnayoreh .gt_col_heading {
+#snayorehal .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2341,7 +3017,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#fbsnayoreh .gt_column_spanner_outer {
+#snayorehal .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2353,15 +3029,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#fbsnayoreh .gt_column_spanner_outer:first-child {
+#snayorehal .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fbsnayoreh .gt_column_spanner_outer:last-child {
+#snayorehal .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fbsnayoreh .gt_column_spanner {
+#snayorehal .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -2373,11 +3049,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#fbsnayoreh .gt_spanner_row {
+#snayorehal .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fbsnayoreh .gt_group_heading {
+#snayorehal .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2403,7 +3079,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#fbsnayoreh .gt_empty_group_heading {
+#snayorehal .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2418,15 +3094,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#fbsnayoreh .gt_from_md > :first-child {
+#snayorehal .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fbsnayoreh .gt_from_md > :last-child {
+#snayorehal .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fbsnayoreh .gt_row {
+#snayorehal .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2445,7 +3121,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#fbsnayoreh .gt_stub {
+#snayorehal .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -2458,7 +3134,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#fbsnayoreh .gt_stub_row_group {
+#snayorehal .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2472,15 +3148,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#fbsnayoreh .gt_row_group_first td {
+#snayorehal .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fbsnayoreh .gt_row_group_first th {
+#snayorehal .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fbsnayoreh .gt_summary_row {
+#snayorehal .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2490,16 +3166,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#fbsnayoreh .gt_first_summary_row {
+#snayorehal .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#fbsnayoreh .gt_first_summary_row.thick {
+#snayorehal .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fbsnayoreh .gt_last_summary_row {
+#snayorehal .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2509,7 +3185,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#fbsnayoreh .gt_grand_summary_row {
+#snayorehal .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -2519,7 +3195,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#fbsnayoreh .gt_first_grand_summary_row {
+#snayorehal .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2529,7 +3205,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#fbsnayoreh .gt_last_grand_summary_row_top {
+#snayorehal .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2539,11 +3215,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#fbsnayoreh .gt_striped {
+#snayorehal .gt_striped {
   background-color: #F4F4F4;
 }
 
-#fbsnayoreh .gt_table_body {
+#snayorehal .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2552,7 +3228,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#fbsnayoreh .gt_footnotes {
+#snayorehal .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2566,7 +3242,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#fbsnayoreh .gt_footnote {
+#snayorehal .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2575,7 +3251,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#fbsnayoreh .gt_sourcenotes {
+#snayorehal .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2589,7 +3265,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#fbsnayoreh .gt_sourcenote {
+#snayorehal .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2597,63 +3273,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#fbsnayoreh .gt_left {
+#snayorehal .gt_left {
   text-align: left;
 }
 
-#fbsnayoreh .gt_center {
+#snayorehal .gt_center {
   text-align: center;
 }
 
-#fbsnayoreh .gt_right {
+#snayorehal .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fbsnayoreh .gt_font_normal {
+#snayorehal .gt_font_normal {
   font-weight: normal;
 }
 
-#fbsnayoreh .gt_font_bold {
+#snayorehal .gt_font_bold {
   font-weight: bold;
 }
 
-#fbsnayoreh .gt_font_italic {
+#snayorehal .gt_font_italic {
   font-style: italic;
 }
 
-#fbsnayoreh .gt_super {
+#snayorehal .gt_super {
   font-size: 65%;
 }
 
-#fbsnayoreh .gt_footnote_marks {
+#snayorehal .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fbsnayoreh .gt_asterisk {
+#snayorehal .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fbsnayoreh .gt_indent_1 {
+#snayorehal .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fbsnayoreh .gt_indent_2 {
+#snayorehal .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fbsnayoreh .gt_indent_3 {
+#snayorehal .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fbsnayoreh .gt_indent_4 {
+#snayorehal .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fbsnayoreh .gt_indent_5 {
+#snayorehal .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2716,24 +3392,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="alspkzcbwj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="spkzcbwjcf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#alspkzcbwj table {
+#spkzcbwjcf table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#alspkzcbwj thead, #alspkzcbwj tbody, #alspkzcbwj tfoot, #alspkzcbwj tr, #alspkzcbwj td, #alspkzcbwj th {
+#spkzcbwjcf thead, #spkzcbwjcf tbody, #spkzcbwjcf tfoot, #spkzcbwjcf tr, #spkzcbwjcf td, #spkzcbwjcf th {
   border-style: none;
 }
 
-#alspkzcbwj p {
+#spkzcbwjcf p {
   margin: 0;
   padding: 0;
 }
 
-#alspkzcbwj .gt_table {
+#spkzcbwjcf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2759,12 +3435,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_caption {
+#spkzcbwjcf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#alspkzcbwj .gt_title {
+#spkzcbwjcf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2776,7 +3452,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#alspkzcbwj .gt_subtitle {
+#spkzcbwjcf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2788,7 +3464,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#alspkzcbwj .gt_heading {
+#spkzcbwjcf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2800,13 +3476,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_bottom_border {
+#spkzcbwjcf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#alspkzcbwj .gt_col_headings {
+#spkzcbwjcf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -2821,7 +3497,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_col_heading {
+#spkzcbwjcf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2841,7 +3517,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#alspkzcbwj .gt_column_spanner_outer {
+#spkzcbwjcf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2853,15 +3529,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#alspkzcbwj .gt_column_spanner_outer:first-child {
+#spkzcbwjcf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#alspkzcbwj .gt_column_spanner_outer:last-child {
+#spkzcbwjcf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#alspkzcbwj .gt_column_spanner {
+#spkzcbwjcf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -2873,11 +3549,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#alspkzcbwj .gt_spanner_row {
+#spkzcbwjcf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#alspkzcbwj .gt_group_heading {
+#spkzcbwjcf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2903,7 +3579,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#alspkzcbwj .gt_empty_group_heading {
+#spkzcbwjcf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2918,15 +3594,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#alspkzcbwj .gt_from_md > :first-child {
+#spkzcbwjcf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#alspkzcbwj .gt_from_md > :last-child {
+#spkzcbwjcf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#alspkzcbwj .gt_row {
+#spkzcbwjcf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2945,7 +3621,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#alspkzcbwj .gt_stub {
+#spkzcbwjcf .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -2958,7 +3634,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_stub_row_group {
+#spkzcbwjcf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2972,15 +3648,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#alspkzcbwj .gt_row_group_first td {
+#spkzcbwjcf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#alspkzcbwj .gt_row_group_first th {
+#spkzcbwjcf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#alspkzcbwj .gt_summary_row {
+#spkzcbwjcf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2990,16 +3666,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_first_summary_row {
+#spkzcbwjcf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#alspkzcbwj .gt_first_summary_row.thick {
+#spkzcbwjcf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#alspkzcbwj .gt_last_summary_row {
+#spkzcbwjcf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3009,7 +3685,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#alspkzcbwj .gt_grand_summary_row {
+#spkzcbwjcf .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -3019,7 +3695,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_first_grand_summary_row {
+#spkzcbwjcf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3029,7 +3705,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#alspkzcbwj .gt_last_grand_summary_row_top {
+#spkzcbwjcf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3039,11 +3715,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#alspkzcbwj .gt_striped {
+#spkzcbwjcf .gt_striped {
   background-color: #F4F4F4;
 }
 
-#alspkzcbwj .gt_table_body {
+#spkzcbwjcf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -3052,7 +3728,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#alspkzcbwj .gt_footnotes {
+#spkzcbwjcf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3066,7 +3742,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_footnote {
+#spkzcbwjcf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3075,7 +3751,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_sourcenotes {
+#spkzcbwjcf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3089,7 +3765,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_sourcenote {
+#spkzcbwjcf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3097,63 +3773,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_left {
+#spkzcbwjcf .gt_left {
   text-align: left;
 }
 
-#alspkzcbwj .gt_center {
+#spkzcbwjcf .gt_center {
   text-align: center;
 }
 
-#alspkzcbwj .gt_right {
+#spkzcbwjcf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#alspkzcbwj .gt_font_normal {
+#spkzcbwjcf .gt_font_normal {
   font-weight: normal;
 }
 
-#alspkzcbwj .gt_font_bold {
+#spkzcbwjcf .gt_font_bold {
   font-weight: bold;
 }
 
-#alspkzcbwj .gt_font_italic {
+#spkzcbwjcf .gt_font_italic {
   font-style: italic;
 }
 
-#alspkzcbwj .gt_super {
+#spkzcbwjcf .gt_super {
   font-size: 65%;
 }
 
-#alspkzcbwj .gt_footnote_marks {
+#spkzcbwjcf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#alspkzcbwj .gt_asterisk {
+#spkzcbwjcf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#alspkzcbwj .gt_indent_1 {
+#spkzcbwjcf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#alspkzcbwj .gt_indent_2 {
+#spkzcbwjcf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#alspkzcbwj .gt_indent_3 {
+#spkzcbwjcf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#alspkzcbwj .gt_indent_4 {
+#spkzcbwjcf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#alspkzcbwj .gt_indent_5 {
+#spkzcbwjcf .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -3352,24 +4028,24 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="cfdjagfvsy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="djagfvsybh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#cfdjagfvsy table {
+#djagfvsybh table {
   font-family: 'JetBrains Mono', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cfdjagfvsy thead, #cfdjagfvsy tbody, #cfdjagfvsy tfoot, #cfdjagfvsy tr, #cfdjagfvsy td, #cfdjagfvsy th {
+#djagfvsybh thead, #djagfvsybh tbody, #djagfvsybh tfoot, #djagfvsybh tr, #djagfvsybh td, #djagfvsybh th {
   border-style: none;
 }
 
-#cfdjagfvsy p {
+#djagfvsybh p {
   margin: 0;
   padding: 0;
 }
 
-#cfdjagfvsy .gt_table {
+#djagfvsybh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3395,12 +4071,12 @@ are useful for healthcare revenue cycle analysis.</p>
   border-left-color: #D3D3D3;
 }
 
-#cfdjagfvsy .gt_caption {
+#djagfvsybh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cfdjagfvsy .gt_title {
+#djagfvsybh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3412,7 +4088,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-width: 0;
 }
 
-#cfdjagfvsy .gt_subtitle {
+#djagfvsybh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3424,7 +4100,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-width: 0;
 }
 
-#cfdjagfvsy .gt_heading {
+#djagfvsybh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3436,13 +4112,13 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjagfvsy .gt_bottom_border {
+#djagfvsybh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
 }
 
-#cfdjagfvsy .gt_col_headings {
+#djagfvsybh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -3457,7 +4133,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjagfvsy .gt_col_heading {
+#djagfvsybh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3477,7 +4153,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#cfdjagfvsy .gt_column_spanner_outer {
+#djagfvsybh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3489,15 +4165,15 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 4px;
 }
 
-#cfdjagfvsy .gt_column_spanner_outer:first-child {
+#djagfvsybh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cfdjagfvsy .gt_column_spanner_outer:last-child {
+#djagfvsybh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cfdjagfvsy .gt_column_spanner {
+#djagfvsybh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #0076BA;
@@ -3509,11 +4185,11 @@ are useful for healthcare revenue cycle analysis.</p>
   width: 100%;
 }
 
-#cfdjagfvsy .gt_spanner_row {
+#djagfvsybh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cfdjagfvsy .gt_group_heading {
+#djagfvsybh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3539,7 +4215,7 @@ are useful for healthcare revenue cycle analysis.</p>
   text-align: left;
 }
 
-#cfdjagfvsy .gt_empty_group_heading {
+#djagfvsybh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3554,15 +4230,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: middle;
 }
 
-#cfdjagfvsy .gt_from_md > :first-child {
+#djagfvsybh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cfdjagfvsy .gt_from_md > :last-child {
+#djagfvsybh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cfdjagfvsy .gt_row {
+#djagfvsybh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3581,7 +4257,7 @@ are useful for healthcare revenue cycle analysis.</p>
   overflow-x: hidden;
 }
 
-#cfdjagfvsy .gt_stub {
+#djagfvsybh .gt_stub {
   color: #FFFFFF;
   background-color: #0076BA;
   font-size: 100%;
@@ -3594,7 +4270,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#cfdjagfvsy .gt_stub_row_group {
+#djagfvsybh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3608,15 +4284,15 @@ are useful for healthcare revenue cycle analysis.</p>
   vertical-align: top;
 }
 
-#cfdjagfvsy .gt_row_group_first td {
+#djagfvsybh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cfdjagfvsy .gt_row_group_first th {
+#djagfvsybh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cfdjagfvsy .gt_summary_row {
+#djagfvsybh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3626,16 +4302,16 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#cfdjagfvsy .gt_first_summary_row {
+#djagfvsybh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #0076BA;
 }
 
-#cfdjagfvsy .gt_first_summary_row.thick {
+#djagfvsybh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cfdjagfvsy .gt_last_summary_row {
+#djagfvsybh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3645,7 +4321,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#cfdjagfvsy .gt_grand_summary_row {
+#djagfvsybh .gt_grand_summary_row {
   color: #333333;
   background-color: #89D3FE;
   text-transform: inherit;
@@ -3655,7 +4331,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#cfdjagfvsy .gt_first_grand_summary_row {
+#djagfvsybh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3665,7 +4341,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-top-color: #0076BA;
 }
 
-#cfdjagfvsy .gt_last_grand_summary_row_top {
+#djagfvsybh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3675,11 +4351,11 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#cfdjagfvsy .gt_striped {
+#djagfvsybh .gt_striped {
   background-color: #F4F4F4;
 }
 
-#cfdjagfvsy .gt_table_body {
+#djagfvsybh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #0076BA;
@@ -3688,7 +4364,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-bottom-color: #0076BA;
 }
 
-#cfdjagfvsy .gt_footnotes {
+#djagfvsybh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3702,7 +4378,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjagfvsy .gt_footnote {
+#djagfvsybh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3711,7 +4387,7 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#cfdjagfvsy .gt_sourcenotes {
+#djagfvsybh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3725,7 +4401,7 @@ are useful for healthcare revenue cycle analysis.</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjagfvsy .gt_sourcenote {
+#djagfvsybh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3733,63 +4409,63 @@ are useful for healthcare revenue cycle analysis.</p>
   padding-right: 5px;
 }
 
-#cfdjagfvsy .gt_left {
+#djagfvsybh .gt_left {
   text-align: left;
 }
 
-#cfdjagfvsy .gt_center {
+#djagfvsybh .gt_center {
   text-align: center;
 }
 
-#cfdjagfvsy .gt_right {
+#djagfvsybh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cfdjagfvsy .gt_font_normal {
+#djagfvsybh .gt_font_normal {
   font-weight: normal;
 }
 
-#cfdjagfvsy .gt_font_bold {
+#djagfvsybh .gt_font_bold {
   font-weight: bold;
 }
 
-#cfdjagfvsy .gt_font_italic {
+#djagfvsybh .gt_font_italic {
   font-style: italic;
 }
 
-#cfdjagfvsy .gt_super {
+#djagfvsybh .gt_super {
   font-size: 65%;
 }
 
-#cfdjagfvsy .gt_footnote_marks {
+#djagfvsybh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cfdjagfvsy .gt_asterisk {
+#djagfvsybh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cfdjagfvsy .gt_indent_1 {
+#djagfvsybh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cfdjagfvsy .gt_indent_2 {
+#djagfvsybh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cfdjagfvsy .gt_indent_3 {
+#djagfvsybh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cfdjagfvsy .gt_indent_4 {
+#djagfvsybh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cfdjagfvsy .gt_indent_5 {
+#djagfvsybh .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
