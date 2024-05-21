@@ -24,8 +24,10 @@ library(forager)
 library(dplyr)
 library(tidyr)
 library(gt)
+library(gtExtras)
 library(ggplot2)
 library(scales)
+library(headliner)
 ```
 
 ## Introduction
@@ -164,7 +166,148 @@ ggplot(dar_mon, aes(x = gross_charges, y = ending_ar), group = 1) +
 ```
 
 
+```{r}
+avg_dar(
+  df     = dar_ex(),
+  date   = date,
+  gct    = gross_charges,
+  earb   = ending_ar,
+  dart   = 35,
+  period = "month"
+) |> 
+  select(
+    month,
+    gross_charges,
+    ending_ar,
+    ending_ar_target,
+    dar,
+    dar_pass
+    ) |> 
+  headliner::add_headline_column(
+    x = ending_ar, 
+    y = ending_ar_target, 
+    headline = "{delta_p}% {trend} than Target", 
+    trend_phrases = headliner::trend_terms(more = "HIGHER", less = "Lower"), 
+    n_decimal = 0) |> 
+  gt(rowname_col = "month") |> 
+  cols_label(
+    gross_charges = "Gross Charges", 
+    ending_ar = "Ending AR", 
+    ending_ar_target = "Target AR", 
+    dar = "Days in AR", 
+    dar_pass = "Pass", 
+    headline = "Ending AR Trend"
+    ) |> 
+  tab_row_group(label = "Q4", rows = c(10:12)) |>
+  tab_row_group(label = "Q3", rows = c(7:9)) |>
+  tab_row_group(label = "Q2", rows = c(4:6)) |>
+  tab_row_group(label = "Q1", rows = c(1:3)) |> 
+  fmt_number(columns = dar) |>
+  fmt_currency(columns = c(gross_charges, ending_ar, ending_ar_target)) |>
+  tab_style(style = cell_text(font = c(
+    google_font(name = "IBM Plex Mono"),
+    default_fonts())), 
+    locations = cells_body(columns = c(gross_charges, ending_ar, ending_ar_target, dar))) |> 
+  opt_stylize(style = 6, color = "cyan") |> 
+  tab_header(
+    title = md("Example **Days in AR Analysis** with the **{forager}** Package"), 
+    subtitle = md("**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest <br> month-to-month increase in AR & highest percentage over the AR Target *(46%)*.")) |> 
+  opt_all_caps() |> 
+  grand_summary_rows(
+    columns = c(gross_charges, ending_ar, ending_ar_target, dar),
+    fns = list(Mean = ~mean(., na.rm = TRUE), Median = ~median(., na.rm = TRUE))) |> 
+  opt_table_font(font = list(gt::google_font(name = "Roboto"))) |> 
+  opt_align_table_header(align = "left")
+```
 
+
+```{r}
+dar_month <- avg_dar(
+  df     = dar_ex(),
+  date   = date,
+  gct    = gross_charges,
+  earb   = ending_ar,
+  dart   = 35,
+  period = "month"
+)
+
+# Create df for gt_plt_bar_stack
+dar_month_pct <- dar_month |>
+  mutate(
+    gct_pct = (gross_charges / (gross_charges + ending_ar) * 100),
+    earb_pct = (ending_ar / (gross_charges + ending_ar) * 100)) |>
+  select(month, gct_pct, earb_pct) |>
+  pivot_longer(-month, names_to = "measure", values_to = "percentage") |>
+  group_by(month) |>
+  summarize(list_data = list(percentage))
+
+# Right join data frames
+dar_month_join <- right_join(
+  dar_month, 
+  dar_month_pct, 
+  by = "month")
+
+# Create new copy cols for gt_plt_bullet
+dar_month_gt <- dar_month_join |> 
+  select(
+    month, 
+    gross_charges, 
+    ending_ar, 
+    ending_ar_target,
+    dar, 
+    dar_pass,
+    list_data
+    ) |>
+  mutate(
+    target_col = ending_ar, 
+    plot_col = ending_ar_target)
+
+# Create gt table
+dar_month_gt |> 
+  gt(rowname_col = "month") |>
+  cols_label(
+    gross_charges = "Gross Charges",
+    ending_ar = "Ending AR",
+    ending_ar_target = "Optimal AR",
+    dar = "Days in AR",
+    dar_pass = "Pass",
+    plot_col = "Optimal AR Threshold") |>
+  tab_row_group(label = "Q4", rows = c(10:12)) |>
+  tab_row_group(label = "Q3", rows = c(7:9)) |>
+  tab_row_group(label = "Q2", rows = c(4:6)) |>
+  tab_row_group(label = "Q1", rows = c(1:3)) |>
+  gt_theme_nytimes() |> 
+  fmt_number(columns = dar) |>
+  fmt_currency(columns = c(gross_charges, ending_ar, ending_ar_target)) |>
+  gt_plt_bullet(column = plot_col, 
+                target = target_col, 
+                palette = c("#8ca0aa", "black"), 
+                width = 65
+                ) |>
+  gt_plt_bar_stack(list_data, 
+                   width = 50, 
+                   labels = c("Charges (%) ", " AR (%)"), 
+                   palette = c("#2c3e50", "#8ca0aa")
+                   ) |>
+  gt_badge(dar_pass, 
+           palette = c("FALSE" = "#8ca0aa")
+           ) |> 
+  tab_style(style = cell_text(color = "#2c3e50", weight = "bolder"), 
+            locations = cells_body(columns = dar_pass, rows = dar_pass == "FALSE")
+            ) |>
+  tab_style(style = cell_text(color = "#8ca0aa", weight = "normal"), 
+            locations = cells_body(columns = dar_pass, rows = dar_pass == "TRUE")
+            ) |> 
+  data_color(columns = c(gross_charges, ending_ar, dar), 
+             colors = col_numeric(palette = c("#2c3e50", "#8ca0aa") |> 
+                                    as.character(), 
+                                  domain = NULL)
+             ) |> 
+  tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", 
+               locations = cells_column_labels(columns = plot_col)
+               ) |> 
+  tab_header(title = md("Example **Days in AR Analysis** with the **{forager}** Package"))
+```
 
 
 

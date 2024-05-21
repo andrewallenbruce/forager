@@ -86,17 +86,5 @@ bin_aging <- function(df, date, bin_type = "chop") {
       )
     )
   }
-
-  # if (bin_type == "ivs") {
-  #   start <- seq(0, 120, 30)
-  #   end <- start + 30
-  #   end[5] <- 1000
-  #
-  #   df <- df |>
-  #     dplyr::mutate(
-  #       aging_bin = ivs::iv(start, end)
-  #     )
-  # }
-
   return(df)
 }

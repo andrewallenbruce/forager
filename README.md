@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# `forager` <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="200"/></a>
+# forager <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="200"/></a>
 
 > ***Forager** (noun)*
 >
@@ -18,9 +18,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![repo status:
-WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
 [![code
@@ -31,32 +28,21 @@ commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)]
 coverage](https://codecov.io/gh/andrewallenbruce/forager/branch/master/graph/badge.svg)](https://app.codecov.io/gh/andrewallenbruce/forager?branch=master)
 <!-- badges: end -->
 
-`forager` is a work-in-progress, the goal of which is to become a suite
-of integrated analytics tools focused on a comprehensive overview of a
-healthcare organization’s operational and financial performance areas.
-Build your own rule-based, automated reporting pipeline to monitor:
-
-- Patient Scheduling
-- Coding / Billing
-- Productivity
-- Collections & A/R
-- Denial Management
-
 ## Installation
 
 You can install the development version of `forager` from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("andrewallenbruce/forager")
-
-# install.packages("remotes")
-remotes::install_github("andrewallenbruce/forager")
+# install.packages("pak")
+pak::pak("andrewallenbruce/forager")
 ```
 
 ``` r
+library(tidyverse)
+library(clock)
 library(forager)
+library(fuimus)
 ```
 
 ## Foundation: Time Measurement
@@ -90,179 +76,210 @@ identifying workflow issues.
 ``` r
 x <- forager::generate_data(15000)
 x |> head(n = 10)
-#> # A tibble: 10 × 5
-#>    claim_id   payer        ins_class balance    dates           
-#>    <variable> <chr>        <chr>     <variable> <list>          
-#>  1 00001      Medicaid     Secondary 152.85747  <tibble [1 × 5]>
-#>  2 00002      UnitedHealth Secondary  36.05447  <tibble [1 × 5]>
-#>  3 00003      Centene      Secondary  90.33910  <tibble [1 × 5]>
-#>  4 00004      UnitedHealth Secondary  51.64573  <tibble [1 × 5]>
-#>  5 00005      Medicaid     Secondary 154.65047  <tibble [1 × 5]>
-#>  6 00006      Humana       Secondary 132.19150  <tibble [1 × 5]>
-#>  7 00007      Centene      Primary    77.79067  <tibble [1 × 5]>
-#>  8 00008      Humana       Secondary 139.89570  <tibble [1 × 5]>
-#>  9 00009      Anthem       Primary    71.28777  <tibble [1 × 5]>
-#> 10 00010      Centene      Secondary 141.13423  <tibble [1 × 5]>
+#> # A tibble: 10 × 9
+#>    claim_id   date_of_service payer    ins_class balance    date_of_release
+#>    <variable> <date>          <chr>    <chr>     <variable> <date>         
+#>  1 00001      2022-06-20      Medicaid Secondary 191.92213  2022-07-05     
+#>  2 00002      2022-12-20      BCBS     Primary   239.44870  2022-12-29     
+#>  3 00003      2022-06-20      Cigna    Secondary 150.90283  2022-07-04     
+#>  4 00004      2023-02-20      BCBS     Primary   100.98583  2023-03-03     
+#>  5 00005      2023-03-20      Medicaid Secondary 103.16400  2023-04-02     
+#>  6 00006      2022-10-20      BCBS     Primary    26.85437  2022-11-06     
+#>  7 00007      2022-07-20      Cigna    Secondary 116.19070  2022-08-01     
+#>  8 00008      2022-12-20      Humana   Secondary 180.63007  2022-12-30     
+#>  9 00009      2022-06-20      Medicare Secondary 179.69207  2022-07-02     
+#> 10 00010      2022-10-20      Anthem   Primary   141.31267  2022-11-06     
+#> # ℹ 3 more variables: date_of_submission <date>, date_of_acceptance <date>,
+#> #   date_of_adjudication <date>
 ```
 
 <br>
 
 ``` r
-x |> tidyr::unnest(dates) |> 
-     tidyr::pivot_longer(cols = tidyr::starts_with("date"), 
-                         names_to = "date_type", 
-                         values_to = "date") |> 
-                         head(n = 10) |> 
-                         gluedown::md_table()
+x |> 
+  pivot_longer(
+    cols      = starts_with("date"), 
+    names_to  = "date_type", 
+    values_to = "date") |> 
+  mutate(days_diff = lead(date) - date,
+         .by = claim_id)
+#> # A tibble: 75,000 × 7
+#>    claim_id   payer    ins_class balance    date_type       date       days_diff
+#>    <variable> <chr>    <chr>     <variable> <chr>           <date>     <drtn>   
+#>  1 00001      Medicaid Secondary 191.9221   date_of_service 2022-06-20 15 days  
+#>  2 00001      Medicaid Secondary 191.9221   date_of_release 2022-07-05  4 days  
+#>  3 00001      Medicaid Secondary 191.9221   date_of_submis… 2022-07-09  1 days  
+#>  4 00001      Medicaid Secondary 191.9221   date_of_accept… 2022-07-10 31 days  
+#>  5 00001      Medicaid Secondary 191.9221   date_of_adjudi… 2022-08-10 NA days  
+#>  6 00002      BCBS     Primary   239.4487   date_of_service 2022-12-20  9 days  
+#>  7 00002      BCBS     Primary   239.4487   date_of_release 2022-12-29  1 days  
+#>  8 00002      BCBS     Primary   239.4487   date_of_submis… 2022-12-30  5 days  
+#>  9 00002      BCBS     Primary   239.4487   date_of_accept… 2023-01-04 27 days  
+#> 10 00002      BCBS     Primary   239.4487   date_of_adjudi… 2023-01-31 NA days  
+#> # ℹ 74,990 more rows
 ```
-
-| claim_id | payer        | ins_class |   balance | date_type            | date       |
-|:---------|:-------------|:----------|----------:|:---------------------|:-----------|
-| 00001    | Medicaid     | Secondary | 152.85747 | date_of_service      | 2020-09-19 |
-| 00001    | Medicaid     | Secondary | 152.85747 | date_of_release      | 2020-09-30 |
-| 00001    | Medicaid     | Secondary | 152.85747 | date_of_submission   | 2020-10-02 |
-| 00001    | Medicaid     | Secondary | 152.85747 | date_of_acceptance   | 2020-10-05 |
-| 00001    | Medicaid     | Secondary | 152.85747 | date_of_adjudication | 2020-11-09 |
-| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_service      | 2020-07-19 |
-| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_release      | 2020-08-02 |
-| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_submission   | 2020-08-04 |
-| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_acceptance   | 2020-08-04 |
-| 00002    | UnitedHealth | Secondary |  36.05447 | date_of_adjudication | 2020-09-09 |
 
 <br>
 
 ``` r
-x |> tidyr::unnest(dates) |> 
-  count_days(date_of_service, date_of_release, provider_lag) |> 
-  count_days(date_of_release, date_of_submission, billing_lag) |> 
-  count_days(date_of_submission, date_of_acceptance, processing_lag) |> 
+x_days <- x |> 
+  count_days(date_of_service, date_of_release, prov_lag) |> 
+  count_days(date_of_release, date_of_submission, bill_lag) |> 
+  count_days(date_of_submission, date_of_acceptance, proc_lag) |> 
   count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
-  count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
-  dplyr::group_by(month = clock::date_month_factor(date_of_service)) |> 
-  dplyr::summarise(no_of_claims = dplyr::n(), 
-                   balance_total = sum(balance),
-                   avg_prov_lag = round(mean(provider_lag), 2), 
-                   avg_bill_lag = round(mean(billing_lag), 2),
-                   avg_accept_lag = round(mean(processing_lag), 2),
-                   avg_pay_lag = round(mean(payer_lag), 2),
-                   avg_days_in_ar = round(mean(days_in_ar), 2), .groups = "drop") |> 
-  gluedown::md_table()
+  count_days(date_of_release, date_of_adjudication, dar)
 ```
 
-| month     | no_of_claims | balance_total | avg_prov_lag | avg_bill_lag | avg_accept_lag | avg_pay_lag | avg_days_in_ar |
-|:----------|-------------:|--------------:|-------------:|-------------:|---------------:|------------:|---------------:|
-| January   |         1277 |      174559.7 |        10.79 |         2.20 |           3.05 |       33.18 |          35.37 |
-| February  |         1263 |      171249.5 |        11.22 |         2.32 |           3.11 |       33.01 |          35.34 |
-| March     |         1225 |      156436.5 |        11.05 |         2.31 |           3.14 |       33.05 |          35.36 |
-| April     |         1257 |      168064.5 |        11.11 |         2.39 |           3.08 |       33.19 |          35.58 |
-| May       |         1281 |      167327.5 |        11.22 |         2.31 |           3.09 |       33.20 |          35.51 |
-| June      |         1251 |      163328.0 |        10.84 |         2.28 |           3.20 |       33.26 |          35.54 |
-| July      |         1238 |      166397.6 |        10.92 |         2.31 |           3.06 |       33.17 |          35.47 |
-| August    |         1239 |      162255.0 |        10.82 |         2.32 |           3.09 |       33.10 |          35.41 |
-| September |         1281 |      173373.6 |        10.99 |         2.22 |           3.12 |       33.09 |          35.31 |
-| October   |         1200 |      160917.7 |        11.12 |         2.28 |           3.09 |       33.25 |          35.53 |
-| November  |         1236 |      165392.2 |        11.00 |         2.35 |           3.16 |       33.16 |          35.51 |
-| December  |         1252 |      167007.3 |        10.92 |         2.39 |           3.11 |       33.21 |          35.60 |
+``` r
+x_days |> 
+  group_by(month = date_month_factor(date_of_service)) |> 
+  summarise(
+    n_claims = n(), 
+    balance = sum(balance),
+    prov_lag = mean(prov_lag), 
+    bill_lag = mean(bill_lag),
+    proc_lag = mean(proc_lag),
+    payer_lag = mean(payer_lag),
+    dar = mean(dar), 
+    .groups = "drop")
+#> # A tibble: 12 × 8
+#>    month     n_claims balance prov_lag bill_lag proc_lag payer_lag   dar
+#>    <ord>        <int>   <dbl>    <dbl>    <dbl>    <dbl>     <dbl> <dbl>
+#>  1 January       1190 163636.     11.1     2.34     3.06      33.1  35.4
+#>  2 February      1262 161645.     11.0     2.24     3.12      33.0  35.3
+#>  3 March         1339 171348.     10.9     2.33     3.22      33.3  35.7
+#>  4 April         1164 162699.     11.0     2.41     3.13      33.2  35.6
+#>  5 May           1203 161203.     11.0     2.32     3.13      33.0  35.3
+#>  6 June          1269 173170.     10.9     2.36     3.03      33.1  35.5
+#>  7 July          1284 174301.     11.2     2.31     3.25      33.2  35.6
+#>  8 August        1243 163962.     10.9     2.39     3.12      33.2  35.5
+#>  9 September     1237 167538.     11.0     2.33     3.14      33.1  35.4
+#> 10 October       1287 176752.     11.0     2.31     3.10      33.2  35.5
+#> 11 November      1252 166784.     11.1     2.28     3.13      33.2  35.5
+#> 12 December      1270 167237.     11.3     2.35     3.12      33.2  35.6
+```
 
 <br>
 
 ``` r
-x |> tidyr::unnest(dates) |> 
-  count_days(date_of_service, date_of_release, provider_lag) |> 
-  count_days(date_of_release, date_of_submission, billing_lag) |> 
-  count_days(date_of_submission, date_of_acceptance, processing_lag) |> 
-  count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
-  count_days(date_of_release, date_of_adjudication, days_in_ar) |> 
-  dplyr::group_by(qtr = lubridate::quarter(date_of_service)) |> 
-  dplyr::summarise(no_of_claims = dplyr::n(), balance_total = sum(balance), avg_prov_lag = round(mean(provider_lag), 2), avg_bill_lag = round(mean(billing_lag), 2),
-                   avg_accept_lag = round(mean(processing_lag), 2),
-                      avg_pay_lag = round(mean(payer_lag), 2),
-                      avg_days_in_ar = round(mean(days_in_ar), 2), .groups = "drop") |> 
-  gluedown::md_table()
+x_days |> 
+  group_by(qtr = quarter(date_of_service)) |> 
+  summarise(
+    n_claims = n(), 
+    balance = sum(balance),
+    prov_lag = mean(prov_lag), 
+    bill_lag = mean(bill_lag),
+    proc_lag = mean(proc_lag),
+    payer_lag = mean(payer_lag),
+    dar = mean(dar), 
+    .groups = "drop")
+#> # A tibble: 4 × 8
+#>     qtr n_claims balance prov_lag bill_lag proc_lag payer_lag   dar
+#>   <int>    <int>   <dbl>    <dbl>    <dbl>    <dbl>     <dbl> <dbl>
+#> 1     1     3791 496629.     11.0     2.31     3.14      33.1  35.4
+#> 2     2     3636 497072.     11.0     2.36     3.09      33.1  35.5
+#> 3     3     3764 505800.     11.0     2.34     3.17      33.2  35.5
+#> 4     4     3809 510773.     11.1     2.31     3.12      33.2  35.5
 ```
-
-| qtr | no_of_claims | balance_total | avg_prov_lag | avg_bill_lag | avg_accept_lag | avg_pay_lag | avg_days_in_ar |
-|----:|-------------:|--------------:|-------------:|-------------:|---------------:|------------:|---------------:|
-|   1 |         3765 |      502245.7 |        11.02 |         2.28 |           3.10 |       33.08 |          35.36 |
-|   2 |         3789 |      498720.0 |        11.06 |         2.33 |           3.12 |       33.22 |          35.54 |
-|   3 |         3758 |      502026.2 |        10.91 |         2.28 |           3.09 |       33.12 |          35.40 |
-|   4 |         3688 |      493317.2 |        11.01 |         2.34 |           3.12 |       33.21 |          35.55 |
 
 ## Aging Calculation
 
 ``` r
 x |> 
-  tidyr::unnest(dates) |> 
-  forager:::count_days(date_of_service, date_of_adjudication, days_in_ar) |> 
-  dplyr::group_by(aging_bucket = cut(days_in_ar, breaks = seq(0, 500, by = 30))) |> 
-  dplyr::summarise(no_of_claims = dplyr::n(),
-                   balance_total = sum(balance), .groups = "drop") |> 
-  gluedown::md_table()
+  count_days(date_of_service, date_of_adjudication, dar) |> 
+  group_by(aging_bin = cut(dar, breaks = seq(0, 500, by = 30))) |> 
+  summarise(
+    n_claims = n(),
+    balance = roundup(sum(balance)), 
+    .groups = "drop")
+#> # A tibble: 3 × 3
+#>   aging_bin n_claims  balance
+#>   <fct>        <int>    <dbl>
+#> 1 (0,30]          16    2836.
+#> 2 (30,60]      14880 1994347.
+#> 3 (60,90]        104   13091.
 ```
 
-| aging_bucket | no_of_claims | balance_total |
-|:-------------|-------------:|--------------:|
-| (0,30\]      |           19 |      2776.459 |
-| (30,60\]     |        14899 |   1984261.643 |
-| (60,90\]     |           82 |      9271.023 |
+``` r
+x |> 
+  bin_aging(date_of_service)
+#> # A tibble: 15,000 × 11
+#>    claim_id   date_of_service payer    ins_class balance    date_of_release
+#>    <variable> <date>          <chr>    <chr>     <variable> <date>         
+#>  1 00001      2022-06-20      Medicaid Secondary 191.92213  2022-07-05     
+#>  2 00002      2022-12-20      BCBS     Primary   239.44870  2022-12-29     
+#>  3 00003      2022-06-20      Cigna    Secondary 150.90283  2022-07-04     
+#>  4 00004      2023-02-20      BCBS     Primary   100.98583  2023-03-03     
+#>  5 00005      2023-03-20      Medicaid Secondary 103.16400  2023-04-02     
+#>  6 00006      2022-10-20      BCBS     Primary    26.85437  2022-11-06     
+#>  7 00007      2022-07-20      Cigna    Secondary 116.19070  2022-08-01     
+#>  8 00008      2022-12-20      Humana   Secondary 180.63007  2022-12-30     
+#>  9 00009      2022-06-20      Medicare Secondary 179.69207  2022-07-02     
+#> 10 00010      2022-10-20      Anthem   Primary   141.31267  2022-11-06     
+#> # ℹ 14,990 more rows
+#> # ℹ 5 more variables: date_of_submission <date>, date_of_acceptance <date>,
+#> #   date_of_adjudication <date>, dar <int>, aging_bin <fct>
+```
 
 ## Days in AR Monthly Calculation
 
 ``` r
-y <- tibble::tibble(
-  date = clock::date_build(2022, 1:12),
+tibble(
+  date = date_build(2024, 1:12),
   gct = abs(rnorm(12, c(365000.567, 169094.46, 297731.74), c(2:3))),
-  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3))))
-
-y |> 
-  forager::dar_month(date, gct, earb, dart = 35) |> 
-  gluedown::md_table()
+  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3)))) |> 
+  avg_dar(
+    date, 
+    gct, 
+    earb, 
+    dart = 35)
+#> # A tibble: 12 × 27
+#>    date           gct    earb  nmon mon   month     nqtr  yqtr dqtr   year  ymon
+#>    <date>       <dbl>   <dbl> <dbl> <ord> <ord>    <int> <dbl> <chr> <dbl> <dbl>
+#>  1 2024-01-01 364999. 182771.     1 Jan   January      1 2024. 1Q24   2024 2024.
+#>  2 2024-02-01 169097. 169635.     2 Feb   February     1 2024. 1Q24   2024 2024.
+#>  3 2024-03-01 297734. 179347.     3 Mar   March        1 2024. 1Q24   2024 2024.
+#>  4 2024-04-01 365001. 182773.     4 Apr   April        2 2024. 2Q24   2024 2024.
+#>  5 2024-05-01 169093. 169632.     5 May   May          2 2024. 2Q24   2024 2024.
+#>  6 2024-06-01 297731. 179344.     6 Jun   June         2 2024. 2Q24   2024 2024.
+#>  7 2024-07-01 365000. 182773.     7 Jul   July         3 2024. 3Q24   2024 2024.
+#>  8 2024-08-01 169092. 169635.     8 Aug   August       3 2024. 3Q24   2024 2024.
+#>  9 2024-09-01 297731. 179348.     9 Sep   Septemb…     3 2024. 3Q24   2024 2024.
+#> 10 2024-10-01 365002. 182771.    10 Oct   October      4 2024. 4Q24   2024 2024.
+#> 11 2024-11-01 169094. 169631.    11 Nov   November     4 2024. 4Q24   2024 2024.
+#> 12 2024-12-01 297729. 179347.    12 Dec   December     4 2024. 4Q24   2024 2024.
+#> # ℹ 16 more variables: myear <chr>, nhalf <int>, yhalf <dbl>, dhalf <chr>,
+#> #   ndip <int>, adc <dbl>, dar <dbl>, dar_pass <lgl>, dar_diff <dbl>,
+#> #   ratio_actual <dbl>, ratio_ideal <dbl>, ratio_diff <dbl>, earb_target <dbl>,
+#> #   earb_dec_abs <dbl>, earb_dec_pct <dbl>, earb_gct_diff <dbl>
 ```
-
-| date       | month     | nmon | ndip |      gct |     earb | earb_trg |    earb_dc |   earb_pct |       adc |      dar | pass |    actual |    ideal |     radiff |
-|:-----------|:----------|-----:|-----:|---------:|---------:|---------:|-----------:|-----------:|----------:|---------:|:-----|----------:|---------:|-----------:|
-| 2022-01-01 | January   |    1 |   31 | 365000.5 | 182770.0 | 412097.3 | -229327.35 | -125.47319 | 11774.210 | 15.52291 | TRUE | 0.5007390 | 1.129032 | -0.6282932 |
-| 2022-02-01 | February  |    2 |   28 | 169090.8 | 169632.9 | 211363.5 |  -41730.61 |  -24.60054 |  6038.958 | 28.08977 | TRUE | 1.0032060 | 1.250000 | -0.2467940 |
-| 2022-03-01 | March     |    3 |   31 | 297734.2 | 179348.2 | 336151.6 | -156803.34 |  -87.42955 |  9604.330 | 18.67368 | TRUE | 0.6023769 | 1.129032 | -0.5266554 |
-| 2022-04-01 | April     |    4 |   30 | 364997.1 | 182774.3 | 425829.9 | -243055.66 | -132.98132 | 12166.570 | 15.02266 | TRUE | 0.5007554 | 1.166667 | -0.6659112 |
-| 2022-05-01 | May       |    5 |   31 | 169096.5 | 169633.6 | 190915.4 |  -21281.81 |  -12.54576 |  5454.725 | 31.09846 | TRUE | 1.0031762 | 1.129032 | -0.1258560 |
-| 2022-06-01 | June      |    6 |   30 | 297726.8 | 179345.0 | 347347.9 | -168002.94 |  -93.67584 |  9924.227 | 18.07143 | TRUE | 0.6023811 | 1.166667 | -0.5642856 |
-| 2022-07-01 | July      |    7 |   31 | 365002.2 | 182771.0 | 412099.3 | -229328.24 | -125.47298 | 11774.264 | 15.52292 | TRUE | 0.5007395 | 1.129032 | -0.6282928 |
-| 2022-08-01 | August    |    8 |   31 | 169092.2 | 169627.4 | 190910.6 |  -21283.18 |  -12.54702 |  5454.588 | 31.09811 | TRUE | 1.0031650 | 1.129032 | -0.1258673 |
-| 2022-09-01 | September |    9 |   30 | 297729.7 | 179344.1 | 347351.3 | -168007.25 |  -93.67872 |  9924.324 | 18.07116 | TRUE | 0.6023722 | 1.166667 | -0.5642945 |
-| 2022-10-01 | October   |   10 |   31 | 364999.9 | 182773.2 | 412096.7 | -229323.51 | -125.46892 | 11774.191 | 15.52320 | TRUE | 0.5007485 | 1.129032 | -0.6282837 |
-| 2022-11-01 | November  |   11 |   30 | 169094.4 | 169636.7 | 197276.8 |  -27640.12 |  -16.29372 |  5636.479 | 30.09621 | TRUE | 1.0032069 | 1.166667 | -0.1634597 |
-| 2022-12-01 | December  |   12 |   31 | 297725.8 | 179346.6 | 336142.0 | -156795.39 |  -87.42591 |  9604.057 | 18.67405 | TRUE | 0.6023886 | 1.129032 | -0.5266437 |
 
 <br>
 
 ## Days in AR Quarterly Calculation
 
 ``` r
-y |> forager::dar_qtr(date, gct, earb, 35) |> 
-     gluedown::md_table()
+tibble(
+  date = date_build(2024, 1:12),
+  gct = abs(rnorm(12, c(365000.567, 169094.46, 297731.74), c(2:3))),
+  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3)))) |> 
+  avg_dar(date, 
+          gct, 
+          earb, 
+          dart = 35, 
+          period = "quarter")
 ```
 
-| date       | nqtr | ndip |  gct_qtr |     earb | earb_trg |   earb_dc | earb_pct |     adc |   dar | pass | actual | ideal | radiff |
-|:-----------|-----:|-----:|---------:|---------:|---------:|----------:|---------:|--------:|------:|:-----|-------:|------:|-------:|
-| 2022-03-01 |    1 |   90 | 831825.6 | 179348.2 | 323487.7 | -144139.5 |   -80.37 | 9242.51 | 19.40 | TRUE |   0.22 |  0.39 |  -0.17 |
-| 2022-06-01 |    2 |   91 | 831820.4 | 179345.0 | 319930.9 | -140585.9 |   -78.39 | 9140.88 | 19.62 | TRUE |   0.22 |  0.38 |  -0.16 |
-| 2022-09-01 |    3 |   92 | 831824.2 | 179344.1 | 316454.8 | -137110.7 |   -76.45 | 9041.57 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
-| 2022-12-01 |    4 |   92 | 831820.1 | 179346.6 | 316453.3 | -137106.7 |   -76.45 | 9041.52 | 19.84 | TRUE |   0.22 |  0.38 |  -0.16 |
+# A tibble: 4 × 18
 
-<br>
-
-### Presentation Examples
-
-<img src="man/figures/gt_1.png" style="width:75.0%" />
-
-<br>
-
-<img src="man/figures/gt_2.png" style="width:75.0%" />
-
-<br>
-
-<img src="man/figures/gt_qtr_2.png" style="width:75.0%" />
+date earb nmon nqtr month gct ndip adc dar dar_pass dar_diff <date>
+<dbl> <dbl> <int> <ord> <dbl> <int> <dbl> <dbl> <lgl> <dbl> 1 2024-03-01
+1.79e5 3 1 March 8.32e5 91 9141. 19.6 TRUE -15.4 2 2024-06-01 1.79e5 6 2
+June 8.32e5 91 9141. 19.6 TRUE -15.4 3 2024-09-01 1.79e5 9 3 Sept…
+8.32e5 92 9042. 19.8 TRUE -15.2 4 2024-12-01 1.79e5 12 4 Dece… 8.32e5 92
+9042. 19.8 TRUE -15.2 \# ℹ 7 more variables: ratio_actual <dbl>,
+ratio_ideal <dbl>, ratio_diff <dbl>, \# earb_target <dbl>, earb_dec_abs
+<dbl>, earb_dec_pct <dbl>, \# earb_gct_diff <dbl>
 
 ## Code of Conduct
 

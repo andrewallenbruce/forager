@@ -21,12 +21,13 @@ Imports:
     pins,
     rlang,
     santoku,
-    tidyr,
     vctrs,
     wakefield
 Suggests:
     covr,
+    tidyr,
     ggplot2,
+    headliner,
     forcats,
     scales,
     fuimus,
