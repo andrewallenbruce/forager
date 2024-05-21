@@ -130,14 +130,34 @@ dar_mon |>
 ```
 
 ```{r}
-dar_mon |> 
+dar_ex() |>
+  ggplot() +
+  geom_line(aes(x = date, y = ending_ar),
+            alpha = 0.7,
+            linewidth = 1.5) +
+  geom_line(
+    aes(x = date, y = gross_charges),
+    color = "red",
+    alpha = 0.7,
+    linewidth = 1.5
+  ) +
+  # geom_point(aes(x = date, y = ending_ar), size = 2) +
+  # geom_point(aes(x = date, y = gross_charges), color = "red", size = 2) +
+  scale_y_continuous(labels = dollar_format(prefix = "$")) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b") +
+  labs(title = NULL, x = NULL, y = NULL)
+```
+
+
+
+```{r}
+dar_mon |>
   ggplot(aes(x = ending_ar, y = dar)) +
   geom_point() +
   geom_hline(yintercept = 35, color = "red") +
-  scale_x_continuous(labels = dollar_format(prefix = "$"),
-                     limits = c(0, dar_mon$ending_ar)) +
+  scale_x_continuous(labels = dollar_format(prefix = "$"), limits = c(0, max(dar_mon$gross_charges))) +
   labs(title = "Days in AR by Month", x = NULL, y = NULL) +
-  facet_wrap(~month) + 
+  facet_wrap( ~ month) +
   coord_flip() +
   theme_minimal()
 ```
@@ -145,21 +165,31 @@ dar_mon |>
 
 
 ```{r}
-dar_ratio <- dar_mon |> 
-  select(mon, ratio_ideal)
-
-ggplot(dar_mon, aes(x = gross_charges, y = ending_ar), group = 1) +
-  geom_point(alpha = 1) +
+ggplot() +
+  geom_point(data = dar_mon,
+             aes(x = gross_charges, y = ending_ar),
+             group = 1) +
+  geom_point(
+    data = dar_mon,
+    aes(x = gross_charges, y = ending_ar_target),
+    group = 1,
+    color = "red"
+  ) +
+  geom_abline(data = dar_mon,
+              aes(intercept = 0, slope = ratio_ideal),
+              color = "red") +
   geom_abline(
-    slope = dar_ratio$ratio_ideal,
-    intercept = 0,
-    color = "red") +
-  facet_wrap(~month, scales = "free_x") +
-  scale_y_continuous(labels = dollar_format(prefix = "$"),
-                     limits = c(0, dar_mon$ending_ar)
-                     ) +
-  scale_x_continuous(labels = dollar_format(prefix = "$"),
-                     limits = c(0, dar_mon$gross_charges)) +
+    data = dar_mon,
+    aes(intercept = 0, slope = ratio_actual),
+    color = "blue",
+    linewidth = 1.5,
+    alpha = 0.25
+  ) +
+  facet_wrap( ~ month, scales = "free_x") +
+  scale_y_continuous(labels = dollar_format(prefix = "$"), limits = c(0, max(
+    c(dar_mon$ending_ar, dar_mon$ending_ar_target)
+  ))) +
+  scale_x_continuous(labels = dollar_format(prefix = "$"), limits = c(0, max(dar_mon$gross_charges))) +
   scale_shape_identity() +
   labs(title = NULL, x = "Total Gross Charges", y = "Ending AR Balance") +
   theme(legend.position = "none")

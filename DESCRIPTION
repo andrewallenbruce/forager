@@ -26,6 +26,7 @@ Imports:
 Suggests:
     covr,
     tidyr,
+    svglite,
     ggplot2,
     headliner,
     forcats,
