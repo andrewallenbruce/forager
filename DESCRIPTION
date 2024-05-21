@@ -5,7 +5,7 @@ Authors@R:
     person("Andrew", "Bruce", , "andrew.bruce@northstarrevenueintegrity.com", role = c("aut", "cre", "cph"))
 Maintainer: Andrew Bruce <andrew.bruce@northstarrevenueintegrity.com>
 Description: The goal of forager is to provide a suite of analytic tools
-    for healthcare revenue cycle management.
+    for healthcare revenue cycle management. 
 License: MIT + file LICENSE
 URL: https://github.com/andrewallenbruce/forager,
     https://andrewallenbruce.github.io/forager/
@@ -26,6 +26,9 @@ Imports:
     wakefield
 Suggests:
     covr,
+    ggplot2,
+    forcats,
+    scales,
     fuimus,
     gt,
     gtExtras,

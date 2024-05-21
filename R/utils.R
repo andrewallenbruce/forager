@@ -199,3 +199,23 @@ age_days <- function(df,
       "{colname}" := ((as.numeric(lubridate::days(end) - lubridate::days(start), "hours") / 24) + 1)) |>
     dplyr::select(!c(end, start))
 }
+
+#' Sorted Bar Chart
+#'
+#' @param df data frame
+#'
+#' @param var column to plot
+#'
+#' @returns A [ggplot2][ggplot2::ggplot2-package] object
+#'
+#' @autoglobal
+#'
+#' @keywords internal
+#'
+#' @export
+sorted_bars <- function(df, var) {
+  df |>
+    dplyr::mutate({{ var }} := forcats::fct_rev(forcats::fct_infreq({{ var }})))  |>
+    ggplot2::ggplot(ggplot2::aes(y = {{ var }})) +
+    ggplot2::geom_bar()
+}

@@ -4,6 +4,7 @@ utils::globalVariables(c(
   # <avg_dar>
   # <count_days>
   # <age_days>
+  # <sorted_bars>
   ":=",
   # <avg_dar>
   "adc",

@@ -10,19 +10,22 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse  = FALSE,
-  echo      = TRUE,
+  echo      = TRUE, 
   message   = FALSE, 
   warning   = FALSE,
   error     = TRUE,
   comment   = "#>",
   dpi       = 600, 
   out.width = "100%"
-  )
+)
+options(scipen = 999)
 
 library(forager)
 library(dplyr)
 library(tidyr)
 library(gt)
+library(ggplot2)
+library(scales)
 ```
 
 ## Introduction
@@ -31,43 +34,27 @@ The `forager` package is a collection of functions that are useful for healthcar
 
 ## Days in Accounts Receivable
 
-Days in Accounts Receivable (also known as Days in AR or simply DAR) is a common financial metric belonging to a group of ratios called **efficiency ratios**. The calculation measures the average amount of time it takes for a business to collect money owed from the responsible party for services rendered and billed.
-
-As its name implies, the unit of measurement employed by this particular metric is days, or rather the average number of days from the moment a physician provides a service until the patient or guarantor pays for that service. This number can tell you much about the financial health of the business.
-
-The formula for calculating DAR is: 
-
-${\textrm{Days in AR}} = \dfrac {\textrm{Ending AR Balance}} {{\textrm{Gross Charges}} \div {\textrm{Number of Days in Period}}}$
-
-
-| **Variable**  | **Description**      |
-:--------------:|:---------------------|
-| $n_{days}$    | Days in Period       |
-| $gc_t$        | Total Gross Charges  |
-| $ear$         | Ending AR Balance    |
-| $adc$         | Average Daily Charge |
-| $dar$         | Days in AR           |
-| $dart$        | Days in AR Target    |
-| $eart$        | Ending AR Target       |
-
-: DAR Formula Components.
-
-
-   * Ending AR Target: $earb_{target} = (dar_{target} \times gct) \div n_{days}$
-   * Gross Charges Target: $gct_{target} = (earb \times n_{days}) \div dar_{target}$
-   * Days in Period Target: $n_{days} = (dar_{target} \times gct) \div earb$
+```{r}
+dar_ex()
+```
 
 
 
 ```{r}
-avg_dar(
+dar_mon <- avg_dar(
   df     = dar_ex(),
   date   = date,
   gct    = gross_charges,
   earb   = ending_ar,
   dart   = 35,
   period = "month"
-) |> 
+)
+```
+
+
+
+```{r}
+dar_mon |> 
   gt(rowname_col = "mon") |> 
   cols_hide(c(date, 
               nmon, 
@@ -93,7 +80,6 @@ avg_dar(
                            ending_ar_target, 
                            ending_ar_dec_abs, 
                            earb_gct_diff)) |> 
-  # fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
   fmt_percent(columns = c(ending_ar_dec_pct)) |> 
   fmt_number(columns = c(dar, 
                          dar_diff, 
@@ -129,6 +115,59 @@ avg_dar(
   ) |> 
   opt_stylize()
 ```
+
+
+```{r}
+dar_mon |> 
+  ggplot(aes(x = mon, y = dar)) +
+  # geom_point() +
+  geom_line(group = 1, linetype = "dashed", alpha = 0.7) +
+  geom_hline(yintercept = 35, color = "red") +
+  labs(title = "Days in AR by Month", x = NULL, y = NULL) +
+  theme_minimal()
+```
+
+```{r}
+dar_mon |> 
+  ggplot(aes(x = ending_ar, y = dar)) +
+  geom_point() +
+  geom_hline(yintercept = 35, color = "red") +
+  scale_x_continuous(labels = dollar_format(prefix = "$"),
+                     limits = c(0, dar_mon$ending_ar)) +
+  labs(title = "Days in AR by Month", x = NULL, y = NULL) +
+  facet_wrap(~month) + 
+  coord_flip() +
+  theme_minimal()
+```
+
+
+
+```{r}
+dar_ratio <- dar_mon |> 
+  select(mon, ratio_ideal)
+
+ggplot(dar_mon, aes(x = gross_charges, y = ending_ar), group = 1) +
+  geom_point(alpha = 1) +
+  geom_abline(
+    slope = dar_ratio$ratio_ideal,
+    intercept = 0,
+    color = "red") +
+  facet_wrap(~month, scales = "free_x") +
+  scale_y_continuous(labels = dollar_format(prefix = "$"),
+                     limits = c(0, dar_mon$ending_ar)
+                     ) +
+  scale_x_continuous(labels = dollar_format(prefix = "$"),
+                     limits = c(0, dar_mon$gross_charges)) +
+  scale_shape_identity() +
+  labs(title = NULL, x = "Total Gross Charges", y = "Ending AR Balance") +
+  theme(legend.position = "none")
+```
+
+
+
+
+
+
 
 ```{r}
 avg_dar(
@@ -205,6 +244,13 @@ binned <- bin_aging(
 
 binned
 ```
+
+```{r}
+binned |> 
+  sorted_bars(ins_name) +
+  theme_minimal()
+```
+
 
 ```{r}
 binned |>
