@@ -26,3 +26,17 @@ An account is a *billable episode of care*. It begins to age once it is billed t
 As well, aging should be broken down by many metrics, such as Provider, Patient, Insurance Types (Commercial, Primary, Secondary, Worker’s Compensation, Managed Care), Facility, Diagnosis/Procedure code, Specialty, etc. The older the account or the longer the account remains unpaid, the less likely it will be reimbursed.
 
 Most claims are originally billed to insurance and, until the insurance makes a payment, the responsibility for the payment continues to be with the insurance payer. After the payer makes or denies a payment (with no just cause for an appeal), the responsibility for the balance of goes to the patient (to be sent an invoice) or the physician (to be written off.)
+
+
+## Percentage of Accounts Receivable Beyond X Days (PARBX)
+
+PARBX resolves the sensitivity issues of the DAR metric. It offers a simple billing process metric that’s not dependent on the charge. Its graphic representation has a skewed bell shape (Figures 12 and 13.) Its steepness represents billing process quality; a steep curve and thin tail mean a healthy billing process, while a flat bell and fat tail also mean billing problems. According to the MGMA survey, 25%-35% of the average family practice’s accounts receivables were more than 120 days old in 1997. This number has improved down to 17.7% in 2004.
+
+## Patient Liability
+
+The percentage of patient liability is the ratio of patient responsibility to total billed charges, and it roughly reflects patient deductibles. This metric is important in measuring front office function because it has little to do with clean claim submission or effective follow-up.
+
+
+## First-Pass Pay (FPP) Rate and Denial Rate
+
+The FPP Rate is the percentage of claims paid in full upon the first submission (subject to federal or state timely payment regulations; most state laws require 15 days for electronic submission and 30 days for paper submission.) The denial rate is the complementary metric to the FPP rate. It counts the percentage of claims that require follow-up and therefore cost more to process. Follow-up may take the form of a phone call to the payer to discover a lost claim, receive an interpretation of a denial message, correct earlier submitted data, resubmit the original claim, and consult with the provider and medical note, or denial appeal. Both FPP and denial rates are very important metrics often used for billing process improvement. The upside of the FPP/denial metric is that it’s not affected by the charge, but its downside is that it hides the differences between process imperfections on the claim submission and claim payment sides. To identify patterns of problem CPT codes or payers, the FPP/denial metric needs to be computed and compared across all payer-CPT code pairs, which is a standard feature for modern billing technologies.

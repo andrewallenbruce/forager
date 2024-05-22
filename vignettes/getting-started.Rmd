@@ -471,26 +471,32 @@ binned |>
   opt_stylize()
 ```
 
+## Nathan Moore Medicare Reimbursement Rate Example
 
-```{r}
-binned |>
-  arrange(ins_name, aging_bin) |>
-  summarise(
-    n_claims = n(),
-    balance = sum(charges),
-    .by = c(aging_bin, ins_name)
-  ) |>
-  mutate(
-    pct_claims = n_claims / sum(n_claims),
-    pct_balance = balance / sum(balance),
-    .by = ins_name
-  ) |>
-  gt(groupname_col = "aging_bin", rowname_col = "ins_name") |>
-  fmt_percent(columns = pct_claims:pct_balance) |>
-  fmt_currency(columns = balance) |>
-  fmt_number(columns = n_claims, decimals = 0) |>
-  cols_label(n_claims = "Claims", balance = "Charges") |>
-  cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
-  cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
-  opt_stylize()
+```{r message=FALSE, warning=FALSE}
+nm_rate <- dplyr::tibble(
+  payer = c("Aetna", "BCBS", "Cigna", "United", "Humana", "Anthem", "Centene"),
+  rate = c(1.31, 1.3, 1.1, 1.68, 1.66, 1.55, 1.48),
+  rvus = c(8100, 6000, 5700, 4000, 1990, 1000, 799),
+  desc = c(paste0(rate * 100, "%, ", format(rvus, big.mark = ","), " RVUs"))
+  )
+
+ggplot(nm_rate, aes(x = rvus, y = rate)) +
+  ggforce::geom_mark_circle(aes(fill = payer, label = payer, description = desc)) +
+  geom_point() +
+  geom_smooth(method = lm, 
+              formula = y ~ x, 
+              se = FALSE, 
+              color = "red", 
+              linetype = "dashed", 
+              linewidth = 1.5,
+              alpha = 0.5) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(labels = scales::comma) +
+  ggthemes::theme_fivethirtyeight() +
+  labs(
+    title = "Percentage of Reimbursement Compared to RVU Volume",
+    x = "RVU Volume",
+    y = "Rate as A Pct% of Medicare Reimbursement") +
+  theme(legend.position = "none")
 ```

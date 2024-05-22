@@ -38,8 +38,6 @@ utils::globalVariables(c(
   "max_nmon",
   # <avg_dar>
   "month",
-  # <generate_data>
-  "NA_Date_",
   # <avg_dar>
   "ndip",
   # <predict_net>

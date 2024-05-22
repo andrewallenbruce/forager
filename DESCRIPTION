@@ -26,6 +26,8 @@ Imports:
 Suggests:
     covr,
     tidyr,
+    ggthemes,
+    ggforce,
     svglite,
     janitor,
     ggplot2,

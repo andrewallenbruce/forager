@@ -1,63 +1,76 @@
+library(tidyverse)
+library(clock)
+
 healthr <- healthyR.data::healthyR_data |>
-  mutate(
-    date_of_service = as_date(visit_end_date_time),
-    visit_end_date_time = NULL
-  ) |>
-  select(
-    patient_id = mrn,
-    date_of_service,
+  reframe(
+    pid = mrn,
+    dos = as_date(visit_end_date_time),
+    visit_end_date_time = NULL,
     payer = payer_grouping,
     charges = total_charge_amount,
     adjustment = total_adjustment_amount,
     payment = total_payment_amount,
     balance = total_amount_due
   ) |>
-  arrange(patient_id) |>
-  group_by(patient_id) |>
-  mutate(visit = row_number(),
-         .after = patient_id) |>
+  #------ If you alter the years, you'll
+  # have to redo this visit calculation:
+  arrange(pid) |>
+  group_by(pid) |>
+  mutate(
+    visit = row_number(),
+    .after = pid
+    ) |>
   ungroup() |>
-  arrange(date_of_service) |>
+  arrange(dos) |>
+  #------ End
   mutate(
     payer = case_match(
       payer,
+      # "Blue Cross"
+      # "Medicaid"
+      # "Commercial"
       "Medicare A" ~ "Medicare Part A",
       "Medicaid HMO" ~ "Anthem",
-      # "Blue Cross"
       "Medicare B" ~ "Medicare Part B",
       "Medicare HMO" ~ "Aetna",
       "HMO" ~ "Humana",
-      # "Medicaid"
-      # "Commercial"
       "Self Pay" ~ "Patient",
       "Compensation" ~ "Worker's Comp",
       "Exchange Plans" ~ "Medicare Advantage",
       c("No Fault", "?") ~ "Commercial",
       .default = payer
     ),
-    payer = forcats::as_factor(payer))
+    payer = as_factor(payer))
 
 healthr |>
   mutate(
-    date_of_service = add_years(date_of_service, 4, invalid = "previous"),
+    dos = add_years(dos, 4, invalid = "previous"),
     closed = if_else(balance == 0, TRUE, FALSE),
-    date_of_service = case_when(
-      year(date_of_service) < 2015 & !closed ~ add_years(date_of_service, 8, invalid = "previous"),
-      year(date_of_service) < 2016 & !closed ~ add_years(date_of_service, 7, invalid = "previous"),
-      year(date_of_service) < 2017 & !closed ~ add_years(date_of_service, 6, invalid = "previous"),
-      year(date_of_service) < 2018 & !closed ~ add_years(date_of_service, 5, invalid = "previous"),
-      year(date_of_service) < 2019 & !closed ~ add_years(date_of_service, 4, invalid = "previous"),
-      year(date_of_service) < 2020 & !closed ~ add_years(date_of_service, 3, invalid = "previous"),
-      year(date_of_service) < 2021 & !closed ~ add_years(date_of_service, 2, invalid = "previous"),
-      TRUE ~ date_of_service
+    dos = case_when(
+      year(dos) < 2015 & !closed ~ add_years(dos, 8, invalid = "previous"),
+      year(dos) < 2016 & !closed ~ add_years(dos, 7, invalid = "previous"),
+      year(dos) < 2017 & !closed ~ add_years(dos, 6, invalid = "previous"),
+      year(dos) < 2018 & !closed ~ add_years(dos, 5, invalid = "previous"),
+      year(dos) < 2019 & !closed ~ add_years(dos, 4, invalid = "previous"),
+      year(dos) < 2020 & !closed ~ add_years(dos, 3, invalid = "previous"),
+      year(dos) < 2021 & !closed ~ add_years(dos, 2, invalid = "previous"),
+      dos >= clock::date_today("") ~ add_years(dos, -1, invalid = "previous"),
+      .default = dos
     ),
-    date_of_reconciliation = if_else(closed, add_months(date_of_service, 3, invalid = "previous"), NA_Date_),
-    days_in_ar = if_else(closed, as.integer(date_of_reconciliation - date_of_service), NA_integer_),
-    today = clock::date_today("")
-         ) |>
-  count_days(start = date_of_service, end = today, name = "days") |>
+    date_recon = if_else(closed, add_months(dos, 3, invalid = "previous"), NA),
+    date_recon = case_when(
+      date_recon >= clock::date_today("") ~ add_years(dos, -1, invalid = "previous")),
+    days_in_ar = if_else(closed, as.integer(date_recon - dos), NA)
+  ) |>
+  fuimus::count_days(
+    start = dos,
+    end = today,
+    name = "days"
+  ) |>
+  dplyr::arrange(dplyr::desc(dos))
+
   filter(closed == FALSE) |>
-  group_by(year = year(date_of_service)) |>
+  group_by(year = year(dos)) |>
   count(payer) |>
   print(n = 200)
 
