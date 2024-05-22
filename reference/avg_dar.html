@@ -82,7 +82,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">avg_dar</span><span class="op">(</span><span class="va">df</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span>, period <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"month"</span>, <span class="st">"quarter"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">avg_dar</span><span class="op">(</span><span class="va">df</span>, <span class="va">date</span>, <span class="va">gct</span>, <span class="va">earb</span>, dart <span class="op">=</span> <span class="fl">35</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"month"</span>, <span class="st">"quarter"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -104,11 +104,11 @@
 
 
 <dt>dart</dt>
-<dd><p><code>&lt;dbl&gt;</code> Target Days in AR, default is <code>35</code> days</p></dd>
+<dd><p><code>[numeric]</code> Target Days in AR, default is <code>35</code> days</p></dd>
 
 
-<dt>period</dt>
-<dd><p><code>&lt;chr&gt;</code> string specifying the calculation period; one of
+<dt>by</dt>
+<dd><p><code>[character]</code> string specifying the calculation period; one of
 <code>"month"</code>, <code>"quarter"</code>, or <code>"year"</code>; defaults to <code>"month"</code></p></dd>
 
 </dl></div>
@@ -128,7 +128,7 @@
 <span class="r-in"><span>        gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span></span>
 <span class="r-in"><span>        earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span></span>
 <span class="r-in"><span>        dart   <span class="op">=</span> <span class="fl">35</span>,</span></span>
-<span class="r-in"><span>        period <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 27</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    date       gross_charges ending_ar  nmon mon   month   nqtr  yqtr dqtr   year</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -155,7 +155,7 @@
 <span class="r-in"><span>        gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span></span>
 <span class="r-in"><span>        earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span></span>
 <span class="r-in"><span>        dart   <span class="op">=</span> <span class="fl">35</span>,</span></span>
-<span class="r-in"><span>        period <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        by <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 18</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   date       ending_ar  nmon  nqtr month     gross_charges  ndip   adc   dar</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>

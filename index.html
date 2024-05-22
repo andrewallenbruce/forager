@@ -165,193 +165,211 @@
 </ul>
 <p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
-<span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 10 × 9</span></span>
-<span><span class="co">#&gt;    claim_id   date_of_service payer    ins_class balance    date_of_release</span></span>
-<span><span class="co">#&gt;    &lt;variable&gt; &lt;date&gt;          &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;date&gt;         </span></span>
-<span><span class="co">#&gt;  1 00001      2022-06-20      Medicaid Secondary 191.92213  2022-07-05     </span></span>
-<span><span class="co">#&gt;  2 00002      2022-12-20      BCBS     Primary   239.44870  2022-12-29     </span></span>
-<span><span class="co">#&gt;  3 00003      2022-06-20      Cigna    Secondary 150.90283  2022-07-04     </span></span>
-<span><span class="co">#&gt;  4 00004      2023-02-20      BCBS     Primary   100.98583  2023-03-03     </span></span>
-<span><span class="co">#&gt;  5 00005      2023-03-20      Medicaid Secondary 103.16400  2023-04-02     </span></span>
-<span><span class="co">#&gt;  6 00006      2022-10-20      BCBS     Primary    26.85437  2022-11-06     </span></span>
-<span><span class="co">#&gt;  7 00007      2022-07-20      Cigna    Secondary 116.19070  2022-08-01     </span></span>
-<span><span class="co">#&gt;  8 00008      2022-12-20      Humana   Secondary 180.63007  2022-12-30     </span></span>
-<span><span class="co">#&gt;  9 00009      2022-06-20      Medicare Secondary 179.69207  2022-07-02     </span></span>
-<span><span class="co">#&gt; 10 00010      2022-10-20      Anthem   Primary   141.31267  2022-11-06     </span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: date_of_submission &lt;date&gt;, date_of_acceptance &lt;date&gt;,</span></span>
-<span><span class="co">#&gt; #   date_of_adjudication &lt;date&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">1500</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 101.8013</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">x_pvt</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">clm_id</span><span class="op">:</span><span class="va">date_recon</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span></span>
 <span>    cols      <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"date"</span><span class="op">)</span>, </span>
 <span>    names_to  <span class="op">=</span> <span class="st">"date_type"</span>, </span>
 <span>    values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>days_diff <span class="op">=</span> <span class="fu">lead</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">-</span> <span class="va">date</span>,</span>
-<span>         .by <span class="op">=</span> <span class="va">claim_id</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 75,000 × 7</span></span>
-<span><span class="co">#&gt;    claim_id   payer    ins_class balance    date_type       date       days_diff</span></span>
-<span><span class="co">#&gt;    &lt;variable&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;chr&gt;           &lt;date&gt;     &lt;drtn&gt;   </span></span>
-<span><span class="co">#&gt;  1 00001      Medicaid Secondary 191.9221   date_of_service 2022-06-20 15 days  </span></span>
-<span><span class="co">#&gt;  2 00001      Medicaid Secondary 191.9221   date_of_release 2022-07-05  4 days  </span></span>
-<span><span class="co">#&gt;  3 00001      Medicaid Secondary 191.9221   date_of_submis… 2022-07-09  1 days  </span></span>
-<span><span class="co">#&gt;  4 00001      Medicaid Secondary 191.9221   date_of_accept… 2022-07-10 31 days  </span></span>
-<span><span class="co">#&gt;  5 00001      Medicaid Secondary 191.9221   date_of_adjudi… 2022-08-10 NA days  </span></span>
-<span><span class="co">#&gt;  6 00002      BCBS     Primary   239.4487   date_of_service 2022-12-20  9 days  </span></span>
-<span><span class="co">#&gt;  7 00002      BCBS     Primary   239.4487   date_of_release 2022-12-29  1 days  </span></span>
-<span><span class="co">#&gt;  8 00002      BCBS     Primary   239.4487   date_of_submis… 2022-12-30  5 days  </span></span>
-<span><span class="co">#&gt;  9 00002      BCBS     Primary   239.4487   date_of_accept… 2023-01-04 27 days  </span></span>
-<span><span class="co">#&gt; 10 00002      BCBS     Primary   239.4487   date_of_adjudi… 2023-01-31 NA days  </span></span>
-<span><span class="co">#&gt; # ℹ 74,990 more rows</span></span></code></pre></div>
+<span>  <span class="fu">mutate</span><span class="op">(</span>date_lag <span class="op">=</span> <span class="fu">lead</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">-</span> <span class="va">date</span>,</span>
+<span>         date_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">date_lag</span>, order_by <span class="op">=</span> <span class="va">date</span><span class="op">)</span>,</span>
+<span>         date_type <span class="op">=</span> <span class="fu">str_remove_all</span><span class="op">(</span><span class="va">date_type</span>, <span class="st">"date_"</span><span class="op">)</span>,</span>
+<span>         date_type <span class="op">=</span> <span class="fu">case_match</span><span class="op">(</span></span>
+<span>           <span class="va">date_type</span>,</span>
+<span>           <span class="st">"srvc"</span> <span class="op">~</span> <span class="st">"Service"</span>,</span>
+<span>           <span class="st">"rlse"</span> <span class="op">~</span> <span class="st">"Release"</span>,</span>
+<span>           <span class="st">"submit"</span> <span class="op">~</span> <span class="st">"Submission"</span>,</span>
+<span>           <span class="st">"accept"</span> <span class="op">~</span> <span class="st">"Acceptance"</span>,</span>
+<span>           <span class="st">"adjud"</span> <span class="op">~</span> <span class="st">"Adjudication"</span>,</span>
+<span>           <span class="st">"recon"</span> <span class="op">~</span> <span class="st">"Reconciliation"</span><span class="op">)</span>,</span>
+<span>         date_type <span class="op">=</span> <span class="fu">fct_relevel</span><span class="op">(</span></span>
+<span>           <span class="va">date_type</span>, </span>
+<span>           <span class="st">"Service"</span>, </span>
+<span>           <span class="st">"Release"</span>, </span>
+<span>           <span class="st">"Submission"</span>, </span>
+<span>           <span class="st">"Acceptance"</span>, </span>
+<span>           <span class="st">"Adjudication"</span>, </span>
+<span>           <span class="st">"Reconciliation"</span><span class="op">)</span>, </span>
+<span>         .by <span class="op">=</span> <span class="va">clm_id</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x_pvt</span></span>
+<span><span class="co">#&gt; # A tibble: 9,000 × 7</span></span>
+<span><span class="co">#&gt;    clm_id payer  charges balance date_type      date       date_lag</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;  &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;          &lt;date&gt;     &lt;drtn&gt;  </span></span>
+<span><span class="co">#&gt;  1 0030   Cigna     107.    107. Service        2023-05-21 NA days </span></span>
+<span><span class="co">#&gt;  2 0030   Cigna     107.    107. Release        2023-06-06 16 days </span></span>
+<span><span class="co">#&gt;  3 0030   Cigna     107.    107. Submission     2023-06-10  4 days </span></span>
+<span><span class="co">#&gt;  4 0030   Cigna     107.    107. Acceptance     2023-06-22 12 days </span></span>
+<span><span class="co">#&gt;  5 0030   Cigna     107.    107. Adjudication   2023-09-02 72 days </span></span>
+<span><span class="co">#&gt;  6 0030   Cigna     107.    107. Reconciliation NA         NA days </span></span>
+<span><span class="co">#&gt;  7 0046   Anthem    181.    181. Service        2023-05-21 NA days </span></span>
+<span><span class="co">#&gt;  8 0046   Anthem    181.    181. Release        2023-05-24  3 days </span></span>
+<span><span class="co">#&gt;  9 0046   Anthem    181.    181. Submission     2023-05-28  4 days </span></span>
+<span><span class="co">#&gt; 10 0046   Anthem    181.    181. Acceptance     2023-06-15 18 days </span></span>
+<span><span class="co">#&gt; # ℹ 8,990 more rows</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x_days</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_release</span>, <span class="va">prov_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_submission</span>, <span class="va">bill_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_acceptance</span>, <span class="va">proc_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_submission</span>, <span class="va">date_of_adjudication</span>, <span class="va">payer_lag</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_release</span>, <span class="va">date_of_adjudication</span>, <span class="va">dar</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x_days</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">group_by</span><span class="op">(</span>month <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span></span>
+<span>    year  <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/clock-getters.html" class="external-link">get_year</a></span><span class="op">(</span><span class="va">date_srvc</span><span class="op">)</span>,</span>
+<span>    month <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_srvc</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
-<span>    prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">prov_lag</span><span class="op">)</span>, </span>
-<span>    bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">bill_lag</span><span class="op">)</span>,</span>
-<span>    proc_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">proc_lag</span><span class="op">)</span>,</span>
-<span>    payer_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>,</span>
-<span>    dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dar</span><span class="op">)</span>, </span>
+<span>    n_claims    <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_rlse   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_rlse</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>    days_submit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_submit</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_accept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_accept</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_adjud  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_adjud</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_recon  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_recon</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_in_ar  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 12 × 8</span></span>
-<span><span class="co">#&gt;    month     n_claims balance prov_lag bill_lag proc_lag payer_lag   dar</span></span>
-<span><span class="co">#&gt;    &lt;ord&gt;        &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 January       1190 163636.     11.1     2.34     3.06      33.1  35.4</span></span>
-<span><span class="co">#&gt;  2 February      1262 161645.     11.0     2.24     3.12      33.0  35.3</span></span>
-<span><span class="co">#&gt;  3 March         1339 171348.     10.9     2.33     3.22      33.3  35.7</span></span>
-<span><span class="co">#&gt;  4 April         1164 162699.     11.0     2.41     3.13      33.2  35.6</span></span>
-<span><span class="co">#&gt;  5 May           1203 161203.     11.0     2.32     3.13      33.0  35.3</span></span>
-<span><span class="co">#&gt;  6 June          1269 173170.     10.9     2.36     3.03      33.1  35.5</span></span>
-<span><span class="co">#&gt;  7 July          1284 174301.     11.2     2.31     3.25      33.2  35.6</span></span>
-<span><span class="co">#&gt;  8 August        1243 163962.     10.9     2.39     3.12      33.2  35.5</span></span>
-<span><span class="co">#&gt;  9 September     1237 167538.     11.0     2.33     3.14      33.1  35.4</span></span>
-<span><span class="co">#&gt; 10 October       1287 176752.     11.0     2.31     3.10      33.2  35.5</span></span>
-<span><span class="co">#&gt; 11 November      1252 166784.     11.1     2.28     3.13      33.2  35.5</span></span>
-<span><span class="co">#&gt; 12 December      1270 167237.     11.3     2.35     3.12      33.2  35.6</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 12 × 10</span></span>
+<span><span class="co">#&gt;     year month     n_claims balance days_rlse days_submit days_accept days_adjud</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;ord&gt;        &lt;int&gt;   &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2022 June           120      0       8.06        3.06        12.8       74.0</span></span>
+<span><span class="co">#&gt;  2  2022 July           136      0       8.77        3.12        12.5       73.3</span></span>
+<span><span class="co">#&gt;  3  2022 August         127      0       8.08        2.96        13.0       75.2</span></span>
+<span><span class="co">#&gt;  4  2022 September      131      0       8.07        3.11        13         73.5</span></span>
+<span><span class="co">#&gt;  5  2022 October        124      0       7.60        2.75        12.6       74.5</span></span>
+<span><span class="co">#&gt;  6  2022 November       114      0       7.86        3.07        11.9       71.7</span></span>
+<span><span class="co">#&gt;  7  2022 December       142      0       7.84        3.04        12.2       77.0</span></span>
+<span><span class="co">#&gt;  8  2023 January        124  10815.      7.78        2.63        12.4       73.7</span></span>
+<span><span class="co">#&gt;  9  2023 February       122  12522.      7.98        2.99        12.5       77.1</span></span>
+<span><span class="co">#&gt; 10  2023 March          139  13533.      7.90        2.78        11.8       74.2</span></span>
+<span><span class="co">#&gt; 11  2023 April          123  14256.      7.98        2.98        12.9       76.8</span></span>
+<span><span class="co">#&gt; 12  2023 May             98  10116.      8.33        3.03        12.2       72.3</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: days_recon &lt;dbl&gt;, days_in_ar &lt;dbl&gt;</span></span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x_days</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">group_by</span><span class="op">(</span>qtr <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span></span>
+<span>    year  <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/clock-getters.html" class="external-link">get_year</a></span><span class="op">(</span><span class="va">date_srvc</span><span class="op">)</span>,</span>
+<span>    nqtr <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_srvc</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
-<span>    prov_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">prov_lag</span><span class="op">)</span>, </span>
-<span>    bill_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">bill_lag</span><span class="op">)</span>,</span>
-<span>    proc_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">proc_lag</span><span class="op">)</span>,</span>
-<span>    payer_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">payer_lag</span><span class="op">)</span>,</span>
-<span>    dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dar</span><span class="op">)</span>, </span>
+<span>    n_claims    <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_rlse   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_rlse</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>    days_submit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_submit</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_accept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_accept</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_adjud  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_adjud</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_recon  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_recon</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    days_in_ar  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
 <span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 8</span></span>
-<span><span class="co">#&gt;     qtr n_claims balance prov_lag bill_lag proc_lag payer_lag   dar</span></span>
-<span><span class="co">#&gt;   &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1     1     3791 496629.     11.0     2.31     3.14      33.1  35.4</span></span>
-<span><span class="co">#&gt; 2     2     3636 497072.     11.0     2.36     3.09      33.1  35.5</span></span>
-<span><span class="co">#&gt; 3     3     3764 505800.     11.0     2.34     3.17      33.2  35.5</span></span>
-<span><span class="co">#&gt; 4     4     3809 510773.     11.1     2.31     3.12      33.2  35.5</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 5 × 10</span></span>
+<span><span class="co">#&gt;    year  nqtr n_claims balance days_rlse days_submit days_accept days_adjud</span></span>
+<span><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1  2022     2      120      0       8.06        3.06        12.8       74.0</span></span>
+<span><span class="co">#&gt; 2  2022     3      394      0       8.31        3.07        12.8       74.0</span></span>
+<span><span class="co">#&gt; 3  2022     4      380      0       7.77        2.96        12.2       74.6</span></span>
+<span><span class="co">#&gt; 4  2023     1      385  36869.      7.89        2.80        12.2       74.9</span></span>
+<span><span class="co">#&gt; 5  2023     2      221  24373.      8.13        3.00        12.6       74.8</span></span>
+<span><span class="co">#&gt; # ℹ 2 more variables: days_recon &lt;dbl&gt;, days_in_ar &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/count_days.html" class="external-link">count_days</a></span><span class="op">(</span><span class="va">date_of_service</span>, <span class="va">date_of_adjudication</span>, <span class="va">dar</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">group_by</span><span class="op">(</span>aging_bin <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">dar</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span>, by <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">days_in_ar</span>, bin_type <span class="op">=</span> <span class="st">"chop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
 <span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
-<span><span class="co">#&gt;   aging_bin n_claims  balance</span></span>
-<span><span class="co">#&gt;   &lt;fct&gt;        &lt;int&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 (0,30]          16    2836.</span></span>
-<span><span class="co">#&gt; 2 (30,60]      14880 1994347.</span></span>
-<span><span class="co">#&gt; 3 (60,90]        104   13091.</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">date_of_service</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 15,000 × 11</span></span>
-<span><span class="co">#&gt;    claim_id   date_of_service payer    ins_class balance    date_of_release</span></span>
-<span><span class="co">#&gt;    &lt;variable&gt; &lt;date&gt;          &lt;chr&gt;    &lt;chr&gt;     &lt;variable&gt; &lt;date&gt;         </span></span>
-<span><span class="co">#&gt;  1 00001      2022-06-20      Medicaid Secondary 191.92213  2022-07-05     </span></span>
-<span><span class="co">#&gt;  2 00002      2022-12-20      BCBS     Primary   239.44870  2022-12-29     </span></span>
-<span><span class="co">#&gt;  3 00003      2022-06-20      Cigna    Secondary 150.90283  2022-07-04     </span></span>
-<span><span class="co">#&gt;  4 00004      2023-02-20      BCBS     Primary   100.98583  2023-03-03     </span></span>
-<span><span class="co">#&gt;  5 00005      2023-03-20      Medicaid Secondary 103.16400  2023-04-02     </span></span>
-<span><span class="co">#&gt;  6 00006      2022-10-20      BCBS     Primary    26.85437  2022-11-06     </span></span>
-<span><span class="co">#&gt;  7 00007      2022-07-20      Cigna    Secondary 116.19070  2022-08-01     </span></span>
-<span><span class="co">#&gt;  8 00008      2022-12-20      Humana   Secondary 180.63007  2022-12-30     </span></span>
-<span><span class="co">#&gt;  9 00009      2022-06-20      Medicare Secondary 179.69207  2022-07-02     </span></span>
-<span><span class="co">#&gt; 10 00010      2022-10-20      Anthem   Primary   141.31267  2022-11-06     </span></span>
-<span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 5 more variables: date_of_submission &lt;date&gt;, date_of_acceptance &lt;date&gt;,</span></span>
-<span><span class="co">#&gt; #   date_of_adjudication &lt;date&gt;, dar &lt;int&gt;, aging_bin &lt;fct&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 5 × 3</span></span>
+<span><span class="co">#&gt;   aging_bin  n_claims balance</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 (30, 60]        124   5934.</span></span>
+<span><span class="co">#&gt; 2 (60, 90]        453  20147.</span></span>
+<span><span class="co">#&gt; 3 (90, 120]       492  19992.</span></span>
+<span><span class="co">#&gt; 4 (120, 150]      345  13099.</span></span>
+<span><span class="co">#&gt; 5 (150, 180]       86   2070.</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">days_in_ar</span>, bin_type <span class="op">=</span> <span class="st">"case"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span><span class="co">#&gt;   aging_bin n_claims balance</span></span>
+<span><span class="co">#&gt;   &lt;fct&gt;        &lt;int&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 31-60          124   5934.</span></span>
+<span><span class="co">#&gt; 2 61-90          453  20147.</span></span>
+<span><span class="co">#&gt; 3 91-120         492  19992.</span></span>
+<span><span class="co">#&gt; 4 121+           431  15169.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-monthly-calculation">Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-monthly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
 <span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
-<span>  gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365000.567</span>, <span class="fl">169094.46</span>, <span class="fl">297731.74</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  gct  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">250000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span>,</span>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">290000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>    <span class="va">date</span>, </span>
 <span>    <span class="va">gct</span>, </span>
 <span>    <span class="va">earb</span>, </span>
-<span>    dart <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span>
+<span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 12 × 27</span></span>
-<span><span class="co">#&gt;    date           gct    earb  nmon mon   month     nqtr  yqtr dqtr   year  ymon</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;ord&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2024-01-01 364999. 182771.     1 Jan   January      1 2024. 1Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  2 2024-02-01 169097. 169635.     2 Feb   February     1 2024. 1Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  3 2024-03-01 297734. 179347.     3 Mar   March        1 2024. 1Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  4 2024-04-01 365001. 182773.     4 Apr   April        2 2024. 2Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  5 2024-05-01 169093. 169632.     5 May   May          2 2024. 2Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  6 2024-06-01 297731. 179344.     6 Jun   June         2 2024. 2Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  7 2024-07-01 365000. 182773.     7 Jul   July         3 2024. 3Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  8 2024-08-01 169092. 169635.     8 Aug   August       3 2024. 3Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  9 2024-09-01 297731. 179348.     9 Sep   Septemb…     3 2024. 3Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; 10 2024-10-01 365002. 182771.    10 Oct   October      4 2024. 4Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; 11 2024-11-01 169094. 169631.    11 Nov   November     4 2024. 4Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; 12 2024-12-01 297729. 179347.    12 Dec   December     4 2024. 4Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;    date          gct   earb  nmon mon   month      nqtr  yqtr dqtr   year  ymon</span></span>
+<span><span class="co">#&gt;    &lt;date&gt;      &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;ord&gt; &lt;ord&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2024-01-01 249971 290387     1 Jan   January       1 2024. 1Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  2 2024-02-01 249609 289524     2 Feb   February      1 2024. 1Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  3 2024-03-01 250604 290556     3 Mar   March         1 2024. 1Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  4 2024-04-01 249649 290402     4 Apr   April         2 2024. 2Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  5 2024-05-01 250781 290856     5 May   May           2 2024. 2Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  6 2024-06-01 250043 290617     6 Jun   June          2 2024. 2Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  7 2024-07-01 249686 289370     7 Jul   July          3 2024. 3Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  8 2024-08-01 250669 289316     8 Aug   August        3 2024. 3Q24   2024 2024.</span></span>
+<span><span class="co">#&gt;  9 2024-09-01 249563 290971     9 Sep   September     3 2024. 3Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; 10 2024-10-01 249992 290669    10 Oct   October       4 2024. 4Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; 11 2024-11-01 249929 289751    11 Nov   November      4 2024. 4Q24   2024 2024.</span></span>
+<span><span class="co">#&gt; 12 2024-12-01 250540 289247    12 Dec   December      4 2024. 4Q24   2024 2024.</span></span>
 <span><span class="co">#&gt; # ℹ 16 more variables: myear &lt;chr&gt;, nhalf &lt;int&gt;, yhalf &lt;dbl&gt;, dhalf &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   ndip &lt;int&gt;, adc &lt;dbl&gt;, dar &lt;dbl&gt;, dar_pass &lt;lgl&gt;, dar_diff &lt;dbl&gt;,</span></span>
 <span><span class="co">#&gt; #   ratio_actual &lt;dbl&gt;, ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   earb_dec_abs &lt;dbl&gt;, earb_dec_pct &lt;dbl&gt;, earb_gct_diff &lt;dbl&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; #   earb_dec_abs &lt;dbl&gt;, earb_dec_pct &lt;dbl&gt;, earb_gct_diff &lt;int&gt;</span></span></code></pre></div>
 <p><br></p>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-quarterly-calculation">Days in AR Quarterly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-quarterly-calculation"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
 <span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
-<span>  gct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365000.567</span>, <span class="fl">169094.46</span>, <span class="fl">297731.74</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">182771.32</span>, <span class="fl">169633.64</span>, <span class="fl">179347.72</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/avg_dar.html">avg_dar</a></span><span class="op">(</span><span class="va">date</span>, </span>
-<span>          <span class="va">gct</span>, </span>
-<span>          <span class="va">earb</span>, </span>
-<span>          dart <span class="op">=</span> <span class="fl">35</span>, </span>
-<span>          period <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></code></pre></div>
+<span>  gct  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">250000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span>,</span>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">285500</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>    <span class="va">date</span>, </span>
+<span>    <span class="va">gct</span>, </span>
+<span>    <span class="va">earb</span>, </span>
+<span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 4 × 18</span></span>
+<span><span class="co">#&gt;   date         earb  nmon  nqtr month    gct  ndip   adc   dar dar_pass dar_diff</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;      &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;ord&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;       &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2024-03-01 285101     3     1 March 748742    91 8228.  34.7 TRUE      -0.350 </span></span>
+<span><span class="co">#&gt; 2 2024-06-01 285522     6     2 June  750220    91 8244.  34.6 TRUE      -0.367 </span></span>
+<span><span class="co">#&gt; 3 2024-09-01 285733     9     3 Sept… 749819    92 8150.  35.1 FALSE      0.0584</span></span>
+<span><span class="co">#&gt; 4 2024-12-01 284571    12     4 Dece… 750898    92 8162.  34.9 TRUE      -0.134 </span></span>
+<span><span class="co">#&gt; # ℹ 7 more variables: ratio_actual &lt;dbl&gt;, ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   earb_target &lt;dbl&gt;, earb_dec_abs &lt;dbl&gt;, earb_dec_pct &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   earb_gct_diff &lt;int&gt;</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level1">
-<h1 id="a-tibble-4--18">A tibble: 4 × 18<a class="anchor" aria-label="anchor" href="#a-tibble-4--18"></a>
-</h1>
-<p>date earb nmon nqtr month gct ndip adc dar dar_pass dar_diff <date><dbl><dbl><int><ord><dbl><int><dbl><dbl><lgl><dbl> 1 2024-03-01 1.79e5 3 1 March 8.32e5 91 9141. 19.6 TRUE -15.4 2 2024-06-01 1.79e5 6 2 June 8.32e5 91 9141. 19.6 TRUE -15.4 3 2024-09-01 1.79e5 9 3 Sept… 8.32e5 92 9042. 19.8 TRUE -15.2 4 2024-12-01 1.79e5 12 4 Dece… 8.32e5 92 9042. 19.8 TRUE -15.2 # ℹ 7 more variables: ratio_actual <dbl>, ratio_ideal <dbl>, ratio_diff <dbl>, # earb_target <dbl>, earb_dec_abs <dbl>, earb_dec_pct <dbl>, # earb_gct_diff <dbl></dbl></dbl></dbl></dbl></dbl></dbl></dbl></dbl></lgl></dbl></dbl></int></dbl></ord></int></dbl></dbl></date></p>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>

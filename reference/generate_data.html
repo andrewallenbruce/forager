@@ -82,13 +82,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_data</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_data</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">100</span>, add_day_counts <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>rows</dt>
-<dd><p>number of rows to generate; default is 100</p></dd>
+<dd><p><code>[integerish]</code> rows number of rows to generate; default is <code>100</code></p></dd>
+
+
+<dt>add_day_counts</dt>
+<dd><p><code>[logical]</code> add_day_counts add columns for days between events; default is <code>TRUE</code></p></dd>
+
+
+<dt>...</dt>
+<dd><p><code>[dots]</code> additional arguments</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,16 +111,9 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">generate_data</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   claim_id   date_of_service payer        ins_class balance    date_of_release</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1          2022-11-21      Anthem       Secondary  59.90037  2022-12-02     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2          2022-06-21      Medicare     Primary    42.31207  2022-07-04     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3          2023-01-21      UnitedHealth Primary    11.16570  2023-01-28     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 4          2022-12-21      UnitedHealth Secondary 144.18263  2023-01-03     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5          2023-02-21      BCBS         Secondary  47.93740  2023-03-05     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: date_of_submission &lt;date&gt;, date_of_acceptance &lt;date&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   date_of_adjudication &lt;date&gt;</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::mutate(dplyr::tibble(clm_id = wakefield::id_factor(n = rows),     payer = forcats::as_factor(fixtuRes::set_vector(size = rows,         set = payer_names)), charges = as.double(wakefield::income(n = rows,         digits = 2)/300), date_srvc = lubridate::as_date(wakefield::date_stamp(n = rows,         start = lubridate::today() - lubridate::dyears(1), random = TRUE)),     date_rlse = date_srvc + stats::rpois(rows, 1:15), date_submit = date_rlse +         stats::rpois(rows, 1:5), date_accept = date_submit +         stats::rpois(rows, 5:20), date_adjud = date_accept +         stats::rpois(rows, 30:120), date_recon = date_adjud +         stats::rpois(rows, 1:10)), balance = charges, balance = dplyr::if_else(date_adjud ==     date_recon, 0, balance), date_recon = dplyr::if_else(lubridate::year(date_srvc) ==     max(lubridate::year(date_srvc)) &amp; balance &gt; 0 &amp; dplyr::row_number(date_recon) %in%     rsmpl, NA_Date_, date_recon), balance = dplyr::if_else(!is.na(date_recon),     0, balance), .after = charges):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `date_recon = dplyr::if_else(...)`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'NA_Date_' not found</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

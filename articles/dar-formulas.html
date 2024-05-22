@@ -139,9 +139,9 @@ is:</p>
 <p><br></p>
 <p>Where:</p>
 <ul>
-<li>$ndip = $ Number of Days in Period</li>
-<li>$gct = $ Total Gross Charges</li>
-<li>$earb = $ Ending AR Balance</li>
+<li>${ndip} = $ Number of Days in Period</li>
+<li>${gct} = $ Total Gross Charges</li>
+<li>${earb} = $ Ending AR Balance</li>
 </ul>
 <div class="section level3">
 <h3 id="number-of-days-in-the-period">Number of Days in the Period<a class="anchor" aria-label="anchor" href="#number-of-days-in-the-period"></a>
@@ -175,9 +175,12 @@ companies, or other entities for services rendered.</p>
 </h3>
 <p>Let’s say you have the following data:</p>
 <ul>
-<li>Number of Days in Period: 30</li>
-<li>Total Gross Charges: $180,000</li>
-<li>Ending AR Balance: $77,400</li>
+<li>Number of Days in Period = <strong>30</strong>
+</li>
+<li>Total Gross Charges = <strong>$180,000</strong>
+</li>
+<li>Ending AR Balance = <strong>$77,400</strong>
+</li>
 </ul>
 <p>The calculation would look like this:</p>
 <p><span class="math inline">\(\dfrac {77,400} {180,000 \div 30} =
@@ -198,18 +201,14 @@ companies, or other entities for services rendered.</p>
 <h2 id="dar-targets">DAR Targets<a class="anchor" aria-label="anchor" href="#dar-targets"></a>
 </h2>
 <ul>
-<li>Ending AR <span class="math inline">\(earb_t = (dar_t \times gct)
-\div ndip\)</span> <br>
-</li>
-<li>Gross Charges <span class="math inline">\(gct_t = (earb \times ndip)
-\div dar_t\)</span> <br>
-</li>
-<li>Days in Period: <span class="math inline">\(ndip_t = (dar_t \times
-gct) \div earb\)</span> <br>
-</li>
-<li>DAR: <span class="math inline">\(dar_t = (earb \times ndip) \div
-gct\)</span>
-</li>
+<li><span class="math inline">\(earb_t = (dar_t \times gct) \div
+ndip\)</span></li>
+<li><span class="math inline">\(gct_t = (earb \times ndip) \div
+dar_t\)</span></li>
+<li><span class="math inline">\(ndip_t = (dar_t \times gct) \div
+earb\)</span></li>
+<li><span class="math inline">\(dar_t = (earb \times ndip) \div
+gct\)</span></li>
 </ul>
 </div>
 
