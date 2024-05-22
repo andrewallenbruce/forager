@@ -7,16 +7,25 @@ utils::globalVariables(c(
   # <avg_dar>
   "adc",
   # <bin_aging>
+  "aging_bin",
+  # <generate_data>
+  "balance",
+  # <generate_data>
+  "charges",
   # <avg_dar>
   "dar",
   # <generate_data>
-  "date_of_acceptance",
+  "date_accept",
   # <generate_data>
-  "date_of_release",
+  "date_adjud",
   # <generate_data>
-  "date_of_service",
+  "date_recon",
   # <generate_data>
-  "date_of_submission",
+  "date_rlse",
+  # <generate_data>
+  "date_srvc",
+  # <generate_data>
+  "date_submit",
   # <predict_net>
   "earb_gt120",
   # <predict_net>
@@ -29,6 +38,8 @@ utils::globalVariables(c(
   "max_nmon",
   # <avg_dar>
   "month",
+  # <generate_data>
+  "NA_Date_",
   # <avg_dar>
   "ndip",
   # <predict_net>

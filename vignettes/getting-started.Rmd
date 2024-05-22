@@ -49,7 +49,7 @@ dar_mon <- avg_dar(
   gct    = gross_charges,
   earb   = ending_ar,
   dart   = 35,
-  period = "month"
+  by = "month"
 )
 ```
 
@@ -58,24 +58,27 @@ dar_mon <- avg_dar(
 ```{r}
 dar_mon |> 
   gt(rowname_col = "mon") |> 
-  cols_hide(c(date, 
-              nmon, 
-              month, 
-              nqtr, 
-              yqtr, 
-              dqtr, 
-              year, 
-              ymon, 
-              myear, 
-              nhalf, 
-              yhalf, 
-              dhalf, 
-              ndip,
-              ending_ar_target,
-              dar_diff,
-              ratio_ideal,
-              ratio_actual)) |> 
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  cols_hide(
+    c(
+      date,
+      nmon,
+      month,
+      nqtr,
+      yqtr,
+      dqtr,
+      year,
+      ymon,
+      myear,
+      nhalf,
+      yhalf,
+      dhalf,
+      ndip,
+      ending_ar_target,
+      dar_diff,
+      ratio_ideal,
+      ratio_actual
+    )
+  ) |> 
   fmt_currency(columns = c(gross_charges, 
                            ending_ar, 
                            adc, 
@@ -122,7 +125,6 @@ dar_mon |>
 ```{r}
 dar_mon |> 
   ggplot(aes(x = mon, y = dar)) +
-  # geom_point() +
   geom_line(group = 1, linetype = "dashed", alpha = 0.7) +
   geom_hline(yintercept = 35, color = "red") +
   labs(title = "Days in AR by Month", x = NULL, y = NULL) +
@@ -139,10 +141,7 @@ dar_ex() |>
     aes(x = date, y = gross_charges),
     color = "red",
     alpha = 0.7,
-    linewidth = 1.5
-  ) +
-  # geom_point(aes(x = date, y = ending_ar), size = 2) +
-  # geom_point(aes(x = date, y = gross_charges), color = "red", size = 2) +
+    linewidth = 1.5) +
   scale_y_continuous(labels = dollar_format(prefix = "$")) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
   labs(title = NULL, x = NULL, y = NULL)
@@ -203,7 +202,7 @@ avg_dar(
   gct    = gross_charges,
   earb   = ending_ar,
   dart   = 35,
-  period = "month"
+  by = "month"
 ) |> 
   select(
     month,
@@ -219,34 +218,40 @@ avg_dar(
     headline = "{delta_p}% {trend} than Target", 
     trend_phrases = headliner::trend_terms(more = "HIGHER", less = "Lower"), 
     n_decimal = 0) |> 
-  gt(rowname_col = "month") |> 
+  gt(rowname_col = "month") |>
   cols_label(
-    gross_charges = "Gross Charges", 
-    ending_ar = "Ending AR", 
-    ending_ar_target = "Target AR", 
-    dar = "Days in AR", 
-    dar_pass = "Pass", 
+    gross_charges = "Gross Charges",
+    ending_ar = "Ending AR",
+    ending_ar_target = "Target AR",
+    dar = "Days in AR",
+    dar_pass = "Pass",
     headline = "Ending AR Trend"
-    ) |> 
+  ) |>
   tab_row_group(label = "Q4", rows = c(10:12)) |>
   tab_row_group(label = "Q3", rows = c(7:9)) |>
   tab_row_group(label = "Q2", rows = c(4:6)) |>
-  tab_row_group(label = "Q1", rows = c(1:3)) |> 
+  tab_row_group(label = "Q1", rows = c(1:3)) |>
   fmt_number(columns = dar) |>
   fmt_currency(columns = c(gross_charges, ending_ar, ending_ar_target)) |>
-  tab_style(style = cell_text(font = c(
-    google_font(name = "IBM Plex Mono"),
-    default_fonts())), 
-    locations = cells_body(columns = c(gross_charges, ending_ar, ending_ar_target, dar))) |> 
-  opt_stylize(style = 6, color = "cyan") |> 
+  # tab_style(style = cell_text(font = c(
+  #   google_font(name = "IBM Plex Mono"),
+  #   default_fonts())),
+  #   locations = cells_body(columns = c(gross_charges, ending_ar, ending_ar_target, dar))) |>
+  opt_stylize(style = 6, color = "cyan") |>
   tab_header(
-    title = md("Example **Days in AR Analysis** with the **{forager}** Package"), 
-    subtitle = md("**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest <br> month-to-month increase in AR & highest percentage over the AR Target *(46%)*.")) |> 
-  opt_all_caps() |> 
+    title = md("Example **Days in AR Analysis** with the **{forager}** Package"),
+    subtitle = md(
+      "**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest <br> month-to-month increase in AR & highest percentage over the AR Target *(46%)*."
+    )
+  ) |>
+  opt_all_caps() |>
   grand_summary_rows(
     columns = c(gross_charges, ending_ar, ending_ar_target, dar),
-    fns = list(Mean = ~mean(., na.rm = TRUE), Median = ~median(., na.rm = TRUE))) |> 
-  opt_table_font(font = list(gt::google_font(name = "Roboto"))) |> 
+    fns = list(
+      Mean = ~ mean(., na.rm = TRUE),
+      Median = ~ median(., na.rm = TRUE)
+    )
+  ) |>
   opt_align_table_header(align = "left")
 ```
 
@@ -258,14 +263,13 @@ dar_month <- avg_dar(
   gct    = gross_charges,
   earb   = ending_ar,
   dart   = 35,
-  period = "month"
+  by = "month"
 )
 
 # Create df for gt_plt_bar_stack
 dar_month_pct <- dar_month |>
-  mutate(
-    gct_pct = (gross_charges / (gross_charges + ending_ar) * 100),
-    earb_pct = (ending_ar / (gross_charges + ending_ar) * 100)) |>
+  mutate(gct_pct = (gross_charges / (gross_charges + ending_ar) * 100),
+         earb_pct = (ending_ar / (gross_charges + ending_ar) * 100)) |>
   select(month, gct_pct, earb_pct) |>
   pivot_longer(-month, names_to = "measure", values_to = "percentage") |>
   group_by(month) |>
@@ -279,21 +283,17 @@ dar_month_join <- right_join(
 
 # Create new copy cols for gt_plt_bullet
 dar_month_gt <- dar_month_join |> 
-  select(
-    month, 
-    gross_charges, 
-    ending_ar, 
-    ending_ar_target,
-    dar, 
-    dar_pass,
-    list_data
-    ) |>
-  mutate(
-    target_col = ending_ar, 
-    plot_col = ending_ar_target)
+  select(month,
+         gross_charges,
+         ending_ar,
+         ending_ar_target,
+         dar,
+         dar_pass,
+         list_data) |>
+  mutate(target_col = ending_ar, plot_col = ending_ar_target)
 
 # Create gt table
-dar_month_gt |> 
+dar_month_gt |>
   gt(rowname_col = "month") |>
   cols_label(
     gross_charges = "Gross Charges",
@@ -301,41 +301,45 @@ dar_month_gt |>
     ending_ar_target = "Optimal AR",
     dar = "Days in AR",
     dar_pass = "Pass",
-    plot_col = "Optimal AR Threshold") |>
+    plot_col = "Optimal AR Threshold"
+  ) |>
   tab_row_group(label = "Q4", rows = c(10:12)) |>
   tab_row_group(label = "Q3", rows = c(7:9)) |>
   tab_row_group(label = "Q2", rows = c(4:6)) |>
   tab_row_group(label = "Q1", rows = c(1:3)) |>
-  gt_theme_nytimes() |> 
+  gt_theme_nytimes() |>
   fmt_number(columns = dar) |>
   fmt_currency(columns = c(gross_charges, ending_ar, ending_ar_target)) |>
-  gt_plt_bullet(column = plot_col, 
-                target = target_col, 
-                palette = c("#8ca0aa", "black"), 
-                width = 65
-                ) |>
-  gt_plt_bar_stack(list_data, 
-                   width = 50, 
-                   labels = c("Charges (%) ", " AR (%)"), 
-                   palette = c("#2c3e50", "#8ca0aa")
-                   ) |>
-  gt_badge(dar_pass, 
-           palette = c("FALSE" = "#8ca0aa")
-           ) |> 
-  tab_style(style = cell_text(color = "#2c3e50", weight = "bolder"), 
-            locations = cells_body(columns = dar_pass, rows = dar_pass == "FALSE")
-            ) |>
-  tab_style(style = cell_text(color = "#8ca0aa", weight = "normal"), 
-            locations = cells_body(columns = dar_pass, rows = dar_pass == "TRUE")
-            ) |> 
-  data_color(columns = c(gross_charges, ending_ar, dar), 
-             colors = col_numeric(palette = c("#2c3e50", "#8ca0aa") |> 
-                                    as.character(), 
-                                  domain = NULL)
-             ) |> 
-  tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", 
-               locations = cells_column_labels(columns = plot_col)
-               ) |> 
+  gt_plt_bullet(
+    column = plot_col,
+    target = target_col,
+    palette = c("#8ca0aa", "black"),
+    width = 65
+  ) |>
+  gt_plt_bar_stack(
+    list_data,
+    width = 50,
+    labels = c("Charges (%) ", " AR (%)"),
+    palette = c("#2c3e50", "#8ca0aa")
+  ) |>
+  gt_badge(dar_pass, palette = c("FALSE" = "#8ca0aa")) |>
+  tab_style(
+    style = cell_text(color = "#2c3e50", weight = "bolder"),
+    locations = cells_body(columns = dar_pass, rows = dar_pass == "FALSE")
+  ) |>
+  tab_style(
+    style = cell_text(color = "#8ca0aa", weight = "normal"),
+    locations = cells_body(columns = dar_pass, rows = dar_pass == "TRUE")
+  ) |>
+  data_color(
+    columns = c(gross_charges, ending_ar, dar),
+    colors = col_numeric(
+      palette = c("#2c3e50", "#8ca0aa") |>
+        as.character(),
+      domain = NULL
+    )
+  ) |>
+  tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", locations = cells_column_labels(columns = plot_col)) |>
   tab_header(title = md("Example **Days in AR Analysis** with the **{forager}** Package"))
 ```
 
@@ -349,46 +353,49 @@ avg_dar(
   gct    = gross_charges,
   earb   = ending_ar,
   dart   = 39,
-  period = "quarter"
+  by = "quarter"
 ) |> 
-  gt(rowname_col = "nqtr") |> 
-  cols_hide(c(date, 
-              nmon, 
-              month,
-              ndip,
-              ending_ar_target,
-              dar_diff,
-              ratio_ideal,
-              ratio_actual)) |> 
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
-  fmt_currency(columns = c(gross_charges, 
-                           ending_ar, 
-                           adc, 
-                           ending_ar_target, 
-                           ending_ar_dec_abs, 
-                           earb_gct_diff)) |> 
-  # fmt_tf(columns = c(dar_pass), tf_style = "check-mark") |> 
-  fmt_percent(columns = c(ending_ar_dec_pct)) |> 
-  fmt_number(columns = c(dar, 
-                         dar_diff, 
-                         ratio_actual, 
-                         ratio_ideal, 
-                         ratio_diff)) |> 
-  cols_move_to_start(c(nqtr, 
-                       gross_charges, 
-                       ending_ar, 
-                       earb_gct_diff,
-                       adc, 
-                       dar_pass, 
-                       dar, 
-                       dar_diff, 
-                       ratio_actual, 
-                       ratio_ideal, 
-                       ratio_diff, 
-                       ending_ar_target, 
-                       ending_ar_dec_abs, 
-                       ending_ar_dec_pct
-                       )) |> 
+  gt(rowname_col = "nqtr") |>
+  cols_hide(c(
+    date,
+    nmon,
+    month,
+    ndip,
+    ending_ar_target,
+    dar_diff,
+    ratio_ideal,
+    ratio_actual
+  )) |>
+  fmt_currency(
+    columns = c(
+      gross_charges,
+      ending_ar,
+      adc,
+      ending_ar_target,
+      ending_ar_dec_abs,
+      earb_gct_diff
+    )
+  ) |>
+  fmt_percent(columns = c(ending_ar_dec_pct)) |>
+  fmt_number(columns = c(dar, dar_diff, ratio_actual, ratio_ideal, ratio_diff)) |>
+  cols_move_to_start(
+    c(
+      nqtr,
+      gross_charges,
+      ending_ar,
+      earb_gct_diff,
+      adc,
+      dar_pass,
+      dar,
+      dar_diff,
+      ratio_actual,
+      ratio_ideal,
+      ratio_diff,
+      ending_ar_target,
+      ending_ar_dec_abs,
+      ending_ar_dec_pct
+    )
+  ) |>
   cols_label(
     gross_charges = "Gross Charges",
     ending_ar = "Ending AR",
@@ -399,21 +406,17 @@ avg_dar(
     ending_ar_dec_abs = "AR Decrease Needed",
     ending_ar_dec_pct = "%",
     earb_gct_diff = "AR - GC"
-  ) |> 
+  ) |>
   opt_stylize()
 ```
 
 ## Aging Bins
 
 ```{r}
-binned <- bin_aging(
-  df = load_ex("aging_ex"),
-  date = dos
-  ) |>
-  dplyr::select(
-    dos:ins_class,
-    dar:aging_bin
-    )
+binned <- load_ex("aging_ex") |> 
+  select(dos:ins_name) |> 
+  days_between(dos) |>
+  bin_aging(days_in_ar)
 
 binned
 ```
@@ -434,7 +437,6 @@ binned |>
   mutate(pct_claims = n_claims / sum(n_claims),
          pct_balance = balance / sum(balance)) |>
   gt(rowname_col = "aging_bin") |>
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |>
   fmt_percent(columns = pct_claims:pct_balance, decimals = 0) |>
   fmt_currency(columns = balance, decimals = 0) |>
   fmt_number(columns = n_claims, decimals = 0) |>
@@ -460,7 +462,6 @@ binned |>
   mutate(pct_claims = n_claims / sum(n_claims),
          pct_balance = balance / sum(balance)) |>
   gt(groupname_col = "aging_bin", rowname_col = "ins_name") |>
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |>
   fmt_percent(columns = pct_claims:pct_balance) |>
   fmt_currency(columns = balance, decimals = 0) |>
   fmt_number(columns = n_claims, decimals = 0) |>
@@ -479,14 +480,15 @@ binned |>
     balance = sum(charges),
     .by = c(aging_bin, ins_name)
   ) |>
-  mutate(pct_claims = n_claims / sum(n_claims),
-                pct_balance = balance / sum(balance),
-                .by = ins_name) |>
+  mutate(
+    pct_claims = n_claims / sum(n_claims),
+    pct_balance = balance / sum(balance),
+    .by = ins_name
+  ) |>
   gt(groupname_col = "aging_bin", rowname_col = "ins_name") |>
-  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
-  fmt_percent(columns = pct_claims:pct_balance) |> 
-  fmt_currency(columns = balance) |> 
-  fmt_number(columns = n_claims, decimals = 0) |> 
+  fmt_percent(columns = pct_claims:pct_balance) |>
+  fmt_currency(columns = balance) |>
+  fmt_number(columns = n_claims, decimals = 0) |>
   cols_label(n_claims = "Claims", balance = "Charges") |>
   cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
   cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>

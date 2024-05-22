@@ -4,10 +4,14 @@
 \alias{generate_data}
 \title{Generate mock coding/billing data frame}
 \usage{
-generate_data(rows = 100)
+generate_data(rows = 100, add_day_counts = TRUE, ...)
 }
 \arguments{
-\item{rows}{number of rows to generate; default is 100}
+\item{rows}{\verb{[integerish]} rows number of rows to generate; default is \code{100}}
+
+\item{add_day_counts}{\verb{[logical]} add_day_counts add columns for days between events; default is \code{TRUE}}
+
+\item{...}{\verb{[dots]} additional arguments}
 }
 \value{
 A \link[tibble:tibble-package]{tibble}

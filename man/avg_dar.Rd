@@ -4,7 +4,7 @@
 \alias{avg_dar}
 \title{Calculate Average Days in AR}
 \usage{
-avg_dar(df, date, gct, earb, dart = 35, period = c("month", "quarter"))
+avg_dar(df, date, gct, earb, dart = 35, by = c("month", "quarter"))
 }
 \arguments{
 \item{df}{\verb{<data.frame>} or \verb{<tibble>}}
@@ -15,9 +15,9 @@ avg_dar(df, date, gct, earb, dart = 35, period = c("month", "quarter"))
 
 \item{earb}{\verb{<dbl>} column of ending accounts receivable balances}
 
-\item{dart}{\verb{<dbl>} Target Days in AR, default is \code{35} days}
+\item{dart}{\verb{[numeric]} Target Days in AR, default is \code{35} days}
 
-\item{period}{\verb{<chr>} string specifying the calculation period; one of
+\item{by}{\verb{[character]} string specifying the calculation period; one of
 \code{"month"}, \code{"quarter"}, or \code{"year"}; defaults to \code{"month"}}
 }
 \value{
@@ -32,13 +32,13 @@ avg_dar(df     = dar_ex(),
         gct    = gross_charges,
         earb   = ending_ar,
         dart   = 35,
-        period = "month")
+        by = "month")
 
 avg_dar(df     = dar_ex(),
         date   = date,
         gct    = gross_charges,
         earb   = ending_ar,
         dart   = 35,
-        period = "quarter")
+        by = "quarter")
 
 }

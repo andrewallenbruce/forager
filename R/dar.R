@@ -8,9 +8,9 @@
 #'
 #' @template args-earb-col
 #'
-#' @param dart `<dbl>` Target Days in AR, default is `35` days
+#' @param dart `[numeric]` Target Days in AR, default is `35` days
 #'
-#' @param period `<chr>` string specifying the calculation period; one of
+#' @param by `[character]` string specifying the calculation period; one of
 #'   `"month"`, `"quarter"`, or `"year"`; defaults to `"month"`
 #'
 #' @template returns-default
@@ -21,14 +21,14 @@
 #'         gct    = gross_charges,
 #'         earb   = ending_ar,
 #'         dart   = 35,
-#'         period = "month")
+#'         by = "month")
 #'
 #' avg_dar(df     = dar_ex(),
 #'         date   = date,
 #'         gct    = gross_charges,
 #'         earb   = ending_ar,
 #'         dart   = 35,
-#'         period = "quarter")
+#'         by = "quarter")
 #'
 #' @autoglobal
 #'
@@ -38,9 +38,9 @@ avg_dar <- function(df,
                     gct,
                     earb,
                     dart = 35,
-                    period = c("month", "quarter")) {
+                    by = c("month", "quarter")) {
 
-  period  <- match.arg(period)
+  by  <- match.arg(by)
   datecol <- rlang::englue("{{ date }}")
   earbcol <- rlang::englue("{{ earb }}")
   gctcol  <- rlang::englue("{{ gct }}")
@@ -63,7 +63,7 @@ avg_dar <- function(df,
     ndip         = lubridate::days_in_month({{ date }})
   )
 
-  if (period == "quarter") {
+  if (by == "quarter") {
 
     qtr_max_nmons <- df |>
       dplyr::summarise(

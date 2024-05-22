@@ -4,12 +4,12 @@
 \alias{bin_aging}
 \title{Apply 30-Day Aging Bins}
 \usage{
-bin_aging(df, date, bin_type = "chop")
+bin_aging(df, ndays, bin_type = c("case", "chop"))
 }
 \arguments{
 \item{df}{\verb{<data.frame>} or \verb{<tibble>}}
 
-\item{date}{column of \verb{<date>}s}
+\item{ndays}{\verb{<dbl>} column of counts of days elapsed to bin by}
 
 \item{bin_type}{\verb{<chr>} string specifying the bin type; one of "chop", "cut" or "ivs"}
 }
@@ -20,56 +20,22 @@ a \link[tibble:tibble-package]{tibble}
 Apply 30-Day Aging Bins
 }
 \examples{
-binned <- bin_aging(
-  df = load_ex("aging_ex"),
-  date = dos
-) |>
-  dplyr::select(
-    dos:ins_class,
-    dar:aging_bin
-  )
+generate_data(10)[c(
+  "date_srvc",
+  "charges",
+  "payer")] |>
+  days_between(date_srvc) |>
+  bin_aging(days_in_ar)
 
-head(binned)
-
-binned |>
+load_ex("aging_ex") |>
+  dplyr::select(dos, charges, ins_name) |>
+  days_between(dos) |>
+  bin_aging(days_in_ar) |>
   dplyr::arrange(aging_bin) |>
-  dplyr::summarise(n_claims = dplyr::n(),
-                   balance = sum(charges),
-                   .by = aging_bin) |>
-  dplyr::mutate(
-    tot_claims = sum(n_claims),
-    tot_balance = sum(balance),
-    pct_claims = n_claims / tot_claims,
-    pct_balance = balance / tot_balance) |>
-  print(n = 50)
-
-binned |>
-  dplyr::arrange(aging_bin, ins_name) |>
-  dplyr::summarise(
-    n_claims = dplyr::n(),
-    balance = sum(charges),
-    .by = c(aging_bin, ins_name)
+  dplyr::group_by(
+    year = clock::get_year(dos),
+    month = clock::date_month_factor(dos),
   ) |>
-  dplyr::mutate(
-    tot_claims = sum(n_claims),
-    tot_balance = sum(balance),
-    pct_claims = n_claims / tot_claims,
-    pct_balance = balance / tot_balance) |>
-  print(n = 50)
-
-binned |>
-  dplyr::arrange(ins_name, aging_bin) |>
-  dplyr::summarise(
-    n_claims = dplyr::n(),
-    balance = sum(charges),
-    .by = c(aging_bin, ins_name)
-  ) |>
-  dplyr::mutate(
-    tot_claims = sum(n_claims),
-    tot_balance = sum(balance),
-    pct_claims = n_claims / tot_claims,
-    pct_balance = balance / tot_balance,
-    .by = ins_name) |>
-  print(n = 50)
+  janitor::tabyl(ins_name, aging_bin, year)
 
 }

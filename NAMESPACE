@@ -3,6 +3,7 @@
 export(avg_dar)
 export(bin_aging)
 export(dar_ex)
+export(days_between)
 export(generate_data)
 export(load_ex)
 export(net_ex)

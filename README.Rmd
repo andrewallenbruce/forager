@@ -57,7 +57,7 @@ You can install the development version of `forager` from
 pak::pak("andrewallenbruce/forager")
 ```
 
-```{r, echo=TRUE, warning=FALSE, message=FALSE}
+```{r setup, echo=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(clock)
 library(forager)
@@ -87,59 +87,78 @@ Measuring the amount of time between each step becomes crucial in identifying wo
 <br>
 
 ```{r, echo=TRUE, warning=FALSE}
-x <- forager::generate_data(15000)
-x |> head(n = 10)
+x <- forager::generate_data(1500)
+
+mean(x$days_in_ar, na.rm = TRUE)
 ```
 <br>
 
 ```{r echo=TRUE}
-x |> 
+x_pvt <- x |> 
+  select(clm_id:date_recon) |> 
   pivot_longer(
     cols      = starts_with("date"), 
     names_to  = "date_type", 
     values_to = "date") |> 
-  mutate(days_diff = lead(date) - date,
-         .by = claim_id)
+  mutate(date_lag = lead(date) - date,
+         date_lag = lag(date_lag, order_by = date),
+         date_type = str_remove_all(date_type, "date_"),
+         date_type = case_match(
+           date_type,
+           "srvc" ~ "Service",
+           "rlse" ~ "Release",
+           "submit" ~ "Submission",
+           "accept" ~ "Acceptance",
+           "adjud" ~ "Adjudication",
+           "recon" ~ "Reconciliation"),
+         date_type = fct_relevel(
+           date_type, 
+           "Service", 
+           "Release", 
+           "Submission", 
+           "Acceptance", 
+           "Adjudication", 
+           "Reconciliation"), 
+         .by = clm_id)
+
+x_pvt
 ```
+
 <br>
 
 ```{r echo=TRUE}
-x_days <- x |> 
-  count_days(date_of_service, date_of_release, prov_lag) |> 
-  count_days(date_of_release, date_of_submission, bill_lag) |> 
-  count_days(date_of_submission, date_of_acceptance, proc_lag) |> 
-  count_days(date_of_submission, date_of_adjudication, payer_lag) |> 
-  count_days(date_of_release, date_of_adjudication, dar)
-```
-
-
-```{r echo=TRUE}
-x_days |> 
-  group_by(month = date_month_factor(date_of_service)) |> 
+x |> 
+  group_by(
+    year  = get_year(date_srvc),
+    month = date_month_factor(date_srvc)) |> 
   summarise(
-    n_claims = n(), 
-    balance = sum(balance),
-    prov_lag = mean(prov_lag), 
-    bill_lag = mean(bill_lag),
-    proc_lag = mean(proc_lag),
-    payer_lag = mean(payer_lag),
-    dar = mean(dar), 
+    n_claims    = n(), 
+    balance     = sum(balance, na.rm = TRUE),
+    days_rlse   = mean(days_rlse, na.rm = TRUE), 
+    days_submit = mean(days_submit, na.rm = TRUE),
+    days_accept = mean(days_accept, na.rm = TRUE),
+    days_adjud  = mean(days_adjud, na.rm = TRUE),
+    days_recon  = mean(days_recon, na.rm = TRUE),
+    days_in_ar  = mean(days_in_ar, na.rm = TRUE), 
     .groups = "drop")
 ```
 
 <br>
 
 ```{r echo=TRUE}
-x_days |> 
-  group_by(qtr = quarter(date_of_service)) |> 
+x |> 
+  group_by(
+    year  = get_year(date_srvc),
+    nqtr = quarter(date_srvc)) |> 
   summarise(
-    n_claims = n(), 
-    balance = sum(balance),
-    prov_lag = mean(prov_lag), 
-    bill_lag = mean(bill_lag),
-    proc_lag = mean(proc_lag),
-    payer_lag = mean(payer_lag),
-    dar = mean(dar), 
+    n_claims    = n(), 
+    balance     = sum(balance, na.rm = TRUE),
+    days_rlse   = mean(days_rlse, na.rm = TRUE), 
+    days_submit = mean(days_submit, na.rm = TRUE),
+    days_accept = mean(days_accept, na.rm = TRUE),
+    days_adjud  = mean(days_adjud, na.rm = TRUE),
+    days_recon  = mean(days_recon, na.rm = TRUE),
+    days_in_ar  = mean(days_in_ar, na.rm = TRUE), 
     .groups = "drop")
 ```
 
@@ -148,48 +167,54 @@ x_days |>
 
 ```{r echo=TRUE}
 x |> 
-  count_days(date_of_service, date_of_adjudication, dar) |> 
-  group_by(aging_bin = cut(dar, breaks = seq(0, 500, by = 30))) |> 
+  bin_aging(days_in_ar, bin_type = "chop") |> 
+  group_by(aging_bin) |> 
   summarise(
     n_claims = n(),
-    balance = roundup(sum(balance)), 
+    balance = roundup(sum(balance, na.rm = TRUE)), 
+    .groups = "drop")
+
+x |> 
+  bin_aging(days_in_ar, bin_type = "case") |> 
+  group_by(aging_bin) |> 
+  summarise(
+    n_claims = n(),
+    balance = roundup(sum(balance, na.rm = TRUE)), 
     .groups = "drop")
 ```
-
-```{r}
-x |> 
-  bin_aging(date_of_service)
-```
-
 
 ## Days in AR Monthly Calculation
 
 ```{r echo=TRUE}
 tibble(
   date = date_build(2024, 1:12),
-  gct = abs(rnorm(12, c(365000.567, 169094.46, 297731.74), c(2:3))),
-  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3)))) |> 
+  gct  = rpois(12, 250000:400000),
+  earb = rpois(12, 290000:400000)
+  ) |> 
   avg_dar(
     date, 
     gct, 
     earb, 
-    dart = 35)
+    dart = 35,
+    by = "month")
 ```
 
 <br>
 
 ## Days in AR Quarterly Calculation
 
-```{r results='asis', echo=TRUE}
+```{r echo=TRUE}
 tibble(
   date = date_build(2024, 1:12),
-  gct = abs(rnorm(12, c(365000.567, 169094.46, 297731.74), c(2:3))),
-  earb = abs(rnorm(12, c(182771.32, 169633.64, 179347.72), c(2:3)))) |> 
-  avg_dar(date, 
-          gct, 
-          earb, 
-          dart = 35, 
-          period = "quarter")
+  gct  = rpois(12, 250000:400000),
+  earb = rpois(12, 285500:400000)
+  ) |> 
+  avg_dar(
+    date, 
+    gct, 
+    earb, 
+    dart = 35,
+    by = "quarter")
 ```
 
 

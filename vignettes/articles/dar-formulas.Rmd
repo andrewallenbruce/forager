@@ -36,9 +36,9 @@ ${dar} = \dfrac {earb} {{gct} \div {ndip}}$
 
 Where:
 
-   * $ndip = $ Number of Days in Period
-   * $gct = $ Total Gross Charges
-   * $earb = $ Ending AR Balance
+   - ${ndip} = $ Number of Days in Period
+   - ${gct} = $ Total Gross Charges
+   - ${earb} = $ Ending AR Balance
 
 [^1]: A list of fees physicians establish as the fair price for the services they provide. Keep in mind, this is *not* the same as a payment schedule.
 
@@ -60,9 +60,9 @@ This is the Accounts Receivables balance at the close of business (COB) on the f
 
 Let's say you have the following data:
 
-   * Number of Days in Period: 30
-   * Total Gross Charges: $180,000
-   * Ending AR Balance: $77,400
+   * Number of Days in Period = __30__
+   * Total Gross Charges = __$180,000__
+   * Ending AR Balance = __$77,400__
 
 The calculation would look like this:
 
@@ -83,10 +83,7 @@ dar(earb = 77400,
 
 ## DAR Targets
 
-   * Ending AR $earb_t = (dar_t \times gct) \div ndip$ 
-   <br>
-   * Gross Charges $gct_t = (earb \times ndip) \div dar_t$
-   <br>
-   * Days in Period: $ndip_t = (dar_t \times gct) \div earb$
-   <br>
-   * DAR: $dar_t = (earb \times ndip) \div gct$
+   - $earb_t = (dar_t \times gct) \div ndip$ 
+   - $gct_t = (earb \times ndip) \div dar_t$
+   - $ndip_t = (dar_t \times gct) \div earb$
+   - $dar_t = (earb \times ndip) \div gct$

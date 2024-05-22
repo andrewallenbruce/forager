@@ -27,6 +27,7 @@ Suggests:
     covr,
     tidyr,
     svglite,
+    janitor,
     ggplot2,
     headliner,
     forcats,

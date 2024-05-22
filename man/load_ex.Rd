@@ -7,7 +7,7 @@
 load_ex(name)
 }
 \arguments{
-\item{name}{\verb{<chr>} name of example dataset}
+\item{name}{\verb{[character]} name of example dataset}
 }
 \value{
 A \link[tibble:tibble-package]{tibble}
