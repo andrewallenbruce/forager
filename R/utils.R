@@ -123,7 +123,7 @@ generate_data <- function(rows = 100, add_day_counts = TRUE, ...) {
       balance = dplyr::if_else(date_adjud == date_recon, 0, balance),
       date_recon = dplyr::if_else(
         lubridate::year(date_srvc) == max(
-          lubridate::year(date_srvc)) & balance > 0 & dplyr::row_number(date_recon) %in% rsmpl, NA_Date_, date_recon),
+          lubridate::year(date_srvc)) & balance > 0 & dplyr::row_number(date_recon) %in% rsmpl, NA, date_recon),
       balance = dplyr::if_else(!is.na(date_recon), 0, balance),
       .after  = charges
     ) |>
