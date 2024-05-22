@@ -115,9 +115,19 @@
 <span class="r-in"><span>  <span class="st">"charges"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"payer"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">days_between</span><span class="op">(</span><span class="va">date_srvc</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::mutate(dplyr::tibble(clm_id = wakefield::id_factor(n = rows),     payer = forcats::as_factor(fixtuRes::set_vector(size = rows,         set = payer_names)), charges = as.double(wakefield::income(n = rows,         digits = 2)/300), date_srvc = lubridate::as_date(wakefield::date_stamp(n = rows,         start = lubridate::today() - lubridate::dyears(1), random = TRUE)),     date_rlse = date_srvc + stats::rpois(rows, 1:15), date_submit = date_rlse +         stats::rpois(rows, 1:5), date_accept = date_submit +         stats::rpois(rows, 5:20), date_adjud = date_accept +         stats::rpois(rows, 30:120), date_recon = date_adjud +         stats::rpois(rows, 1:10)), balance = charges, balance = dplyr::if_else(date_adjud ==     date_recon, 0, balance), date_recon = dplyr::if_else(lubridate::year(date_srvc) ==     max(lubridate::year(date_srvc)) &amp; balance &gt; 0 &amp; dplyr::row_number(date_recon) %in%     rsmpl, NA_Date_, date_recon), balance = dplyr::if_else(!is.na(date_recon),     0, balance), .after = charges):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `date_recon = dplyr::if_else(...)`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'NA_Date_' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    date_srvc  charges payer         days_in_ar</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2023-05-22    52.9 United Health        366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2023-04-22   170.  Humana               396</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2023-02-22   234.  BCBS                 455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2023-01-22    50.4 Medicaid             486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2022-12-22    91.2 Cigna                517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2022-12-22    60.2 Humana               517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2022-10-22   156.  United Health        578</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-08-22   147.  Medicare             639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-06-22   319.  Medicaid             700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-06-22   151.  Cigna                700</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
