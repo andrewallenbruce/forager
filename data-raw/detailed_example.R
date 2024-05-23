@@ -1,65 +1,88 @@
 library(googlesheets4)
 library(tidyverse)
 library(janitor)
-library(provider)
 library(clock)
 
-pt_aging <- read_sheet("1F2bl8z77yNoorLxp5HerqzJnS7AwaDXxQDJsnzr_0kI", sheet = "PatientAging_20240312") |>
+remove_quiet <- function(df) {
+  janitor::remove_empty(
+    df,
+    which = c("rows", "cols"))
+}
+
+pt_aging <- read_sheet(
+  "1F2bl8z77yNoorLxp5HerqzJnS7AwaDXxQDJsnzr_0kI",
+  sheet = "PatientAging_20240312"
+  ) |>
   clean_names() |>
+  filter(!is.na(pid)) |>
   mutate(
-    date_of_birth = as.Date(date_of_birth),
-    initial_bill_date = as.Date(initial_bill_date),
-    last_bill_date = as.Date(last_bill_date),
+    pid                  = str_remove_all(pid, "REP"),
+    pid                  = fuimus::pad_number(pid),
+    date_of_birth        = as.Date(date_of_birth),
+    initial_bill_date    = as.Date(initial_bill_date),
+    last_bill_date       = as.Date(last_bill_date),
     last_patient_payment = as.Date(last_patient_payment),
-    date_report = as.Date("2024-03-12"),
-    days_bill_last = as.numeric(date_report - last_bill_date),
-    days_ptpmt_last = as.numeric(date_report - last_patient_payment)
+    date_report          = as.Date("2024-03-12"),
+    days_bill_last       = as.integer(date_report - last_bill_date),
+    days_pay_last        = as.integer(date_report - last_patient_payment),
+    disabled_statements  = if_else(disabled_statements == "YES", TRUE, FALSE)
     ) |>
-  unnest_longer(last_payment_amount, indices_include = FALSE) |>
+  unnest_longer(
+    last_payment_amount,
+    indices_include = FALSE
+    ) |>
   separate_wider_delim(
-    cols = patient_name,
-    delim = ", ",
-    names = c("last_name", "first_name"),
-    too_few = "align_start") |>
+    cols    = patient_name,
+    delim   = ", ",
+    names   = c("last_name", "first_name"),
+    too_few = "align_start"
+    ) |>
   select(
     pid,
-    last = last_name,
-    first = first_name,
-    dob = date_of_birth,
-    class,
-    date_bill_init = initial_bill_date,
-    days_bill_init = average_days,
-    date_bill_last = last_bill_date,
+    class_pid       = class,
+    dob             = date_of_birth,
+    date_bill_first = initial_bill_date,
+    date_bill_last  = last_bill_date,
+    date_pay_last   = last_patient_payment,
+    days_bill_first = average_days,
     days_bill_last,
-    date_ptpmt_last = last_patient_payment,
-    days_ptpmt_last,
-    ptpmt_last_amt = last_payment_amount,
-    prim_ins = primary_insurance,
-    prim_cls = primary_ins_class,
-    sec_ins = secondary_insurance,,
-    sec_cls = secondary_ins_class,,
-    age_0_30 = x0_to_30,
-    age_31_60 = x31_to_60,
-    age_61_90 = x61_to_90,
-    age_91_120 = x91_to_120,
-    age_121 = x121,
-    aging_total = total,
-    dis_stm = disabled_statements
+    days_pay_last,
+    amt_pay_last    = last_payment_amount,
+    ins_prim        = primary_insurance,
+    class_prim      = primary_ins_class,
+    ins_sec         = secondary_insurance,,
+    class_sec       = secondary_ins_class,,
+    bin_0_30        = x0_to_30,
+    bin_31_60       = x31_to_60,
+    bin_61_90       = x61_to_90,
+    bin_91_120      = x91_to_120,
+    bin_121         = x121,
+    aging_total     = total,
+    disabled_statements
   )
 
-bottom_totals <- pt_aging |>
-  filter(is.na(pid)) |>
-  remove_empty()
+pin_update(
+  pt_aging,
+  name = "patient_aging",
+  title = "Patient Aging Example",
+  description = "Patient Aging Example"
+)
 
-bottom_totals |>
-  pivot_longer(
-    cols = c(age_0_30:age_121),
-    names_to = "age_bucket",
-    values_to = "count"
-  )
 
-pt_aging <- pt_aging |>
-  filter(!is.na(pid))
+
+# bottom_totals <- pt_aging |>
+#   filter(is.na(pid)) |>
+#   remove_empty()
+
+# bottom_totals |>
+#   pivot_longer(
+#     cols = c(age_0_30:age_121),
+#     names_to = "age_bucket",
+#     values_to = "count"
+#   )
+
+# pt_aging <- pt_aging |>
+#   filter(!is.na(pid))
 
 
 # 4 Encounters: 121+ bucket,
@@ -68,9 +91,11 @@ pt_aging <- pt_aging |>
 # sitting on aging for around 450 days
 # dollar amount = $710.00
 pt_aging |>
-  filter(dis_stm == "YES") |>
-  filter(days_bill_init > 0)
+  filter(disabled_statements) |>
+  filter(days_bill_first > 0) |>
+  remove_quiet()
 
 pt_aging |>
-  filter(!is.na(age_121), !is.na(date_ptpmt_last)) |>
-  arrange(desc(date_ptpmt_last))
+  filter(!is.na(bin_121), !is.na(date_pay_last)) |>
+  arrange(desc(date_pay_last)) |>
+  remove_quiet()

@@ -1,3 +1,4 @@
+source(here::here("data-raw", "pins_functions.R"))
 library(tidyverse)
 library(clock)
 
@@ -5,46 +6,8 @@ healthr <- healthyR.data::healthyR_data |>
   reframe(
     pid = mrn,
     dos = as_date(visit_end_date_time),
-    visit_end_date_time = NULL,
-    payer = payer_grouping,
-    charges = total_charge_amount,
-    adjustment = total_adjustment_amount,
-    payment = total_payment_amount,
-    balance = total_amount_due
-  ) |>
-  #------ If you alter the years, you'll
-  # have to redo this visit calculation:
-  arrange(pid) |>
-  group_by(pid) |>
-  mutate(
-    visit = row_number(),
-    .after = pid
-    ) |>
-  ungroup() |>
-  arrange(dos) |>
-  #------ End
-  mutate(
-    payer = case_match(
-      payer,
-      # "Blue Cross"
-      # "Medicaid"
-      # "Commercial"
-      "Medicare A" ~ "Medicare Part A",
-      "Medicaid HMO" ~ "Anthem",
-      "Medicare B" ~ "Medicare Part B",
-      "Medicare HMO" ~ "Aetna",
-      "HMO" ~ "Humana",
-      "Self Pay" ~ "Patient",
-      "Compensation" ~ "Worker's Comp",
-      "Exchange Plans" ~ "Medicare Advantage",
-      c("No Fault", "?") ~ "Commercial",
-      .default = payer
-    ),
-    payer = as_factor(payer))
-
-healthr |>
-  mutate(
     dos = add_years(dos, 4, invalid = "previous"),
+    balance = total_amount_due,
     closed = if_else(balance == 0, TRUE, FALSE),
     dos = case_when(
       year(dos) < 2015 & !closed ~ add_years(dos, 8, invalid = "previous"),
@@ -54,12 +17,77 @@ healthr |>
       year(dos) < 2019 & !closed ~ add_years(dos, 4, invalid = "previous"),
       year(dos) < 2020 & !closed ~ add_years(dos, 3, invalid = "previous"),
       year(dos) < 2021 & !closed ~ add_years(dos, 2, invalid = "previous"),
-      dos >= clock::date_today("") ~ add_years(dos, -1, invalid = "previous"),
+      dos >= date_today("") ~ add_years(dos, -1, invalid = "previous"),
       .default = dos
     ),
+    charges = total_charge_amount,
+    adjustment = total_adjustment_amount,
+    payment = total_payment_amount,
+    payer = payer_grouping,
+    payer = case_match(
+      payer,
+        "Medicare A" ~ "Medicare Part A",
+        "Medicaid HMO" ~ "Anthem",
+        "Medicare B" ~ "Medicare Part B",
+        "Medicare HMO" ~ "Aetna",
+        "HMO" ~ "Humana",
+        "Self Pay" ~ "Patient",
+        "Compensation" ~ "Worker's Comp",
+        "Exchange Plans" ~ "Medicare Advantage",
+        c("No Fault", "?") ~ "Commercial",
+      .default = payer
+    ),
+    payer = as_factor(payer),
+  ) |>
+  arrange(pid) |>
+  group_by(pid) |>
+  mutate(visit = row_number(),
+         .after = pid
+         ) |>
+  ungroup() |>
+  arrange(dos) |>
+  select(
+    pid,
+    visit,
+    dos,
+    payer,
+    charges,
+    adjustment,
+    payment,
+    balance,
+    closed
+    )
+
+pin_update(
+  healthr,
+  name = "healthyr",
+  title = "HealthyR Example",
+  description = "HealthyR Example"
+)
+
+
+healthr |>
+  filter(closed) |>
+  group_by(year = year(dos)) |>
+  summarise(n = n())
+
+# Oldest open accounts:
+# 2021: 2,384
+# 2022: 14,600
+# 2023: 6,122
+# 2024: 1,102
+# Total: 24,208
+healthr |>
+  filter(!closed) |>
+  group_by(year = year(dos)) |>
+  summarise(n = n())
+
+
+# Try to add close date to closed accounts
+healthr |>
+  mutate(
     date_recon = if_else(closed, add_months(dos, 3, invalid = "previous"), NA),
-    date_recon = case_when(
-      date_recon >= clock::date_today("") ~ add_years(dos, -1, invalid = "previous")),
+    date_recon = case_when(date_recon >= date_today("") ~ add_years(dos, -1, invalid = "previous")),
     days_in_ar = if_else(closed, as.integer(date_recon - dos), NA)
   ) |>
   fuimus::count_days(
@@ -67,14 +95,8 @@ healthr |>
     end = today,
     name = "days"
   ) |>
-  dplyr::arrange(dplyr::desc(dos))
-
+  arrange(desc(dos)) |>
   filter(closed == FALSE) |>
   group_by(year = year(dos)) |>
   count(payer) |>
   print(n = 200)
-
-sample(c(30:60), 1)
-# if balance == 0, stop counting days
-
-rpois(1, 30:90)

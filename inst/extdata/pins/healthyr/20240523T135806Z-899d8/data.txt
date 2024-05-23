@@ -1,0 +1,10 @@
+file: healthyr.qs
+file_size: 4062651
+pin_hash: 899d88c364592b8c
+type: qs
+title: HealthyR Example
+description: HealthyR Example
+tags: ~
+urls: ~
+created: 20240523T135806Z
+api_version: 1

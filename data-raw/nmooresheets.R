@@ -3,26 +3,70 @@ library(tidyverse)
 library(janitor)
 library(clock)
 
-nm_collect <- read_sheet(
-  "1LM9juL8JJ1zihOMGV6kMeJ9Fe1tpmf9ka-thYpiWzt0",
-  sheet = "Collections") |>
-  clean_names()
+gs_id <- "1LM9juL8JJ1zihOMGV6kMeJ9Fe1tpmf9ka-thYpiWzt0"
 
-nm_em <- read_sheet(
-  "1LM9juL8JJ1zihOMGV6kMeJ9Fe1tpmf9ka-thYpiWzt0",
-  sheet = "EM") |>
-  clean_names()
+nm_examples <- list(
+  collections   = read_sheet(gs_id, sheet = "Collections") |> clean_names(),
+  em_visits     = read_sheet(gs_id, sheet = "EM") |> clean_names(),
+  reimbursement = read_sheet(gs_id, sheet = "Reimbursement") |> clean_names(),
+  last_referral = read_sheet(gs_id, sheet = "LastReferral") |> clean_names()
+)
 
-nm_reimburse <- read_sheet(
-  "1LM9juL8JJ1zihOMGV6kMeJ9Fe1tpmf9ka-thYpiWzt0",
-  sheet = "Reimbursement") |>
-  clean_names()
+nm_examples$collections <- nm_examples$collections |>
+  reframe(
+    patient,
+    procedure  = as.character(code),
+    dos        = as_date(date),
+    balance    = amount,
+    payer      = as_factor(payer),
+    ins_class  = as_factor(payor_type),
+    state      = as_factor(state),
+    referring  = referring_physician,
+    rendering  = doctor
+    # hcpcs_desc = map(hcpcs_code, northstar::get_descriptions)
+  )
 
-nm_refer <- read_sheet(
-  "1LM9juL8JJ1zihOMGV6kMeJ9Fe1tpmf9ka-thYpiWzt0",
-  sheet = "LastReferral") |>
-  clean_names()
+nm_examples$em_visits <- nm_examples$em_visits |>
+  reframe(
+    patient,
+    dos        = as_date(date),
+    dob        = dos - years(patient_age),
+    hcpcs_code = as.character(e_m_code),
+    em_level   = as_factor(code_level),
+    payer      = as_factor(insurance),
+    city,
+    state      = as_factor(state),
+    referring  = referring_physician,
+    rendering  = doctor
+  )
 
+nm_examples$reimbursement <- nm_examples$reimbursement |>
+  reframe(
+    patient,
+    dos = as_date(date),
+    hcpcs_code = cpt_code,
+    payer = as_factor(primary_insurance),
+    charges = billed,
+    allowed,
+    adjustment = wo,
+    rendering = doctor
+  )
+
+nm_examples$last_referral <- nm_examples$last_referral |>
+  reframe(
+    referring_physician,
+    rendering_physician = doctor,
+    date_last_referral = as_date(last_referral_date),
+    location,
+    specialty
+  )
+
+pin_update(
+  nm_examples,
+  name = "nm_examples",
+  title = "4 Examples from Nate Moore",
+  description = "4 Examples from Nate Moore"
+)
 
 # Nate Moore Medicare Rate Example
 #
