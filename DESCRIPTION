@@ -28,6 +28,7 @@ Suggests:
     tidyr,
     ggthemes,
     ggforce,
+    waterfalls,
     svglite,
     janitor,
     ggplot2,

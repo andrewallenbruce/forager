@@ -51,6 +51,8 @@ dar_mon <- avg_dar(
   dart   = 35,
   by = "month"
 )
+
+dar_mon
 ```
 
 
@@ -128,7 +130,8 @@ dar_mon |>
   geom_line(group = 1, linetype = "dashed", alpha = 0.7) +
   geom_hline(yintercept = 35, color = "red") +
   labs(title = "Days in AR by Month", x = NULL, y = NULL) +
-  theme_minimal()
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10)
 ```
 
 ```{r}
@@ -144,7 +147,31 @@ dar_ex() |>
     linewidth = 1.5) +
   scale_y_continuous(labels = dollar_format(prefix = "$")) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
-  labs(title = NULL, x = NULL, y = NULL)
+  labs(title = NULL, x = NULL, y = NULL) + 
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10)
+```
+
+
+```{r}
+ar_ch <- dar_mon |> 
+  dplyr::reframe(
+    mon,
+    ending_ar,
+    change = ending_ar - lag(ending_ar),
+    change = ifelse(is.na(change), ending_ar, change),
+    change = fuimus::roundup(change, 0)
+  )
+ 
+waterfalls::waterfall(
+  ar_ch[c('change', 'mon')], 
+  calc_total = TRUE,
+  rect_width = 1) +
+  scale_y_continuous(
+    labels = dollar_format(scale = 0.001, suffix = "k")
+    ) +
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10)
 ```
 
 
@@ -152,13 +179,18 @@ dar_ex() |>
 ```{r}
 dar_mon |>
   ggplot(aes(x = ending_ar, y = dar)) +
-  geom_point() +
-  geom_hline(yintercept = 35, color = "red") +
-  scale_x_continuous(labels = dollar_format(prefix = "$"), limits = c(0, max(dar_mon$gross_charges))) +
+  geom_point(aes(colour = dar > 35), show.legend = FALSE) +
+  geom_hline(yintercept = 35, color = "red", alpha = 0.5) +
+  scale_x_continuous(
+    labels = dollar_format(scale = 0.001, suffix = "k"), 
+    limits = c(0, max(dar_mon$gross_charges))
+    ) +
   labs(title = "Days in AR by Month", x = NULL, y = NULL) +
-  facet_wrap( ~ month) +
+  # facet_wrap( ~ month) +
+  facet_grid(ndip ~ mon, margins = TRUE) +
   coord_flip() +
-  theme_minimal()
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10)
 ```
 
 
@@ -177,21 +209,28 @@ ggplot() +
   geom_abline(data = dar_mon,
               aes(intercept = 0, slope = ratio_ideal),
               color = "red") +
-  geom_abline(
-    data = dar_mon,
-    aes(intercept = 0, slope = ratio_actual),
-    color = "blue",
-    linewidth = 1.5,
-    alpha = 0.25
-  ) +
-  facet_wrap( ~ month, scales = "free_x") +
-  scale_y_continuous(labels = dollar_format(prefix = "$"), limits = c(0, max(
-    c(dar_mon$ending_ar, dar_mon$ending_ar_target)
+  # geom_abline(
+  #   data = dar_mon,
+  #   aes(intercept = 0, slope = ratio_actual),
+  #   color = "blue",
+  #   linewidth = 1.5,
+  #   alpha = 0.25
+  # ) +
+  # facet_wrap( ~ month, scales = "free_x") +
+  facet_grid(mon ~ ndip, margins = TRUE) +
+  scale_y_continuous(
+    labels = dollar_format(prefix = "$", scale = 0.001, suffix = "k"), 
+    limits = c(0, max(c(dar_mon$ending_ar, dar_mon$ending_ar_target)
   ))) +
-  scale_x_continuous(labels = dollar_format(prefix = "$"), limits = c(0, max(dar_mon$gross_charges))) +
+  scale_x_continuous(
+    labels = dollar_format(prefix = "$", scale = 0.001, suffix = "k"), 
+    limits = c(0, max(dar_mon$gross_charges))) +
   scale_shape_identity() +
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10) +
   labs(title = NULL, x = "Total Gross Charges", y = "Ending AR Balance") +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        strip.text.y = element_text(angle = 0))
 ```
 
 
@@ -424,7 +463,8 @@ binned
 ```{r}
 binned |> 
   sorted_bars(ins_name) +
-  theme_minimal()
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10)
 ```
 
 
@@ -461,14 +501,16 @@ binned |>
   ) |>
   mutate(pct_claims = n_claims / sum(n_claims),
          pct_balance = balance / sum(balance)) |>
-  gt(groupname_col = "aging_bin", rowname_col = "ins_name") |>
+  gt(groupname_col = "aging_bin", 
+     rowname_col = "ins_name",
+     row_group_as_column = TRUE) |>
   fmt_percent(columns = pct_claims:pct_balance) |>
   fmt_currency(columns = balance, decimals = 0) |>
   fmt_number(columns = n_claims, decimals = 0) |>
   cols_label(n_claims = "Claims", balance = "Charges") |>
   cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
   cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
-  opt_stylize()
+  gtExtras::gt_theme_nytimes()
 ```
 
 ## Nathan Moore Medicare Reimbursement Rate Example
@@ -482,7 +524,17 @@ nm_rate <- dplyr::tibble(
   )
 
 ggplot(nm_rate, aes(x = rvus, y = rate)) +
-  ggforce::geom_mark_circle(aes(fill = payer, label = payer, description = desc)) +
+  ggforce::geom_mark_circle(
+    aes(fill = payer, label = payer, description = desc),
+    expand = -0.5,
+    radius = unit(3, "mm"),
+    label.buffer = unit(5, "mm"),
+    con.type = "straight",
+    con.cap = 0,
+    label.colour = "grey30",
+    con.colour = "grey30",
+    colour = "grey30",
+    ) +
   geom_point() +
   geom_smooth(method = lm, 
               formula = y ~ x, 
@@ -493,10 +545,10 @@ ggplot(nm_rate, aes(x = rvus, y = rate)) +
               alpha = 0.5) +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
   scale_x_continuous(labels = scales::comma) +
-  ggthemes::theme_fivethirtyeight() +
-  labs(
-    title = "Percentage of Reimbursement Compared to RVU Volume",
-    x = "RVU Volume",
-    y = "Rate as A Pct% of Medicare Reimbursement") +
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10) +
+  labs(title = "Percentage of Reimbursement Compared to RVU Volume",
+       x = "RVU Volume",
+       y = "Rate as A Pct% of Medicare Reimbursement") +
   theme(legend.position = "none")
 ```
