@@ -54,6 +54,8 @@
     <a class="dropdown-item" href="../articles/aging-of_accounts.html">Aging of Accounts</a>
     <a class="dropdown-item" href="../articles/dar-formulas.html">DAR Formulas</a>
     <a class="dropdown-item" href="../articles/getting-started.html">Getting started</a>
+    <a class="dropdown-item" href="../articles/parbx-and-bpi.html">PARBx &amp; BPI</a>
+    <a class="dropdown-item" href="../articles/patient-scheduling.html">Patient Scheduling</a>
   </div>
 </li>
       </ul>
@@ -2911,16 +2913,16 @@ are useful for healthcare revenue cycle analysis.</p>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,618 × 5</span></span></span>
 <span><span class="co">#&gt;    dos        charges ins_name   days_in_ar aging_bin</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare          148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient           148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross        148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA             148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross        148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA             148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient           148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare          148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross        148 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient           148 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare          149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient           149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross        149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA             149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross        149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA             149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient           149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare          149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross        149 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient           149 121+     </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span> </span>
@@ -3402,28 +3404,28 @@ are useful for healthcare revenue cycle analysis.</p>
 <tbody class="gt_table_body">
 <tr>
 <th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">0-30</th>
-<td headers="stub_1_1 n_claims" class="gt_row gt_right">1,002 (38%)</td>
-<td headers="stub_1_1 balance" class="gt_row gt_right">$486,384 (37%)</td>
+<td headers="stub_1_1 n_claims" class="gt_row gt_right">992 (38%)</td>
+<td headers="stub_1_1 balance" class="gt_row gt_right">$480,960 (37%)</td>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">31-60</th>
-<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">389 (15%)</td>
-<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$197,340 (15%)</td>
+<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">388 (15%)</td>
+<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$196,871 (15%)</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">61-90</th>
 <td headers="stub_1_3 n_claims" class="gt_row gt_right">443 (17%)</td>
-<td headers="stub_1_3 balance" class="gt_row gt_right">$217,910 (17%)</td>
+<td headers="stub_1_3 balance" class="gt_row gt_right">$217,477 (17%)</td>
 </tr>
 <tr>
 <th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">91-120</th>
-<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">426 (16%)</td>
-<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$213,442 (16%)</td>
+<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">413 (16%)</td>
+<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$208,082 (16%)</td>
 </tr>
 <tr>
 <th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub">121+</th>
-<td headers="stub_1_5 n_claims" class="gt_row gt_right">358 (14%)</td>
-<td headers="stub_1_5 balance" class="gt_row gt_right">$185,865 (14%)</td>
+<td headers="stub_1_5 n_claims" class="gt_row gt_right">382 (15%)</td>
+<td headers="stub_1_5 balance" class="gt_row gt_right">$197,551 (15%)</td>
 </tr>
 </tbody>
 </table>
@@ -3906,13 +3908,13 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="0-30 n_claims_2 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">207 (7.91%)</td>
-<td headers="0-30 n_claims_2 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$102,050 (7.84%)</td>
+<td headers="0-30 n_claims_2 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">206 (7.87%)</td>
+<td headers="0-30 n_claims_2 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$101,313 (7.79%)</td>
 </tr>
 <tr>
 <th id="n_claims_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="0-30 n_claims_3 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">116 (4.43%)</td>
-<td headers="0-30 n_claims_3 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$53,123 (4.08%)</td>
+<td headers="0-30 n_claims_3 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">114 (4.35%)</td>
+<td headers="0-30 n_claims_3 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$52,827 (4.06%)</td>
 </tr>
 <tr>
 <th id="n_claims_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3921,13 +3923,13 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="0-30 n_claims_5 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">188 (7.18%)</td>
-<td headers="0-30 n_claims_5 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$90,741 (6.98%)</td>
+<td headers="0-30 n_claims_5 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">187 (7.14%)</td>
+<td headers="0-30 n_claims_5 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$89,924 (6.91%)</td>
 </tr>
 <tr>
 <th id="n_claims_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="0-30 n_claims_6 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">396 (15.13%)</td>
-<td headers="0-30 n_claims_6 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$197,336 (15.17%)</td>
+<td headers="0-30 n_claims_6 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">390 (14.90%)</td>
+<td headers="0-30 n_claims_6 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$193,763 (14.89%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="31-60 stub_2_7 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">31-60</td>
@@ -3937,13 +3939,13 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="31-60 n_claims_8 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">87 (3.32%)</td>
-<td headers="31-60 n_claims_8 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$44,864 (3.45%)</td>
+<td headers="31-60 n_claims_8 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">86 (3.28%)</td>
+<td headers="31-60 n_claims_8 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$44,091 (3.39%)</td>
 </tr>
 <tr>
 <th id="n_claims_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="31-60 n_claims_9 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">37 (1.41%)</td>
-<td headers="31-60 n_claims_9 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$15,198 (1.17%)</td>
+<td headers="31-60 n_claims_9 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">39 (1.49%)</td>
+<td headers="31-60 n_claims_9 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$15,495 (1.19%)</td>
 </tr>
 <tr>
 <th id="n_claims_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3952,29 +3954,29 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="31-60 n_claims_11 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">74 (2.83%)</td>
-<td headers="31-60 n_claims_11 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$35,337 (2.72%)</td>
+<td headers="31-60 n_claims_11 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">72 (2.75%)</td>
+<td headers="31-60 n_claims_11 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$34,542 (2.66%)</td>
 </tr>
 <tr>
 <th id="n_claims_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
 <td headers="31-60 n_claims_12 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">157 (6.00%)</td>
-<td headers="31-60 n_claims_12 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$81,252 (6.25%)</td>
+<td headers="31-60 n_claims_12 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$82,054 (6.31%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="61-90 stub_2_13 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">61-90</td>
 <th id="stub_2_13" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="61-90 stub_2_13 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">53 (2.02%)</td>
-<td headers="61-90 stub_2_13 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$30,951 (2.38%)</td>
+<td headers="61-90 stub_2_13 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">51 (1.95%)</td>
+<td headers="61-90 stub_2_13 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$29,391 (2.26%)</td>
 </tr>
 <tr>
 <th id="n_claims_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
 <td headers="61-90 n_claims_14 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">87 (3.32%)</td>
-<td headers="61-90 n_claims_14 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$39,435 (3.03%)</td>
+<td headers="61-90 n_claims_14 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$40,111 (3.08%)</td>
 </tr>
 <tr>
 <th id="n_claims_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="61-90 n_claims_15 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">49 (1.87%)</td>
-<td headers="61-90 n_claims_15 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$21,967 (1.69%)</td>
+<td headers="61-90 n_claims_15 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">47 (1.80%)</td>
+<td headers="61-90 n_claims_15 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$21,685 (1.67%)</td>
 </tr>
 <tr>
 <th id="n_claims_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3984,28 +3986,28 @@ are useful for healthcare revenue cycle analysis.</p>
 <tr>
 <th id="n_claims_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
 <td headers="61-90 n_claims_17 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">78 (2.98%)</td>
-<td headers="61-90 n_claims_17 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$38,876 (2.99%)</td>
+<td headers="61-90 n_claims_17 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$37,852 (2.91%)</td>
 </tr>
 <tr>
 <th id="n_claims_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="61-90 n_claims_18 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">168 (6.42%)</td>
-<td headers="61-90 n_claims_18 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$83,211 (6.40%)</td>
+<td headers="61-90 n_claims_18 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">172 (6.57%)</td>
+<td headers="61-90 n_claims_18 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$84,967 (6.53%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="91-120 stub_2_19 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">91-120</td>
 <th id="stub_2_19" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="91-120 stub_2_19 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">55 (2.10%)</td>
-<td headers="91-120 stub_2_19 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$31,857 (2.45%)</td>
+<td headers="91-120 stub_2_19 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">54 (2.06%)</td>
+<td headers="91-120 stub_2_19 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$31,510 (2.42%)</td>
 </tr>
 <tr>
 <th id="n_claims_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="91-120 n_claims_20 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">72 (2.75%)</td>
-<td headers="91-120 n_claims_20 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$37,877 (2.91%)</td>
+<td headers="91-120 n_claims_20 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">69 (2.64%)</td>
+<td headers="91-120 n_claims_20 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$35,833 (2.75%)</td>
 </tr>
 <tr>
 <th id="n_claims_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
 <td headers="91-120 n_claims_21 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">32 (1.22%)</td>
-<td headers="91-120 n_claims_21 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$15,575 (1.20%)</td>
+<td headers="91-120 n_claims_21 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$14,709 (1.13%)</td>
 </tr>
 <tr>
 <th id="n_claims_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -4014,29 +4016,29 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="91-120 n_claims_23 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">90 (3.44%)</td>
-<td headers="91-120 n_claims_23 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$43,638 (3.35%)</td>
+<td headers="91-120 n_claims_23 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">87 (3.32%)</td>
+<td headers="91-120 n_claims_23 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$43,687 (3.36%)</td>
 </tr>
 <tr>
 <th id="n_claims_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="91-120 n_claims_24 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">171 (6.53%)</td>
-<td headers="91-120 n_claims_24 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$80,253 (6.17%)</td>
+<td headers="91-120 n_claims_24 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">165 (6.30%)</td>
+<td headers="91-120 n_claims_24 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$78,100 (6.00%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="121+ stub_2_25 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">121+</td>
 <th id="stub_2_25" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="121+ stub_2_25 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">32 (1.22%)</td>
-<td headers="121+ stub_2_25 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$14,769 (1.14%)</td>
+<td headers="121+ stub_2_25 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">35 (1.34%)</td>
+<td headers="121+ stub_2_25 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$16,675 (1.28%)</td>
 </tr>
 <tr>
 <th id="n_claims_26" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="121+ n_claims_26 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">82 (3.13%)</td>
-<td headers="121+ n_claims_26 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$45,816 (3.52%)</td>
+<td headers="121+ n_claims_26 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">87 (3.32%)</td>
+<td headers="121+ n_claims_26 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$48,693 (3.74%)</td>
 </tr>
 <tr>
 <th id="n_claims_27" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="121+ n_claims_27 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">45 (1.72%)</td>
-<td headers="121+ n_claims_27 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$25,882 (1.99%)</td>
+<td headers="121+ n_claims_27 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">47 (1.80%)</td>
+<td headers="121+ n_claims_27 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$27,029 (2.08%)</td>
 </tr>
 <tr>
 <th id="n_claims_28" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -4045,13 +4047,13 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_29" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="121+ n_claims_29 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">67 (2.56%)</td>
-<td headers="121+ n_claims_29 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$29,786 (2.29%)</td>
+<td headers="121+ n_claims_29 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">73 (2.79%)</td>
+<td headers="121+ n_claims_29 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$32,373 (2.49%)</td>
 </tr>
 <tr>
 <th id="n_claims_30" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="121+ n_claims_30 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">131 (5.00%)</td>
-<td headers="121+ n_claims_30 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$68,688 (5.28%)</td>
+<td headers="121+ n_claims_30 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">139 (5.31%)</td>
+<td headers="121+ n_claims_30 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$71,855 (5.52%)</td>
 </tr>
 </tbody>
 </table>
