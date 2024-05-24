@@ -1,0 +1,592 @@
+---
+title: "Patient Scheduling"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  echo      = TRUE, 
+  message   = FALSE, 
+  warning   = FALSE,
+  error     = TRUE,
+  comment   = "#>",
+  dpi       = 300, 
+  out.width = "100%",
+  fig.path  = "man/figures/README-"
+)
+```
+
+```{r setup}
+library(forager)
+library(dplyr)
+library(tidyr)
+library(lubridate)
+library(ivs)
+library(clock)
+library(vctrs)
+library(ggplot2)
+```
+
+# Interval Vectors in R with `ivs`
+
+-   [ivs blog](https://blog.davisvaughan.com/posts/2022-04-20-ivs-0-1-0/)
+
+<br><br>
+
+## Find ranges of dates when an apartment is empty
+
+Adapted from this [`ivs` example](https://stackoverflow.com/questions/72536566/adding-rows-for-missing-intervals-between-existing-intervals-in-r/72547866#72547866)
+
+-   Convert to dates rather than date-times
+-   Add 1 to `end_date` to make ranges that match `[, )`, which is what `ivs` wants (and makes more sense here)
+-   For each apartment, compute the interval *complement* with `iv_set_complement()`. These are the empty dates (it keeps in mind any overlaps)
+-   Bind the complement with the original data and sort
+
+The end dates in the final result will be +1 vs what is in your `desired_outcome` but I find these interval problems are easier to think about if you use right open intervals, `[, )`.
+
+```{r}
+example_dates <- structure(
+  list(
+    apartment = c("A", "A", "A", "A", "B", "B", "B", "C", "C", "C"), 
+    start_date = structure(
+      c(
+        1640995200, 1642291200, 1649980800, 1655769600, 1644451200,
+        1646092800, 1659312000, 1646438400, 1649376000, 1664582400
+      ), 
+      class = c("POSIXct", "POSIXt"), 
+      tzone = "UTC"
+    ), 
+    end_date = structure(
+      c(
+        1642204800, 1648166400, 1655683200, 1668643200, 1655251200, 
+        1653868800, 1667260800, 1654819200, 1661385600, 1668470400
+      ), 
+      class = c("POSIXct", "POSIXt"), 
+      tzone = "UTC"
+    ), 
+    status = c(
+      "person in apartment", "person in apartment", "person in apartment", 
+      "person in apartment", "person in apartment", "person in apartment",
+      "person in apartment", "person in apartment", "person in apartment", 
+      "person in apartment"
+    )
+  ), 
+  class = c("tbl_df", "tbl", "data.frame"), 
+  row.names = c(NA, -10L)
+)
+
+# Convert dates to dates rather than date-times
+example_dates <- example_dates |>
+  mutate(start_date = as.Date(start_date), 
+         end_date = as.Date(end_date)) |>
+  mutate(end_date = end_date + 1) # Make `end_date` exclusive
+
+example_dates
+```
+
+```{r}
+ggplot(example_dates) + 
+  geom_linerange(aes(xmin = start_date, 
+                     xmax = end_date, 
+                     y = apartment), linewidth = 1.25, color = "grey") +
+  geom_point(aes(x = start_date, y = apartment), 
+             colour = "blue", 
+             #fill = "black", 
+             #stroke = 1, 
+             size = 3,
+             shape = 21) +
+  geom_point(aes(x = end_date, y = apartment), colour = "red", 
+             #fill = "black", 
+             size = 3,
+             shape = 21) +
+  ggthemes::geom_rangeframe() +
+  ggthemes::theme_pander() +
+  labs(x = "", y = "")
+```
+
+```{r}
+# Combine start/end into an interval vector
+example_dates2 <- example_dates |>
+  mutate(range = iv(start_date, end_date), .keep = "unused")
+
+example_dates2
+```
+
+```{r}
+# Compute the complement per apartment
+empty_dates <- example_dates2 |>
+  group_by(apartment) |>
+  summarise(range = iv_set_complement(range)) |>
+  mutate(status = "apartment empty")
+
+empty_dates
+```
+
+```{r}
+# Bind and sort
+apt_dates <- bind_rows(example_dates2, empty_dates) |>
+  arrange(apartment, range) |>
+  mutate(start_date = iv_start(range), 
+         end_date = iv_end(range), 
+         .keep = "unused")
+apt_dates
+```
+
+<br><br>
+
+
+## Group hospital patient stay dates
+
+Adapted from this [`ivs` example](https://stackoverflow.com/questions/72188780/grouping-dates-in-r-to-create-patient-episodes/72189705#72189705)
+
+```{r}
+df <- tribble(
+  ~Patient.ID, ~Admitted.Date, ~Discharge.Date,
+  810L,   "2020-12-15",    "2020-12-16",
+  810L,   "2021-06-17",    "2021-06-19",
+  810L,   "2021-06-19",    "2021-06-27",
+  810L,   "2021-06-27",    "2021-07-03"
+)
+df <- mutate(df, Admitted.Date = as.Date(Admitted.Date))
+df <- mutate(df, Discharge.Date = as.Date(Discharge.Date))
+df
+```
+
+```{r}
+# Create an interval vector combining the hospital stay as:
+# [Admitted.Date, Discharge.Date)
+df <- df |>
+  mutate(Stay = iv(Admitted.Date, Discharge.Date), .keep = "unused")
+
+df
+```
+
+```{r}
+# Assuming you have multiple patients, we will group by `Patient.ID`.
+# Then compute the non-overlapping interval "groups" per patient with `iv_groups()`
+df |>
+  group_by(Patient.ID) |>
+  reframe(Stay = iv_groups(Stay))
+```
+
+```{r}
+# You can also see which "group" each stay fell in by using `iv_identify_group()`
+df |>
+  group_by(Patient.ID) |>
+  mutate(Group = iv_identify_group(Stay))
+```
+
+<br><br>
+
+
+## Find overlapping dates for each ID and create a new row for the overlap
+
+  [SO example](https://stackoverflow.com/questions/46151452/find-overlapping-dates-for-each-id-and-create-a-new-row-for-the-overlap/71753687#71753687)
+
+ > I would like to find the overlapping dates for each ID and create a new row with the overlapping dates and also combine the characters (char) for the lines. It is possible that my data will have 2 overlaps and need 2 combinations of characters. eg. ERM
+
+```{r eval=FALSE}
+ggplot(DT) + aes(y = char, yend = char, x = date1, xend = date2) + 
+  geom_segment() + facet_wrap("ID", ncol = 1L) 
+```
+
+
+![](https://i.stack.imgur.com/TBP5G.png)
+
+
+You can also use dplyr/tidyr along with the ivs package, which is a package dedicated to working with interval vectors like you have here. This allows you to combine your start/end dates into a single interval column and use a variety of iv_*() functions on it, here we use iv_identify_splits().
+
+Understanding iv_identify_splits() can be a little tricky at first, so I'd encourage you to take a look at the graphical representation of that operation [here](https://davisvaughan.github.io/ivs/reference/iv-splits.html#graphical-representation).
+
+
+```{r}
+df3 <- tribble(
+  ~ID,       ~date1,       ~date2, ~char,
+  15L, "2003-04-05", "2003-05-06",   "E",
+  15L, "2003-04-20", "2003-06-20",   "R",
+  16L, "2001-01-02", "2002-03-04",   "M",
+  17L, "2003-03-05", "2007-02-22",   "I",
+  17L, "2005-04-15", "2014-05-19",   "C",
+  17L, "2007-05-15", "2008-02-05",   "I",
+  17L, "2008-02-05", "2012-02-14",   "M",
+  17L, "2010-06-07", "2011-02-14",   "V",
+  17L, "2010-09-22", "2014-05-19",   "P",
+  17L, "2012-02-28", "2013-03-04",   "R"
+) |>
+  mutate(
+    date1 = as.Date(date1),
+    date2 = as.Date(date2)
+  )
+
+# Combine the start/stop endpoints into a single interval vector
+df3 <- df3 |>
+  mutate(interval = iv(date1, date2), .keep = "unused")
+
+# Note that these are half-open intervals and you may need to adjust the end!
+df3
+```
+
+
+```{r}
+# For each ID, compute the "splits" for each interval.
+# This splits on all the endpoints and returns a list column
+df3 <- df3 |>
+  group_by(ID) |>
+  mutate(splits = iv_identify_splits(interval))
+
+print(df3, n = 3)
+```
+
+
+```{r}
+# Note how the total range of the splits vector matches the
+# range of the corresponding interval
+df3$interval[[1]]
+```
+
+
+```{r}
+df3$splits[[1]]
+```
+
+
+![](https://davisvaughan.github.io/ivs/reference/figures/splits.png)
+
+
+```{r}
+# From there we can unchop() the splits column so we can group on it
+df3 <- df3 |> unchop(splits)
+
+# Note how rows 2 and 3 have the same `splits` value, so `E` and `R` will
+# go together
+df3
+```
+
+
+```{r}
+# Group by (ID, splits) and paste the `char` column elements together
+df3 |>
+  group_by(ID, splits) |>
+  summarise(char = paste0(char, collapse = ","), .groups = "drop")
+```
+
+## Aggregate counts by month from start-stop ranged variables
+
+```{r}
+enrollments <- tribble(
+  ~unique_name, ~enrollment_start, ~enrollment_end,
+  "Amy",        "1, Jan, 2017",    "30, Sep, 2018",
+  "Franklin",   "1, Jan, 2017",    "19, Feb, 2017",
+  "Franklin",   "5, Jun, 2017",    "4, Feb, 2018",
+  "Franklin",   "21, Oct, 2018",   "9, Mar, 2019",
+  "Samir",      "1, Jan, 2017",    "4, Feb, 2017",
+  "Samir",      "5, Apr, 2017",    "12, Sep, 2018"
+)
+
+# Parse these into "day" precision year-month-day objects, then restrict
+# them to just "month" precision because that is all we need
+enrollments <- enrollments %>%
+  mutate(
+    start = enrollment_start %>%
+      year_month_day_parse(format = "%d, %b, %Y") %>%
+      calendar_narrow("month"),
+    end = enrollment_end %>%
+      year_month_day_parse(format = "%d, %b, %Y") %>%
+      calendar_narrow("month") %>%
+      add_months(1),
+    .keep = "unused"
+  )
+
+enrollments
+```
+
+
+```{r}
+# Create an interval vector, note that these are half-open intervals.
+# The month on the RHS is not included, which is why we added 1 to `end` above.
+enrollments <- enrollments %>% mutate(active = iv(start, end), 
+                                      .keep = "unused")
+enrollments
+```
+
+
+```{r}
+# We'll generate a sequence of months that will be part of the final result
+bounds <- range(enrollments$active)
+lower <- iv_start(bounds[[1]])
+upper <- iv_end(bounds[[2]]) - 1L
+months <- tibble(month = seq(lower, upper, by = 1))
+months
+```
+
+To actually compute the counts, use `iv_count_between()`, which counts up all instances where `month[i]` is between any interval in `enrollments$active`
+
+
+```{r}
+months %>% mutate(count = iv_count_between(month, enrollments$active))
+```
+
+
+## Number of records open in a month, in dataset containing single records with start / end dates
+
+```{r}
+ds <- data.frame(
+  record_id = c("00a", "00b", "00c"),
+  record_start_date = as.Date(c("2020-01-16", "2020-03-25", "2020-02-22")),
+  record_end_date = as.Date(c("2020-12-05", "2020-06-21", "2020-11-12"))
+)
+
+# Record the start and end months to generate the counts for
+start <- date_start(min(ds$record_start_date), "year")
+end <- date_end(max(ds$record_end_date), "year") + 1L
+
+# Construct an interval vector
+ds <- ds %>%
+  mutate(
+    record_range = iv(record_start_date, record_end_date), 
+    .keep = "unused"
+  )
+
+ds
+```
+
+
+
+
+```{r}
+# Generate the months sequence to count along
+result <- tibble(
+  month = date_seq(
+    from = start, 
+    to = end, 
+    by = duration_months(1)
+  )
+)
+
+# Count the number of times `month[[i]]` is between any of the
+# ranges in `ds$record_range`
+result %>%
+  mutate(
+    count = iv_count_between(month, ds$record_range)
+  )
+```
+
+## Generate new variable based on start and stop date
+
+```{r}
+df <- read.table(header = T, text = "   Machine   Start      Stop           ServiceType 
+1       XX 2014-12-04       NA          AA
+2       XX 2013-09-05 2013-11-05          BB
+3       XX 2013-11-21 2014-09-25          BB
+4       XX 2013-10-11 2014-11-18          BB
+5       XX 2021-12-03       <NA>          AA
+6       XX 2020-08-06 2022-09-15          AA
+7       XX 2021-06-10       <NA>          BB
+8       YY 2020-01-17       <NA>          BB
+9       YY 2015-11-04 2018-04-30          BB
+10      YY 2016-05-28 2019-03-21          BB
+11      YY 2019-09-27       <NA>          BB
+12      YY 2018-01-05       <NA>          AA
+")
+df
+```
+
+
+```{r}
+df %>% 
+  mutate(Stop = ifelse(Stop == "<NA>", Start, Stop),
+         across(c(Start, Stop), ymd),
+         Stop = if_else(Stop == Start, Stop + days(1), Stop),
+         ivs = iv(Start, Stop)) %>% 
+  group_by(Machine, gp = iv_identify_group(ivs)) %>% 
+  summarise(ServiceType = toString(unique(ServiceType)), .groups = "drop") %>% 
+  mutate(gp = iv_start(gp),
+         ServiceType = ifelse(ServiceType %in% c("BB, AA", "AA, BB"), 
+                              "CC", ServiceType))
+```
+
+<br><br>
+
+## Aggregate Data by Month using start and end dates to calculate monthly disease prevelance
+
+```{r}
+df <- data.frame(patid=c("1","2","3","4","5","6","7"), 
+                 
+                 start_date=c("01/03/2016","24/08/2016", 
+                              "01/01/2016","24/02/2016", 
+                              "24/04/2016","01/04/2016", 
+                              "01/09/2016"), 
+                 
+                 end_date=c("31/12/2016","31/12/2016", 
+                            "23/12/2016","01/08/2016", 
+                            "17/06/2016","04/05/2016", 
+                            "31/10/2016"), 
+                 
+                 disease=c("yes","no","yes","no", 
+                           "no","yes","yes"), 
+                 
+                 disease_date=c("15/08/2016",NA, 
+                                "15/08/2016",NA,NA, 
+                                "01/05/2016","31/10/2016"))
+df
+```
+
+
+
+
+Here's a solution that uses ivs (for interval vectors), clock (for month precision dates), and vctrs (for counting matches).
+
+Note that ivs requires half-open intervals, which in practice means that we add 1 to our "end" months before creating the interval vector.
+
+The real stars of the show are:
+
+vec_count_matches() to count each time a month appeared in disease_date, which gives us our n_disease
+iv_count_between() to count each time a month fell between a range, which gives us our n_total
+
+
+```{r}
+# Only need these cols
+df <- df %>%
+  select(start_date, end_date, disease_date)
+
+# Turn into actual dates
+df <- df %>%
+  mutate(
+    across(everything(), \(col) {
+      date_parse(col, format = "%d/%m/%Y")
+    })
+  )
+
+# We really only need month based information, so drop the days
+df <- df %>%
+  mutate(
+    across(everything(), \(col) {
+      calendar_narrow(as_year_month_day(col), "month")
+    })
+  )
+
+# Turn the start/end dates into real ranges.
+# Make them half-open ranges by adding 1 to the end date month
+df <- df %>%
+  mutate(range = iv(start_date, end_date + 1L), .keep = "unused", .before = 1)
+
+df
+```
+
+
+```{r}
+# Little helper to count the number of times each `needle` appears in `haystack`
+vec_count_matches <- function(needles, haystack) {
+  out <- vec_rep(0L, times = vec_size(needles))
+  matches <- vec_locate_matches(needles, haystack, no_match = "drop")
+  result <- vec_count(matches$needles, sort = "location")
+  out[result$key] <- result$count
+  out
+}
+
+# Create a full sequence from min month to max month
+from <- min(iv_start(df$range))
+to <- max(iv_end(df$range))
+
+tibble(
+  month = seq(from = from, to = to, by = 1),
+  n_disease = vec_count_matches(month, df$disease_date),
+  n_total = iv_count_between(month, df$range),
+  prevalence = n_disease / n_total
+)
+```
+
+Update: And with the dev version of ivs (what will soon be 0.2.0), this is even easier with iv_diff() and iv_count_includes(), which means you don't need the custom vec_count_matches() helper at all:
+
+
+
+```{r}
+tibble(
+  month = iv_diff(seq(from = from, to = to, by = 1)),
+  n_disease = iv_count_includes(month, df$disease_date),
+  n_total = iv_count_overlaps(month, df$range, type = "within"),
+  prevalence = n_disease / n_total
+)
+```
+
+
+## Count instances of value within overlapping dates
+
+I have a dataframe that includes start_date and end_date for a given unit_id along with the unit's group.
+
+```{r}
+data.frame(unit_id = c(1,2,3),
+                 start_date = as.Date(c("2019-01-01","2019-02-05","2020-01-12")),
+                 end_date = as.Date(c("2019-02-06","2019-02-28","2020-01-30")), 
+                 group = c("pass","fail","pass"))
+```
+
+For each unit_id, I need to calculate the proportion of all units that pass within the duration, start_date and end_date for the current unit_id.
+
+Taking unit_id=1 as an example, I need to find all units that have start_date and/or end_date within the dates for unit 1, i.e. start_date = 2019-01-01 and end_date = 2019-02-06. Given my in_df, this would return two units, 1 and 2. One unit passes and one fails so the proportion of pass would be 0.5. desired_df shows the output I expect for this example.
+
+```{r}
+data.frame(unit_id = c(1,2,3),
+                 start_date = as.Date(c("2019-01-01","2019-02-05","2020-01-12")),
+                 end_date = as.Date(c("2019-02-06","2019-02-28","2020-01-30")), 
+                 group = c("pass","fail","pass"),
+                 pass_prop = c(0.5,0.5,1))
+```
+
+
+I think ivs can help you, but I think you might be looking for iv_locate_overlaps() here:
+
+```{r}
+# Starting with the more complex example with the 4th row
+in_df <- tibble(unit_id = c(1,2,3,4),
+                start_date = as.Date(c("2019-01-01","2019-02-05","2020-01-12","2019-02-20")),
+                end_date = as.Date(c("2019-02-06","2019-02-28","2020-01-30","2020-01-30")), 
+                group = c("pass","fail","pass","pass"))
+
+in_df <- in_df %>%
+  mutate(range = iv(start_date, end_date), .keep = "unused")
+in_df
+```
+
+
+```{r}
+# "find all units that have `start_date` and/or `end_date` within the dates for unit i"
+# So you are looking for "any" kind of overlap.
+# `iv_locate_overlaps()` does: "For each `needle`, find every location in `haystack`
+# where that `needle` has ANY overlap at all"
+locs <- iv_locate_overlaps(
+  needles = in_df$range, 
+  haystack = in_df$range, 
+  type = "any"
+)
+
+# Note `needle` 1 overlaps `haystack` locations 1 and 2 (which is what you said
+# you want for unit 1)
+locs
+```
+
+
+```{r}
+# Slice `in_df` appropriately, keeping relevant columns needed to answer the question
+needles <- in_df[locs$needles, c("unit_id", "range")]
+haystack <- in_df[locs$haystack, c("group", "range")]
+haystack <- rename(haystack, overlaps = range)
+
+expanded_df <- bind_cols(needles, haystack)
+expanded_df
+```
+
+
+```{r}
+# Compute the pass proportion per unit
+expanded_df %>%
+  group_by(unit_id) %>%
+  summarise(pass_prop = sum(group == "pass") / length(group))
+```
+
+
+
+```{r}
+forager::google_billdata
+```
+
