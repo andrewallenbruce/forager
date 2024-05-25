@@ -218,34 +218,18 @@ df3
 ```
 
 
-```{r}
-ggplot(nm_rate, aes(x = rvus, y = rate)) +
-  ggforce::geom_mark_circle(
-    aes(fill = payer, label = payer, description = desc),
-    expand = -0.5,
-    radius = unit(3, "mm"),
-    label.buffer = unit(5, "mm"),
-    con.type = "straight",
-    con.cap = 0,
-    label.colour = "grey30",
-    con.colour = "grey30",
-    colour = "grey30",
-    ) +
-  geom_point()
-```
-
-
-
 ```{r eval=FALSE}
 ggplot(df3) + 
-  geom_segment(aes(y = char, yend = char, x = date1, xend = date2)) +
+  geom_segment(aes(y = char, yend = char, x = date1, xend = date2), color = "darkgreen") +
   geom_text(aes(y = char, x = date_mid, label = char), fontface = "bold") + 
   # geom_point(aes(y = char, x = date_mid), shape = 23) +
   ggforce::geom_mark_rect(aes(y = char, x = date_mid, fill = date_mid, group = char)) +
   # ggforce::geom_mark_rect(aes(y = char, x = date2, fill = date2)) +
-  theme_classic(
-    
-  ) +
+  # ggthemes::theme_few() + 
+  # ggthemes::extended_range_breaks() +
+  ggthemes::geom_rangeframe() +
+  ggthemes::theme_pander() +
+  scale_x_date(date_breaks = "1 year", date_labels = "%y", expand =  c(0.15, 0.15)) +
   labs(x = NULL, y = NULL) +
   theme(legend.position = "none")
 ```
@@ -472,11 +456,11 @@ iv_count_between() to count each time a month fell between a range, which gives 
 
 ```{r}
 # Only need these cols
-df <- df |>
+ddf <- ddf |>
   select(start_date, end_date, disease_date)
 
 # Turn into actual dates
-df <- df |>
+ddf <- ddf |>
   mutate(
     across(everything(), \(col) {
       date_parse(col, format = "%d/%m/%Y")
@@ -484,7 +468,7 @@ df <- df |>
   )
 
 # We really only need month based information, so drop the days
-df <- df |>
+ddf <- ddf |>
   mutate(
     across(everything(), \(col) {
       calendar_narrow(as_year_month_day(col), "month")
@@ -493,10 +477,10 @@ df <- df |>
 
 # Turn the start/end dates into real ranges.
 # Make them half-open ranges by adding 1 to the end date month
-df <- df |>
+ddf <- ddf |>
   mutate(range = iv(start_date, end_date + 1L), .keep = "unused", .before = 1)
 
-df
+ddf
 ```
 
 
@@ -511,13 +495,13 @@ vec_count_matches <- function(needles, haystack) {
 }
 
 # Create a full sequence from min month to max month
-from <- min(iv_start(df$range))
-to <- max(iv_end(df$range))
+from <- min(iv_start(ddf$range))
+to <- max(iv_end(ddf$range))
 
 tibble(
   month = seq(from = from, to = to, by = 1),
-  n_disease = vec_count_matches(month, df$disease_date),
-  n_total = iv_count_between(month, df$range),
+  n_disease = vec_count_matches(month, ddf$disease_date),
+  n_total = iv_count_between(month, ddf$range),
   prevalence = n_disease / n_total
 )
 ```
@@ -529,8 +513,8 @@ Update: And with the dev version of ivs (what will soon be 0.2.0), this is even 
 ```{r}
 tibble(
   month = iv_diff(seq(from = from, to = to, by = 1)),
-  n_disease = iv_count_includes(month, df$disease_date),
-  n_total = iv_count_overlaps(month, df$range, type = "within"),
+  n_disease = iv_count_includes(month, ddf$disease_date),
+  n_total = iv_count_overlaps(month, ddf$range, type = "within"),
   prevalence = n_disease / n_total
 )
 ```
@@ -541,10 +525,12 @@ tibble(
 I have a dataframe that includes start_date and end_date for a given unit_id along with the unit's group.
 
 ```{r}
-data.frame(unit_id = c(1,2,3),
-                 start_date = as.Date(c("2019-01-01","2019-02-05","2020-01-12")),
-                 end_date = as.Date(c("2019-02-06","2019-02-28","2020-01-30")), 
-                 group = c("pass","fail","pass"))
+data.frame(
+  unit_id = c(1, 2, 3),
+  start_date = as.Date(c("2019-01-01", "2019-02-05", "2020-01-12")),
+  end_date = as.Date(c("2019-02-06", "2019-02-28", "2020-01-30")),
+  group = c("pass", "fail", "pass")
+)
 ```
 
 For each unit_id, I need to calculate the proportion of all units that pass within the duration, start_date and end_date for the current unit_id.
@@ -552,11 +538,13 @@ For each unit_id, I need to calculate the proportion of all units that pass with
 Taking unit_id=1 as an example, I need to find all units that have start_date and/or end_date within the dates for unit 1, i.e. start_date = 2019-01-01 and end_date = 2019-02-06. Given my in_df, this would return two units, 1 and 2. One unit passes and one fails so the proportion of pass would be 0.5. desired_df shows the output I expect for this example.
 
 ```{r}
-data.frame(unit_id = c(1,2,3),
-                 start_date = as.Date(c("2019-01-01","2019-02-05","2020-01-12")),
-                 end_date = as.Date(c("2019-02-06","2019-02-28","2020-01-30")), 
-                 group = c("pass","fail","pass"),
-                 pass_prop = c(0.5,0.5,1))
+data.frame(
+  unit_id = c(1, 2, 3),
+  start_date = as.Date(c("2019-01-01", "2019-02-05", "2020-01-12")),
+  end_date = as.Date(c("2019-02-06", "2019-02-28", "2020-01-30")),
+  group = c("pass", "fail", "pass"),
+  pass_prop = c(0.5, 0.5, 1)
+)
 ```
 
 
@@ -571,6 +559,7 @@ in_df <- tibble(unit_id = c(1,2,3,4),
 
 in_df <- in_df |>
   mutate(range = iv(start_date, end_date), .keep = "unused")
+
 in_df
 ```
 

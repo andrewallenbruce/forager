@@ -5,7 +5,7 @@ Authors@R:
     person("Andrew", "Bruce", , "andrew.bruce@northstarrevenueintegrity.com", role = c("aut", "cre", "cph"))
 Maintainer: Andrew Bruce <andrew.bruce@northstarrevenueintegrity.com>
 Description: The goal of forager is to provide a suite of analytic tools
-    for healthcare revenue cycle management. 
+    for healthcare revenue cycle management.
 License: MIT + file LICENSE
 URL: https://github.com/andrewallenbruce/forager,
     https://andrewallenbruce.github.io/forager/
@@ -25,24 +25,29 @@ Imports:
     wakefield
 Suggests:
     covr,
-    tidyr,
-    ggthemes,
-    ggforce,
-    waterfalls,
-    svglite,
-    janitor,
-    ggplot2,
-    headliner,
     forcats,
-    scales,
     fuimus,
+    ggforce,
+    ggplot2,
+    ggthemes,
     gt,
     gtExtras,
+    headliner,
+    highcharter,
+    htmltools,
+    ivs,
+    janitor,
     knitr,
     qs,
+    reactable,
+    reactablefmtr,
     rmarkdown,
     roxyglobals,
-    testthat (>= 3.0.0)
+    scales,
+    svglite,
+    testthat (>= 3.0.0),
+    tidyr,
+    waterfalls
 VignetteBuilder: 
     knitr
 Remotes: 
