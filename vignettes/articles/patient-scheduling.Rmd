@@ -2,21 +2,19 @@
 title: "Patient Scheduling"
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse  = TRUE,
+  collapse  = FALSE,
   echo      = TRUE, 
   message   = FALSE, 
   warning   = FALSE,
   error     = TRUE,
   comment   = "#>",
-  dpi       = 300, 
-  out.width = "100%",
-  fig.path  = "man/figures/README-"
+  dpi       = 600, 
+  out.width = "100%"
 )
-```
+options(scipen = 999)
 
-```{r setup}
 library(forager)
 library(dplyr)
 library(tidyr)
@@ -142,13 +140,13 @@ Adapted from this [`ivs` example](https://stackoverflow.com/questions/72188780/g
 ```{r}
 df <- tribble(
   ~Patient.ID, ~Admitted.Date, ~Discharge.Date,
-  810L,   "2020-12-15",    "2020-12-16",
-  810L,   "2021-06-17",    "2021-06-19",
-  810L,   "2021-06-19",    "2021-06-27",
-  810L,   "2021-06-27",    "2021-07-03"
-)
-df <- mutate(df, Admitted.Date = as.Date(Admitted.Date))
-df <- mutate(df, Discharge.Date = as.Date(Discharge.Date))
+  810L,        "2020-12-15",    "2020-12-16",
+  810L,        "2021-06-17",    "2021-06-19",
+  810L,        "2021-06-19",    "2021-06-27",
+  810L,        "2021-06-27",    "2021-07-03"
+) |> 
+  mutate(Admitted.Date = as.Date(Admitted.Date),
+         Discharge.Date = as.Date(Discharge.Date))
 df
 ```
 
@@ -185,15 +183,6 @@ df |>
 
  > I would like to find the overlapping dates for each ID and create a new row with the overlapping dates and also combine the characters (char) for the lines. It is possible that my data will have 2 overlaps and need 2 combinations of characters. eg. ERM
 
-```{r eval=FALSE}
-ggplot(DT) + aes(y = char, yend = char, x = date1, xend = date2) + 
-  geom_segment() + facet_wrap("ID", ncol = 1L) 
-```
-
-
-![](https://i.stack.imgur.com/TBP5G.png)
-
-
 You can also use dplyr/tidyr along with the ivs package, which is a package dedicated to working with interval vectors like you have here. This allows you to combine your start/end dates into a single interval column and use a variety of iv_*() functions on it, here we use iv_identify_splits().
 
 Understanding iv_identify_splits() can be a little tricky at first, so I'd encourage you to take a look at the graphical representation of that operation [here](https://davisvaughan.github.io/ivs/reference/iv-splits.html#graphical-representation).
@@ -215,12 +204,14 @@ df3 <- tribble(
 ) |>
   mutate(
     date1 = as.Date(date1),
-    date2 = as.Date(date2)
+    date2 = as.Date(date2),
+    days = trunc(as.integer(date2 - date1) / 2),
+    date_mid = date2 - lubridate::days(days)
   )
 
 # Combine the start/stop endpoints into a single interval vector
 df3 <- df3 |>
-  mutate(interval = iv(date1, date2), .keep = "unused")
+  mutate(interval = iv(date1, date2))
 
 # Note that these are half-open intervals and you may need to adjust the end!
 df3
@@ -228,25 +219,57 @@ df3
 
 
 ```{r}
+ggplot(nm_rate, aes(x = rvus, y = rate)) +
+  ggforce::geom_mark_circle(
+    aes(fill = payer, label = payer, description = desc),
+    expand = -0.5,
+    radius = unit(3, "mm"),
+    label.buffer = unit(5, "mm"),
+    con.type = "straight",
+    con.cap = 0,
+    label.colour = "grey30",
+    con.colour = "grey30",
+    colour = "grey30",
+    ) +
+  geom_point()
+```
+
+
+
+```{r eval=FALSE}
+ggplot(df3) + 
+  geom_segment(aes(y = char, yend = char, x = date1, xend = date2)) +
+  geom_text(aes(y = char, x = date_mid, label = char), fontface = "bold") + 
+  # geom_point(aes(y = char, x = date_mid), shape = 23) +
+  ggforce::geom_mark_rect(aes(y = char, x = date_mid, fill = date_mid, group = char)) +
+  # ggforce::geom_mark_rect(aes(y = char, x = date2, fill = date2)) +
+  theme_classic(
+    
+  ) +
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "none")
+```
+
+```{r}
 # For each ID, compute the "splits" for each interval.
 # This splits on all the endpoints and returns a list column
-df3 <- df3 |>
+df33 <- df3 |>
   group_by(ID) |>
   mutate(splits = iv_identify_splits(interval))
 
-print(df3, n = 3)
+print(df33, n = 3)
 ```
 
 
 ```{r}
 # Note how the total range of the splits vector matches the
 # range of the corresponding interval
-df3$interval[[1]]
+df33$interval[[1]]
 ```
 
 
 ```{r}
-df3$splits[[1]]
+df33$splits[[1]]
 ```
 
 
@@ -255,17 +278,17 @@ df3$splits[[1]]
 
 ```{r}
 # From there we can unchop() the splits column so we can group on it
-df3 <- df3 |> unchop(splits)
+df33 <- df33 |> unchop(splits)
 
 # Note how rows 2 and 3 have the same `splits` value, so `E` and `R` will
 # go together
-df3
+df33
 ```
 
 
 ```{r}
 # Group by (ID, splits) and paste the `char` column elements together
-df3 |>
+df33 |>
   group_by(ID, splits) |>
   summarise(char = paste0(char, collapse = ","), .groups = "drop")
 ```
@@ -285,14 +308,14 @@ enrollments <- tribble(
 
 # Parse these into "day" precision year-month-day objects, then restrict
 # them to just "month" precision because that is all we need
-enrollments <- enrollments %>%
+enrollments <- enrollments |> 
   mutate(
-    start = enrollment_start %>%
-      year_month_day_parse(format = "%d, %b, %Y") %>%
+    start = enrollment_start |> 
+      year_month_day_parse(format = "%d, %b, %Y") |> 
       calendar_narrow("month"),
-    end = enrollment_end %>%
-      year_month_day_parse(format = "%d, %b, %Y") %>%
-      calendar_narrow("month") %>%
+    end = enrollment_end |> 
+      year_month_day_parse(format = "%d, %b, %Y") |> 
+      calendar_narrow("month") |> 
       add_months(1),
     .keep = "unused"
   )
@@ -304,8 +327,9 @@ enrollments
 ```{r}
 # Create an interval vector, note that these are half-open intervals.
 # The month on the RHS is not included, which is why we added 1 to `end` above.
-enrollments <- enrollments %>% mutate(active = iv(start, end), 
-                                      .keep = "unused")
+enrollments <- enrollments |> 
+  mutate(active = iv(start, end), 
+         .keep = "unused")
 enrollments
 ```
 
@@ -323,7 +347,8 @@ To actually compute the counts, use `iv_count_between()`, which counts up all in
 
 
 ```{r}
-months %>% mutate(count = iv_count_between(month, enrollments$active))
+months |> 
+  mutate(count = iv_count_between(month, enrollments$active))
 ```
 
 
@@ -341,7 +366,7 @@ start <- date_start(min(ds$record_start_date), "year")
 end <- date_end(max(ds$record_end_date), "year") + 1L
 
 # Construct an interval vector
-ds <- ds %>%
+ds <- ds |> 
   mutate(
     record_range = iv(record_start_date, record_end_date), 
     .keep = "unused"
@@ -365,7 +390,7 @@ result <- tibble(
 
 # Count the number of times `month[[i]]` is between any of the
 # ranges in `ds$record_range`
-result %>%
+result |> 
   mutate(
     count = iv_count_between(month, ds$record_range)
   )
@@ -374,7 +399,8 @@ result %>%
 ## Generate new variable based on start and stop date
 
 ```{r}
-df <- read.table(header = T, text = "   Machine   Start      Stop           ServiceType 
+tb <- read.table(header = T, 
+text = "   Machine   Start      Stop           ServiceType 
 1       XX 2014-12-04       NA          AA
 2       XX 2013-09-05 2013-11-05          BB
 3       XX 2013-11-21 2014-09-25          BB
@@ -388,18 +414,18 @@ df <- read.table(header = T, text = "   Machine   Start      Stop           Serv
 11      YY 2019-09-27       <NA>          BB
 12      YY 2018-01-05       <NA>          AA
 ")
-df
+tb
 ```
 
 
 ```{r}
-df %>% 
+tb|> 
   mutate(Stop = ifelse(Stop == "<NA>", Start, Stop),
          across(c(Start, Stop), ymd),
          Stop = if_else(Stop == Start, Stop + days(1), Stop),
-         ivs = iv(Start, Stop)) %>% 
-  group_by(Machine, gp = iv_identify_group(ivs)) %>% 
-  summarise(ServiceType = toString(unique(ServiceType)), .groups = "drop") %>% 
+         ivs = iv(Start, Stop)) |> 
+  group_by(Machine, gp = iv_identify_group(ivs)) |> 
+  summarise(ServiceType = toString(unique(ServiceType)), .groups = "drop") |> 
   mutate(gp = iv_start(gp),
          ServiceType = ifelse(ServiceType %in% c("BB, AA", "AA, BB"), 
                               "CC", ServiceType))
@@ -410,7 +436,7 @@ df %>%
 ## Aggregate Data by Month using start and end dates to calculate monthly disease prevelance
 
 ```{r}
-df <- data.frame(patid=c("1","2","3","4","5","6","7"), 
+ddf <- data.frame(patid=c("1","2","3","4","5","6","7"), 
                  
                  start_date=c("01/03/2016","24/08/2016", 
                               "01/01/2016","24/02/2016", 
@@ -428,7 +454,7 @@ df <- data.frame(patid=c("1","2","3","4","5","6","7"),
                  disease_date=c("15/08/2016",NA, 
                                 "15/08/2016",NA,NA, 
                                 "01/05/2016","31/10/2016"))
-df
+ddf
 ```
 
 
@@ -446,11 +472,11 @@ iv_count_between() to count each time a month fell between a range, which gives 
 
 ```{r}
 # Only need these cols
-df <- df %>%
+df <- df |>
   select(start_date, end_date, disease_date)
 
 # Turn into actual dates
-df <- df %>%
+df <- df |>
   mutate(
     across(everything(), \(col) {
       date_parse(col, format = "%d/%m/%Y")
@@ -458,7 +484,7 @@ df <- df %>%
   )
 
 # We really only need month based information, so drop the days
-df <- df %>%
+df <- df |>
   mutate(
     across(everything(), \(col) {
       calendar_narrow(as_year_month_day(col), "month")
@@ -467,7 +493,7 @@ df <- df %>%
 
 # Turn the start/end dates into real ranges.
 # Make them half-open ranges by adding 1 to the end date month
-df <- df %>%
+df <- df |>
   mutate(range = iv(start_date, end_date + 1L), .keep = "unused", .before = 1)
 
 df
@@ -543,7 +569,7 @@ in_df <- tibble(unit_id = c(1,2,3,4),
                 end_date = as.Date(c("2019-02-06","2019-02-28","2020-01-30","2020-01-30")), 
                 group = c("pass","fail","pass","pass"))
 
-in_df <- in_df %>%
+in_df <- in_df |>
   mutate(range = iv(start_date, end_date), .keep = "unused")
 in_df
 ```
@@ -579,14 +605,8 @@ expanded_df
 
 ```{r}
 # Compute the pass proportion per unit
-expanded_df %>%
-  group_by(unit_id) %>%
+expanded_df |>
+  group_by(unit_id) |>
   summarise(pass_prop = sum(group == "pass") / length(group))
-```
-
-
-
-```{r}
-forager::google_billdata
 ```
 

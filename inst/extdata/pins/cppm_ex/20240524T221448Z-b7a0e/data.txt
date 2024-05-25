@@ -1,0 +1,10 @@
+file: cppm_ex.qs
+file_size: 670
+pin_hash: b7a0e6397f4827f5
+type: qs
+title: CPPM Example
+description: CPPM Example
+tags: ~
+urls: ~
+created: 20240524T221448Z
+api_version: 1

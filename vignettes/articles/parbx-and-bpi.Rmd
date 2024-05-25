@@ -2,29 +2,29 @@
 title: "PARBx & BPI"
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse  = TRUE,
+  collapse  = FALSE,
   echo      = TRUE, 
   message   = FALSE, 
   warning   = FALSE,
   error     = TRUE,
   comment   = "#>",
-  dpi       = 300, 
-  out.width = "100%",
-  fig.path  = "man/figures/README-"
+  dpi       = 600, 
+  out.width = "100%"
 )
-```
+options(scipen = 999)
 
-```{r setup}
 library(forager)
 library(dplyr)
+library(tidyr)
+library(wakefield)
 library(reactable)
 library(reactablefmtr)
 library(htmltools)
 library(highcharter)
 ```
- 
+
 # PARB$x$
 
 PARB$x$, or *Percentage of Accounts Receivable Beyond $x$ Days*, is exactly what it sounds like: monitoring the percentage of your AR balances as they age, in what are commonly referred to as aging “buckets” or “bins.” This idea, in and of itself, is not revolutionary, other than his suggestion to use PARB$x$ to resolve Days in AR’s inability to highlight the overall behavior of Accounts Receivable. The innovation comes in the form of using the PARB$x$ data to create an index that tracks a payer’s performance month-to-month and annually:
@@ -181,7 +181,8 @@ htmltools::div(class = "rcm-analysis", bpi_mon_tbl)
 bpi_mon_long <- bpi_mon |>
   select(payer, nov_parbx, dec_parbx) |>
   rename(November = nov_parbx, December = dec_parbx) |>
-  tidyr::pivot_longer(!payer, names_to = "month", values_to = "parbx")
+  pivot_longer(!payer, names_to = "month", values_to = "parbx")
+
 head(bpi_mon_long, 10)
 ```
 
@@ -422,7 +423,7 @@ div(class = "rcm-analysis", bpi_mon_wt_tbl)
 bpi_mon_long_wt <- bpi_mon_wt |>
   select(payer, nov_parbx_wt, dec_parbx_wt) |>
   rename(November = nov_parbx_wt, December = dec_parbx_wt) |>
-  tidyr::pivot_longer(!payer, names_to = "month", values_to = "parbx_wt")
+  pivot_longer(!payer, names_to = "month", values_to = "parbx_wt")
 
 parbx_hc2 <- bpi_mon_long_wt |>
   hchart("line", hcaes(x = month, y = parbx_wt, group = payer),

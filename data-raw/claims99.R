@@ -1,31 +1,40 @@
-## code to prepare `claims_99` dataset goes here
+path99 <- "D:/medical_ins_large_claims/1999/claim99fr2.txt"
 
-#qs::qread("C:/Users/andyb/Desktop/forager/extdata/large_claims_data/claims_99")
+claims_99 <- tidytable::fread(path99)
 
-#"D:/medical_ins_large_claims/1999/claim99fr2.txt"
+names_new <- c(
+  "CLAIMYR"  = "claim_yr",
+  "CLAIMANT" = "claimant",
+  "RELATION" = "relation",
+  "PATSEX"   = "sex",
+  "PATBRTYR" = "dob",
+  "HOSCVCHG" = "hosp_covd_chrg",
+  "HOSLWCHG" = "hosp_allw_chrg",
+  "HOSPDCHG" = "hosp_paid_chrg",
+  "PHYCVCHG" = "phys_covd_chrg",
+  "PHYLWCHG" = "phys_allw_chrg",
+  "PHYPDCHG" = "phys_paid_chrg",
+  "OTHCVCHG" = "oth_covd_chrg",
+  "OTHLWCHG" = "oth_allw_chrg",
+  "OTHPDCHG" = "oth_paid_chrg",
+  "TOTCVCHG" = "tot_covd_chrg",
+  "TOTLWCHG" = "tot_allw_chrg",
+  "TOTPDCHG" = "tot_paid_chrg",
+  "DIAG1"    = "diag1",
+  "DIAG1CHG" = "diag1chg",
+  "DIAG2"    = "diag2",
+  "DIAG2CHG" = "diag2chg",
+  "DIAG3"    = "diag3",
+  "DIAG3CHG" = "diag3chg",
+  "DGCAT"    = "dgcat",
+  "DGCATCHG" = "dgcatchg",
+  "EXPOSMEM" = "exposmem",
+  "PPO"      = "ppo"
+  )
 
-claims_99 <- fst::read_fst("C:/Users/andyb/Desktop/forager/extdata/large_claims_data/claims_99")
 
-names(claims_99)[1] <- "claim_yr"
-names(claims_99)[2] <- "pt_id"
-names(claims_99)[4] <- "sex"
-names(claims_99)[5] <- "birth_yr"
-
-names(claims_99)[6] <- "hosp_covd_chrg"
-names(claims_99)[7] <- "hosp_allw_chrg"
-names(claims_99)[8] <- "hosp_paid_chrg"
-
-names(claims_99)[9] <- "phys_covd_chrg"
-names(claims_99)[10] <- "phys_allw_chrg"
-names(claims_99)[11] <- "phys_paid_chrg"
-
-names(claims_99)[12] <- "oth_covd_chrg"
-names(claims_99)[13] <- "oth_allw_chrg"
-names(claims_99)[14] <- "oth_paid_chrg"
-
-names(claims_99)[15] <- "tot_covd_chrg"
-names(claims_99)[16] <- "tot_allw_chrg"
-names(claims_99)[17] <- "tot_paid_chrg"
+names(claims_99) |>
+  rlang::set_names(names_new)
 
 claims_99 <- claims_99 |>
   dplyr::tibble() |>
@@ -45,4 +54,3 @@ claims_99 <- claims_99 |>
 # dplyr::mutate(diag2 = dplyr::na_if(diag2, ""),
 #               diag3 = dplyr::na_if(diag3, ""))
 
-usethis::use_data(claims_99, overwrite = TRUE)
