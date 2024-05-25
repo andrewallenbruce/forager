@@ -218,7 +218,7 @@ df3
 ```
 
 
-```{r eval=FALSE}
+```{r}
 ggplot(df3) + 
   geom_segment(aes(y = char, yend = char, x = date1, xend = date2), color = "darkgreen") +
   geom_text(aes(y = char, x = date_mid, label = char), fontface = "bold") + 
