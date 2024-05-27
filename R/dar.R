@@ -118,7 +118,8 @@ avg_dar <- function(df,
 
       earb_gct_diff = {{ earb }} - {{ gct }},
 
-      )
+      ) |>
+    .add_class()
 }
 
 #' Days in AR Example Data

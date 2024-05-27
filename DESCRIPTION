@@ -22,7 +22,8 @@ Imports:
     rlang,
     santoku,
     vctrs,
-    wakefield
+    wakefield,
+    withr (>= 3.0.0)
 Suggests:
     covr,
     forcats,

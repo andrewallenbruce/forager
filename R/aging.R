@@ -101,7 +101,8 @@ days_between <- function(df, from, to = NULL) {
           {{ from }},
           clock::date_today(""),
           "day")
-        )
+        ) |>
+      .add_class()
 
   } else {
 
@@ -111,6 +112,7 @@ days_between <- function(df, from, to = NULL) {
           {{ from }},
           {{ to }},
           "day")
-        )
+        ) |>
+      .add_class()
     }
 }
