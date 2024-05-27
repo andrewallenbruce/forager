@@ -119,18 +119,18 @@
 <span class="r-in"><span>  <span class="fu"><a href="days_between.html">days_between</a></span><span class="op">(</span><span class="va">date_srvc</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">bin_aging</span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    date_srvc  charges payer         days_in_ar aging_bin</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">date_srvc</span>  <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">payer</span>         <span style="font-weight: bold;">days_in_ar</span> <span style="font-weight: bold;">aging_bin</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2023-05-25    11.2 BCBS                 366 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2023-05-25   278.  Medicaid             366 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2023-05-25   385.  Anthem               366 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2023-04-25    42.3 United Health        396 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2023-04-25   132.  BCBS                 396 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2023-03-25    21.8 Cigna                427 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2023-02-25   144.  Centene              455 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-25    95.8 United Health        517 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-25    46.3 Anthem               517 121+     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-25    47.9 BCBS                 578 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2023-05-27    11.2 BCBS                 366 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2023-05-27   278.  Medicaid             366 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2023-05-27   385.  Anthem               366 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2023-04-27    42.3 United Health        396 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2023-04-27   132.  BCBS                 396 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2023-03-27    21.8 Cigna                427 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2023-02-27   144.  Centene              455 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2022-12-27    95.8 United Health        517 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2022-12-27    46.3 Anthem               517 121+     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2022-10-27    47.9 BCBS                 578 121+     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">charges</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
@@ -153,12 +153,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`2024`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ins_name 0-30 31-60 61-90 91-120 121+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA   82    32    50     52   32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross  205    84    88     68   77</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA  113    40    46     32   42</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry   11     4     8      6    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare  186    71    77     84   70</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient  386   158   167    166  122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA   82    29    49     52   36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross  201    83    86     72   80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA  111    38    44     37   43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry   10     5     8      6    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare  181    73    75     83   76</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient  375   158   170    165  131</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
