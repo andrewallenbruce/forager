@@ -20,20 +20,20 @@ library(dplyr)
 library(tidyr)
 library(gt)
 library(wakefield)
-library(reactable)
-library(reactablefmtr)
-library(htmltools)
-library(highcharter)
+# library(reactable)
+# library(reactablefmtr)
+# library(htmltools)
+# library(highcharter)
 ```
 
-# PARB$x$
+## PARBx
 
 PARB$x$, or *Percentage of Accounts Receivable Beyond $x$ Days*, is exactly what it sounds like: monitoring the percentage of your AR balances as they age, in what are commonly referred to as aging “buckets” or “bins.” This idea, in and of itself, is not revolutionary, other than his suggestion to use PARB$x$ to resolve Days in AR’s inability to highlight the overall behavior of Accounts Receivable. The innovation comes in the form of using the PARB$x$ data to create an index that tracks a payer’s performance month-to-month and annually:
 
 PARB$x$ data can then be used to calculate a BPI, or Billing Performance Index. BPI is a key billing performance characteristic because it’s an indicator of claims that are never paid. Obviously, the lower the index, the better the billing performance. But this statistic is meaningful only when considered in the context of the relative performance of other payers. Lirov (2009)
 
 
-# Billing Performance Index (BPI)
+## Billing Performance Index (BPI)
 
 Lirov’s Billing Performance Index was inspired by a Wall Street benchmarking technique called a payment performance index. He emphasizes the advantage of a “context-driven, rule-based approach to relative benchmarking”:
 
@@ -43,7 +43,7 @@ Applying this indexing method to payers allows providers to track the ease/diffi
 
 This results in a provider being able to focus his or her AR management resources on more problematic payers. Lirov does suggest several criteria that should be considered before a payer is elligible for inclusion such as a minimum threshold of claims submitted and total gross charges processed.
 
-## Monthly BPI Ranking
+### Monthly BPI Ranking
 
 For this example, I’ve put the mock data provided by Dr. Lirov into a data frame. The data ranks (or indexes) the payers with the top 10 lowest PARBx
  percentages by the most recent month’s (December) figures, including November’s figures as well. December’s rankings appear alongside a Rank Change column indicating the number of places each payer rose or fell from November to December. Using {reactable} and {reactablefmtr} I can create an interactive table of the data:
@@ -76,7 +76,6 @@ parbx_rank
 ```
 
 ```{r}
-# "code-commit"
 parbx_rank |>
   arrange(rank_dec) |> 
   mutate(dir = case_when(
@@ -164,70 +163,7 @@ parbx_rank |>
 ```
 
 
-```{r}
-tibble(
-  rank = 1:15,
-  n_months = c(
-    12, 11, 11, 10, 10,
-    7, 7, 7, 5, 4, 3,
-    3, 3, 2, 2
-  ),
-  payer = c(
-    "BCBS Illinois", "Cigna",
-    "Medicare New Jersey",
-    "Aetna", "UnitedHealthcare",
-    "Medicare Illinois", "Horizon BCBS New Jersey",
-    "BCBS Pennsylvania", "BCBS Georgia",
-    "Anthem BCBS Colorado",
-    "BCBS Michigan", "BCBS Texas", "GEICO",
-    "Anthem BCBS Colorado", "Humana"
-  ),
-  min = c(
-    7.1, 8.9, 7.5, 8.8, 11.3,
-    5.8, 13.9, 12.4, 22.9, 12.4,
-    3.2, 10.3, 33.4, 6.8, 7.9
-  ) / 100,
-  mean = c(
-    10.9, 13.4, 15.7, 16.6, 17.2,
-    14, 18, 23.5, 34.1, 19.1, 6.8,
-    15.2, 34.9, 9.6, 9.9
-  ) / 100,
-  max = c(
-    16, 24.1, 20.5, 22.1, 23.2,
-    30.4, 24.3, 43.4, 43.3, 34.1,
-    13.6, 20, 36.2, 12.3, 11.8
-  ) / 100
-) |> 
-  gt(rowname_col = "rank", groupname_col = "payer", row_group_as_column = TRUE) |>
-  fmt_percent(columns = c(min, mean, max), drop_trailing_zeros = TRUE) |>
-  cols_align(align = "center", columns = c(rank, n_months, min, mean, max)) |> 
-  cols_label(
-    rank = "Rank",
-    n_months = "Months",
-    min = "Minimum",
-    mean = "Average",
-    max = "Maximum"
-  ) |>
-  data_color(columns = c(min, mean, max),
-             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |> 
-  opt_table_font(font = gt::google_font(name = "Atkinson Hyperlegible")) |> 
-  tab_header(title = md("**Annual Billing Performance Index**"),
-             subtitle = "Top 15 Payers Ranked by Months Included on BPI.") |> 
-  tab_spanner(label = md("**Percentage of AR Beyond 120 Days**"), columns = c(min, mean, max)) |> 
-  opt_stylize(color = "cyan", add_row_striping = FALSE) |>
-  tab_options(
-    quarto.disable_processing = TRUE,
-    table.font.size = gt::px(18),
-    table.width = gt::pct(100),
-    heading.align = "left",
-    heading.title.font.size = gt::px(24),
-    heading.subtitle.font.size = gt::px(21))
-```
-
-
-
-
-```{r}
+```{r echo=FALSE, eval=FALSE}
 bpi_mon <- dplyr::tibble(
   payer = c(
     "Medicare Illinois",
@@ -352,7 +288,7 @@ bpi_mon_tbl <- reactable(
 htmltools::div(class = "rcm-analysis", bpi_mon_tbl)
 ```
 
-```{r}
+```{r echo=FALSE, eval=FALSE}
 bpi_mon_long <- bpi_mon |>
   select(payer, nov_parbx, dec_parbx) |>
   rename(November = nov_parbx, December = dec_parbx) |>
@@ -420,16 +356,7 @@ parbx_hc1 <- bpi_mon_long |>
 parbx_hc1
 ```
 
-
-## Weighting Payers by Proportion of AR > 120 Days
-
-There’s one step we can take to give us further insight into each payer’s relative performance: weighting their PARBx figures by the percentage of total AR older than 120 days that belongs to each. Keep in mind, the figures above represent a percentage of the AR belonging only to that payer.
-
-### Generate Random Weights
-
-I’ll generate some random weights to add to each month. The `probs()` function from the {wakefield} package will generate a set of x numbers, the sum of which will be equal to one. I’ll put these into a new data frame, merge the two data frames, then create a new “Weighted PARBx” column:
-
-```{r}
+```{r echo=FALSE, eval=FALSE}
 props <- tibble(
   payer = c(
     "Medicare Illinois",
@@ -583,9 +510,7 @@ bpi_mon_wt_tbl <- reactable(
 div(class = "rcm-analysis", bpi_mon_wt_tbl)
 ```
 
-
-
-```{r}
+```{r echo=FALSE, eval=FALSE}
 bpi_mon_long_wt <- bpi_mon_wt |>
   select(payer, nov_parbx_wt, dec_parbx_wt) |>
   rename(November = nov_parbx_wt, December = dec_parbx_wt) |>
@@ -663,14 +588,78 @@ parbx_hc2
 ```
 
 
-Annual BPI Summary
-The final destination for all of this data is the annual summary of the monthly Billing Performance Index. The Annual BPI is simply a list of the payers who participated in the Monthly BPI, ranked by the number of times that they made the top 10 that year. Also included are each payer’s mean, minimum, and maximum BPI for the year. Lirov sums up the importance of the annual summary:
+### Annual BPI Summary
 
-A low percentage of accounts receivable beyond 120 days is critical to being included in the billing index. However, the frequency of inclusion in the index is a more robust performance metric, because it measures billing performance consistency over a longer time period. The following example table lists the insurance companies that made the BPI listing for 20xx, along with their average, low, and high billing index for the year. Lirov (2009)
+The final destination for all of this data is the annual summary of the monthly Billing Performance Index. 
 
-Note: In the following example, I’ve broken any ties in ranking between payers by giving the payer with the lower average BPI the higher rank.
+The Annual BPI is simply a list of the payers who participated in the Monthly BPI, ranked by the number of times that they made the top 10 that year. Also included are each payer’s mean, minimum, and maximum BPI for the year. Lirov sums up the importance of the annual summary:
+
+A low percentage of accounts receivable beyond 120 days is critical to being included in the billing index. However, the frequency of inclusion in the index is a more robust performance metric, because it measures billing performance consistency over a longer time period.
+
+
 
 ```{r}
+tibble(
+  rank = 1:15,
+  n_months = c(
+    12, 11, 11, 10, 10,
+    7, 7, 7, 5, 4, 3,
+    3, 3, 2, 2
+  ),
+  payer = c(
+    "BCBS Illinois", "Cigna",
+    "Medicare New Jersey",
+    "Aetna", "UnitedHealthcare",
+    "Medicare Illinois", "Horizon BCBS New Jersey",
+    "BCBS Pennsylvania", "BCBS Georgia",
+    "Anthem BCBS Colorado",
+    "BCBS Michigan", "BCBS Texas", "GEICO",
+    "Anthem BCBS Colorado", "Humana"
+  ),
+  min = c(
+    7.1, 8.9, 7.5, 8.8, 11.3,
+    5.8, 13.9, 12.4, 22.9, 12.4,
+    3.2, 10.3, 33.4, 6.8, 7.9
+  ) / 100,
+  mean = c(
+    10.9, 13.4, 15.7, 16.6, 17.2,
+    14, 18, 23.5, 34.1, 19.1, 6.8,
+    15.2, 34.9, 9.6, 9.9
+  ) / 100,
+  max = c(
+    16, 24.1, 20.5, 22.1, 23.2,
+    30.4, 24.3, 43.4, 43.3, 34.1,
+    13.6, 20, 36.2, 12.3, 11.8
+  ) / 100
+) |> 
+  gt(rowname_col = "rank", groupname_col = "payer", row_group_as_column = TRUE) |>
+  fmt_percent(columns = c(min, mean, max), drop_trailing_zeros = TRUE) |>
+  cols_align(align = "center", columns = c(rank, n_months, min, mean, max)) |> 
+  cols_label(
+    rank = "Rank",
+    n_months = "Months",
+    min = "Minimum",
+    mean = "Average",
+    max = "Maximum"
+  ) |>
+  data_color(columns = c(min, mean, max),
+             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |> 
+  opt_table_font(font = gt::google_font(name = "Atkinson Hyperlegible")) |> 
+  tab_header(title = md("**Annual Billing Performance Index**"),
+             subtitle = "Top 15 Payers Ranked by Months Included on BPI.") |> 
+  tab_spanner(label = md("**Percentage of AR Beyond 120 Days**"), columns = c(min, mean, max)) |> 
+  opt_stylize(color = "cyan", add_row_striping = FALSE) |>
+  tab_options(
+    quarto.disable_processing = TRUE,
+    table.font.size = gt::px(18),
+    table.width = gt::pct(100),
+    heading.align = "left",
+    heading.title.font.size = gt::px(24),
+    heading.subtitle.font.size = gt::px(21))
+```
+
+
+```{r echo=FALSE, eval=FALSE}
 bpi_ann <- data.frame(
   rank = 1:15,
   mon = c(
@@ -772,6 +761,3 @@ bpi_ann_tbl <- reactable(
 
 div(class = "rcm-analysis", bpi_ann_tbl)
 ```
-
-
-As with the monthly BPI, the annual figures would be more representative if weighted by percentage of total AR older than 120 days, but the general idea is there.

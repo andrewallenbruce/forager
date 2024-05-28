@@ -22,29 +22,53 @@ library(gt)
 ```
 
 
-An account is a *billable episode of care*. It begins to age once it is billed to an insurance company or patient. These outstanding accounts are monitored by age in 30-day increments (0 - 30, 31 - 60, 61 - 90, and so forth.) AR departments monitor the number of accounts outstanding, the dollar amount in each 30-day increment (sometimes called “bins” or “buckets”), and the responsible parties. 
+An **account** is a *billable episode of care*. 
 
-As well, aging should be broken down by many metrics, such as Provider, Patient, Insurance Types (Commercial, Primary, Secondary, Worker’s Compensation, Managed Care), Facility, Diagnosis/Procedure code, Specialty, etc. The older the account or the longer the account remains unpaid, the less likely it will be reimbursed.
+It begins to age once it is billed to an insurance company or patient. Note: This is not entirely true, and it depends on an organization's policies. Some may choose to say an account/claim begins to age once the episode of care is complete, i.e. a healthcare provider has performed work, charges have been entered into the chart, etc. Keep in mind that gross charges are essentially a measurement of unpaid work.
 
-Most claims are originally billed to insurance and, until the insurance makes a payment, the responsibility for the payment continues to be with the insurance payer. After the payer makes or denies a payment (with no just cause for an appeal), the responsibility for the balance of goes to the patient (to be sent an invoice) or the physician (to be written off.)
+These outstanding accounts are monitored by age in 30-day increments (0 - 30, 31 - 60, 61 - 90, and so forth.) AR departments monitor the number of accounts outstanding, the dollar amount in each 30-day increment (sometimes called “bins” or “buckets”), and the responsible parties. 
+
+Aging should be broken down by many metrics, such as Provider, Patient, Insurance Types (Commercial, Primary, Secondary, Worker’s Compensation, Managed Care), Facility, Diagnosis/Procedure code, Specialty, etc. The older the account or the longer the account remains unpaid, the less likely it will be reimbursed.
+
+Most claims are originally billed to insurance and, until the insurance makes a payment, the responsibility for the payment continues to be with the insurance payer. 
+
+After the payer makes or denies a payment (with no just cause for an appeal), the responsibility for the balance of goes to the patient (to be sent an invoice) or the physician (to be written off.)
 
 
 ## Percentage of Accounts Receivable Beyond X Days (PARBX)
 
-PARBX resolves the sensitivity issues of the DAR metric. It offers a simple billing process metric that’s not dependent on the charge. Its graphic representation has a skewed bell shape (Figures 12 and 13.) Its steepness represents billing process quality; a steep curve and thin tail mean a healthy billing process, while a flat bell and fat tail also mean billing problems. According to the MGMA survey, 25%-35% of the average family practice’s accounts receivables were more than 120 days old in 1997. This number has improved down to 17.7% in 2004.
+PARBx resolves the sensitivity issues of the DAR metric. It offers a simple billing process metric that’s not dependent on the charge. Its graphic representation has a skewed bell shape. Its steepness represents billing process quality; a steep curve and thin tail mean a healthy billing process, while a flat bell and fat tail also mean billing problems.
 
 ## Patient Liability
 
-The percentage of patient liability is the ratio of patient responsibility to total billed charges, and it roughly reflects patient deductibles. This metric is important in measuring front office function because it has little to do with clean claim submission or effective follow-up.
+Patient liability is the ratio of patient responsibility to total billed charges, and roughly reflects patient deductibles. This metric is important in measuring front office function because it has little to do with clean claim submission or effective follow-up.
 
 
 ## First-Pass Pay (FPP) Rate and Denial Rate
 
-The FPP Rate is the percentage of claims paid in full upon the first submission (subject to federal or state timely payment regulations; most state laws require 15 days for electronic submission and 30 days for paper submission.) The denial rate is the complementary metric to the FPP rate. It counts the percentage of claims that require follow-up and therefore cost more to process. Follow-up may take the form of a phone call to the payer to discover a lost claim, receive an interpretation of a denial message, correct earlier submitted data, resubmit the original claim, and consult with the provider and medical note, or denial appeal. Both FPP and denial rates are very important metrics often used for billing process improvement. The upside of the FPP/denial metric is that it’s not affected by the charge, but its downside is that it hides the differences between process imperfections on the claim submission and claim payment sides. To identify patterns of problem CPT codes or payers, the FPP/denial metric needs to be computed and compared across all payer-CPT code pairs, which is a standard feature for modern billing technologies.
+The FPP Rate is the percentage of claims paid in full upon the first submission (subject to federal or state timely payment regulations; most state laws require 15 days for electronic submission and 30 days for paper submission.) 
+
+The denial rate is the complementary metric to the FPP rate. It counts the percentage of claims that require follow-up and therefore cost more to process. 
+
+Follow-up may take the form of a phone call to the payer to discover a lost claim, receive an interpretation of a denial message, correct earlier submitted data, resubmit the original claim, and consult with the provider and medical note, or denial appeal. 
+
+Both FPP and denial rates are very important metrics often used for billing process improvement. The upside of the FPP/denial metric is that it’s not affected by the charge, but its downside is that it hides the differences between process imperfections on the claim submission and claim payment sides. 
+
+To identify patterns of problem CPT codes or payers, the FPP/Denial metric needs to be computed and compared across all payer-CPT code pairs.
 
 
 ```{r}
-parbx_ex() |> 
+payers <- c("Cigna", "BCBS", "Anthem", 
+            "Humana", "UHC", "Medicare", 
+            "Coventry", "Medicaid", "Centene", 
+            "CVSHealth", "Geico", "Peachstate")
+
+parbx_ex(payers)
+```
+
+
+```{r}
+parbx_ex(payers) |> 
   mutate(aging_prop = fuimus::roundup(aging_prop * 100)) |> 
   pivot_wider(names_from = "aging_bin", 
               values_from = "aging_prop") |> 
@@ -54,45 +78,57 @@ parbx_ex() |>
      groupname_col = "month", 
      row_group_as_column = TRUE) |> 
   fmt_number(decimals = 1) |> 
-  opt_table_font(font = gt::google_font(name = "Fira Code")) |> 
+  opt_table_font(font = google_font(name = "Atkinson Hyperlegible")) |> 
   tab_options(
-    column_labels.font.weight = "bold"
-  )
+    column_labels.font.weight = "bold",
+    column_labels.font.size = px(16),
+    column_labels.border.bottom.width = px(3),
+    quarto.disable_processing = TRUE,
+    table.font.size = px(18),
+    table.width = pct(75),
+    heading.align = "left",
+    heading.title.font.size = px(24),
+    heading.subtitle.font.size = px(21),
+    # table_body.hlines.style = "none",
+    column_labels.border.top.color = "darkgreen",
+    column_labels.border.bottom.color = "darkgreen",
+    table_body.border.bottom.color = "darkgreen",
+    stub.border.style = "none",
+    stub.background.color = "darkgreen",
+    # stub.font.weight = "bold",
+    row_group.font.weight = "bold"
+    )
 ```
 
 
 ```{r}
-ex_prop <- parbx_ex() |> 
+ex_prop <- parbx_ex(payers) |> 
   pivot_wider(names_from = "aging_bin", 
               values_from = "aging_prop") |> 
   select(month, payer, `121+`) |> 
-  pivot_wider(names_from = month, values_from = `121+`)
+  pivot_wider(names_from = month, values_from = `121+`) |> 
+  rlang::set_names(c("payer", month.abb))
 
-ex_prop_payer <- parbx_ex() |> 
+ex_prop_payer <- parbx_ex(payers) |> 
   pivot_wider(names_from = "aging_bin", 
               values_from = "aging_prop") |> 
   select(month, payer, `121+`) |> 
   pivot_wider(names_from = payer, values_from = `121+`)
 
-ex_prop_payer |> 
-  gt(rowname_col = "month") |> 
+ex_prop |> 
+  gt(rowname_col = "payer") |> 
   fmt_percent(decimals = 0) |>
   cols_align(align = "center") |> 
   data_color(
-    columns = !month,
-    direction = "row",
-    palette = "ggsci::red_material"
+    columns = !payer,
+    palette = "ggsci::red_material",
+    apply_to = "text"
     ) |> 
-  cols_width(
-    Cigna ~  px(100),
-    Humana ~ px(100),
-    UHC ~    px(100),
-    Anthem ~ px(100),
-    BCBS ~   px(100)
-  ) |> 
-  opt_table_font(font = gt::google_font(name = "Fira Code")) |> 
+  opt_table_font(font = google_font(name = "Fira Code")) |> 
   tab_options(
+    column_labels.font.weight = "bold",
     quarto.disable_processing = TRUE,
+    table.background.color = "grey50",
     table.font.size = gt::px(18),
     table.width = gt::pct(100),
     heading.align = "left",
@@ -105,31 +141,43 @@ ex_prop_payer |>
 ex_prop |> 
   reframe(
     payer,
-    January = dplyr::min_rank(January),
-    February = dplyr::min_rank(February),
-    ch_JF = January - February,
-    March = dplyr::min_rank(March),
-    ch_FM = February - March,
-    April = dplyr::min_rank(April),
-    ch_MA = March - April,
-    May = dplyr::min_rank(May),
-    ch_AM = April - May,
-    June = dplyr::min_rank(June),
-    ch_MJ = May - June,
-    July = dplyr::min_rank(July),
-    ch_JJ = June - July,
-    August = dplyr::min_rank(August),
-    ch_JA = July - August,
-    September = dplyr::min_rank(September),
-    ch_AS = August - September,
-    October = dplyr::min_rank(October),
-    ch_SO = September - October,
-    November = dplyr::min_rank(November),
-    ch_ON = October - November,
-    December = dplyr::min_rank(December),
-    ch_ND = November - December
-    ) |> 
+    Jan = min_rank(Jan),
+    Feb = min_rank(Feb),
+    Mar = min_rank(Mar),
+    Apr = min_rank(Apr),
+    May = min_rank(May),
+    Jun = min_rank(Jun),
+    Jul = min_rank(Jul),
+    Aug = min_rank(Aug),
+    Sep = min_rank(Sep),
+    Oct = min_rank(Oct),
+    Nov = min_rank(Nov),
+    Dec = min_rank(Dec)) |> 
   gt(rowname_col = "payer") |> 
-  opt_table_font(font = gt::google_font(name = "Fira Code"))
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  data_color(
+    columns = !payer,
+    palette = "Greens",
+    apply_to = "text",
+    reverse = TRUE
+    ) |> 
+  cols_align(align = "center") |> 
+  tab_options(
+    column_labels.font.weight = "bold",
+    column_labels.font.size = px(16),
+    column_labels.border.bottom.width = px(3),
+    quarto.disable_processing = TRUE,
+    table.font.size = px(18),
+    table.width = pct(75),
+    heading.align = "left",
+    heading.title.font.size = px(24),
+    heading.subtitle.font.size = px(21),
+    table_body.hlines.style = "none",
+    column_labels.border.top.color = "darkgreen",
+    column_labels.border.bottom.color = "darkgreen",
+    table_body.border.bottom.color = "darkgreen",
+    stub.border.style = "none",
+    stub.background.color = "darkgreen"
+    )
 ```
 
