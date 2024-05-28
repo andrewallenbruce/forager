@@ -1,0 +1,10 @@
+file: aging_facility.qs
+file_size: 304591
+pin_hash: 3b93c6978367f01d
+type: qs
+title: Facility A and B Aging Example
+description: Facility A and B Aging Example
+tags: ~
+urls: ~
+created: 20240528T112143Z
+api_version: 1

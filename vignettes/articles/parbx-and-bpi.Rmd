@@ -77,22 +77,36 @@ parbx_rank
 
 ```{r}
 parbx_rank |>
+  arrange(rank_dec) |> 
   gt(rowname_col = "payer") |>
   fmt_percent(columns = starts_with("parbx_"),
               drop_trailing_zeros = TRUE) |>
   fmt_integer(columns = ends_with("_change"), force_sign = TRUE) |>
   cols_move_to_start(columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |>
+  cols_align(align = "center", columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |> 
   cols_label(
     rank_change = "Change",
     rank_nov = "Rank",
-    parbx_nov = md("PARB$x$"),
+    parbx_nov = md("PARB<b><i><sub>x</sub></i></b>"),
     rank_dec = "Rank",
-    parbx_dec = md("PARB$x$"),
+    parbx_dec = md("PARB<b><i><sub>x</sub></i></b>")
   ) |>
   data_color(columns = starts_with("parbx_"),
              palette = c("#15607A", "#FFFFFF", "#FA8C00")) |>
+  opt_table_font(font = gt::google_font(name = "Atkinson Hyperlegible")) |> 
+  tab_header(title = md("**Billing Performance Index**"),
+             subtitle = "Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days") |> 
+  tab_spanner(label = md("**November**"), columns = c(rank_nov, parbx_nov)) |> 
+  tab_spanner(label = md("**December**"), columns = c(rank_dec, parbx_dec)) |> 
   opt_stylize(color = "cyan", add_row_striping = FALSE) |>
-  tab_options(quarto.disable_processing = TRUE)
+  tab_options(
+    quarto.disable_processing = TRUE,
+    table.font.size = gt::px(18),
+    table.width = gt::pct(100),
+    heading.align = "left",
+    heading.title.font.size = gt::px(24),
+    heading.subtitle.font.size = gt::px(21)
+              )
 ```
 
 ```{r}
@@ -105,23 +119,99 @@ parbx_rank |>
     rank_dec = dplyr::min_rank(parbx_dec),
     rank_change = rank_nov - rank_dec
   ) |>
+  arrange(rank_dec) |> 
   gt(rowname_col = "payer") |>
-  fmt_percent(columns = starts_with("parbx_"),
-              drop_trailing_zeros = TRUE) |>
+  fmt_percent(columns = starts_with("parbx_"), drop_trailing_zeros = TRUE) |>
   fmt_integer(columns = ends_with("_change"), force_sign = TRUE) |>
   cols_move_to_start(columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |>
+  cols_align(align = "center", columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |> 
   cols_label(
     rank_change = "Change",
     rank_nov = "Rank",
-    parbx_nov = md("PARB$x$"),
+    parbx_nov = md("<sub>wt</sub>PARB<b><i><sub>x</sub></i></b>"),
     rank_dec = "Rank",
-    parbx_dec = md("PARB$x$"),
+    parbx_dec = md("<sub>wt</sub>PARB<b><i><sub>x</sub></i></b>")
   ) |>
   data_color(columns = starts_with("parbx_"),
-             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |>
+             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |> 
+  opt_table_font(font = gt::google_font(name = "Atkinson Hyperlegible")) |> 
+  tab_header(title = md("**Weighted Billing Performance Index**"),
+             subtitle = "Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days") |> 
+  tab_spanner(label = md("**November**"), columns = c(rank_nov, parbx_nov)) |> 
+  tab_spanner(label = md("**December**"), columns = c(rank_dec, parbx_dec)) |> 
   opt_stylize(color = "cyan", add_row_striping = FALSE) |>
-  tab_options(quarto.disable_processing = TRUE)
+  tab_options(
+    quarto.disable_processing = TRUE,
+    table.font.size = gt::px(18),
+    table.width = gt::pct(100),
+    heading.align = "left",
+    heading.title.font.size = gt::px(24),
+    heading.subtitle.font.size = gt::px(21)
+              )
 ```
+
+
+```{r}
+tibble(
+  rank = 1:15,
+  n_months = c(
+    12, 11, 11, 10, 10,
+    7, 7, 7, 5, 4, 3,
+    3, 3, 2, 2
+  ),
+  payer = c(
+    "BCBS Illinois", "Cigna",
+    "Medicare New Jersey",
+    "Aetna", "UnitedHealthcare",
+    "Medicare Illinois", "Horizon BCBS New Jersey",
+    "BCBS Pennsylvania", "BCBS Georgia",
+    "Anthem BCBS Colorado",
+    "BCBS Michigan", "BCBS Texas", "GEICO",
+    "Anthem BCBS Colorado", "Humana"
+  ),
+  min = c(
+    7.1, 8.9, 7.5, 8.8, 11.3,
+    5.8, 13.9, 12.4, 22.9, 12.4,
+    3.2, 10.3, 33.4, 6.8, 7.9
+  ) / 100,
+  mean = c(
+    10.9, 13.4, 15.7, 16.6, 17.2,
+    14, 18, 23.5, 34.1, 19.1, 6.8,
+    15.2, 34.9, 9.6, 9.9
+  ) / 100,
+  max = c(
+    16, 24.1, 20.5, 22.1, 23.2,
+    30.4, 24.3, 43.4, 43.3, 34.1,
+    13.6, 20, 36.2, 12.3, 11.8
+  ) / 100
+) |> 
+  gt(rowname_col = "payer") |>
+  fmt_percent(columns = c(min, mean, max), drop_trailing_zeros = TRUE) |>
+  cols_align(align = "center", columns = c(rank, n_months, min, mean, max)) |> 
+  cols_label(
+    rank = "Rank",
+    n_months = "Months",
+    min = "Minimum",
+    mean = "Average",
+    max = "Maximum"
+  ) |>
+  data_color(columns = c(min, mean, max),
+             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |> 
+  opt_table_font(font = gt::google_font(name = "Atkinson Hyperlegible")) |> 
+  tab_header(title = md("**Annual Billing Performance Index**"),
+             subtitle = "Top 15 Payers Ranked by Months Included on BPI.") |> 
+  tab_spanner(label = md("**Percentage of AR Beyond 120 Days**"), columns = c(min, mean, max)) |> 
+  opt_stylize(color = "cyan", add_row_striping = FALSE) |>
+  tab_options(
+    quarto.disable_processing = TRUE,
+    table.font.size = gt::px(18),
+    table.width = gt::pct(100),
+    heading.align = "left",
+    heading.title.font.size = gt::px(24),
+    heading.subtitle.font.size = gt::px(21)
+              )
+```
+
 
 
 

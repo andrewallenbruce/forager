@@ -2,10 +2,14 @@ aging_biweekly:
 - aging_biweekly/20240523T150434Z-71990/
 aging_ex:
 - aging_ex/20240509T015946Z-e1388/
+aging_facility:
+- aging_facility/20240528T112143Z-3b93c/
 aging_monthly:
 - aging_monthly/20240513T182038Z-3ab2b/
 cppm_ex:
 - cppm_ex/20240524T221448Z-b7a0e/
+denials_extract:
+- denials_extract/20240528T113354Z-1dedb/
 healthyr:
 - healthyr/20240523T135806Z-899d8/
 monthly_raw:
@@ -14,5 +18,5 @@ nm_examples:
 - nm_examples/20240523T144836Z-49c74/
 patient_aging:
 - patient_aging/20240523T153723Z-5b645/
-practicum:
-- practicum/20240525T173631Z-362d5/
+transaction_data:
+- transaction_data/20240528T114612Z-f7460/

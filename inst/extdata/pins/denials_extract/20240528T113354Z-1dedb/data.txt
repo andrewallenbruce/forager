@@ -1,0 +1,10 @@
+file: denials_extract.qs
+file_size: 406989
+pin_hash: 1dedbecf073fce3c
+type: qs
+title: Denials Extract
+description: Denials Extract
+tags: ~
+urls: ~
+created: 20240528T113354Z
+api_version: 1
