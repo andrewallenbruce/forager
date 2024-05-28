@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   )
 
 library(forager)
+library(fuimus)
 library(dplyr)
 library(tidyr)
 library(gt)
@@ -40,3 +41,95 @@ The percentage of patient liability is the ratio of patient responsibility to to
 ## First-Pass Pay (FPP) Rate and Denial Rate
 
 The FPP Rate is the percentage of claims paid in full upon the first submission (subject to federal or state timely payment regulations; most state laws require 15 days for electronic submission and 30 days for paper submission.) The denial rate is the complementary metric to the FPP rate. It counts the percentage of claims that require follow-up and therefore cost more to process. Follow-up may take the form of a phone call to the payer to discover a lost claim, receive an interpretation of a denial message, correct earlier submitted data, resubmit the original claim, and consult with the provider and medical note, or denial appeal. Both FPP and denial rates are very important metrics often used for billing process improvement. The upside of the FPP/denial metric is that it’s not affected by the charge, but its downside is that it hides the differences between process imperfections on the claim submission and claim payment sides. To identify patterns of problem CPT codes or payers, the FPP/denial metric needs to be computed and compared across all payer-CPT code pairs, which is a standard feature for modern billing technologies.
+
+
+```{r}
+parbx_ex() |> 
+  mutate(aging_prop = fuimus::roundup(aging_prop * 100)) |> 
+  pivot_wider(names_from = "aging_bin", 
+              values_from = "aging_prop") |> 
+  arrange(month) |> 
+  select(-date) |> 
+  gt(rowname_col = "payer", 
+     groupname_col = "month", 
+     row_group_as_column = TRUE) |> 
+  fmt_number(decimals = 1) |> 
+  opt_table_font(font = gt::google_font(name = "Fira Code")) |> 
+  tab_options(
+    column_labels.font.weight = "bold"
+  )
+```
+
+
+```{r}
+ex_prop <- parbx_ex() |> 
+  pivot_wider(names_from = "aging_bin", 
+              values_from = "aging_prop") |> 
+  select(month, payer, `121+`) |> 
+  pivot_wider(names_from = month, values_from = `121+`)
+
+ex_prop_payer <- parbx_ex() |> 
+  pivot_wider(names_from = "aging_bin", 
+              values_from = "aging_prop") |> 
+  select(month, payer, `121+`) |> 
+  pivot_wider(names_from = payer, values_from = `121+`)
+
+ex_prop_payer |> 
+  gt(rowname_col = "month") |> 
+  fmt_percent(decimals = 0) |>
+  cols_align(align = "center") |> 
+  data_color(
+    columns = !month,
+    direction = "row",
+    palette = "ggsci::red_material"
+    ) |> 
+  cols_width(
+    Cigna ~  px(100),
+    Humana ~ px(100),
+    UHC ~    px(100),
+    Anthem ~ px(100),
+    BCBS ~   px(100)
+  ) |> 
+  opt_table_font(font = gt::google_font(name = "Fira Code")) |> 
+  tab_options(
+    quarto.disable_processing = TRUE,
+    table.font.size = gt::px(18),
+    table.width = gt::pct(100),
+    heading.align = "left",
+    heading.title.font.size = gt::px(24),
+    heading.subtitle.font.size = gt::px(21))
+```
+
+
+```{r}
+ex_prop |> 
+  reframe(
+    payer,
+    January = dplyr::min_rank(January),
+    February = dplyr::min_rank(February),
+    ch_JF = January - February,
+    March = dplyr::min_rank(March),
+    ch_FM = February - March,
+    April = dplyr::min_rank(April),
+    ch_MA = March - April,
+    May = dplyr::min_rank(May),
+    ch_AM = April - May,
+    June = dplyr::min_rank(June),
+    ch_MJ = May - June,
+    July = dplyr::min_rank(July),
+    ch_JJ = June - July,
+    August = dplyr::min_rank(August),
+    ch_JA = July - August,
+    September = dplyr::min_rank(September),
+    ch_AS = August - September,
+    October = dplyr::min_rank(October),
+    ch_SO = September - October,
+    November = dplyr::min_rank(November),
+    ch_ON = October - November,
+    December = dplyr::min_rank(December),
+    ch_ND = November - December
+    ) |> 
+  gt(rowname_col = "payer") |> 
+  opt_table_font(font = gt::google_font(name = "Fira Code"))
+```
+

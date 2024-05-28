@@ -76,20 +76,34 @@ parbx_rank
 ```
 
 ```{r}
+# "code-commit"
 parbx_rank |>
   arrange(rank_dec) |> 
+  mutate(dir = case_when(
+    rank_change == 0 ~ "code-commit",
+    rank_change > 0 ~ "arrow-up",
+    rank_change < 0 ~ "arrow-down"
+  )
+) |> 
   gt(rowname_col = "payer") |>
+  cols_add(change_abs = abs(rank_change)) |>
+  fmt_icon(
+    columns = dir,
+    fill_color = c("arrow-up" = "#15607A", "arrow-down" = "#FA8C00", "code-commit" = "grey90")) |> 
   fmt_percent(columns = starts_with("parbx_"),
               drop_trailing_zeros = TRUE) |>
   fmt_integer(columns = ends_with("_change"), force_sign = TRUE) |>
-  cols_move_to_start(columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |>
-  cols_align(align = "center", columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |> 
+  cols_hide(columns = c(rank_change)) |> 
+  cols_move_to_start(columns = c(dir, change_abs, rank_nov, parbx_nov, rank_dec, parbx_dec)) |>
+  cols_align(align = "center", columns = c(dir, rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |> 
+  # cols_merge(columns = c(change_abs, dir), pattern = "{1} {2}") |> 
   cols_label(
-    rank_change = "Change",
+    change_abs = "Change",
     rank_nov = "Rank",
     parbx_nov = md("PARB<b><i><sub>x</sub></i></b>"),
     rank_dec = "Rank",
-    parbx_dec = md("PARB<b><i><sub>x</sub></i></b>")
+    parbx_dec = md("PARB<b><i><sub>x</sub></i></b>"),
+    dir = ""
   ) |>
   data_color(columns = starts_with("parbx_"),
              palette = c("#15607A", "#FFFFFF", "#FA8C00")) |>
@@ -105,8 +119,7 @@ parbx_rank |>
     table.width = gt::pct(100),
     heading.align = "left",
     heading.title.font.size = gt::px(24),
-    heading.subtitle.font.size = gt::px(21)
-              )
+    heading.subtitle.font.size = gt::px(21))
 ```
 
 ```{r}
@@ -185,7 +198,7 @@ tibble(
     13.6, 20, 36.2, 12.3, 11.8
   ) / 100
 ) |> 
-  gt(rowname_col = "payer") |>
+  gt(rowname_col = "rank", groupname_col = "payer", row_group_as_column = TRUE) |>
   fmt_percent(columns = c(min, mean, max), drop_trailing_zeros = TRUE) |>
   cols_align(align = "center", columns = c(rank, n_months, min, mean, max)) |> 
   cols_label(
@@ -208,8 +221,7 @@ tibble(
     table.width = gt::pct(100),
     heading.align = "left",
     heading.title.font.size = gt::px(24),
-    heading.subtitle.font.size = gt::px(21)
-              )
+    heading.subtitle.font.size = gt::px(21))
 ```
 
 
