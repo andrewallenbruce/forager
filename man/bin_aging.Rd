@@ -21,16 +21,16 @@ Apply 30-Day Aging Bins
 }
 \examples{
 generate_data(10)[c(
-  "date_srvc",
+  "date_service",
   "charges",
   "payer")] |>
-  days_between(date_srvc) |>
-  bin_aging(days_in_ar)
+  days_between(date_service) |>
+  bin_aging(days_elapsed)
 
 load_ex("aging_ex") |>
   dplyr::select(dos, charges, ins_name) |>
   days_between(dos) |>
-  bin_aging(days_in_ar) |>
+  bin_aging(days_elapsed) |>
   dplyr::arrange(aging_bin) |>
   dplyr::group_by(
     year = clock::get_year(dos),

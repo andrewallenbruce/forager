@@ -18,6 +18,7 @@ options(scipen = 999)
 library(forager)
 library(dplyr)
 library(tidyr)
+library(gt)
 library(wakefield)
 library(reactable)
 library(reactablefmtr)
@@ -48,6 +49,83 @@ For this example, I’ve put the mock data provided by Dr. Lirov into a data fra
  percentages by the most recent month’s (December) figures, including November’s figures as well. December’s rankings appear alongside a Rank Change column indicating the number of places each payer rose or fell from November to December. Using {reactable} and {reactablefmtr} I can create an interactive table of the data:
 
 ```{r}
+parbx_rank <- dplyr::tibble(
+  payer = c(
+    "Medicare Illinois",
+    "BCBS Illinois",
+    "Cigna",
+    "Horizon BCBS NJ",
+    "Aetna",
+    "UnitedHealthcare",
+    "Medicare NJ",
+    "GEICO",
+    "BCBS Pennsylvania",
+    "BCBS Georgia"
+  ),
+  # Convert to proportions
+  parbx_nov = c(5.8, 7.9, 15.7, 20.7, 20, 15, 19.4, 36.2, 30.5, 39.9) / 100,
+  parbx_dec = c(6.8, 8.1, 10.7, 13.9, 14.8, 21.2, 18.8, 35.2, 43.4, 43.3) / 100
+) |> 
+  dplyr::mutate(
+    rank_nov = dplyr::min_rank(parbx_nov),
+    rank_dec = dplyr::min_rank(parbx_dec),
+    rank_change = rank_nov - rank_dec) |> 
+  dplyr::arrange(rank_dec)
+
+parbx_rank
+```
+
+```{r}
+parbx_rank |>
+  gt(rowname_col = "payer") |>
+  fmt_percent(columns = starts_with("parbx_"),
+              drop_trailing_zeros = TRUE) |>
+  fmt_integer(columns = ends_with("_change"), force_sign = TRUE) |>
+  cols_move_to_start(columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |>
+  cols_label(
+    rank_change = "Change",
+    rank_nov = "Rank",
+    parbx_nov = md("PARB$x$"),
+    rank_dec = "Rank",
+    parbx_dec = md("PARB$x$"),
+  ) |>
+  data_color(columns = starts_with("parbx_"),
+             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |>
+  opt_stylize(color = "cyan", add_row_striping = FALSE) |>
+  tab_options(quarto.disable_processing = TRUE)
+```
+
+```{r}
+parbx_rank |> 
+  select(payer, parbx_nov, parbx_dec) |> 
+  mutate(
+    parbx_nov = parbx_nov * wakefield::probs(n()),
+    parbx_dec = parbx_dec * wakefield::probs(n()),
+    rank_nov = dplyr::min_rank(parbx_nov),
+    rank_dec = dplyr::min_rank(parbx_dec),
+    rank_change = rank_nov - rank_dec
+  ) |>
+  gt(rowname_col = "payer") |>
+  fmt_percent(columns = starts_with("parbx_"),
+              drop_trailing_zeros = TRUE) |>
+  fmt_integer(columns = ends_with("_change"), force_sign = TRUE) |>
+  cols_move_to_start(columns = c(rank_change, rank_nov, parbx_nov, rank_dec, parbx_dec)) |>
+  cols_label(
+    rank_change = "Change",
+    rank_nov = "Rank",
+    parbx_nov = md("PARB$x$"),
+    rank_dec = "Rank",
+    parbx_dec = md("PARB$x$"),
+  ) |>
+  data_color(columns = starts_with("parbx_"),
+             palette = c("#15607A", "#FFFFFF", "#FA8C00")) |>
+  opt_stylize(color = "cyan", add_row_striping = FALSE) |>
+  tab_options(quarto.disable_processing = TRUE)
+```
+
+
+
+```{r}
 bpi_mon <- dplyr::tibble(
   payer = c(
     "Medicare Illinois",
@@ -67,11 +145,7 @@ bpi_mon <- dplyr::tibble(
   dec_rank = c(1, 2, 3, 4, 5, 7, 6, 8, 10, 9),
   dec_parbx = c(6.8, 8.1, 10.7, 13.9, 14.8, 21.2, 18.8, 35.2, 43.4, 43.3)
 )
-bpi_mon
-```
 
-
-```{r}
 bpi_mon_tbl <- reactable(
   bpi_mon,
   pagination = FALSE,
@@ -175,7 +249,6 @@ bpi_mon_tbl <- reactable(
 
 htmltools::div(class = "rcm-analysis", bpi_mon_tbl)
 ```
- 
 
 ```{r}
 bpi_mon_long <- bpi_mon |>
@@ -183,10 +256,6 @@ bpi_mon_long <- bpi_mon |>
   rename(November = nov_parbx, December = dec_parbx) |>
   pivot_longer(!payer, names_to = "month", values_to = "parbx")
 
-head(bpi_mon_long, 10)
-```
-
-```{r}
 parbx_hc1 <- bpi_mon_long |>
   hchart("line", hcaes(x = month, y = parbx, group = payer),
     dataLabels = list(
@@ -250,21 +319,16 @@ parbx_hc1
 ```
 
 
-Weighting Payers by Proportion of Total AR > 120 Days
+## Weighting Payers by Proportion of AR > 120 Days
+
 There’s one step we can take to give us further insight into each payer’s relative performance: weighting their PARBx figures by the percentage of total AR older than 120 days that belongs to each. Keep in mind, the figures above represent a percentage of the AR belonging only to that payer.
 
-Generate Random Weights
-I’ll generate some random weights to add to each month. The probs() function from the wakefield package will generate a set of x numbers, the sum of which will be equal to one. I’ll put these into a new data frame, merge the two data frames, then create a new “Weighted PARBx
-” column:
+### Generate Random Weights
+
+I’ll generate some random weights to add to each month. The `probs()` function from the {wakefield} package will generate a set of x numbers, the sum of which will be equal to one. I’ll put these into a new data frame, merge the two data frames, then create a new “Weighted PARBx” column:
 
 ```{r}
-library(wakefield)
-set.seed(1234)
-a <- probs(10)
-b <- probs(10)
-
-# Create data frame with new data
-props <- data.frame(
+props <- tibble(
   payer = c(
     "Medicare Illinois",
     "BCBS Illinois",
@@ -277,8 +341,8 @@ props <- data.frame(
     "BCBS Pennsylvania",
     "BCBS Georgia"
   ),
-  nov_pct = a,
-  dec_pct = b
+  nov_pct = wakefield::probs(10),
+  dec_pct = wakefield::probs(10)
 )
 
 # Merge the two data frames

@@ -6,6 +6,8 @@ utils::globalVariables(c(
   ":=",
   # <avg_dar>
   "adc",
+  # <generate_data>
+  "age",
   # <bin_aging>
   "aging_bin",
   # <generate_data>
@@ -15,17 +17,17 @@ utils::globalVariables(c(
   # <avg_dar>
   "dar",
   # <generate_data>
-  "date_accept",
+  "date_acceptance",
   # <generate_data>
-  "date_adjud",
+  "date_adjudication",
   # <generate_data>
-  "date_recon",
+  "date_reconciliation",
   # <generate_data>
-  "date_rlse",
+  "date_release",
   # <generate_data>
-  "date_srvc",
+  "date_service",
   # <generate_data>
-  "date_submit",
+  "date_submission",
   # <predict_net>
   "earb_gt120",
   # <predict_net>

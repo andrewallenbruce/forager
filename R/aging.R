@@ -10,16 +10,16 @@
 #'
 #' @examples
 #' generate_data(10)[c(
-#'   "date_srvc",
+#'   "date_service",
 #'   "charges",
 #'   "payer")] |>
-#'   days_between(date_srvc) |>
-#'   bin_aging(days_in_ar)
+#'   days_between(date_service) |>
+#'   bin_aging(days_elapsed)
 #'
 #' load_ex("aging_ex") |>
 #'   dplyr::select(dos, charges, ins_name) |>
 #'   days_between(dos) |>
-#'   bin_aging(days_in_ar) |>
+#'   bin_aging(days_elapsed) |>
 #'   dplyr::arrange(aging_bin) |>
 #'   dplyr::group_by(
 #'     year = clock::get_year(dos),
@@ -75,18 +75,18 @@ bin_aging <- function(df, ndays, bin_type = c("case", "chop")) {
 #'
 #' @template args-df-default
 #'
-#' @param from `[character]` column of dates to calculate days between
+#' @param from `[character]` column of start dates
 #'
-#' @param to `[character]` column of dates to calculate days between
+#' @param to `[character]` column of end dates
 #'
 #' @template returns-default
 #'
 #' @examples
 #' generate_data(10)[c(
-#'   "date_srvc",
+#'   "date_service",
 #'   "charges",
 #'   "payer")] |>
-#'   days_between(date_srvc)
+#'   days_between(date_service)
 #'
 #' @autoglobal
 #'
@@ -97,7 +97,7 @@ days_between <- function(df, from, to = NULL) {
 
     df |>
       dplyr::mutate(
-        days_in_ar = clock::date_count_between(
+        days_elapsed = clock::date_count_between(
           {{ from }},
           clock::date_today(""),
           "day")
@@ -108,7 +108,7 @@ days_between <- function(df, from, to = NULL) {
 
     df |>
       dplyr::mutate(
-        days_in_ar = clock::date_count_between(
+        days_elapsed = clock::date_count_between(
           {{ from }},
           {{ to }},
           "day")

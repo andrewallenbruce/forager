@@ -76,7 +76,7 @@ load_ex <- function(name) {
 #'
 #' @param rows `[integerish]` rows number of rows to generate; default is `100`
 #'
-#' @param add_day_counts `[logical]` add_day_counts add columns for days between events; default is `TRUE`
+#' @param count_days `[logical]` add columns for days between events; default is `FALSE`
 #'
 #' @param ... `[dots]` additional arguments
 #'
@@ -88,64 +88,61 @@ load_ex <- function(name) {
 #' @autoglobal
 #'
 #' @export
-generate_data <- function(rows = 100, add_day_counts = TRUE, ...) {
+generate_data <- function(rows = 100, count_days = FALSE, ...) {
 
   payer_names <- c(
     "Medicare",
     "Medicaid",
     "Cigna",
     "Humana",
-    "United Health",
+    "UHC",
     "Anthem",
     "BCBS",
     "Centene"
   )
 
+  # df$column <- sample(c("A", "B", "C"), nrow(relig_income), replace = TRUE)
+
   rsmpl <- sample(1:rows, size = (75 * rows / 100))
 
   df <- dplyr::tibble(
-    clm_id    = wakefield::id_factor(n = rows),
-    payer     = forcats::as_factor(fixtuRes::set_vector(size = rows, set = payer_names)),
-    charges   = as.double(wakefield::income(n = rows, digits = 2) / 300),
-    date_srvc = lubridate::as_date(wakefield::date_stamp(
-        n      = rows,
-        start  = lubridate::today() - lubridate::dyears(1),
-        random = TRUE)
-    ),
-    date_rlse   = date_srvc   + stats::rpois(rows, 1:15),
-    date_submit = date_rlse   + stats::rpois(rows, 1:5),
-    date_accept = date_submit + stats::rpois(rows, 5:20),
-    date_adjud  = date_accept + stats::rpois(rows, 30:120),
-    date_recon  = date_adjud  + stats::rpois(rows, 1:10)
+    claimid             = wakefield::id_factor(n = rows),
+    payer               = forcats::as_factor(fixtuRes::set_vector(size = rows, set = payer_names)),
+    charges             = as.double(wakefield::income(n = rows, digits = 2) / 300),
+    age                 = as.double(wakefield::age(n = rows, x = 15:100)),
+    date_service        = clock::date_today("") - age,
+    date_release        = date_service + stats::rpois(rows, 1:15),
+    date_submission     = date_release + stats::rpois(rows, 1:5),
+    date_acceptance     = date_submission + stats::rpois(rows, 5:20),
+    date_adjudication   = date_acceptance + stats::rpois(rows, 30:120),
+    date_reconciliation = date_adjudication + stats::rpois(rows, 1:10)
   ) |>
     dplyr::mutate(
-      balance = charges,
-      balance = dplyr::if_else(date_adjud == date_recon, 0, balance),
-      date_recon = dplyr::if_else(
-        lubridate::year(date_srvc) == max(
-          lubridate::year(date_srvc)) & balance > 0 & dplyr::row_number(date_recon) %in% rsmpl, NA, date_recon),
-      balance = dplyr::if_else(!is.na(date_recon), 0, balance),
-      .after  = charges
+      age                 = NULL,
+      balance             = charges,
+      balance             = dplyr::if_else(date_adjudication == date_reconciliation, 0, balance),
+      date_reconciliation = dplyr::if_else(lubridate::year(date_service) == max(lubridate::year(date_service)) & balance > 0 & dplyr::row_number(date_reconciliation) %in% rsmpl, NA, date_reconciliation),
+      balance             = dplyr::if_else(!is.na(date_reconciliation), 0, balance),
+      .after              = charges
     ) |>
-    dplyr::arrange(dplyr::desc(date_srvc))
+    dplyr::arrange(dplyr::desc(date_service))
 
-  if (add_day_counts) {
+  if (count_days) {
 
     df <- df |>
       dplyr::mutate(
-      days_rlse   = as.integer(date_rlse   - date_srvc),
-      days_submit = as.integer(date_submit - date_rlse),
-      days_accept = as.integer(date_accept - date_submit),
-      days_adjud  = as.integer(date_adjud  - date_accept),
-      days_recon  = as.integer(date_recon  - date_adjud),
-      days_in_ar  = dplyr::if_else(
-        is.na(date_recon),
-        as.integer(date_adjud - date_srvc),
-        as.integer(date_recon - date_srvc)
+        days_release        = as.integer(date_release - date_service),
+        days_submission     = as.integer(date_submission - date_release),
+        days_acceptance     = as.integer(date_acceptance - date_submission),
+        days_adjudication   = as.integer(date_adjudication  - date_acceptance),
+        days_reconciliation = as.integer(date_reconciliation  - date_adjudication),
+        days_in_ar          = dplyr::if_else(is.na(date_reconciliation),
+                                    as.integer(date_adjudication - date_service),
+                                    as.integer(date_reconciliation - date_service)
+        )
       )
-    )
   }
-  return(df)
+  return(.add_class(df))
 }
 
 #' Sorted Bar Chart
@@ -163,7 +160,8 @@ generate_data <- function(rows = 100, add_day_counts = TRUE, ...) {
 #' @export
 sorted_bars <- function(df, var) {
   df |>
-    dplyr::mutate({{ var }} := forcats::fct_rev(forcats::fct_infreq({{ var }})))  |>
+    dplyr::mutate({{ var }} := forcats::fct_rev(
+      forcats::fct_infreq({{ var }})))  |>
     ggplot2::ggplot(ggplot2::aes(y = {{ var }})) +
     ggplot2::geom_bar()
 }

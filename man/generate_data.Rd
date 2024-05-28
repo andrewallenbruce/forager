@@ -4,12 +4,12 @@
 \alias{generate_data}
 \title{Generate mock coding/billing data frame}
 \usage{
-generate_data(rows = 100, add_day_counts = TRUE, ...)
+generate_data(rows = 100, count_days = FALSE, ...)
 }
 \arguments{
 \item{rows}{\verb{[integerish]} rows number of rows to generate; default is \code{100}}
 
-\item{add_day_counts}{\verb{[logical]} add_day_counts add columns for days between events; default is \code{TRUE}}
+\item{count_days}{\verb{[logical]} add columns for days between events; default is \code{FALSE}}
 
 \item{...}{\verb{[dots]} additional arguments}
 }

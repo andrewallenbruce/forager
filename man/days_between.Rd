@@ -9,9 +9,9 @@ days_between(df, from, to = NULL)
 \arguments{
 \item{df}{\verb{<data.frame>} or \verb{<tibble>}}
 
-\item{from}{\verb{[character]} column of dates to calculate days between}
+\item{from}{\verb{[character]} column of start dates}
 
-\item{to}{\verb{[character]} column of dates to calculate days between}
+\item{to}{\verb{[character]} column of end dates}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
@@ -21,9 +21,9 @@ Calculate Number of Days Between Two Dates
 }
 \examples{
 generate_data(10)[c(
-  "date_srvc",
+  "date_service",
   "charges",
   "payer")] |>
-  days_between(date_srvc)
+  days_between(date_service)
 
 }

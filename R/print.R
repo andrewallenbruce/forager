@@ -13,12 +13,13 @@ print.forager <- function(x, ...) {
 }
 
 #' @keywords internal
+#'
 #' @noRd
 .add_class <- function(data) {
 
   data <- dplyr::as_tibble(data)
 
-  class(data) <- c("forager", class(data))
+  class(data) <- unique(c("forager", class(data)))
 
   data
 }
