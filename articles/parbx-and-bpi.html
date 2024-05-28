@@ -213,25 +213,40 @@ payer rose or fell from November to December. Using {reactable} and
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> BCBS Pennsylvania     0.305     0.434        8       10          -<span style="color: #BB0000;">2</span></span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">parbx_rank</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">rank_dec</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"payer"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"parbx_"</span><span class="op">)</span>,</span>
 <span>              drop_trailing_zeros <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fmt_integer</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">ends_with</span><span class="op">(</span><span class="st">"_change"</span><span class="op">)</span>, force_sign <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">cols_move_to_start</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_change</span>, <span class="va">rank_nov</span>, <span class="va">parbx_nov</span>, <span class="va">rank_dec</span>, <span class="va">parbx_dec</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_align</span><span class="op">(</span>align <span class="op">=</span> <span class="st">"center"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_change</span>, <span class="va">rank_nov</span>, <span class="va">parbx_nov</span>, <span class="va">rank_dec</span>, <span class="va">parbx_dec</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">cols_label</span><span class="op">(</span></span>
 <span>    rank_change <span class="op">=</span> <span class="st">"Change"</span>,</span>
 <span>    rank_nov <span class="op">=</span> <span class="st">"Rank"</span>,</span>
-<span>    parbx_nov <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"PARB$x$"</span><span class="op">)</span>,</span>
+<span>    parbx_nov <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;"</span><span class="op">)</span>,</span>
 <span>    rank_dec <span class="op">=</span> <span class="st">"Rank"</span>,</span>
-<span>    parbx_dec <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"PARB$x$"</span><span class="op">)</span>,</span>
+<span>    parbx_dec <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">data_color</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"parbx_"</span><span class="op">)</span>,</span>
 <span>             palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#15607A"</span>, <span class="st">"#FFFFFF"</span>, <span class="st">"#FA8C00"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Atkinson Hyperlegible"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**Billing Performance Index**"</span><span class="op">)</span>,</span>
+<span>             subtitle <span class="op">=</span> <span class="st">"Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_spanner</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**November**"</span><span class="op">)</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_nov</span>, <span class="va">parbx_nov</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_spanner</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**December**"</span><span class="op">)</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_dec</span>, <span class="va">parbx_dec</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"cyan"</span>, add_row_striping <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tab_options</span><span class="op">(</span>quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">tab_options</span><span class="op">(</span></span>
+<span>    quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    table.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span>,</span>
+<span>    table.width <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/pct.html" class="external-link">pct</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>    heading.title.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">24</span><span class="op">)</span>,</span>
+<span>    heading.subtitle.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">21</span><span class="op">)</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
 <div id="wlefoodfie" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wlefoodfie table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+<style>@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#wlefoodfie table {
+  font-family: 'Atkinson Hyperlegible', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -252,11 +267,11 @@ payer rose or fell from November to December. Using {reactable} and
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
-  width: auto;
+  width: 100%;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #016763;
@@ -278,7 +293,7 @@ payer rose or fell from November to December. Using {reactable} and
 
 #wlefoodfie .gt_title {
   color: #333333;
-  font-size: 125%;
+  font-size: 24px;
   font-weight: initial;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -290,7 +305,7 @@ payer rose or fell from November to December. Using {reactable} and
 
 #wlefoodfie .gt_subtitle {
   color: #333333;
-  font-size: 85%;
+  font-size: 21px;
   font-weight: initial;
   padding-top: 3px;
   padding-bottom: 5px;
@@ -302,7 +317,7 @@ payer rose or fell from November to December. Using {reactable} and
 
 #wlefoodfie .gt_heading {
   background-color: #FFFFFF;
-  text-align: center;
+  text-align: left;
   border-bottom-color: #FFFFFF;
   border-left-style: none;
   border-left-width: 1px;
@@ -670,94 +685,112 @@ payer rose or fell from November to December. Using {reactable} and
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="true" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Change">Change</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="PARB$x$">PARB$x$</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="PARB$x$">PARB$x$</th>
-    </tr></thead>
+<thead>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_title gt_font_normal" style><strong>Billing Performance Index</strong></td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days</td>
+    </tr>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1" scope="col" id="Change">Change</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="&lt;strong&gt;November&lt;/strong&gt;">
+        <span class="gt_column_spanner"><strong>November</strong></span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="&lt;strong&gt;December&lt;/strong&gt;">
+        <span class="gt_column_spanner"><strong>December</strong></span>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;">PARB<b><i><sub>x</sub></i></b>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;">PARB<b><i><sub>x</sub></i></b>
+</th>
+    </tr>
+</thead>
 <tbody class="gt_table_body">
 <tr>
 <th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">Medicare Illinois</th>
-<td headers="stub_1_1 rank_change" class="gt_row gt_right">0</td>
-<td headers="stub_1_1 rank_nov" class="gt_row gt_right">1</td>
-<td headers="stub_1_1 parbx_nov" class="gt_row gt_right" style="background-color: #15607A; color: #FFFFFF;">5.8%</td>
-<td headers="stub_1_1 rank_dec" class="gt_row gt_right">1</td>
-<td headers="stub_1_1 parbx_dec" class="gt_row gt_right" style="background-color: #15607A; color: #FFFFFF;">6.8%</td>
+<td headers="stub_1_1 rank_change" class="gt_row gt_center">0</td>
+<td headers="stub_1_1 rank_nov" class="gt_row gt_center">1</td>
+<td headers="stub_1_1 parbx_nov" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">5.8%</td>
+<td headers="stub_1_1 rank_dec" class="gt_row gt_center">1</td>
+<td headers="stub_1_1 parbx_dec" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">6.8%</td>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">BCBS Illinois</th>
-<td headers="stub_1_2 rank_change" class="gt_row gt_right">0</td>
-<td headers="stub_1_2 rank_nov" class="gt_row gt_right">2</td>
-<td headers="stub_1_2 parbx_nov" class="gt_row gt_right" style="background-color: #3C7289; color: #FFFFFF;">7.9%</td>
-<td headers="stub_1_2 rank_dec" class="gt_row gt_right">2</td>
-<td headers="stub_1_2 parbx_dec" class="gt_row gt_right" style="background-color: #2E6A83; color: #FFFFFF;">8.1%</td>
+<td headers="stub_1_2 rank_change" class="gt_row gt_center">0</td>
+<td headers="stub_1_2 rank_nov" class="gt_row gt_center">2</td>
+<td headers="stub_1_2 parbx_nov" class="gt_row gt_center" style="background-color: #3C7289; color: #FFFFFF;">7.9%</td>
+<td headers="stub_1_2 rank_dec" class="gt_row gt_center">2</td>
+<td headers="stub_1_2 parbx_dec" class="gt_row gt_center" style="background-color: #2E6A83; color: #FFFFFF;">8.1%</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">Cigna</th>
-<td headers="stub_1_3 rank_change" class="gt_row gt_right">+1</td>
-<td headers="stub_1_3 rank_nov" class="gt_row gt_right">4</td>
-<td headers="stub_1_3 parbx_nov" class="gt_row gt_right" style="background-color: #A2B9C5; color: #000000;">15.7%</td>
-<td headers="stub_1_3 rank_dec" class="gt_row gt_right">3</td>
-<td headers="stub_1_3 parbx_dec" class="gt_row gt_right" style="background-color: #518095; color: #FFFFFF;">10.7%</td>
+<td headers="stub_1_3 rank_change" class="gt_row gt_center">+1</td>
+<td headers="stub_1_3 rank_nov" class="gt_row gt_center">4</td>
+<td headers="stub_1_3 parbx_nov" class="gt_row gt_center" style="background-color: #A2B9C5; color: #000000;">15.7%</td>
+<td headers="stub_1_3 rank_dec" class="gt_row gt_center">3</td>
+<td headers="stub_1_3 parbx_dec" class="gt_row gt_center" style="background-color: #518095; color: #FFFFFF;">10.7%</td>
 </tr>
 <tr>
 <th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Horizon BCBS NJ</th>
-<td headers="stub_1_4 rank_change" class="gt_row gt_right">+3</td>
-<td headers="stub_1_4 rank_nov" class="gt_row gt_right">7</td>
-<td headers="stub_1_4 parbx_nov" class="gt_row gt_right" style="background-color: #E3EAED; color: #000000;">20.7%</td>
-<td headers="stub_1_4 rank_dec" class="gt_row gt_right">4</td>
-<td headers="stub_1_4 parbx_dec" class="gt_row gt_right" style="background-color: #789AAC; color: #FFFFFF;">13.9%</td>
+<td headers="stub_1_4 rank_change" class="gt_row gt_center">+3</td>
+<td headers="stub_1_4 rank_nov" class="gt_row gt_center">7</td>
+<td headers="stub_1_4 parbx_nov" class="gt_row gt_center" style="background-color: #E3EAED; color: #000000;">20.7%</td>
+<td headers="stub_1_4 rank_dec" class="gt_row gt_center">4</td>
+<td headers="stub_1_4 parbx_dec" class="gt_row gt_center" style="background-color: #789AAC; color: #FFFFFF;">13.9%</td>
 </tr>
 <tr>
 <th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">Aetna</th>
-<td headers="stub_1_5 rank_change" class="gt_row gt_right">+1</td>
-<td headers="stub_1_5 rank_nov" class="gt_row gt_right">6</td>
-<td headers="stub_1_5 parbx_nov" class="gt_row gt_right" style="background-color: #DAE3E8; color: #000000;">20%</td>
-<td headers="stub_1_5 rank_dec" class="gt_row gt_right">5</td>
-<td headers="stub_1_5 parbx_dec" class="gt_row gt_right" style="background-color: #83A2B2; color: #FFFFFF;">14.8%</td>
+<td headers="stub_1_5 rank_change" class="gt_row gt_center">+1</td>
+<td headers="stub_1_5 rank_nov" class="gt_row gt_center">6</td>
+<td headers="stub_1_5 parbx_nov" class="gt_row gt_center" style="background-color: #DAE3E8; color: #000000;">20%</td>
+<td headers="stub_1_5 rank_dec" class="gt_row gt_center">5</td>
+<td headers="stub_1_5 parbx_dec" class="gt_row gt_center" style="background-color: #83A2B2; color: #FFFFFF;">14.8%</td>
 </tr>
 <tr>
 <th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Medicare NJ</th>
-<td headers="stub_1_6 rank_change" class="gt_row gt_right">−1</td>
-<td headers="stub_1_6 rank_nov" class="gt_row gt_right">5</td>
-<td headers="stub_1_6 parbx_nov" class="gt_row gt_right" style="background-color: #D2DDE3; color: #000000;">19.4%</td>
-<td headers="stub_1_6 rank_dec" class="gt_row gt_right">6</td>
-<td headers="stub_1_6 parbx_dec" class="gt_row gt_right" style="background-color: #B3C5CF; color: #000000;">18.8%</td>
+<td headers="stub_1_6 rank_change" class="gt_row gt_center">−1</td>
+<td headers="stub_1_6 rank_nov" class="gt_row gt_center">5</td>
+<td headers="stub_1_6 parbx_nov" class="gt_row gt_center" style="background-color: #D2DDE3; color: #000000;">19.4%</td>
+<td headers="stub_1_6 rank_dec" class="gt_row gt_center">6</td>
+<td headers="stub_1_6 parbx_dec" class="gt_row gt_center" style="background-color: #B3C5CF; color: #000000;">18.8%</td>
 </tr>
 <tr>
 <th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">UnitedHealthcare</th>
-<td headers="stub_1_7 rank_change" class="gt_row gt_right">−4</td>
-<td headers="stub_1_7 rank_nov" class="gt_row gt_right">3</td>
-<td headers="stub_1_7 parbx_nov" class="gt_row gt_right" style="background-color: #99B3C0; color: #000000;">15%</td>
-<td headers="stub_1_7 rank_dec" class="gt_row gt_right">7</td>
-<td headers="stub_1_7 parbx_dec" class="gt_row gt_right" style="background-color: #CFDBE1; color: #000000;">21.2%</td>
+<td headers="stub_1_7 rank_change" class="gt_row gt_center">−4</td>
+<td headers="stub_1_7 rank_nov" class="gt_row gt_center">3</td>
+<td headers="stub_1_7 parbx_nov" class="gt_row gt_center" style="background-color: #99B3C0; color: #000000;">15%</td>
+<td headers="stub_1_7 rank_dec" class="gt_row gt_center">7</td>
+<td headers="stub_1_7 parbx_dec" class="gt_row gt_center" style="background-color: #CFDBE1; color: #000000;">21.2%</td>
 </tr>
 <tr>
 <th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">GEICO</th>
-<td headers="stub_1_8 rank_change" class="gt_row gt_right">+1</td>
-<td headers="stub_1_8 rank_nov" class="gt_row gt_right">9</td>
-<td headers="stub_1_8 parbx_nov" class="gt_row gt_right" style="background-color: #FFA54C; color: #000000;">36.2%</td>
-<td headers="stub_1_8 rank_dec" class="gt_row gt_right">8</td>
-<td headers="stub_1_8 parbx_dec" class="gt_row gt_right" style="background-color: #FFBF81; color: #000000;">35.2%</td>
+<td headers="stub_1_8 rank_change" class="gt_row gt_center">+1</td>
+<td headers="stub_1_8 rank_nov" class="gt_row gt_center">9</td>
+<td headers="stub_1_8 parbx_nov" class="gt_row gt_center" style="background-color: #FFA54C; color: #000000;">36.2%</td>
+<td headers="stub_1_8 rank_dec" class="gt_row gt_center">8</td>
+<td headers="stub_1_8 parbx_dec" class="gt_row gt_center" style="background-color: #FFBF81; color: #000000;">35.2%</td>
 </tr>
 <tr>
 <th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">BCBS Georgia</th>
-<td headers="stub_1_9 rank_change" class="gt_row gt_right">+1</td>
-<td headers="stub_1_9 rank_nov" class="gt_row gt_right">10</td>
-<td headers="stub_1_9 parbx_nov" class="gt_row gt_right" style="background-color: #FA8C00; color: #000000;">39.9%</td>
-<td headers="stub_1_9 rank_dec" class="gt_row gt_right">9</td>
-<td headers="stub_1_9 parbx_dec" class="gt_row gt_right" style="background-color: #FA8D04; color: #000000;">43.3%</td>
+<td headers="stub_1_9 rank_change" class="gt_row gt_center">+1</td>
+<td headers="stub_1_9 rank_nov" class="gt_row gt_center">10</td>
+<td headers="stub_1_9 parbx_nov" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">39.9%</td>
+<td headers="stub_1_9 rank_dec" class="gt_row gt_center">9</td>
+<td headers="stub_1_9 parbx_dec" class="gt_row gt_center" style="background-color: #FA8D04; color: #000000;">43.3%</td>
 </tr>
 <tr>
 <th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">BCBS Pennsylvania</th>
-<td headers="stub_1_10 rank_change" class="gt_row gt_right">−2</td>
-<td headers="stub_1_10 rank_nov" class="gt_row gt_right">8</td>
-<td headers="stub_1_10 parbx_nov" class="gt_row gt_right" style="background-color: #FFCB98; color: #000000;">30.5%</td>
-<td headers="stub_1_10 rank_dec" class="gt_row gt_right">10</td>
-<td headers="stub_1_10 parbx_dec" class="gt_row gt_right" style="background-color: #FA8C00; color: #000000;">43.4%</td>
+<td headers="stub_1_10 rank_change" class="gt_row gt_center">−2</td>
+<td headers="stub_1_10 rank_nov" class="gt_row gt_center">8</td>
+<td headers="stub_1_10 parbx_nov" class="gt_row gt_center" style="background-color: #FFCB98; color: #000000;">30.5%</td>
+<td headers="stub_1_10 rank_dec" class="gt_row gt_center">10</td>
+<td headers="stub_1_10 parbx_dec" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">43.4%</td>
 </tr>
 </tbody>
 </table>
@@ -772,50 +805,64 @@ payer rose or fell from November to December. Using {reactable} and
 <span>    rank_dec <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">parbx_dec</span><span class="op">)</span>,</span>
 <span>    rank_change <span class="op">=</span> <span class="va">rank_nov</span> <span class="op">-</span> <span class="va">rank_dec</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">rank_dec</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"payer"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"parbx_"</span><span class="op">)</span>,</span>
-<span>              drop_trailing_zeros <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"parbx_"</span><span class="op">)</span>, drop_trailing_zeros <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fmt_integer</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">ends_with</span><span class="op">(</span><span class="st">"_change"</span><span class="op">)</span>, force_sign <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">cols_move_to_start</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_change</span>, <span class="va">rank_nov</span>, <span class="va">parbx_nov</span>, <span class="va">rank_dec</span>, <span class="va">parbx_dec</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_align</span><span class="op">(</span>align <span class="op">=</span> <span class="st">"center"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_change</span>, <span class="va">rank_nov</span>, <span class="va">parbx_nov</span>, <span class="va">rank_dec</span>, <span class="va">parbx_dec</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">cols_label</span><span class="op">(</span></span>
 <span>    rank_change <span class="op">=</span> <span class="st">"Change"</span>,</span>
 <span>    rank_nov <span class="op">=</span> <span class="st">"Rank"</span>,</span>
-<span>    parbx_nov <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"PARB$x$"</span><span class="op">)</span>,</span>
+<span>    parbx_nov <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"&lt;sub&gt;wt&lt;/sub&gt;PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;"</span><span class="op">)</span>,</span>
 <span>    rank_dec <span class="op">=</span> <span class="st">"Rank"</span>,</span>
-<span>    parbx_dec <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"PARB$x$"</span><span class="op">)</span>,</span>
+<span>    parbx_dec <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"&lt;sub&gt;wt&lt;/sub&gt;PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">data_color</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"parbx_"</span><span class="op">)</span>,</span>
-<span>             palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#15607A"</span>, <span class="st">"#FFFFFF"</span>, <span class="st">"#FA8C00"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>             palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#15607A"</span>, <span class="st">"#FFFFFF"</span>, <span class="st">"#FA8C00"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Atkinson Hyperlegible"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**Weighted Billing Performance Index**"</span><span class="op">)</span>,</span>
+<span>             subtitle <span class="op">=</span> <span class="st">"Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_spanner</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**November**"</span><span class="op">)</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_nov</span>, <span class="va">parbx_nov</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_spanner</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**December**"</span><span class="op">)</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank_dec</span>, <span class="va">parbx_dec</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">opt_stylize</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"cyan"</span>, add_row_striping <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tab_options</span><span class="op">(</span>quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<div id="alspkzcbwj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#alspkzcbwj table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+<span>  <span class="fu">tab_options</span><span class="op">(</span></span>
+<span>    quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    table.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span>,</span>
+<span>    table.width <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/pct.html" class="external-link">pct</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>    heading.title.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">24</span><span class="op">)</span>,</span>
+<span>    heading.subtitle.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">21</span><span class="op">)</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
+<div id="kzcbwjcfdj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#kzcbwjcfdj table {
+  font-family: 'Atkinson Hyperlegible', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#alspkzcbwj thead, #alspkzcbwj tbody, #alspkzcbwj tfoot, #alspkzcbwj tr, #alspkzcbwj td, #alspkzcbwj th {
+#kzcbwjcfdj thead, #kzcbwjcfdj tbody, #kzcbwjcfdj tfoot, #kzcbwjcfdj tr, #kzcbwjcfdj td, #kzcbwjcfdj th {
   border-style: none;
 }
 
-#alspkzcbwj p {
+#kzcbwjcfdj p {
   margin: 0;
   padding: 0;
 }
 
-#alspkzcbwj .gt_table {
+#kzcbwjcfdj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
   margin-left: auto;
   margin-right: auto;
   color: #333333;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: normal;
   font-style: normal;
   background-color: #FFFFFF;
-  width: auto;
+  width: 100%;
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #016763;
@@ -830,14 +877,14 @@ payer rose or fell from November to December. Using {reactable} and
   border-left-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_caption {
+#kzcbwjcfdj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#alspkzcbwj .gt_title {
+#kzcbwjcfdj .gt_title {
   color: #333333;
-  font-size: 125%;
+  font-size: 24px;
   font-weight: initial;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -847,9 +894,9 @@ payer rose or fell from November to December. Using {reactable} and
   border-bottom-width: 0;
 }
 
-#alspkzcbwj .gt_subtitle {
+#kzcbwjcfdj .gt_subtitle {
   color: #333333;
-  font-size: 85%;
+  font-size: 21px;
   font-weight: initial;
   padding-top: 3px;
   padding-bottom: 5px;
@@ -859,9 +906,9 @@ payer rose or fell from November to December. Using {reactable} and
   border-top-width: 0;
 }
 
-#alspkzcbwj .gt_heading {
+#kzcbwjcfdj .gt_heading {
   background-color: #FFFFFF;
-  text-align: center;
+  text-align: left;
   border-bottom-color: #FFFFFF;
   border-left-style: none;
   border-left-width: 1px;
@@ -871,13 +918,13 @@ payer rose or fell from November to December. Using {reactable} and
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_bottom_border {
+#kzcbwjcfdj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #01837B;
 }
 
-#alspkzcbwj .gt_col_headings {
+#kzcbwjcfdj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #01837B;
@@ -892,7 +939,7 @@ payer rose or fell from November to December. Using {reactable} and
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_col_heading {
+#kzcbwjcfdj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -912,7 +959,7 @@ payer rose or fell from November to December. Using {reactable} and
   overflow-x: hidden;
 }
 
-#alspkzcbwj .gt_column_spanner_outer {
+#kzcbwjcfdj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -924,15 +971,15 @@ payer rose or fell from November to December. Using {reactable} and
   padding-right: 4px;
 }
 
-#alspkzcbwj .gt_column_spanner_outer:first-child {
+#kzcbwjcfdj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#alspkzcbwj .gt_column_spanner_outer:last-child {
+#kzcbwjcfdj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#alspkzcbwj .gt_column_spanner {
+#kzcbwjcfdj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #01837B;
@@ -944,11 +991,11 @@ payer rose or fell from November to December. Using {reactable} and
   width: 100%;
 }
 
-#alspkzcbwj .gt_spanner_row {
+#kzcbwjcfdj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#alspkzcbwj .gt_group_heading {
+#kzcbwjcfdj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -974,7 +1021,7 @@ payer rose or fell from November to December. Using {reactable} and
   text-align: left;
 }
 
-#alspkzcbwj .gt_empty_group_heading {
+#kzcbwjcfdj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -989,15 +1036,15 @@ payer rose or fell from November to December. Using {reactable} and
   vertical-align: middle;
 }
 
-#alspkzcbwj .gt_from_md > :first-child {
+#kzcbwjcfdj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#alspkzcbwj .gt_from_md > :last-child {
+#kzcbwjcfdj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#alspkzcbwj .gt_row {
+#kzcbwjcfdj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1016,7 +1063,7 @@ payer rose or fell from November to December. Using {reactable} and
   overflow-x: hidden;
 }
 
-#alspkzcbwj .gt_stub {
+#kzcbwjcfdj .gt_stub {
   color: #FFFFFF;
   background-color: #01837B;
   font-size: 100%;
@@ -1029,7 +1076,7 @@ payer rose or fell from November to December. Using {reactable} and
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_stub_row_group {
+#kzcbwjcfdj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1043,15 +1090,15 @@ payer rose or fell from November to December. Using {reactable} and
   vertical-align: top;
 }
 
-#alspkzcbwj .gt_row_group_first td {
+#kzcbwjcfdj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#alspkzcbwj .gt_row_group_first th {
+#kzcbwjcfdj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#alspkzcbwj .gt_summary_row {
+#kzcbwjcfdj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1061,16 +1108,16 @@ payer rose or fell from November to December. Using {reactable} and
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_first_summary_row {
+#kzcbwjcfdj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #01837B;
 }
 
-#alspkzcbwj .gt_first_summary_row.thick {
+#kzcbwjcfdj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#alspkzcbwj .gt_last_summary_row {
+#kzcbwjcfdj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1080,7 +1127,7 @@ payer rose or fell from November to December. Using {reactable} and
   border-bottom-color: #01837B;
 }
 
-#alspkzcbwj .gt_grand_summary_row {
+#kzcbwjcfdj .gt_grand_summary_row {
   color: #333333;
   background-color: #A5FEF2;
   text-transform: inherit;
@@ -1090,7 +1137,7 @@ payer rose or fell from November to December. Using {reactable} and
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_first_grand_summary_row {
+#kzcbwjcfdj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1100,7 +1147,7 @@ payer rose or fell from November to December. Using {reactable} and
   border-top-color: #01837B;
 }
 
-#alspkzcbwj .gt_last_grand_summary_row_top {
+#kzcbwjcfdj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1110,11 +1157,11 @@ payer rose or fell from November to December. Using {reactable} and
   border-bottom-color: #01837B;
 }
 
-#alspkzcbwj .gt_striped {
+#kzcbwjcfdj .gt_striped {
   background-color: #F4F4F4;
 }
 
-#alspkzcbwj .gt_table_body {
+#kzcbwjcfdj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #01837B;
@@ -1123,7 +1170,7 @@ payer rose or fell from November to December. Using {reactable} and
   border-bottom-color: #01837B;
 }
 
-#alspkzcbwj .gt_footnotes {
+#kzcbwjcfdj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1137,7 +1184,7 @@ payer rose or fell from November to December. Using {reactable} and
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_footnote {
+#kzcbwjcfdj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1146,7 +1193,7 @@ payer rose or fell from November to December. Using {reactable} and
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_sourcenotes {
+#kzcbwjcfdj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1160,7 +1207,7 @@ payer rose or fell from November to December. Using {reactable} and
   border-right-color: #D3D3D3;
 }
 
-#alspkzcbwj .gt_sourcenote {
+#kzcbwjcfdj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1168,160 +1215,826 @@ payer rose or fell from November to December. Using {reactable} and
   padding-right: 5px;
 }
 
-#alspkzcbwj .gt_left {
+#kzcbwjcfdj .gt_left {
   text-align: left;
 }
 
-#alspkzcbwj .gt_center {
+#kzcbwjcfdj .gt_center {
   text-align: center;
 }
 
-#alspkzcbwj .gt_right {
+#kzcbwjcfdj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#alspkzcbwj .gt_font_normal {
+#kzcbwjcfdj .gt_font_normal {
   font-weight: normal;
 }
 
-#alspkzcbwj .gt_font_bold {
+#kzcbwjcfdj .gt_font_bold {
   font-weight: bold;
 }
 
-#alspkzcbwj .gt_font_italic {
+#kzcbwjcfdj .gt_font_italic {
   font-style: italic;
 }
 
-#alspkzcbwj .gt_super {
+#kzcbwjcfdj .gt_super {
   font-size: 65%;
 }
 
-#alspkzcbwj .gt_footnote_marks {
+#kzcbwjcfdj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#alspkzcbwj .gt_asterisk {
+#kzcbwjcfdj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#alspkzcbwj .gt_indent_1 {
+#kzcbwjcfdj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#alspkzcbwj .gt_indent_2 {
+#kzcbwjcfdj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#alspkzcbwj .gt_indent_3 {
+#kzcbwjcfdj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#alspkzcbwj .gt_indent_4 {
+#kzcbwjcfdj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#alspkzcbwj .gt_indent_5 {
+#kzcbwjcfdj .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="true" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Change">Change</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="PARB$x$">PARB$x$</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="PARB$x$">PARB$x$</th>
-    </tr></thead>
+<thead>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_title gt_font_normal" style><strong>Weighted Billing Performance Index</strong></td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days</td>
+    </tr>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1" scope="col" id="Change">Change</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="&lt;strong&gt;November&lt;/strong&gt;">
+        <span class="gt_column_spanner"><strong>November</strong></span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="2" scope="colgroup" id="&lt;strong&gt;December&lt;/strong&gt;">
+        <span class="gt_column_spanner"><strong>December</strong></span>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;sub&gt;wt&lt;/sub&gt;PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;">
+<sub>wt</sub>PARB<b><i><sub>x</sub></i></b>
+</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Rank">Rank</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;sub&gt;wt&lt;/sub&gt;PARB&lt;b&gt;&lt;i&gt;&lt;sub&gt;x&lt;/sub&gt;&lt;/i&gt;&lt;/b&gt;">
+<sub>wt</sub>PARB<b><i><sub>x</sub></i></b>
+</th>
+    </tr>
+</thead>
 <tbody class="gt_table_body">
 <tr>
-<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">Medicare Illinois</th>
-<td headers="stub_1_1 rank_change" class="gt_row gt_right">−3</td>
-<td headers="stub_1_1 rank_nov" class="gt_row gt_right">2</td>
-<td headers="stub_1_1 parbx_nov" class="gt_row gt_right" style="background-color: #18617B; color: #FFFFFF;">0.41%</td>
-<td headers="stub_1_1 rank_dec" class="gt_row gt_right">5</td>
-<td headers="stub_1_1 parbx_dec" class="gt_row gt_right" style="background-color: #517F94; color: #FFFFFF;">1.06%</td>
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">Cigna</th>
+<td headers="stub_1_1 rank_change" class="gt_row gt_center">+7</td>
+<td headers="stub_1_1 rank_nov" class="gt_row gt_center">8</td>
+<td headers="stub_1_1 parbx_nov" class="gt_row gt_center" style="background-color: #B6C8D2; color: #000000;">2.97%</td>
+<td headers="stub_1_1 rank_dec" class="gt_row gt_center">1</td>
+<td headers="stub_1_1 parbx_dec" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">0.04%</td>
 </tr>
 <tr>
-<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">BCBS Illinois</th>
-<td headers="stub_1_2 rank_change" class="gt_row gt_right">+2</td>
-<td headers="stub_1_2 rank_nov" class="gt_row gt_right">5</td>
-<td headers="stub_1_2 parbx_nov" class="gt_row gt_right" style="background-color: #7699AA; color: #FFFFFF;">1.34%</td>
-<td headers="stub_1_2 rank_dec" class="gt_row gt_right">3</td>
-<td headers="stub_1_2 parbx_dec" class="gt_row gt_right" style="background-color: #376F87; color: #FFFFFF;">0.56%</td>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Horizon BCBS NJ</th>
+<td headers="stub_1_2 rank_change" class="gt_row gt_center">+1</td>
+<td headers="stub_1_2 rank_nov" class="gt_row gt_center">3</td>
+<td headers="stub_1_2 parbx_nov" class="gt_row gt_center" style="background-color: #2A6981; color: #FFFFFF;">0.74%</td>
+<td headers="stub_1_2 rank_dec" class="gt_row gt_center">2</td>
+<td headers="stub_1_2 parbx_dec" class="gt_row gt_center" style="background-color: #286881; color: #FFFFFF;">0.27%</td>
 </tr>
 <tr>
-<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">Cigna</th>
-<td headers="stub_1_3 rank_change" class="gt_row gt_right">0</td>
-<td headers="stub_1_3 rank_nov" class="gt_row gt_right">1</td>
-<td headers="stub_1_3 parbx_nov" class="gt_row gt_right" style="background-color: #15607A; color: #FFFFFF;">0.39%</td>
-<td headers="stub_1_3 rank_dec" class="gt_row gt_right">1</td>
-<td headers="stub_1_3 parbx_dec" class="gt_row gt_right" style="background-color: #15607A; color: #FFFFFF;">0.05%</td>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">Medicare Illinois</th>
+<td headers="stub_1_3 rank_change" class="gt_row gt_center">+2</td>
+<td headers="stub_1_3 rank_nov" class="gt_row gt_center">5</td>
+<td headers="stub_1_3 parbx_nov" class="gt_row gt_center" style="background-color: #3C728A; color: #FFFFFF;">0.97%</td>
+<td headers="stub_1_3 rank_dec" class="gt_row gt_center">3</td>
+<td headers="stub_1_3 parbx_dec" class="gt_row gt_center" style="background-color: #316C84; color: #FFFFFF;">0.39%</td>
 </tr>
 <tr>
-<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Horizon BCBS NJ</th>
-<td headers="stub_1_4 rank_change" class="gt_row gt_right">+3</td>
-<td headers="stub_1_4 rank_nov" class="gt_row gt_right">9</td>
-<td headers="stub_1_4 parbx_nov" class="gt_row gt_right" style="background-color: #FFBE7F; color: #000000;">4.34%</td>
-<td headers="stub_1_4 rank_dec" class="gt_row gt_right">6</td>
-<td headers="stub_1_4 parbx_dec" class="gt_row gt_right" style="background-color: #6B91A4; color: #FFFFFF;">1.64%</td>
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">UnitedHealthcare</th>
+<td headers="stub_1_4 rank_change" class="gt_row gt_center">0</td>
+<td headers="stub_1_4 rank_nov" class="gt_row gt_center">4</td>
+<td headers="stub_1_4 parbx_nov" class="gt_row gt_center" style="background-color: #387088; color: #FFFFFF;">0.92%</td>
+<td headers="stub_1_4 rank_dec" class="gt_row gt_center">4</td>
+<td headers="stub_1_4 parbx_dec" class="gt_row gt_center" style="background-color: #3E738B; color: #FFFFFF;">0.61%</td>
 </tr>
 <tr>
-<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">Aetna</th>
-<td headers="stub_1_5 rank_change" class="gt_row gt_right">−5</td>
-<td headers="stub_1_5 rank_nov" class="gt_row gt_right">4</td>
-<td headers="stub_1_5 parbx_nov" class="gt_row gt_right" style="background-color: #5E889C; color: #FFFFFF;">1.07%</td>
-<td headers="stub_1_5 rank_dec" class="gt_row gt_right">9</td>
-<td headers="stub_1_5 parbx_dec" class="gt_row gt_right" style="background-color: #BCCCD5; color: #000000;">3.42%</td>
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">BCBS Illinois</th>
+<td headers="stub_1_5 rank_change" class="gt_row gt_center">−4</td>
+<td headers="stub_1_5 rank_nov" class="gt_row gt_center">1</td>
+<td headers="stub_1_5 parbx_nov" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">0.53%</td>
+<td headers="stub_1_5 rank_dec" class="gt_row gt_center">5</td>
+<td headers="stub_1_5 parbx_dec" class="gt_row gt_center" style="background-color: #497A90; color: #FFFFFF;">0.8%</td>
 </tr>
 <tr>
-<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Medicare NJ</th>
-<td headers="stub_1_6 rank_change" class="gt_row gt_right">−4</td>
-<td headers="stub_1_6 rank_nov" class="gt_row gt_right">3</td>
-<td headers="stub_1_6 parbx_nov" class="gt_row gt_right" style="background-color: #18617B; color: #FFFFFF;">0.41%</td>
-<td headers="stub_1_6 rank_dec" class="gt_row gt_right">7</td>
-<td headers="stub_1_6 parbx_dec" class="gt_row gt_right" style="background-color: #6D93A5; color: #FFFFFF;">1.68%</td>
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">BCBS Georgia</th>
+<td headers="stub_1_6 rank_change" class="gt_row gt_center">+4</td>
+<td headers="stub_1_6 rank_nov" class="gt_row gt_center">10</td>
+<td headers="stub_1_6 parbx_nov" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">7.8%</td>
+<td headers="stub_1_6 rank_dec" class="gt_row gt_center">6</td>
+<td headers="stub_1_6 parbx_dec" class="gt_row gt_center" style="background-color: #83A2B2; color: #FFFFFF;">1.91%</td>
 </tr>
 <tr>
-<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">UnitedHealthcare</th>
-<td headers="stub_1_7 rank_change" class="gt_row gt_right">+2</td>
-<td headers="stub_1_7 rank_nov" class="gt_row gt_right">6</td>
-<td headers="stub_1_7 parbx_nov" class="gt_row gt_right" style="background-color: #ADC1CC; color: #000000;">1.98%</td>
-<td headers="stub_1_7 rank_dec" class="gt_row gt_right">4</td>
-<td headers="stub_1_7 parbx_dec" class="gt_row gt_right" style="background-color: #43768D; color: #FFFFFF;">0.78%</td>
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">Medicare NJ</th>
+<td headers="stub_1_7 rank_change" class="gt_row gt_center">0</td>
+<td headers="stub_1_7 rank_nov" class="gt_row gt_center">7</td>
+<td headers="stub_1_7 parbx_nov" class="gt_row gt_center" style="background-color: #6B91A4; color: #FFFFFF;">1.72%</td>
+<td headers="stub_1_7 rank_dec" class="gt_row gt_center">7</td>
+<td headers="stub_1_7 parbx_dec" class="gt_row gt_center" style="background-color: #B5C7D1; color: #000000;">2.91%</td>
 </tr>
 <tr>
-<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">GEICO</th>
-<td headers="stub_1_8 rank_change" class="gt_row gt_right">+8</td>
-<td headers="stub_1_8 rank_nov" class="gt_row gt_right">10</td>
-<td headers="stub_1_8 parbx_nov" class="gt_row gt_right" style="background-color: #FA8C00; color: #000000;">5.45%</td>
-<td headers="stub_1_8 rank_dec" class="gt_row gt_right">2</td>
-<td headers="stub_1_8 parbx_dec" class="gt_row gt_right" style="background-color: #1D637D; color: #FFFFFF;">0.15%</td>
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">Aetna</th>
+<td headers="stub_1_8 rank_change" class="gt_row gt_center">−2</td>
+<td headers="stub_1_8 rank_nov" class="gt_row gt_center">6</td>
+<td headers="stub_1_8 parbx_nov" class="gt_row gt_center" style="background-color: #568297; color: #FFFFFF;">1.37%</td>
+<td headers="stub_1_8 rank_dec" class="gt_row gt_center">8</td>
+<td headers="stub_1_8 parbx_dec" class="gt_row gt_center" style="background-color: #DDE6EA; color: #000000;">3.7%</td>
 </tr>
 <tr>
-<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">BCBS Georgia</th>
-<td headers="stub_1_9 rank_change" class="gt_row gt_right">−2</td>
-<td headers="stub_1_9 rank_nov" class="gt_row gt_right">8</td>
-<td headers="stub_1_9 parbx_nov" class="gt_row gt_right" style="background-color: #FFECDA; color: #000000;">3.33%</td>
-<td headers="stub_1_9 rank_dec" class="gt_row gt_right">10</td>
-<td headers="stub_1_9 parbx_dec" class="gt_row gt_right" style="background-color: #FA8C00; color: #000000;">9.72%</td>
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">GEICO</th>
+<td headers="stub_1_9 rank_change" class="gt_row gt_center">0</td>
+<td headers="stub_1_9 rank_nov" class="gt_row gt_center">9</td>
+<td headers="stub_1_9 parbx_nov" class="gt_row gt_center" style="background-color: #EDF2F4; color: #000000;">3.88%</td>
+<td headers="stub_1_9 rank_dec" class="gt_row gt_center">9</td>
+<td headers="stub_1_9 parbx_dec" class="gt_row gt_center" style="background-color: #FFECD9; color: #000000;">5.05%</td>
 </tr>
 <tr>
 <th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">BCBS Pennsylvania</th>
-<td headers="stub_1_10 rank_change" class="gt_row gt_right">−1</td>
-<td headers="stub_1_10 rank_nov" class="gt_row gt_right">7</td>
-<td headers="stub_1_10 parbx_nov" class="gt_row gt_right" style="background-color: #E2E9ED; color: #000000;">2.59%</td>
-<td headers="stub_1_10 rank_dec" class="gt_row gt_right">8</td>
-<td headers="stub_1_10 parbx_dec" class="gt_row gt_right" style="background-color: #A2B9C5; color: #000000;">2.85%</td>
+<td headers="stub_1_10 rank_change" class="gt_row gt_center">−8</td>
+<td headers="stub_1_10 rank_nov" class="gt_row gt_center">2</td>
+<td headers="stub_1_10 parbx_nov" class="gt_row gt_center" style="background-color: #1C637C; color: #FFFFFF;">0.59%</td>
+<td headers="stub_1_10 rank_dec" class="gt_row gt_center">10</td>
+<td headers="stub_1_10 parbx_dec" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">8.65%</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span>  rank <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span>
+<span>  n_months <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">12</span>, <span class="fl">11</span>, <span class="fl">11</span>, <span class="fl">10</span>, <span class="fl">10</span>,</span>
+<span>    <span class="fl">7</span>, <span class="fl">7</span>, <span class="fl">7</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">3</span>,</span>
+<span>    <span class="fl">3</span>, <span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">2</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  payer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"BCBS Illinois"</span>, <span class="st">"Cigna"</span>,</span>
+<span>    <span class="st">"Medicare New Jersey"</span>,</span>
+<span>    <span class="st">"Aetna"</span>, <span class="st">"UnitedHealthcare"</span>,</span>
+<span>    <span class="st">"Medicare Illinois"</span>, <span class="st">"Horizon BCBS New Jersey"</span>,</span>
+<span>    <span class="st">"BCBS Pennsylvania"</span>, <span class="st">"BCBS Georgia"</span>,</span>
+<span>    <span class="st">"Anthem BCBS Colorado"</span>,</span>
+<span>    <span class="st">"BCBS Michigan"</span>, <span class="st">"BCBS Texas"</span>, <span class="st">"GEICO"</span>,</span>
+<span>    <span class="st">"Anthem BCBS Colorado"</span>, <span class="st">"Humana"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">7.1</span>, <span class="fl">8.9</span>, <span class="fl">7.5</span>, <span class="fl">8.8</span>, <span class="fl">11.3</span>,</span>
+<span>    <span class="fl">5.8</span>, <span class="fl">13.9</span>, <span class="fl">12.4</span>, <span class="fl">22.9</span>, <span class="fl">12.4</span>,</span>
+<span>    <span class="fl">3.2</span>, <span class="fl">10.3</span>, <span class="fl">33.4</span>, <span class="fl">6.8</span>, <span class="fl">7.9</span></span>
+<span>  <span class="op">)</span> <span class="op">/</span> <span class="fl">100</span>,</span>
+<span>  mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">10.9</span>, <span class="fl">13.4</span>, <span class="fl">15.7</span>, <span class="fl">16.6</span>, <span class="fl">17.2</span>,</span>
+<span>    <span class="fl">14</span>, <span class="fl">18</span>, <span class="fl">23.5</span>, <span class="fl">34.1</span>, <span class="fl">19.1</span>, <span class="fl">6.8</span>,</span>
+<span>    <span class="fl">15.2</span>, <span class="fl">34.9</span>, <span class="fl">9.6</span>, <span class="fl">9.9</span></span>
+<span>  <span class="op">)</span> <span class="op">/</span> <span class="fl">100</span>,</span>
+<span>  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">16</span>, <span class="fl">24.1</span>, <span class="fl">20.5</span>, <span class="fl">22.1</span>, <span class="fl">23.2</span>,</span>
+<span>    <span class="fl">30.4</span>, <span class="fl">24.3</span>, <span class="fl">43.4</span>, <span class="fl">43.3</span>, <span class="fl">34.1</span>,</span>
+<span>    <span class="fl">13.6</span>, <span class="fl">20</span>, <span class="fl">36.2</span>, <span class="fl">12.3</span>, <span class="fl">11.8</span></span>
+<span>  <span class="op">)</span> <span class="op">/</span> <span class="fl">100</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"payer"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">min</span>, <span class="va">mean</span>, <span class="va">max</span><span class="op">)</span>, drop_trailing_zeros <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_align</span><span class="op">(</span>align <span class="op">=</span> <span class="st">"center"</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rank</span>, <span class="va">n_months</span>, <span class="va">min</span>, <span class="va">mean</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
+<span>    rank <span class="op">=</span> <span class="st">"Rank"</span>,</span>
+<span>    n_months <span class="op">=</span> <span class="st">"Months"</span>,</span>
+<span>    min <span class="op">=</span> <span class="st">"Minimum"</span>,</span>
+<span>    mean <span class="op">=</span> <span class="st">"Average"</span>,</span>
+<span>    max <span class="op">=</span> <span class="st">"Maximum"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_color</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">min</span>, <span class="va">mean</span>, <span class="va">max</span><span class="op">)</span>,</span>
+<span>             palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#15607A"</span>, <span class="st">"#FFFFFF"</span>, <span class="st">"#FA8C00"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Atkinson Hyperlegible"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**Annual Billing Performance Index**"</span><span class="op">)</span>,</span>
+<span>             subtitle <span class="op">=</span> <span class="st">"Top 15 Payers Ranked by Months Included on BPI."</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_spanner</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">md</span><span class="op">(</span><span class="st">"**Percentage of AR Beyond 120 Days**"</span><span class="op">)</span>, columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">min</span>, <span class="va">mean</span>, <span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_stylize</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"cyan"</span>, add_row_striping <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tab_options</span><span class="op">(</span></span>
+<span>    quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    table.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span>,</span>
+<span>    table.width <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/pct.html" class="external-link">pct</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>    heading.title.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">24</span><span class="op">)</span>,</span>
+<span>    heading.subtitle.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">21</span><span class="op">)</span></span>
+<span>              <span class="op">)</span></span></code></pre></div>
+<div id="vijbfglzvn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#vijbfglzvn table {
+  font-family: 'Atkinson Hyperlegible', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vijbfglzvn thead, #vijbfglzvn tbody, #vijbfglzvn tfoot, #vijbfglzvn tr, #vijbfglzvn td, #vijbfglzvn th {
+  border-style: none;
+}
+
+#vijbfglzvn p {
+  margin: 0;
+  padding: 0;
+}
+
+#vijbfglzvn .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #016763;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #016763;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vijbfglzvn .gt_title {
+  color: #333333;
+  font-size: 24px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vijbfglzvn .gt_subtitle {
+  color: #333333;
+  font-size: 21px;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vijbfglzvn .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+}
+
+#vijbfglzvn .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #01837B;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vijbfglzvn .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vijbfglzvn .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vijbfglzvn .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vijbfglzvn .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vijbfglzvn .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vijbfglzvn .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #01837B;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vijbfglzvn .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #01837B;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+  vertical-align: middle;
+}
+
+#vijbfglzvn .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vijbfglzvn .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vijbfglzvn .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: none;
+  border-top-width: 1px;
+  border-top-color: #A5FEF2;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #A5FEF2;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #A5FEF2;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vijbfglzvn .gt_stub {
+  color: #FFFFFF;
+  background-color: #01837B;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #01837B;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vijbfglzvn .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vijbfglzvn .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vijbfglzvn .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #01837B;
+}
+
+#vijbfglzvn .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vijbfglzvn .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+}
+
+#vijbfglzvn .gt_grand_summary_row {
+  color: #333333;
+  background-color: #A5FEF2;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #01837B;
+}
+
+#vijbfglzvn .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #01837B;
+}
+
+#vijbfglzvn .gt_striped {
+  background-color: #F4F4F4;
+}
+
+#vijbfglzvn .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #01837B;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #01837B;
+}
+
+#vijbfglzvn .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vijbfglzvn .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vijbfglzvn .gt_left {
+  text-align: left;
+}
+
+#vijbfglzvn .gt_center {
+  text-align: center;
+}
+
+#vijbfglzvn .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vijbfglzvn .gt_font_normal {
+  font-weight: normal;
+}
+
+#vijbfglzvn .gt_font_bold {
+  font-weight: bold;
+}
+
+#vijbfglzvn .gt_font_italic {
+  font-style: italic;
+}
+
+#vijbfglzvn .gt_super {
+  font-size: 65%;
+}
+
+#vijbfglzvn .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vijbfglzvn .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vijbfglzvn .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vijbfglzvn .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vijbfglzvn .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vijbfglzvn .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vijbfglzvn .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="table gt_table" data-quarto-disable-processing="true" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_title gt_font_normal" style><strong>Annual Billing Performance Index</strong></td>
+    </tr>
+<tr class="gt_heading">
+<td colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style>Top 15 Payers Ranked by Months Included on BPI.</td>
+    </tr>
+<tr class="gt_col_headings gt_spanner_row">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1" scope="col" id="Rank">Rank</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1" scope="col" id="Months">Months</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="&lt;strong&gt;Percentage of AR Beyond 120 Days&lt;/strong&gt;">
+        <span class="gt_column_spanner"><strong>Percentage of AR Beyond 120 Days</strong></span>
+      </th>
+    </tr>
+<tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Minimum">Minimum</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Average">Average</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="Maximum">Maximum</th>
+    </tr>
+</thead>
+<tbody class="gt_table_body">
+<tr>
+<th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub">BCBS Illinois</th>
+<td headers="stub_1_1 rank" class="gt_row gt_center">1</td>
+<td headers="stub_1_1 n_months" class="gt_row gt_center">12</td>
+<td headers="stub_1_1 min" class="gt_row gt_center" style="background-color: #5C869B; color: #FFFFFF;">7.1%</td>
+<td headers="stub_1_1 mean" class="gt_row gt_center" style="background-color: #638C9F; color: #FFFFFF;">10.9%</td>
+<td headers="stub_1_1 max" class="gt_row gt_center" style="background-color: #5D889C; color: #FFFFFF;">16%</td>
+</tr>
+<tr>
+<th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub">Cigna</th>
+<td headers="stub_1_2 rank" class="gt_row gt_center">2</td>
+<td headers="stub_1_2 n_months" class="gt_row gt_center">11</td>
+<td headers="stub_1_2 min" class="gt_row gt_center" style="background-color: #7699AA; color: #FFFFFF;">8.9%</td>
+<td headers="stub_1_2 mean" class="gt_row gt_center" style="background-color: #8AA7B6; color: #FFFFFF;">13.4%</td>
+<td headers="stub_1_2 max" class="gt_row gt_center" style="background-color: #CEDAE0; color: #000000;">24.1%</td>
+</tr>
+<tr>
+<th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub">Medicare New Jersey</th>
+<td headers="stub_1_3 rank" class="gt_row gt_center">3</td>
+<td headers="stub_1_3 n_months" class="gt_row gt_center">11</td>
+<td headers="stub_1_3 min" class="gt_row gt_center" style="background-color: #628A9E; color: #FFFFFF;">7.5%</td>
+<td headers="stub_1_3 mean" class="gt_row gt_center" style="background-color: #AEC2CC; color: #000000;">15.7%</td>
+<td headers="stub_1_3 max" class="gt_row gt_center" style="background-color: #9CB4C1; color: #000000;">20.5%</td>
+</tr>
+<tr>
+<th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub">Aetna</th>
+<td headers="stub_1_4 rank" class="gt_row gt_center">4</td>
+<td headers="stub_1_4 n_months" class="gt_row gt_center">10</td>
+<td headers="stub_1_4 min" class="gt_row gt_center" style="background-color: #7598A9; color: #FFFFFF;">8.8%</td>
+<td headers="stub_1_4 mean" class="gt_row gt_center" style="background-color: #BCCCD5; color: #000000;">16.6%</td>
+<td headers="stub_1_4 max" class="gt_row gt_center" style="background-color: #B2C5CF; color: #000000;">22.1%</td>
+</tr>
+<tr>
+<th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub">UnitedHealthcare</th>
+<td headers="stub_1_5 rank" class="gt_row gt_center">5</td>
+<td headers="stub_1_5 n_months" class="gt_row gt_center">10</td>
+<td headers="stub_1_5 min" class="gt_row gt_center" style="background-color: #99B2BF; color: #000000;">11.3%</td>
+<td headers="stub_1_5 mean" class="gt_row gt_center" style="background-color: #C5D3DB; color: #000000;">17.2%</td>
+<td headers="stub_1_5 max" class="gt_row gt_center" style="background-color: #C1D0D8; color: #000000;">23.2%</td>
+</tr>
+<tr>
+<th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub">Medicare Illinois</th>
+<td headers="stub_1_6 rank" class="gt_row gt_center">6</td>
+<td headers="stub_1_6 n_months" class="gt_row gt_center">7</td>
+<td headers="stub_1_6 min" class="gt_row gt_center" style="background-color: #487990; color: #FFFFFF;">5.8%</td>
+<td headers="stub_1_6 mean" class="gt_row gt_center" style="background-color: #94AEBC; color: #000000;">14%</td>
+<td headers="stub_1_6 max" class="gt_row gt_center" style="background-color: #FFEAD6; color: #000000;">30.4%</td>
+</tr>
+<tr>
+<th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub">Horizon BCBS New Jersey</th>
+<td headers="stub_1_7 rank" class="gt_row gt_center">7</td>
+<td headers="stub_1_7 n_months" class="gt_row gt_center">7</td>
+<td headers="stub_1_7 min" class="gt_row gt_center" style="background-color: #BECED7; color: #000000;">13.9%</td>
+<td headers="stub_1_7 mean" class="gt_row gt_center" style="background-color: #D2DDE3; color: #000000;">18%</td>
+<td headers="stub_1_7 max" class="gt_row gt_center" style="background-color: #D0DCE2; color: #000000;">24.3%</td>
+</tr>
+<tr>
+<th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub">BCBS Pennsylvania</th>
+<td headers="stub_1_8 rank" class="gt_row gt_center">8</td>
+<td headers="stub_1_8 n_months" class="gt_row gt_center">7</td>
+<td headers="stub_1_8 min" class="gt_row gt_center" style="background-color: #A9BEC9; color: #000000;">12.4%</td>
+<td headers="stub_1_8 mean" class="gt_row gt_center" style="background-color: #FFE9D3; color: #000000;">23.5%</td>
+<td headers="stub_1_8 max" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">43.4%</td>
+</tr>
+<tr>
+<th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub">BCBS Georgia</th>
+<td headers="stub_1_9 rank" class="gt_row gt_center">9</td>
+<td headers="stub_1_9 n_months" class="gt_row gt_center">5</td>
+<td headers="stub_1_9 min" class="gt_row gt_center" style="background-color: #FFDBB9; color: #000000;">22.9%</td>
+<td headers="stub_1_9 mean" class="gt_row gt_center" style="background-color: #FC921F; color: #000000;">34.1%</td>
+<td headers="stub_1_9 max" class="gt_row gt_center" style="background-color: #FA8D05; color: #000000;">43.3%</td>
+</tr>
+<tr>
+<th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub">Anthem BCBS Colorado</th>
+<td headers="stub_1_10 rank" class="gt_row gt_center">10</td>
+<td headers="stub_1_10 n_months" class="gt_row gt_center">4</td>
+<td headers="stub_1_10 min" class="gt_row gt_center" style="background-color: #A9BEC9; color: #000000;">12.4%</td>
+<td headers="stub_1_10 mean" class="gt_row gt_center" style="background-color: #E3EAEE; color: #000000;">19.1%</td>
+<td headers="stub_1_10 max" class="gt_row gt_center" style="background-color: #FFCFA1; color: #000000;">34.1%</td>
+</tr>
+<tr>
+<th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub">BCBS Michigan</th>
+<td headers="stub_1_11 rank" class="gt_row gt_center">11</td>
+<td headers="stub_1_11 n_months" class="gt_row gt_center">3</td>
+<td headers="stub_1_11 min" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">3.2%</td>
+<td headers="stub_1_11 mean" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">6.8%</td>
+<td headers="stub_1_11 max" class="gt_row gt_center" style="background-color: #397188; color: #FFFFFF;">13.6%</td>
+</tr>
+<tr>
+<th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub">BCBS Texas</th>
+<td headers="stub_1_12 rank" class="gt_row gt_center">12</td>
+<td headers="stub_1_12 n_months" class="gt_row gt_center">3</td>
+<td headers="stub_1_12 min" class="gt_row gt_center" style="background-color: #8AA7B7; color: #FFFFFF;">10.3%</td>
+<td headers="stub_1_12 mean" class="gt_row gt_center" style="background-color: #A6BCC8; color: #000000;">15.2%</td>
+<td headers="stub_1_12 max" class="gt_row gt_center" style="background-color: #95AFBD; color: #000000;">20%</td>
+</tr>
+<tr>
+<th id="stub_1_13" scope="row" class="gt_row gt_left gt_stub">GEICO</th>
+<td headers="stub_1_13 rank" class="gt_row gt_center">13</td>
+<td headers="stub_1_13 n_months" class="gt_row gt_center">3</td>
+<td headers="stub_1_13 min" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">33.4%</td>
+<td headers="stub_1_13 mean" class="gt_row gt_center" style="background-color: #FA8C00; color: #000000;">34.9%</td>
+<td headers="stub_1_13 max" class="gt_row gt_center" style="background-color: #FFC083; color: #000000;">36.2%</td>
+</tr>
+<tr>
+<th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub">Anthem BCBS Colorado</th>
+<td headers="stub_1_14 rank" class="gt_row gt_center">14</td>
+<td headers="stub_1_14 n_months" class="gt_row gt_center">2</td>
+<td headers="stub_1_14 min" class="gt_row gt_center" style="background-color: #578398; color: #FFFFFF;">6.8%</td>
+<td headers="stub_1_14 mean" class="gt_row gt_center" style="background-color: #4E7D93; color: #FFFFFF;">9.6%</td>
+<td headers="stub_1_14 max" class="gt_row gt_center" style="background-color: #21657E; color: #FFFFFF;">12.3%</td>
+</tr>
+<tr>
+<th id="stub_1_15" scope="row" class="gt_row gt_left gt_stub">Humana</th>
+<td headers="stub_1_15 rank" class="gt_row gt_center">15</td>
+<td headers="stub_1_15 n_months" class="gt_row gt_center">2</td>
+<td headers="stub_1_15 min" class="gt_row gt_center" style="background-color: #688FA2; color: #FFFFFF;">7.9%</td>
+<td headers="stub_1_15 mean" class="gt_row gt_center" style="background-color: #538196; color: #FFFFFF;">9.9%</td>
+<td headers="stub_1_15 max" class="gt_row gt_center" style="background-color: #15607A; color: #FFFFFF;">11.8%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bpi_mon</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  payer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Medicare Illinois"</span>,</span>
@@ -1450,7 +2163,7 @@ payer rose or fell from November to December. Using {reactable} and
 <div class="reactable html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"payer":["Medicare Illinois","BCBS Illinois","Cigna","Horizon BCBS NJ","Aetna","UnitedHealthcare","Medicare NJ","GEICO","BCBS Pennsylvania","BCBS Georgia"],"rank_change":[0,0,1,3,1,-4,-1,1,-2,1],"nov_rank":[1,2,4,7,6,3,5,9,8,10],"nov_parbx":[5.8,7.9,15.7,20.7,20,15,19.4,36.2,30.5,39.9],"dec_rank":[1,2,3,4,5,7,6,8,10,9],"dec_parbx":[6.8,8.1,10.7,13.9,14.8,21.2,18.8,35.2,43.4,43.3]},"columns":[{"id":"payer","name":"Payer","type":"character","align":"right","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"sortable":false,"footer":"PARBx Averages"},{"id":"rank_change","name":"Change","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"show":true,"format":{"cell":{"digits":0},"aggregated":{"digits":0}},"cell":["0","0","+1","+3","+1","-4","-1","+1","-2","+1"],"width":100,"style":[{"fontWeight":600,"color":null},{"fontWeight":600,"color":null},{"fontWeight":600,"color":"black"},{"fontWeight":600,"color":"black"},{"fontWeight":600,"color":"black"},{"fontWeight":600,"color":"#ef4035"},{"fontWeight":600,"color":"#ef4035"},{"fontWeight":600,"color":"black"},{"fontWeight":600,"color":"#ef4035"},{"fontWeight":600,"color":"black"}]},{"id":"nov_rank","name":"Rank","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"width":90},{"id":"nov_parbx","name":"PARBx","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"21.11","width":90,"style":[{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#31738AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#9CBCC7FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#E1EAEEFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#D7E4E8FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#93B5C1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#CFDEE4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FBA437FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCCB8CFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"dec_rank","name":"Rank","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"width":90},{"id":"dec_parbx","name":"PARBx","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"21.62","width":90,"style":[{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#256B83FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#468196FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#6F9DADFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#7BA5B4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#CDDDE2FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#AEC8D1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCBF72FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C01FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]}],"columnGroups":[{"name":"December","columns":["dec_rank","dec_parbx"]},{"name":"November","columns":["nov_rank","nov_parbx"]}],"defaultSorted":[{"id":"dec_rank","desc":false}],"pagination":false,"outlined":true,"showSortable":true,"className":"rcm-tbl","dataKey":"266b6b0366dd36da534f980f12568357"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bpi_mon_long</span> <span class="op">&lt;-</span> <span class="va">bpi_mon</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">payer</span>, <span class="va">nov_parbx</span>, <span class="va">dec_parbx</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rename</span><span class="op">(</span>November <span class="op">=</span> <span class="va">nov_parbx</span>, December <span class="op">=</span> <span class="va">dec_parbx</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1535,7 +2248,7 @@ to that payer.</p>
 a set of x numbers, the sum of which will be equal to one. I’ll put
 these into a new data frame, merge the two data frames, then create a
 new “Weighted PARBx” column:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">props</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span></span>
 <span>  payer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"Medicare Illinois"</span>,</span>
@@ -1691,9 +2404,9 @@ new “Weighted PARBx” column:</p>
 <h2 style="color:black;background:#FFFFFF;text-align:left;font-size:24px;font-style:normal;font-weight:bold;text-decoration:;letter-spacing:px;word-spacing:px;text-transform:;text-shadow:;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px">Weighted Billing Performance Index: November to December 2021</h2>
 <h3 style="color:black;background:#FFFFFF;text-align:left;font-size:14px;font-style:normal;font-weight:normal;text-decoration:;letter-spacing:px;word-spacing:px;text-transform:;text-shadow:;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px">Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days, Weighted by Proportion of Total Client AR Beyond 120 Days</h3>
 <div class="reactable html-widget html-fill-item" id="htmlwidget-36aa3d2a04d42bbc2145" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"payer":["Aetna","BCBS Georgia","BCBS Illinois","BCBS Pennsylvania","Cigna","GEICO","Horizon BCBS NJ","Medicare Illinois","Medicare NJ","UnitedHealthcare"],"nov_parbx":[20,39.9,7.9,30.5,15.7,36.2,20.7,5.8,19.4,15],"nov_pct":[13.08,7.47,1.31,8.74,0.37,14.94,18.28,23.4,9.61,2.8],"nov_parbx_wt":[2.62,2.98,0.1,2.67,0.06,5.41,3.78,1.36,1.86,0.42],"dec_parbx":[14.8,43.3,8.1,43.4,10.7,35.2,13.9,6.8,18.8,21.2],"dec_pct":[1.7,16.58,2.38,10.09,1.34,27.42,15.45,7.69,13.16,4.19],"dec_parbx_wt":[0.25,7.18,0.19,4.38,0.14,9.65,2.15,0.52,2.47,0.89]},"columns":[{"id":"payer","name":"Payer","type":"character","align":"right","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"footer":"Averages","width":200},{"id":"nov_parbx","name":"PARBx","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"21.11","style":[{"background":"#D7E4E8FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#31738AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCCB8CFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#9CBCC7FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FBA437FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#E1EAEEFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#CFDEE4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#93B5C1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"nov_pct","name":"Weight","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"show":true,"format":{"cell":{"digits":2},"aggregated":{"digits":2}},"footer":"10.00"},{"id":"nov_parbx_wt","name":"PARBx (wt)","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"2.13","style":[{"background":"#F4F8F9FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FEF4E7FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#18627BFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#F9FBFBFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FDD29BFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#86ADBAFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#B2CAD3FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#34758BFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"dec_parbx","name":"PARBx","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"21.62","style":[{"background":"#7BA5B4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C01FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#256B83FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#468196FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCBF72FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#6F9DADFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#AEC8D1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#CDDDE2FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"dec_pct","name":"Weight","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"show":true,"format":{"cell":{"digits":2},"aggregated":{"digits":2}},"footer":"10.00"},{"id":"dec_parbx_wt","name":"PARBx (wt)","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"2.78","style":[{"background":"#1A637DFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCC784FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#17617BFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#E5EDF0FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#77A3B2FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#276C84FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#87ADBBFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#39798EFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]}],"columnGroups":[{"name":"December","columns":["dec_parbx","dec_pct","dec_parbx_wt"]},{"name":"November","columns":["nov_parbx","nov_pct","nov_parbx_wt"]}],"defaultSorted":[{"id":"dec_parbx_wt","desc":true}],"pagination":false,"outlined":true,"showSortable":true,"className":"rcm-tbl","dataKey":"37ca28802a34bebc06cb41e511189c52"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"payer":["Aetna","BCBS Georgia","BCBS Illinois","BCBS Pennsylvania","Cigna","GEICO","Horizon BCBS NJ","Medicare Illinois","Medicare NJ","UnitedHealthcare"],"nov_parbx":[20,39.9,7.9,30.5,15.7,36.2,20.7,5.8,19.4,15],"nov_pct":[8.18,6.74,20.39,14.29,9.18,3.41,0.54,17.19,10.5,9.58],"nov_parbx_wt":[1.64,2.69,1.61,4.36,1.44,1.24,0.11,1,2.04,1.44],"dec_parbx":[14.8,43.3,8.1,43.4,10.7,35.2,13.9,6.8,18.8,21.2],"dec_pct":[19.47,0.83,8.23,4.59,23.05,4.39,11.77,21.55,3.09,3.03],"dec_parbx_wt":[2.88,0.36,0.67,1.99,2.47,1.54,1.64,1.47,0.58,0.64]},"columns":[{"id":"payer","name":"Payer","type":"character","align":"right","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"footer":"Averages","width":200},{"id":"nov_parbx","name":"PARBx","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"21.11","style":[{"background":"#D7E4E8FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#31738AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCCB8CFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#9CBCC7FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FBA437FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#E1EAEEFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#CFDEE4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#93B5C1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"nov_pct","name":"Weight","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"show":true,"format":{"cell":{"digits":2},"aggregated":{"digits":2}},"footer":"10.00"},{"id":"nov_parbx_wt","name":"PARBx (wt)","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"1.76","style":[{"background":"#BDD2D9FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FDE6C8FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#BAD0D7FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#A7C3CDFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#91B4C0FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#77A2B1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#E9F0F2FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#A7C3CDFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"dec_parbx","name":"PARBx","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"21.62","style":[{"background":"#7BA5B4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C01FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#256B83FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#468196FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FCBF72FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#6F9DADFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#AEC8D1FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#CDDDE2FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]},{"id":"dec_pct","name":"Weight","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"show":true,"format":{"cell":{"digits":2},"aggregated":{"digits":2}},"footer":"10.00"},{"id":"dec_parbx_wt","name":"PARBx (wt)","type":"numeric","align":"center","headerClassName":"col-header","footerClassName":"col-footer","footerStyle":{"fontWeight":"bold"},"defaultSortDesc":true,"format":{"cell":{"digits":1},"aggregated":{"digits":1}},"footer":"1.42","style":[{"background":"#FA8C00FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#15607AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#4E879AFF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FDDDB4FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FBB152FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#F0F4F6FF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#FEFDFAFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#E3ECEFFF","color":"black","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#3D7B91FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"},{"background":"#498397FF","color":"white","fontSize":null,"fontWeight":"normal","transition":"background 1s ease"}]}],"columnGroups":[{"name":"December","columns":["dec_parbx","dec_pct","dec_parbx_wt"]},{"name":"November","columns":["nov_parbx","nov_pct","nov_parbx_wt"]}],"defaultSorted":[{"id":"dec_parbx_wt","desc":true}],"pagination":false,"outlined":true,"showSortable":true,"className":"rcm-tbl","dataKey":"226c9803d51b677e7237fc587dff4ea8"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bpi_mon_long_wt</span> <span class="op">&lt;-</span> <span class="va">bpi_mon_wt</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">payer</span>, <span class="va">nov_parbx_wt</span>, <span class="va">dec_parbx_wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">rename</span><span class="op">(</span>November <span class="op">=</span> <span class="va">nov_parbx_wt</span>, December <span class="op">=</span> <span class="va">dec_parbx_wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1769,7 +2482,7 @@ new “Weighted PARBx” column:</p>
 <span></span>
 <span><span class="va">parbx_hc2</span></span></code></pre></div>
 <div id="htmlwidget-febe03efa1a2d8d52a86" style="width:800px;height:800px;" class="highchart html-widget"></div>
-<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"hc_opts":{"chart":{"reflow":true,"width":800,"height":800,"style":{"fontFamily":"Karla"},"zoomType":"xy"},"title":{"text":"Weighted PARBx: November to December 2021","align":"left","style":{"fontSize":"18","color":"#000000","fontWeight":"bold"}},"yAxis":{"title":{"text":" ","align":"high","margin":10},"type":"linear","gridLineWidth":0,"labels":{"format":"{value}"}},"credits":{"enabled":false},"exporting":{"enabled":true,"filename":"chart"},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}},"line":{"marker":{"symbol":"circle","lineWidth":2,"radius":5}}},"series":[{"name":"Aetna","data":[{"payer":"Aetna","month":"November","parbx_wt":2.62,"y":2.62,"name":"November"},{"payer":"Aetna","month":"December","parbx_wt":0.25,"y":0.25,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"BCBS Georgia","data":[{"payer":"BCBS Georgia","month":"November","parbx_wt":2.98,"y":2.98,"name":"November"},{"payer":"BCBS Georgia","month":"December","parbx_wt":7.18,"y":7.18,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"BCBS Illinois","data":[{"payer":"BCBS Illinois","month":"November","parbx_wt":0.1,"y":0.1,"name":"November"},{"payer":"BCBS Illinois","month":"December","parbx_wt":0.19,"y":0.19,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"BCBS Pennsylvania","data":[{"payer":"BCBS Pennsylvania","month":"November","parbx_wt":2.67,"y":2.67,"name":"November"},{"payer":"BCBS Pennsylvania","month":"December","parbx_wt":4.38,"y":4.38,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Cigna","data":[{"payer":"Cigna","month":"November","parbx_wt":0.06,"y":0.06,"name":"November"},{"payer":"Cigna","month":"December","parbx_wt":0.14,"y":0.14,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"GEICO","data":[{"payer":"GEICO","month":"November","parbx_wt":5.41,"y":5.41,"name":"November"},{"payer":"GEICO","month":"December","parbx_wt":9.65,"y":9.65,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Horizon BCBS NJ","data":[{"payer":"Horizon BCBS NJ","month":"November","parbx_wt":3.78,"y":3.78,"name":"November"},{"payer":"Horizon BCBS NJ","month":"December","parbx_wt":2.15,"y":2.15,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Medicare Illinois","data":[{"payer":"Medicare Illinois","month":"November","parbx_wt":1.36,"y":1.36,"name":"November"},{"payer":"Medicare Illinois","month":"December","parbx_wt":0.52,"y":0.52,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Medicare NJ","data":[{"payer":"Medicare NJ","month":"November","parbx_wt":1.86,"y":1.86,"name":"November"},{"payer":"Medicare NJ","month":"December","parbx_wt":2.47,"y":2.47,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"UnitedHealthcare","data":[{"payer":"UnitedHealthcare","month":"November","parbx_wt":0.42,"y":0.42,"name":"November"},{"payer":"UnitedHealthcare","month":"December","parbx_wt":0.89,"y":0.89,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}}],"xAxis":{"type":"category","title":{},"opposite":true,"labels":{"format":"{value}"},"crosshair":{"snap":true,"width":2,"zIndex":0}},"subtitle":{"text":"Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days","align":"left","style":{"fontSize":"14","color":"#000000","fontWeight":"normal"}},"tooltip":{"shared":true,"formatter":"function(tooltip){\n          function isArray(obj) {\n          return Object.prototype.toString.call(obj) === '[object Array]';\n          }\n\n          function splat(obj) {\n          return isArray(obj) ? obj : [obj];\n          }\n\n          var items = this.points || splat(this), series = items[0].series, s;\n\n          // sort the values\n          items.sort(function(a, b){\n          return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));\n          });\n          items.reverse();\n\n          return tooltip.defaultFormatter.call(this, tooltip);\n        }","useHTML":true,"crosshairs":true,"backgroundColor":"#F0F0F0","borderWidth":1},"legend":{"enabled":false}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":"Karla","debug":false},"evals":["hc_opts.series.0.dataLabels.formatter","hc_opts.series.1.dataLabels.formatter","hc_opts.series.2.dataLabels.formatter","hc_opts.series.3.dataLabels.formatter","hc_opts.series.4.dataLabels.formatter","hc_opts.series.5.dataLabels.formatter","hc_opts.series.6.dataLabels.formatter","hc_opts.series.7.dataLabels.formatter","hc_opts.series.8.dataLabels.formatter","hc_opts.series.9.dataLabels.formatter","hc_opts.tooltip.formatter"],"jsHooks":[]}</script><p>Annual BPI Summary The final destination for all of this data is the
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"hc_opts":{"chart":{"reflow":true,"width":800,"height":800,"style":{"fontFamily":"Karla"},"zoomType":"xy"},"title":{"text":"Weighted PARBx: November to December 2021","align":"left","style":{"fontSize":"18","color":"#000000","fontWeight":"bold"}},"yAxis":{"title":{"text":" ","align":"high","margin":10},"type":"linear","gridLineWidth":0,"labels":{"format":"{value}"}},"credits":{"enabled":false},"exporting":{"enabled":true,"filename":"chart"},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}},"line":{"marker":{"symbol":"circle","lineWidth":2,"radius":5}}},"series":[{"name":"Aetna","data":[{"payer":"Aetna","month":"November","parbx_wt":1.64,"y":1.64,"name":"November"},{"payer":"Aetna","month":"December","parbx_wt":2.88,"y":2.88,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"BCBS Georgia","data":[{"payer":"BCBS Georgia","month":"November","parbx_wt":2.69,"y":2.69,"name":"November"},{"payer":"BCBS Georgia","month":"December","parbx_wt":0.36,"y":0.36,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"BCBS Illinois","data":[{"payer":"BCBS Illinois","month":"November","parbx_wt":1.61,"y":1.61,"name":"November"},{"payer":"BCBS Illinois","month":"December","parbx_wt":0.67,"y":0.67,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"BCBS Pennsylvania","data":[{"payer":"BCBS Pennsylvania","month":"November","parbx_wt":4.36,"y":4.36,"name":"November"},{"payer":"BCBS Pennsylvania","month":"December","parbx_wt":1.99,"y":1.99,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Cigna","data":[{"payer":"Cigna","month":"November","parbx_wt":1.44,"y":1.44,"name":"November"},{"payer":"Cigna","month":"December","parbx_wt":2.47,"y":2.47,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"GEICO","data":[{"payer":"GEICO","month":"November","parbx_wt":1.24,"y":1.24,"name":"November"},{"payer":"GEICO","month":"December","parbx_wt":1.54,"y":1.54,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Horizon BCBS NJ","data":[{"payer":"Horizon BCBS NJ","month":"November","parbx_wt":0.11,"y":0.11,"name":"November"},{"payer":"Horizon BCBS NJ","month":"December","parbx_wt":1.64,"y":1.64,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Medicare Illinois","data":[{"payer":"Medicare Illinois","month":"November","parbx_wt":1,"y":1,"name":"November"},{"payer":"Medicare Illinois","month":"December","parbx_wt":1.47,"y":1.47,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"Medicare NJ","data":[{"payer":"Medicare NJ","month":"November","parbx_wt":2.04,"y":2.04,"name":"November"},{"payer":"Medicare NJ","month":"December","parbx_wt":0.58,"y":0.58,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}},{"name":"UnitedHealthcare","data":[{"payer":"UnitedHealthcare","month":"November","parbx_wt":1.44,"y":1.44,"name":"November"},{"payer":"UnitedHealthcare","month":"December","parbx_wt":0.64,"y":0.64,"name":"December"}],"type":"line","dataLabels":{"enabled":true,"formatter":"\n        function(){return(this.point.payer + ' ' + this.y)}\n        "}}],"xAxis":{"type":"category","title":{},"opposite":true,"labels":{"format":"{value}"},"crosshair":{"snap":true,"width":2,"zIndex":0}},"subtitle":{"text":"Top 10 Payers with the Lowest Percentage of AR Beyond 120 Days","align":"left","style":{"fontSize":"14","color":"#000000","fontWeight":"normal"}},"tooltip":{"shared":true,"formatter":"function(tooltip){\n          function isArray(obj) {\n          return Object.prototype.toString.call(obj) === '[object Array]';\n          }\n\n          function splat(obj) {\n          return isArray(obj) ? obj : [obj];\n          }\n\n          var items = this.points || splat(this), series = items[0].series, s;\n\n          // sort the values\n          items.sort(function(a, b){\n          return ((a.y < b.y) ? -1 : ((a.y > b.y) ? 1 : 0));\n          });\n          items.reverse();\n\n          return tooltip.defaultFormatter.call(this, tooltip);\n        }","useHTML":true,"crosshairs":true,"backgroundColor":"#F0F0F0","borderWidth":1},"legend":{"enabled":false}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":"Karla","debug":false},"evals":["hc_opts.series.0.dataLabels.formatter","hc_opts.series.1.dataLabels.formatter","hc_opts.series.2.dataLabels.formatter","hc_opts.series.3.dataLabels.formatter","hc_opts.series.4.dataLabels.formatter","hc_opts.series.5.dataLabels.formatter","hc_opts.series.6.dataLabels.formatter","hc_opts.series.7.dataLabels.formatter","hc_opts.series.8.dataLabels.formatter","hc_opts.series.9.dataLabels.formatter","hc_opts.tooltip.formatter"],"jsHooks":[]}</script><p>Annual BPI Summary The final destination for all of this data is the
 annual summary of the monthly Billing Performance Index. The Annual BPI
 is simply a list of the payers who participated in the Monthly BPI,
 ranked by the number of times that they made the top 10 that year. Also
@@ -1785,7 +2498,7 @@ for the year. Lirov (2009)</p>
 <p>Note: In the following example, I’ve broken any ties in ranking
 between payers by giving the payer with the lower average BPI the higher
 rank.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bpi_ann</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  rank <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">15</span>,</span>
 <span>  mon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
