@@ -175,6 +175,93 @@ claim payment sides. To identify patterns of problem CPT codes or
 payers, the FPP/denial metric needs to be computed and compared across
 all payer-CPT code pairs, which is a standard feature for modern billing
 technologies.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">parbx_ex</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>aging_prop <span class="op">=</span> <span class="fu">fuimus</span><span class="fu">::</span><span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="va">aging_prop</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"aging_bin"</span>, </span>
+<span>              values_from <span class="op">=</span> <span class="st">"aging_prop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">month</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">date</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"payer"</span>, </span>
+<span>     groupname_col <span class="op">=</span> <span class="st">"month"</span>, </span>
+<span>     row_group_as_column <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_number</span><span class="op">(</span>decimals <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Fira Code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_options</span><span class="op">(</span></span>
+<span>    column_labels.font.weight <span class="op">=</span> <span class="st">"bold"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error in parbx_ex(): could not find function "parbx_ex"</span></span></code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex_prop</span> <span class="op">&lt;-</span> <span class="fu">parbx_ex</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"aging_bin"</span>, </span>
+<span>              values_from <span class="op">=</span> <span class="st">"aging_prop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">month</span>, <span class="va">payer</span>, <span class="va">`121+`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">month</span>, values_from <span class="op">=</span> <span class="va">`121+`</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error in parbx_ex(): could not find function "parbx_ex"</span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex_prop_payer</span> <span class="op">&lt;-</span> <span class="fu">parbx_ex</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"aging_bin"</span>, </span>
+<span>              values_from <span class="op">=</span> <span class="st">"aging_prop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">month</span>, <span class="va">payer</span>, <span class="va">`121+`</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">payer</span>, values_from <span class="op">=</span> <span class="va">`121+`</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error in parbx_ex(): could not find function "parbx_ex"</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex_prop_payer</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">fmt_percent</span><span class="op">(</span>decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cols_align</span><span class="op">(</span>align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">data_color</span><span class="op">(</span></span>
+<span>    columns <span class="op">=</span> <span class="op">!</span><span class="va">month</span>,</span>
+<span>    direction <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"ggsci::red_material"</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">cols_width</span><span class="op">(</span></span>
+<span>    <span class="va">Cigna</span> <span class="op">~</span>  <span class="fu">px</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    <span class="va">Humana</span> <span class="op">~</span> <span class="fu">px</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    <span class="va">UHC</span> <span class="op">~</span>    <span class="fu">px</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    <span class="va">Anthem</span> <span class="op">~</span> <span class="fu">px</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    <span class="va">BCBS</span> <span class="op">~</span>   <span class="fu">px</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Fira Code"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">tab_options</span><span class="op">(</span></span>
+<span>    quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    table.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">18</span><span class="op">)</span>,</span>
+<span>    table.width <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/pct.html" class="external-link">pct</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>    heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>    heading.title.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">24</span><span class="op">)</span>,</span>
+<span>    heading.subtitle.font.size <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/px.html" class="external-link">px</a></span><span class="op">(</span><span class="fl">21</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ex_prop_payer' not found</span></span></code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ex_prop</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">reframe</span><span class="op">(</span></span>
+<span>    <span class="va">payer</span>,</span>
+<span>    January <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">January</span><span class="op">)</span>,</span>
+<span>    February <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">February</span><span class="op">)</span>,</span>
+<span>    ch_JF <span class="op">=</span> <span class="va">January</span> <span class="op">-</span> <span class="va">February</span>,</span>
+<span>    March <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">March</span><span class="op">)</span>,</span>
+<span>    ch_FM <span class="op">=</span> <span class="va">February</span> <span class="op">-</span> <span class="va">March</span>,</span>
+<span>    April <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">April</span><span class="op">)</span>,</span>
+<span>    ch_MA <span class="op">=</span> <span class="va">March</span> <span class="op">-</span> <span class="va">April</span>,</span>
+<span>    May <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">May</span><span class="op">)</span>,</span>
+<span>    ch_AM <span class="op">=</span> <span class="va">April</span> <span class="op">-</span> <span class="va">May</span>,</span>
+<span>    June <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">June</span><span class="op">)</span>,</span>
+<span>    ch_MJ <span class="op">=</span> <span class="va">May</span> <span class="op">-</span> <span class="va">June</span>,</span>
+<span>    July <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">July</span><span class="op">)</span>,</span>
+<span>    ch_JJ <span class="op">=</span> <span class="va">June</span> <span class="op">-</span> <span class="va">July</span>,</span>
+<span>    August <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">August</span><span class="op">)</span>,</span>
+<span>    ch_JA <span class="op">=</span> <span class="va">July</span> <span class="op">-</span> <span class="va">August</span>,</span>
+<span>    September <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">September</span><span class="op">)</span>,</span>
+<span>    ch_AS <span class="op">=</span> <span class="va">August</span> <span class="op">-</span> <span class="va">September</span>,</span>
+<span>    October <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">October</span><span class="op">)</span>,</span>
+<span>    ch_SO <span class="op">=</span> <span class="va">September</span> <span class="op">-</span> <span class="va">October</span>,</span>
+<span>    November <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">November</span><span class="op">)</span>,</span>
+<span>    ch_ON <span class="op">=</span> <span class="va">October</span> <span class="op">-</span> <span class="va">November</span>,</span>
+<span>    December <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">min_rank</a></span><span class="op">(</span><span class="va">December</span><span class="op">)</span>,</span>
+<span>    ch_ND <span class="op">=</span> <span class="va">November</span> <span class="op">-</span> <span class="va">December</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"payer"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">opt_table_font</span><span class="op">(</span>font <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/google_font.html" class="external-link">google_font</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Fira Code"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error in eval(expr, envir, enclos): object 'ex_prop' not found</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
