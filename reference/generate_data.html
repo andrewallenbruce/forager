@@ -84,7 +84,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_data</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">100</span>, add_day_counts <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_data</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">100</span>, count_days <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -93,8 +93,8 @@
 <dd><p><code>[integerish]</code> rows number of rows to generate; default is <code>100</code></p></dd>
 
 
-<dt>add_day_counts</dt>
-<dd><p><code>[logical]</code> add_day_counts add columns for days between events; default is <code>TRUE</code></p></dd>
+<dt>count_days</dt>
+<dd><p><code>[logical]</code> add columns for days between events; default is <code>FALSE</code></p></dd>
 
 
 <dt>...</dt>
@@ -113,17 +113,16 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">generate_data</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   clm_id payer    charges balance date_srvc  date_rlse  date_submit date_accept</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 5      BCBS       134.     134. 2023-04-27 2023-05-04 2023-05-06  2023-05-20 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 2      Cigna       78.2      0  2023-02-27 2023-02-28 2023-03-04  2023-03-09 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 3      Medicare   141.       0  2022-12-27 2022-12-31 2022-12-31  2023-01-03 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 1      Medicare   110.       0  2022-07-27 2022-07-30 2022-07-31  2022-08-06 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 4      Centene     42.4      0  2022-06-27 2022-07-03 2022-07-05  2022-07-10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: date_adjud &lt;date&gt;, date_recon &lt;date&gt;, days_rlse &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   days_submit &lt;int&gt;, days_accept &lt;int&gt;, days_adjud &lt;int&gt;, days_recon &lt;int&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   days_in_ar &lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="font-weight: bold;">claimid</span> <span style="font-weight: bold;">payer</span>    <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">balance</span> <span style="font-weight: bold;">date_service</span> <span style="font-weight: bold;">date_release</span> <span style="font-weight: bold;">date_submission</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 1       Medicare   110.      <span style="color: #949494;">0</span>   2024-04-01   2024-04-03   2024-04-03     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 4       Centene     42.4    42.4 2024-03-17   2024-03-24   2024-03-27     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 2       Cigna       78.2    78.2 2024-03-15   2024-03-18   2024-03-18     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 3       Medicare   141.    141.  2024-03-12   2024-03-15   2024-03-19     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 5       BCBS       134.      <span style="color: #949494;">0</span>   2024-03-12   2024-03-13   2024-03-15     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: </span><span style="color: #949494; font-weight: bold;">date_acceptance</span><span style="color: #949494;"> &lt;date&gt;, </span><span style="color: #949494; font-weight: bold;">date_adjudication</span><span style="color: #949494;"> &lt;date&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">date_reconciliation</span><span style="color: #949494;"> &lt;date&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
