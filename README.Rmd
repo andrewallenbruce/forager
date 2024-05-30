@@ -64,62 +64,44 @@ library(forager)
 library(fuimus)
 ```
 
-## Foundation: Time Measurement
+## The Lifecycle of a Claim 
 
-Everything in a Healthcare RCM workflow is built upon the bedrock of time measurement. 
+    * <b>Provider Lag</b>:    Date of Service - Date of Release
+    * <b>Billing Lag</b>:     Date of Release - Date of Submission
+    * <b>Acceptance Lag</b>:  Date of Submission - Date of Acceptance
+    * <b>Payment Lag</b>:     Date of Acceptance - Date of Adjudication
+    * <b>Days in AR</b>:      Date of Release - Date of Adjudication*
 
-   *  Task $a$ is created at time $t$.
-   *  Subtask $a_1$ is assigned at time $t_1$ to responsible party $x_1$.
-   *  Subtask $a_2$ is assigned at time $t_2$ to responsible party $x_2$.
-   *  So on, and so forth until...
-   *  Task $a_i$ is completed at time $t_i$.
-   
-Measuring the amount of time between each step becomes crucial in identifying workflow issues.
-
-### Example: The Lifecycle of a Claim 
-
-   * **Provider Lag**: Days between *Date of Service* and *Date of Release*
-   * **Billing Lag**:  Days between *Date of Release* and *Date of Submission*
-   * **Acceptance Lag**:  Days between *Date of Submission* and *Date of Acceptance*
-   * **Payment Lag**: Days between *Date of Acceptance* and *Date of Adjudication*
-   * **Days in AR**: Days between *Date of Release* and *Date of Adjudication*
 
 <br>
 
 ```{r, echo=TRUE, warning=FALSE}
 x <- forager::generate_data(1500)
-
-mean(x$days_in_ar, na.rm = TRUE)
+x
 ```
 <br>
 
 ```{r echo=TRUE}
 x_pvt <- x |> 
-  select(clm_id:date_recon) |> 
+  select(claimid:date_reconciliation) |> 
   pivot_longer(
     cols      = starts_with("date"), 
     names_to  = "date_type", 
     values_to = "date") |> 
-  mutate(date_lag = lead(date) - date,
-         date_lag = lag(date_lag, order_by = date),
-         date_type = str_remove_all(date_type, "date_"),
-         date_type = case_match(
-           date_type,
-           "srvc" ~ "Service",
-           "rlse" ~ "Release",
-           "submit" ~ "Submission",
-           "accept" ~ "Acceptance",
-           "adjud" ~ "Adjudication",
-           "recon" ~ "Reconciliation"),
-         date_type = fct_relevel(
-           date_type, 
-           "Service", 
-           "Release", 
-           "Submission", 
-           "Acceptance", 
-           "Adjudication", 
-           "Reconciliation"), 
-         .by = clm_id)
+  mutate(
+    date_lag = lead(date) - date,
+    date_lag = lag(date_lag, order_by = date),
+    date_type = stringr::str_to_sentence(
+      str_remove_all(date_type, "date_")),
+    date_type = fct_relevel(
+      date_type, 
+      "Service", 
+      "Release",
+      "Submission", 
+      "Acceptance", 
+      "Adjudication", 
+      "Reconciliation"), 
+    .by = claimid)
 
 x_pvt
 ```
@@ -129,17 +111,17 @@ x_pvt
 ```{r echo=TRUE}
 x |> 
   group_by(
-    year  = get_year(date_srvc),
-    month = date_month_factor(date_srvc)) |> 
+    year = get_year(date_service),
+    month = date_month_factor(date_service)) |> 
   summarise(
-    n_claims    = n(), 
-    balance     = sum(balance, na.rm = TRUE),
-    days_rlse   = mean(days_rlse, na.rm = TRUE), 
-    days_submit = mean(days_submit, na.rm = TRUE),
-    days_accept = mean(days_accept, na.rm = TRUE),
-    days_adjud  = mean(days_adjud, na.rm = TRUE),
-    days_recon  = mean(days_recon, na.rm = TRUE),
-    days_in_ar  = mean(days_in_ar, na.rm = TRUE), 
+    Claims = n(), 
+    Balance = sum(balance, na.rm = TRUE),
+    Release = as.numeric(mean((date_release - date_service), na.rm = TRUE)), 
+    Submission = as.numeric(mean((date_submission - date_release), na.rm = TRUE)),
+    Acceptance = as.numeric(mean((date_acceptance - date_submission), na.rm = TRUE)),
+    Adjudication  = as.numeric(mean((date_adjudication - date_acceptance), na.rm = TRUE)),
+    Reconciliation = as.numeric(mean((date_reconciliation - date_adjudication), na.rm = TRUE)),
+    Average_DAR = as.numeric(mean((date_reconciliation - date_service), na.rm = TRUE)), 
     .groups = "drop")
 ```
 
@@ -148,17 +130,17 @@ x |>
 ```{r echo=TRUE}
 x |> 
   group_by(
-    year  = get_year(date_srvc),
-    nqtr = quarter(date_srvc)) |> 
+    year  = get_year(date_service),
+    nqtr = quarter(date_service)) |> 
   summarise(
-    n_claims    = n(), 
-    balance     = sum(balance, na.rm = TRUE),
-    days_rlse   = mean(days_rlse, na.rm = TRUE), 
-    days_submit = mean(days_submit, na.rm = TRUE),
-    days_accept = mean(days_accept, na.rm = TRUE),
-    days_adjud  = mean(days_adjud, na.rm = TRUE),
-    days_recon  = mean(days_recon, na.rm = TRUE),
-    days_in_ar  = mean(days_in_ar, na.rm = TRUE), 
+    Claims = n(), 
+    Balance = sum(balance, na.rm = TRUE),
+    Release = as.numeric(mean((date_release - date_service), na.rm = TRUE)), 
+    Submission = as.numeric(mean((date_submission - date_release), na.rm = TRUE)),
+    Acceptance = as.numeric(mean((date_acceptance - date_submission), na.rm = TRUE)),
+    Adjudication  = as.numeric(mean((date_adjudication - date_acceptance), na.rm = TRUE)),
+    Reconciliation = as.numeric(mean((date_reconciliation - date_adjudication), na.rm = TRUE)),
+    Average_DAR = as.numeric(mean((date_reconciliation - date_service), na.rm = TRUE)), 
     .groups = "drop")
 ```
 
@@ -167,6 +149,7 @@ x |>
 
 ```{r echo=TRUE}
 x |> 
+  mutate(days_in_ar = as.numeric((date_reconciliation - date_service))) |> 
   bin_aging(days_in_ar, bin_type = "chop") |> 
   group_by(aging_bin) |> 
   summarise(
@@ -175,6 +158,7 @@ x |>
     .groups = "drop")
 
 x |> 
+  mutate(days_in_ar = as.numeric((date_reconciliation - date_service))) |> 
   bin_aging(days_in_ar, bin_type = "case") |> 
   group_by(aging_bin) |> 
   summarise(

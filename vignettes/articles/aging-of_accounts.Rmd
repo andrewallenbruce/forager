@@ -128,7 +128,7 @@ ex_prop |>
   tab_options(
     column_labels.font.weight = "bold",
     quarto.disable_processing = TRUE,
-    table.background.color = "grey50",
+    # table.background.color = "grey50",
     table.font.size = gt::px(18),
     table.width = gt::pct(100),
     heading.align = "left",

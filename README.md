@@ -45,85 +45,85 @@ library(forager)
 library(fuimus)
 ```
 
-## Foundation: Time Measurement
+## The Lifecycle of a Claim
 
-Everything in a Healthcare RCM workflow is built upon the bedrock of
-time measurement.
-
-- Task $a$ is created at time $t$.
-- Subtask $a_1$ is assigned at time $t_1$ to responsible party $x_1$.
-- Subtask $a_2$ is assigned at time $t_2$ to responsible party $x_2$.
-- So on, and so forth until…
-- Task $a_i$ is completed at time $t_i$.
-
-Measuring the amount of time between each step becomes crucial in
-identifying workflow issues.
-
-### Example: The Lifecycle of a Claim
-
-- **Provider Lag**: Days between *Date of Service* and *Date of Release*
-- **Billing Lag**: Days between *Date of Release* and *Date of
-  Submission*
-- **Acceptance Lag**: Days between *Date of Submission* and *Date of
-  Acceptance*
-- **Payment Lag**: Days between *Date of Acceptance* and *Date of
-  Adjudication*
-- **Days in AR**: Days between *Date of Release* and *Date of
-  Adjudication*
+    * <b>Provider Lag</b>:    Date of Service - Date of Release
+    * <b>Billing Lag</b>:     Date of Release - Date of Submission
+    * <b>Acceptance Lag</b>:  Date of Submission - Date of Acceptance
+    * <b>Payment Lag</b>:     Date of Acceptance - Date of Adjudication
+    * <b>Days in AR</b>:      Date of Release - Date of Adjudication*
 
 <br>
 
 ``` r
 x <- forager::generate_data(1500)
-
-mean(x$days_in_ar, na.rm = TRUE)
-#> [1] 101.8013
+x
+#> # A tibble: 1,500 × 10
+#>    claimid payer    charges balance date_service date_release date_submission
+#>    <fct>   <fct>      <dbl>   <dbl> <date>       <date>       <date>         
+#>  1 0005    Cigna      265.      0   2024-05-15   2024-05-20   2024-05-22     
+#>  2 0031    UHC         25.8    25.8 2024-05-15   2024-05-15   2024-05-15     
+#>  3 0053    Cigna       85.6    85.6 2024-05-15   2024-05-20   2024-05-24     
+#>  4 0127    Humana      21.5     0   2024-05-15   2024-05-21   2024-05-23     
+#>  5 0366    Cigna       43.1    43.1 2024-05-15   2024-05-24   2024-05-24     
+#>  6 0370    BCBS        80.9    80.9 2024-05-15   2024-05-26   2024-06-01     
+#>  7 0496    Medicare    64.4    64.4 2024-05-15   2024-05-19   2024-05-19     
+#>  8 0564    Anthem      14.2    14.2 2024-05-15   2024-05-20   2024-05-23     
+#>  9 0591    Humana      52.2    52.2 2024-05-15   2024-05-21   2024-05-22     
+#> 10 0733    Centene    121.    121.  2024-05-15   2024-05-31   2024-06-05     
+#> 11 0774    Cigna       74.6    74.6 2024-05-15   2024-05-24   2024-05-28     
+#> 12 0841    BCBS        31.2     0   2024-05-15   2024-05-17   2024-05-18     
+#> 13 0981    Anthem      36.2    36.2 2024-05-15   2024-05-23   2024-05-23     
+#> 14 1039    UHC        345.    345.  2024-05-15   2024-05-22   2024-05-27     
+#> 15 1050    Medicare    92.4    92.4 2024-05-15   2024-05-26   2024-06-05     
+#> 16 1148    Medicaid    53.4     0   2024-05-15   2024-05-25   2024-05-27     
+#> 17 1395    Cigna      458.    458.  2024-05-15   2024-06-05   2024-06-09     
+#> 18 1419    UHC        312.    312.  2024-05-15   2024-05-25   2024-05-28     
+#> 19 1453    Cigna      134.      0   2024-05-15   2024-05-30   2024-06-04     
+#> 20 0068    Humana      59.8    59.8 2024-05-14   2024-05-18   2024-05-22     
+#> # ℹ 1,480 more rows
+#> # ℹ 3 more variables: date_acceptance <date>, date_adjudication <date>,
+#> #   date_reconciliation <date>
 ```
 
 <br>
 
 ``` r
 x_pvt <- x |> 
-  select(clm_id:date_recon) |> 
+  select(claimid:date_reconciliation) |> 
   pivot_longer(
     cols      = starts_with("date"), 
     names_to  = "date_type", 
     values_to = "date") |> 
-  mutate(date_lag = lead(date) - date,
-         date_lag = lag(date_lag, order_by = date),
-         date_type = str_remove_all(date_type, "date_"),
-         date_type = case_match(
-           date_type,
-           "srvc" ~ "Service",
-           "rlse" ~ "Release",
-           "submit" ~ "Submission",
-           "accept" ~ "Acceptance",
-           "adjud" ~ "Adjudication",
-           "recon" ~ "Reconciliation"),
-         date_type = fct_relevel(
-           date_type, 
-           "Service", 
-           "Release", 
-           "Submission", 
-           "Acceptance", 
-           "Adjudication", 
-           "Reconciliation"), 
-         .by = clm_id)
+  mutate(
+    date_lag = lead(date) - date,
+    date_lag = lag(date_lag, order_by = date),
+    date_type = stringr::str_to_sentence(
+      str_remove_all(date_type, "date_")),
+    date_type = fct_relevel(
+      date_type, 
+      "Service", 
+      "Release",
+      "Submission", 
+      "Acceptance", 
+      "Adjudication", 
+      "Reconciliation"), 
+    .by = claimid)
 
 x_pvt
 #> # A tibble: 9,000 × 7
-#>    clm_id payer  charges balance date_type      date       date_lag
-#>    <fct>  <fct>    <dbl>   <dbl> <fct>          <date>     <drtn>  
-#>  1 0030   Cigna     107.    107. Service        2023-05-21 NA days 
-#>  2 0030   Cigna     107.    107. Release        2023-06-06 16 days 
-#>  3 0030   Cigna     107.    107. Submission     2023-06-10  4 days 
-#>  4 0030   Cigna     107.    107. Acceptance     2023-06-22 12 days 
-#>  5 0030   Cigna     107.    107. Adjudication   2023-09-02 72 days 
-#>  6 0030   Cigna     107.    107. Reconciliation NA         NA days 
-#>  7 0046   Anthem    181.    181. Service        2023-05-21 NA days 
-#>  8 0046   Anthem    181.    181. Release        2023-05-24  3 days 
-#>  9 0046   Anthem    181.    181. Submission     2023-05-28  4 days 
-#> 10 0046   Anthem    181.    181. Acceptance     2023-06-15 18 days 
+#>    claimid payer charges balance date_type      date       date_lag
+#>    <fct>   <fct>   <dbl>   <dbl> <fct>          <date>     <drtn>  
+#>  1 0005    Cigna   265.      0   Service        2024-05-15 NA days 
+#>  2 0005    Cigna   265.      0   Release        2024-05-20  5 days 
+#>  3 0005    Cigna   265.      0   Submission     2024-05-22  2 days 
+#>  4 0005    Cigna   265.      0   Acceptance     2024-05-30  8 days 
+#>  5 0005    Cigna   265.      0   Adjudication   2024-07-02 33 days 
+#>  6 0005    Cigna   265.      0   Reconciliation 2024-07-02  0 days 
+#>  7 0031    UHC      25.8    25.8 Service        2024-05-15 NA days 
+#>  8 0031    UHC      25.8    25.8 Release        2024-05-15  0 days 
+#>  9 0031    UHC      25.8    25.8 Submission     2024-05-15  0 days 
+#> 10 0031    UHC      25.8    25.8 Acceptance     2024-05-29 14 days 
 #> # ℹ 8,990 more rows
 ```
 
@@ -132,34 +132,26 @@ x_pvt
 ``` r
 x |> 
   group_by(
-    year  = get_year(date_srvc),
-    month = date_month_factor(date_srvc)) |> 
+    year = get_year(date_service),
+    month = date_month_factor(date_service)) |> 
   summarise(
-    n_claims    = n(), 
-    balance     = sum(balance, na.rm = TRUE),
-    days_rlse   = mean(days_rlse, na.rm = TRUE), 
-    days_submit = mean(days_submit, na.rm = TRUE),
-    days_accept = mean(days_accept, na.rm = TRUE),
-    days_adjud  = mean(days_adjud, na.rm = TRUE),
-    days_recon  = mean(days_recon, na.rm = TRUE),
-    days_in_ar  = mean(days_in_ar, na.rm = TRUE), 
+    Claims = n(), 
+    Balance = sum(balance, na.rm = TRUE),
+    Release = as.numeric(mean((date_release - date_service), na.rm = TRUE)), 
+    Submission = as.numeric(mean((date_submission - date_release), na.rm = TRUE)),
+    Acceptance = as.numeric(mean((date_acceptance - date_submission), na.rm = TRUE)),
+    Adjudication  = as.numeric(mean((date_adjudication - date_acceptance), na.rm = TRUE)),
+    Reconciliation = as.numeric(mean((date_reconciliation - date_adjudication), na.rm = TRUE)),
+    Average_DAR = as.numeric(mean((date_reconciliation - date_service), na.rm = TRUE)), 
     .groups = "drop")
-#> # A tibble: 12 × 10
-#>     year month     n_claims balance days_rlse days_submit days_accept days_adjud
-#>    <int> <ord>        <int>   <dbl>     <dbl>       <dbl>       <dbl>      <dbl>
-#>  1  2022 June           120      0       8.06        3.06        12.8       74.0
-#>  2  2022 July           136      0       8.77        3.12        12.5       73.3
-#>  3  2022 August         127      0       8.08        2.96        13.0       75.2
-#>  4  2022 September      131      0       8.07        3.11        13         73.5
-#>  5  2022 October        124      0       7.60        2.75        12.6       74.5
-#>  6  2022 November       114      0       7.86        3.07        11.9       71.7
-#>  7  2022 December       142      0       7.84        3.04        12.2       77.0
-#>  8  2023 January        124  10815.      7.78        2.63        12.4       73.7
-#>  9  2023 February       122  12522.      7.98        2.99        12.5       77.1
-#> 10  2023 March          139  13533.      7.90        2.78        11.8       74.2
-#> 11  2023 April          123  14256.      7.98        2.98        12.9       76.8
-#> 12  2023 May             98  10116.      8.33        3.03        12.2       72.3
-#> # ℹ 2 more variables: days_recon <dbl>, days_in_ar <dbl>
+#> # A tibble: 4 × 10
+#>    year month    Claims Balance Release Submission Acceptance Adjudication
+#>   <int> <ord>     <int>   <dbl>   <dbl>      <dbl>      <dbl>        <dbl>
+#> 1  2024 February    195  17437.    8.01       3.16       13.0         75.1
+#> 2  2024 March       518  49572.    8.12       3.16       12.5         73.4
+#> 3  2024 April       530  49209.    7.95       3.02       12.6         75.4
+#> 4  2024 May         257  23824.    7.93       3.16       12.4         74.5
+#> # ℹ 2 more variables: Reconciliation <dbl>, Average_DAR <dbl>
 ```
 
 <br>
@@ -167,65 +159,67 @@ x |>
 ``` r
 x |> 
   group_by(
-    year  = get_year(date_srvc),
-    nqtr = quarter(date_srvc)) |> 
+    year  = get_year(date_service),
+    nqtr = quarter(date_service)) |> 
   summarise(
-    n_claims    = n(), 
-    balance     = sum(balance, na.rm = TRUE),
-    days_rlse   = mean(days_rlse, na.rm = TRUE), 
-    days_submit = mean(days_submit, na.rm = TRUE),
-    days_accept = mean(days_accept, na.rm = TRUE),
-    days_adjud  = mean(days_adjud, na.rm = TRUE),
-    days_recon  = mean(days_recon, na.rm = TRUE),
-    days_in_ar  = mean(days_in_ar, na.rm = TRUE), 
+    Claims = n(), 
+    Balance = sum(balance, na.rm = TRUE),
+    Release = as.numeric(mean((date_release - date_service), na.rm = TRUE)), 
+    Submission = as.numeric(mean((date_submission - date_release), na.rm = TRUE)),
+    Acceptance = as.numeric(mean((date_acceptance - date_submission), na.rm = TRUE)),
+    Adjudication  = as.numeric(mean((date_adjudication - date_acceptance), na.rm = TRUE)),
+    Reconciliation = as.numeric(mean((date_reconciliation - date_adjudication), na.rm = TRUE)),
+    Average_DAR = as.numeric(mean((date_reconciliation - date_service), na.rm = TRUE)), 
     .groups = "drop")
-#> # A tibble: 5 × 10
-#>    year  nqtr n_claims balance days_rlse days_submit days_accept days_adjud
-#>   <int> <int>    <int>   <dbl>     <dbl>       <dbl>       <dbl>      <dbl>
-#> 1  2022     2      120      0       8.06        3.06        12.8       74.0
-#> 2  2022     3      394      0       8.31        3.07        12.8       74.0
-#> 3  2022     4      380      0       7.77        2.96        12.2       74.6
-#> 4  2023     1      385  36869.      7.89        2.80        12.2       74.9
-#> 5  2023     2      221  24373.      8.13        3.00        12.6       74.8
-#> # ℹ 2 more variables: days_recon <dbl>, days_in_ar <dbl>
+#> # A tibble: 2 × 10
+#>    year  nqtr Claims Balance Release Submission Acceptance Adjudication
+#>   <int> <int>  <int>   <dbl>   <dbl>      <dbl>      <dbl>        <dbl>
+#> 1  2024     1    713  67009.    8.09       3.16       12.6         73.9
+#> 2  2024     2    787  73033.    7.95       3.06       12.5         75.1
+#> # ℹ 2 more variables: Reconciliation <dbl>, Average_DAR <dbl>
 ```
 
 ## Aging Calculation
 
 ``` r
 x |> 
+  mutate(days_in_ar = as.numeric((date_reconciliation - date_service))) |> 
   bin_aging(days_in_ar, bin_type = "chop") |> 
   group_by(aging_bin) |> 
   summarise(
     n_claims = n(),
     balance = roundup(sum(balance, na.rm = TRUE)), 
     .groups = "drop")
-#> # A tibble: 5 × 3
+#> # A tibble: 7 × 3
 #>   aging_bin  n_claims balance
 #>   <fct>         <int>   <dbl>
-#> 1 (30, 60]        124   5934.
-#> 2 (60, 90]        453  20147.
-#> 3 (90, 120]       492  19992.
-#> 4 (120, 150]      345  13099.
-#> 5 (150, 180]       86   2070.
+#> 1 (30, 60]         39      0 
+#> 2 (60, 90]        129      0 
+#> 3 (90, 120]       147      0 
+#> 4 (120, 150]      105      0 
+#> 5 (150, 180]       21      0 
+#> 6 (180, 210]        1      0 
+#> 7 <NA>           1058 140042.
 ```
 
 ``` r
 
 x |> 
+  mutate(days_in_ar = as.numeric((date_reconciliation - date_service))) |> 
   bin_aging(days_in_ar, bin_type = "case") |> 
   group_by(aging_bin) |> 
   summarise(
     n_claims = n(),
     balance = roundup(sum(balance, na.rm = TRUE)), 
     .groups = "drop")
-#> # A tibble: 4 × 3
+#> # A tibble: 5 × 3
 #>   aging_bin n_claims balance
 #>   <fct>        <int>   <dbl>
-#> 1 31-60          124   5934.
-#> 2 61-90          453  20147.
-#> 3 91-120         492  19992.
-#> 4 121+           431  15169.
+#> 1 31-60           39      0 
+#> 2 61-90          129      0 
+#> 3 91-120         147      0 
+#> 4 121+           127      0 
+#> 5 <NA>          1058 140042.
 ```
 
 ## Days in AR Monthly Calculation
@@ -245,18 +239,18 @@ tibble(
 #> # A tibble: 12 × 27
 #>    date          gct   earb  nmon mon   month      nqtr  yqtr dqtr   year  ymon
 #>    <date>      <int>  <int> <dbl> <ord> <ord>     <int> <dbl> <chr> <dbl> <dbl>
-#>  1 2024-01-01 249971 290387     1 Jan   January       1 2024. 1Q24   2024 2024.
-#>  2 2024-02-01 249609 289524     2 Feb   February      1 2024. 1Q24   2024 2024.
-#>  3 2024-03-01 250604 290556     3 Mar   March         1 2024. 1Q24   2024 2024.
-#>  4 2024-04-01 249649 290402     4 Apr   April         2 2024. 2Q24   2024 2024.
-#>  5 2024-05-01 250781 290856     5 May   May           2 2024. 2Q24   2024 2024.
-#>  6 2024-06-01 250043 290617     6 Jun   June          2 2024. 2Q24   2024 2024.
-#>  7 2024-07-01 249686 289370     7 Jul   July          3 2024. 3Q24   2024 2024.
-#>  8 2024-08-01 250669 289316     8 Aug   August        3 2024. 3Q24   2024 2024.
-#>  9 2024-09-01 249563 290971     9 Sep   September     3 2024. 3Q24   2024 2024.
-#> 10 2024-10-01 249992 290669    10 Oct   October       4 2024. 4Q24   2024 2024.
-#> 11 2024-11-01 249929 289751    11 Nov   November      4 2024. 4Q24   2024 2024.
-#> 12 2024-12-01 250540 289247    12 Dec   December      4 2024. 4Q24   2024 2024.
+#>  1 2024-01-01 249588 289611     1 Jan   January       1 2024. 1Q24   2024 2024.
+#>  2 2024-02-01 249478 290606     2 Feb   February      1 2024. 1Q24   2024 2024.
+#>  3 2024-03-01 250528 290108     3 Mar   March         1 2024. 1Q24   2024 2024.
+#>  4 2024-04-01 250502 290315     4 Apr   April         2 2024. 2Q24   2024 2024.
+#>  5 2024-05-01 249248 288934     5 May   May           2 2024. 2Q24   2024 2024.
+#>  6 2024-06-01 250733 289835     6 Jun   June          2 2024. 2Q24   2024 2024.
+#>  7 2024-07-01 249966 290830     7 Jul   July          3 2024. 3Q24   2024 2024.
+#>  8 2024-08-01 249868 289768     8 Aug   August        3 2024. 3Q24   2024 2024.
+#>  9 2024-09-01 249620 289403     9 Sep   September     3 2024. 3Q24   2024 2024.
+#> 10 2024-10-01 249388 290610    10 Oct   October       4 2024. 4Q24   2024 2024.
+#> 11 2024-11-01 250213 289555    11 Nov   November      4 2024. 4Q24   2024 2024.
+#> 12 2024-12-01 250364 289094    12 Dec   December      4 2024. 4Q24   2024 2024.
 #> # ℹ 16 more variables: myear <chr>, nhalf <int>, yhalf <dbl>, dhalf <chr>,
 #> #   ndip <int>, adc <dbl>, dar <dbl>, dar_pass <lgl>, dar_diff <dbl>,
 #> #   ratio_actual <dbl>, ratio_ideal <dbl>, ratio_diff <dbl>, earb_target <dbl>,
@@ -282,10 +276,10 @@ tibble(
 #> # A tibble: 4 × 18
 #>   date         earb  nmon  nqtr month    gct  ndip   adc   dar dar_pass dar_diff
 #>   <date>      <int> <dbl> <int> <ord>  <int> <int> <dbl> <dbl> <lgl>       <dbl>
-#> 1 2024-03-01 285101     3     1 March 748742    91 8228.  34.7 TRUE      -0.350 
-#> 2 2024-06-01 285522     6     2 June  750220    91 8244.  34.6 TRUE      -0.367 
-#> 3 2024-09-01 285733     9     3 Sept… 749819    92 8150.  35.1 FALSE      0.0584
-#> 4 2024-12-01 284571    12     4 Dece… 750898    92 8162.  34.9 TRUE      -0.134 
+#> 1 2024-03-01 285303     3     1 March 750838    91 8251.  34.6 TRUE      -0.422 
+#> 2 2024-06-01 286436     6     2 June  750307    91 8245.  34.7 TRUE      -0.260 
+#> 3 2024-09-01 284659     9     3 Sept… 750146    92 8154.  34.9 TRUE      -0.0886
+#> 4 2024-12-01 285243    12     4 Dece… 749404    92 8146.  35.0 FALSE      0.0176
 #> # ℹ 7 more variables: ratio_actual <dbl>, ratio_ideal <dbl>, ratio_diff <dbl>,
 #> #   earb_target <dbl>, earb_dec_abs <dbl>, earb_dec_pct <dbl>,
 #> #   earb_gct_diff <int>
