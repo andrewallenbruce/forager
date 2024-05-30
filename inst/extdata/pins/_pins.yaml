@@ -16,6 +16,8 @@ monthly_raw:
 - monthly_raw/20240510T070231Z-50efe/
 nm_examples:
 - nm_examples/20240523T144836Z-49c74/
+old_azalea:
+- old_azalea/20240530T114532Z-79688/
 patient_aging:
 - patient_aging/20240523T153723Z-5b645/
 transaction_data:
