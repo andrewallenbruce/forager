@@ -121,16 +121,16 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">date_service</span> <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">payer</span>    <span style="font-weight: bold;">days_elapsed</span> <span style="font-weight: bold;">aging_bin</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-05-13     278.  Medicaid           15 0-30     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-04-27      11.2 BCBS               31 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-04-22      95.8 UHC                36 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-10      42.3 UHC                48 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-04-10     132.  BCBS               48 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-03-29     385.  Anthem             60 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-03-24      21.8 Cigna              65 61-90    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-03-23     144.  Centene            66 61-90    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-03-19      47.9 BCBS               70 61-90    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-03-05      46.3 Anthem             84 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-05-15     278.  Medicaid           15 0-30     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-04-29      11.2 BCBS               31 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-04-24      95.8 UHC                36 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-12      42.3 UHC                48 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-04-12     132.  BCBS               48 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-03-31     385.  Anthem             60 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-03-26      21.8 Cigna              65 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-03-25     144.  Centene            66 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-03-21      47.9 BCBS               70 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-03-07      46.3 Anthem             84 61-90    </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">charges</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
@@ -153,12 +153,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`2024`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ins_name 0-30 31-60 61-90 91-120 121+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA   80    30    48     52   38</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross  197    83    86     73   83</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA  110    37    43     39   44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry   10     5     8      6    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare  178    73    78     79   80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient  369   158   167    170  135</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA   78    26    50     51   43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross  191    81    77     83   90</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA  107    36    43     42   45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry   10     5     7      6    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare  173    76    72     85   82</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient  355   163   154    182  145</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
