@@ -21,6 +21,7 @@ library(ggplot2)
 library(ggforce)
 library(scales)
 library(ggthemes)
+library(gt)
 ```
 
 ## Medicare Reimbursement Rate
