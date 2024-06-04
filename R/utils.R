@@ -113,9 +113,9 @@ generate_data <- function(rows = 100, count_days = FALSE, ...) {
     date_service        = clock::date_today("") - age,
     date_release        = date_service + stats::rpois(rows, 1:15),
     date_submission     = date_release + stats::rpois(rows, 1:5),
-    date_acceptance     = date_submission + stats::rpois(rows, 5:20),
-    date_adjudication   = date_acceptance + stats::rpois(rows, 30:120),
-    date_reconciliation = date_adjudication + stats::rpois(rows, 1:10)
+    date_acceptance     = date_submission + stats::rpois(rows, 5:10),
+    date_adjudication   = date_acceptance + stats::rpois(rows, 10:20),
+    date_reconciliation = date_adjudication + stats::rpois(rows, 1:5)
   ) |>
     dplyr::mutate(
       age                 = NULL,
@@ -165,3 +165,12 @@ sorted_bars <- function(df, var) {
     ggplot2::ggplot(ggplot2::aes(y = {{ var }})) +
     ggplot2::geom_bar()
 }
+
+
+col_palette <- c(
+  "#8ba58e",
+  "#192a38",
+  "#528084",
+  "#2c3e50",
+  "#8ca0aa"
+)

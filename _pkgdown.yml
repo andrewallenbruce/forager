@@ -2,6 +2,7 @@ url: https://andrewallenbruce.github.io/forager/
 
 template:
   bootstrap: 5
+  light-switch: TRUE
   bootswatch: flatly
   bslib:
     base_font: {google: "Roboto"}

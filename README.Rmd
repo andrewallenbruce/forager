@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# forager <a href="https://andrewallenbruce.github.io/forager/"><img src="man/figures/logo.svg" align="right" height="200"/></a>
+# forager <a href="#"><img src="man/figures/logo.svg" align="right" width="25%" min-width="120px"/></a>
 
 > ***Forager** (noun)*
 >
@@ -37,20 +37,18 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
+[![GitHub R package version](https://img.shields.io/github/r-package/v/andrewallenbruce/forager?style=flat-square&logo=R&label=Package&color=%23192a38)]
 [![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
-[![License:
-MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
-[![code
-size](https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager)
-[![last
-commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager/commits/master)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
+[![Code Size](https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager)
+[![last commit](https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg)](https://github.com/andrewallenbruce/forager/commits/master)
 [![Codecov test coverage](https://codecov.io/gh/andrewallenbruce/forager/branch/master/graph/badge.svg)](https://app.codecov.io/gh/andrewallenbruce/forager?branch=master)
+
 <!-- badges: end -->
 
 ## Installation
 
-You can install the development version of `forager` from
-[GitHub](https://github.com/) with:
+You can install the development version of `forager` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
@@ -66,44 +64,80 @@ library(fuimus)
 
 ## The Lifecycle of a Claim 
 
-    * <b>Provider Lag</b>:    Date of Service - Date of Release
-    * <b>Billing Lag</b>:     Date of Release - Date of Submission
-    * <b>Acceptance Lag</b>:  Date of Submission - Date of Acceptance
-    * <b>Payment Lag</b>:     Date of Acceptance - Date of Adjudication
-    * <b>Days in AR</b>:      Date of Release - Date of Adjudication*
+  * <b>Provider Lag</b>:    Date of Service - Date of Release
+  * <b>Billing Lag</b>:     Date of Release - Date of Submission
+  * <b>Acceptance Lag</b>:  Date of Submission - Date of Acceptance
+  * <b>Payment Lag</b>:     Date of Acceptance - Date of Adjudication
+  * <b>Days in AR</b>:      Date of Release - Date of Adjudication
 
 
 <br>
 
 ```{r, echo=TRUE, warning=FALSE}
-x <- forager::generate_data(1500)
+x <- generate_data(15000)
 x
 ```
+
 <br>
 
 ```{r echo=TRUE}
-x_pvt <- x |> 
-  select(claimid:date_reconciliation) |> 
+long <- x |> 
   pivot_longer(
     cols      = starts_with("date"), 
     names_to  = "date_type", 
+    names_prefix = "date_",
     values_to = "date") |> 
   mutate(
-    date_lag = lead(date) - date,
-    date_lag = lag(date_lag, order_by = date),
-    date_type = stringr::str_to_sentence(
-      str_remove_all(date_type, "date_")),
+    days = as.numeric(lead(date) - date),
+    days = lag(days, order_by = date),
     date_type = fct_relevel(
       date_type, 
-      "Service", 
-      "Release",
-      "Submission", 
-      "Acceptance", 
-      "Adjudication", 
-      "Reconciliation"), 
+      "service", 
+      "release",
+      "submission", 
+      "acceptance", 
+      "adjudication", 
+      "reconciliation"), 
     .by = claimid)
 
-x_pvt
+long
+```
+
+<br>
+
+```{r}
+x <- long |> 
+  pivot_wider(
+    names_from = date_type,
+    names_glue = "{.value}_{date_type}",
+    values_from = c(date, days)
+  ) |> 
+  janitor::remove_empty("cols") |> 
+  rowwise() |> 
+  mutate(days_in_ar = as.numeric(diff(c(date_service, date_adjudication)))) |> 
+  ungroup()
+x
+```
+
+
+```{r echo=TRUE}
+x |> 
+  group_by(
+    year = get_year(date_service),
+    month = date_month_factor(date_service),
+    payer
+    ) |>
+  summarise(
+    claims = n(), 
+    balance = sum(balance, na.rm = TRUE),
+    avg_release = mean(days_release, na.rm = TRUE), 
+    avg_submission = mean(days_submission, na.rm = TRUE),
+    avg_acceptance = mean(days_acceptance, na.rm = TRUE),
+    avg_adjudication  = mean(days_adjudication, na.rm = TRUE),
+    avg_reconciliation = mean(days_reconciliation, na.rm = TRUE),
+    avg_dar = mean(days_in_ar, na.rm = TRUE),
+    .groups = "drop") |> 
+  arrange(payer)
 ```
 
 <br>
@@ -112,36 +146,20 @@ x_pvt
 x |> 
   group_by(
     year = get_year(date_service),
-    month = date_month_factor(date_service)) |> 
+    qtr = quarter(date_service),
+    payer
+    ) |>
   summarise(
-    Claims = n(), 
-    Balance = sum(balance, na.rm = TRUE),
-    Release = as.numeric(mean((date_release - date_service), na.rm = TRUE)), 
-    Submission = as.numeric(mean((date_submission - date_release), na.rm = TRUE)),
-    Acceptance = as.numeric(mean((date_acceptance - date_submission), na.rm = TRUE)),
-    Adjudication  = as.numeric(mean((date_adjudication - date_acceptance), na.rm = TRUE)),
-    Reconciliation = as.numeric(mean((date_reconciliation - date_adjudication), na.rm = TRUE)),
-    Average_DAR = as.numeric(mean((date_reconciliation - date_service), na.rm = TRUE)), 
-    .groups = "drop")
-```
-
-<br>
-
-```{r echo=TRUE}
-x |> 
-  group_by(
-    year  = get_year(date_service),
-    nqtr = quarter(date_service)) |> 
-  summarise(
-    Claims = n(), 
-    Balance = sum(balance, na.rm = TRUE),
-    Release = as.numeric(mean((date_release - date_service), na.rm = TRUE)), 
-    Submission = as.numeric(mean((date_submission - date_release), na.rm = TRUE)),
-    Acceptance = as.numeric(mean((date_acceptance - date_submission), na.rm = TRUE)),
-    Adjudication  = as.numeric(mean((date_adjudication - date_acceptance), na.rm = TRUE)),
-    Reconciliation = as.numeric(mean((date_reconciliation - date_adjudication), na.rm = TRUE)),
-    Average_DAR = as.numeric(mean((date_reconciliation - date_service), na.rm = TRUE)), 
-    .groups = "drop")
+    claims = n(), 
+    balance = sum(balance, na.rm = TRUE),
+    avg_release = mean(days_release, na.rm = TRUE), 
+    avg_submission = mean(days_submission, na.rm = TRUE),
+    avg_acceptance = mean(days_acceptance, na.rm = TRUE),
+    avg_adjudication  = mean(days_adjudication, na.rm = TRUE),
+    avg_reconciliation = mean(days_reconciliation, na.rm = TRUE),
+    avg_dar = mean(days_in_ar, na.rm = TRUE),
+    .groups = "drop") |> 
+  arrange(payer)
 ```
 
 
@@ -149,22 +167,36 @@ x |>
 
 ```{r echo=TRUE}
 x |> 
-  mutate(days_in_ar = as.numeric((date_reconciliation - date_service))) |> 
-  bin_aging(days_in_ar, bin_type = "chop") |> 
-  group_by(aging_bin) |> 
+  mutate(
+    dar = if_else(
+      !is.na(date_reconciliation), 
+      as.numeric((date_reconciliation - date_service)),
+      as.numeric((date_adjudication - date_service))
+  )
+    ) |> 
+  bin_aging(dar, "chop") |> 
   summarise(
     n_claims = n(),
-    balance = roundup(sum(balance, na.rm = TRUE)), 
-    .groups = "drop")
+    balance = sum(balance, na.rm = TRUE),
+    .by = c(aging_bin))
+```
 
+
+```{r echo=TRUE}
 x |> 
-  mutate(days_in_ar = as.numeric((date_reconciliation - date_service))) |> 
-  bin_aging(days_in_ar, bin_type = "case") |> 
-  group_by(aging_bin) |> 
+  mutate(
+    dar = if_else(
+      !is.na(date_reconciliation), 
+      as.numeric((date_reconciliation - date_service)),
+      as.numeric((date_adjudication - date_service))
+  )
+    ) |> 
+  bin_aging(dar, "case") |> 
   summarise(
     n_claims = n(),
-    balance = roundup(sum(balance, na.rm = TRUE)), 
-    .groups = "drop")
+    balance = sum(balance, na.rm = TRUE),
+    .by = c(aging_bin, payer)) |> 
+  arrange(aging_bin)
 ```
 
 ## Days in AR Monthly Calculation

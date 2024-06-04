@@ -9,6 +9,20 @@
 #' @template returns-default
 #'
 #' @examples
+#' generate_data(100) |>
+#'   dplyr::mutate(
+#'     dar = dplyr::if_else(
+#'       !is.na(date_reconciliation),
+#'       as.numeric((date_reconciliation - date_service)),
+#'       as.numeric((date_adjudication - date_service))
+#'     )
+#'   ) |>
+#'     bin_aging(dar, "chop") |>
+#'     dplyr::summarise(
+#'       n_claims = dplyr::n(),
+#'       balance = sum(balance, na.rm = TRUE),
+#'       .by = c(aging_bin))
+#'
 #' generate_data(10)[c(
 #'   "date_service",
 #'   "charges",

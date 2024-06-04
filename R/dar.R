@@ -41,82 +41,67 @@ avg_dar <- function(df,
                     by = c("month", "quarter")) {
 
   by  <- match.arg(by)
-  datecol <- rlang::englue("{{ date }}")
-  earbcol <- rlang::englue("{{ earb }}")
-  gctcol  <- rlang::englue("{{ gct }}")
 
-  df <- dplyr::mutate(
+  df <- dplyr::transmute(
     df,
-    "{datecol}" := clock::as_date({{ date }}),
-    nmon         = lubridate::month({{ date }}, label = FALSE),
-    mon          = lubridate::month({{ date }}, label = TRUE, abbr = TRUE),
-    month        = lubridate::month({{ date }}, label = TRUE, abbr = FALSE),
-    nqtr         = lubridate::quarter({{ date }}),
-    yqtr         = lubridate::quarter({{ date }}, with_year = TRUE),
-    dqtr         = paste0(lubridate::quarter({{ date }}), "Q", format({{ date }}, "%y")),
-    year         = lubridate::year({{ date }}),
-    ymon         = as.numeric(format({{ date }}, "%Y.%m")),
-    myear        = format({{ date }}, "%b %Y"),
-    nhalf        = lubridate::semester({{ date }}),
-    yhalf        = lubridate::semester({{ date }}, with_year = TRUE),
-    dhalf        = paste0(lubridate::semester({{ date }}), "H", format({{ date }}, "%y")),
-    ndip         = lubridate::days_in_month({{ date }})
-  )
+    date = clock::as_date({{ date }}),
+    gct = {{ gct }},
+    earb = {{ earb }},
+    ndip = lubridate::days_in_month(date))
 
   if (by == "quarter") {
 
-    qtr_max_nmons <- df |>
+    qtr_dates <- collapse::funique(
+      lubridate::quarter(
+        df$date,
+        type = "date_last")) |>
+      lubridate::floor_date("month")
+
+    qtr_earb <- df |>
+      dplyr::filter(date %in% qtr_dates) |>
+      dplyr::transmute(date, earb)
+
+    qtr_gct <- df |>
+      dplyr::group_by(
+        date = lubridate::quarter(date, type = "date_last") |>
+          lubridate::floor_date("month")) |>
       dplyr::summarise(
-        max_nmon = max(nmon),
-        .by = nqtr) |>
-      dplyr::pull(max_nmon)
+        gct = sum(gct),
+        ndip = sum(ndip))
 
-    earb_sub <- df |>
-      dplyr::filter(nmon %in% qtr_max_nmons) |>
-      dplyr::select({{ date }}, {{ earb }}, nmon, nqtr, month)
-
-    gct_sub <- df |>
-      dplyr::summarise(
-        "{gctcol}" := sum({{ gct }}),
-        ndip = sum(ndip),
-        .by = nqtr)
-
-    df <- dplyr::left_join(
-      earb_sub,
-      gct_sub,
-      by = dplyr::join_by(nqtr)
+    df <- dplyr::full_join(
+      qtr_earb,
+      qtr_gct,
+      by = dplyr::join_by(date)
     )
   }
 
-  earb_trg_col <- rlang::sym(rlang::englue("{{ earb }}_target"))
-  earb_dc_col <- rlang::sym(rlang::englue("{{ earb }}_dec_abs"))
-
   df |>
     dplyr::mutate(
-
-      # Average Daily Charge
-      adc = {{ gct }} / ndip,
-
-      # Days in Accounts Receivable
-      dar = {{ earb }} / adc,
+      adc = gct / ndip,
+      dart = {{ dart }},
+      dar = earb / adc,
       dar_pass = dplyr::case_when(dar < {{ dart }} ~ TRUE, TRUE ~ FALSE),
-      dar_diff = dar - {{ dart }},
+
+      # dar_diff = dar - {{ dart }},
 
       # Ratios: Ending AR to Gross Charges
-      ratio_actual = {{ earb }} / {{ gct }},
       ratio_ideal = {{ dart }} / ndip,
-      ratio_diff = ratio_actual - ratio_ideal,
+      ratio_actual = earb / gct,
+      ratio_diff = ratio_ideal - ratio_actual,
 
       # Ending AR Target
-      "{{ earb }}_target" := ({{ gct }} * {{ dart }}) / ndip,
+      earb_target = (gct * {{ dart }}) / ndip,
 
       # Ending AR Decrease Needed
-      "{{ earb }}_dec_abs" := {{ earb }} - !!earb_trg_col,
+      earb_diff = earb_target - earb,
+
+      gct_pct = gct / (gct + earb),
+      earb_pct = earb / (gct + earb)
 
       # Ending AR Percentage Decrease Needed
-      "{{ earb }}_dec_pct" := !!earb_dc_col / {{ earb }},
-
-      earb_gct_diff = {{ earb }} - {{ gct }},
+      # earb_diff_pct = earb_target / {{ earb }},
+      # earb_gct_diff = {{ earb }} - {{ gct }},
 
       ) |>
     .add_class()
