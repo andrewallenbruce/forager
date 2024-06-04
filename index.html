@@ -121,6 +121,7 @@
 <p><br></p>
 <!-- badges: start -->
 
+<!-- badges: end -->
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -137,166 +138,242 @@
 <div class="section level2">
 <h2 id="the-lifecycle-of-a-claim">The Lifecycle of a Claim<a class="anchor" aria-label="anchor" href="#the-lifecycle-of-a-claim"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">*</span> <span class="er">&lt;</span>b<span class="sc">&gt;</span>Provider Lag<span class="sc">&lt;</span><span class="er">/</span>b<span class="sc">&gt;</span><span class="er">:</span>    Date of Service <span class="sc">-</span> Date of Release</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="sc">*</span> <span class="er">&lt;</span>b<span class="sc">&gt;</span>Billing Lag<span class="sc">&lt;</span><span class="er">/</span>b<span class="sc">&gt;</span><span class="er">:</span>     Date of Release <span class="sc">-</span> Date of Submission</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="sc">*</span> <span class="er">&lt;</span>b<span class="sc">&gt;</span>Acceptance Lag<span class="sc">&lt;</span><span class="er">/</span>b<span class="sc">&gt;</span><span class="er">:</span>  Date of Submission <span class="sc">-</span> Date of Acceptance</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="sc">*</span> <span class="er">&lt;</span>b<span class="sc">&gt;</span>Payment Lag<span class="sc">&lt;</span><span class="er">/</span>b<span class="sc">&gt;</span><span class="er">:</span>     Date of Acceptance <span class="sc">-</span> Date of Adjudication</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="sc">*</span> <span class="er">&lt;</span>b<span class="sc">&gt;</span>Days <span class="cf">in</span> AR<span class="sc">&lt;</span><span class="er">/</span>b<span class="sc">&gt;</span><span class="er">:</span>      Date of Release <span class="sc">-</span> Date of Adjudication<span class="sc">*</span></span></code></pre></div>
+<ul>
+<li>
+<b>Provider Lag</b>: Date of Service - Date of Release</li>
+<li>
+<b>Billing Lag</b>: Date of Release - Date of Submission</li>
+<li>
+<b>Acceptance Lag</b>: Date of Submission - Date of Acceptance</li>
+<li>
+<b>Payment Lag</b>: Date of Acceptance - Date of Adjudication</li>
+<li>
+<b>Days in AR</b>: Date of Release - Date of Adjudication</li>
+</ul>
 <p><br></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">forager</span><span class="fu">::</span><span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">1500</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
 <span><span class="va">x</span></span>
-<span><span class="co">#&gt; # A tibble: 1,500 × 10</span></span>
+<span><span class="co">#&gt; # A tibble: 15,000 × 10</span></span>
 <span><span class="co">#&gt;    claimid payer    charges balance date_service date_release date_submission</span></span>
 <span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;       &lt;date&gt;       &lt;date&gt;         </span></span>
-<span><span class="co">#&gt;  1 0005    Cigna      265.      0   2024-05-15   2024-05-20   2024-05-22     </span></span>
-<span><span class="co">#&gt;  2 0031    UHC         25.8    25.8 2024-05-15   2024-05-15   2024-05-15     </span></span>
-<span><span class="co">#&gt;  3 0053    Cigna       85.6    85.6 2024-05-15   2024-05-20   2024-05-24     </span></span>
-<span><span class="co">#&gt;  4 0127    Humana      21.5     0   2024-05-15   2024-05-21   2024-05-23     </span></span>
-<span><span class="co">#&gt;  5 0366    Cigna       43.1    43.1 2024-05-15   2024-05-24   2024-05-24     </span></span>
-<span><span class="co">#&gt;  6 0370    BCBS        80.9    80.9 2024-05-15   2024-05-26   2024-06-01     </span></span>
-<span><span class="co">#&gt;  7 0496    Medicare    64.4    64.4 2024-05-15   2024-05-19   2024-05-19     </span></span>
-<span><span class="co">#&gt;  8 0564    Anthem      14.2    14.2 2024-05-15   2024-05-20   2024-05-23     </span></span>
-<span><span class="co">#&gt;  9 0591    Humana      52.2    52.2 2024-05-15   2024-05-21   2024-05-22     </span></span>
-<span><span class="co">#&gt; 10 0733    Centene    121.    121.  2024-05-15   2024-05-31   2024-06-05     </span></span>
-<span><span class="co">#&gt; 11 0774    Cigna       74.6    74.6 2024-05-15   2024-05-24   2024-05-28     </span></span>
-<span><span class="co">#&gt; 12 0841    BCBS        31.2     0   2024-05-15   2024-05-17   2024-05-18     </span></span>
-<span><span class="co">#&gt; 13 0981    Anthem      36.2    36.2 2024-05-15   2024-05-23   2024-05-23     </span></span>
-<span><span class="co">#&gt; 14 1039    UHC        345.    345.  2024-05-15   2024-05-22   2024-05-27     </span></span>
-<span><span class="co">#&gt; 15 1050    Medicare    92.4    92.4 2024-05-15   2024-05-26   2024-06-05     </span></span>
-<span><span class="co">#&gt; 16 1148    Medicaid    53.4     0   2024-05-15   2024-05-25   2024-05-27     </span></span>
-<span><span class="co">#&gt; 17 1395    Cigna      458.    458.  2024-05-15   2024-06-05   2024-06-09     </span></span>
-<span><span class="co">#&gt; 18 1419    UHC        312.    312.  2024-05-15   2024-05-25   2024-05-28     </span></span>
-<span><span class="co">#&gt; 19 1453    Cigna      134.      0   2024-05-15   2024-05-30   2024-06-04     </span></span>
-<span><span class="co">#&gt; 20 0068    Humana      59.8    59.8 2024-05-14   2024-05-18   2024-05-22     </span></span>
-<span><span class="co">#&gt; # ℹ 1,480 more rows</span></span>
+<span><span class="co">#&gt;  1 00137   Anthem     177.    177.  2024-05-20   2024-05-23   2024-05-28     </span></span>
+<span><span class="co">#&gt;  2 00180   Anthem     192.    192.  2024-05-20   2024-06-07   2024-06-15     </span></span>
+<span><span class="co">#&gt;  3 00376   BCBS        88.9    88.9 2024-05-20   2024-05-20   2024-05-21     </span></span>
+<span><span class="co">#&gt;  4 00400   Cigna      224.    224.  2024-05-20   2024-05-29   2024-06-04     </span></span>
+<span><span class="co">#&gt;  5 00490   BCBS       190.    190.  2024-05-20   2024-05-28   2024-06-03     </span></span>
+<span><span class="co">#&gt;  6 00556   Humana      94.4     0   2024-05-20   2024-05-22   2024-05-22     </span></span>
+<span><span class="co">#&gt;  7 00577   Humana      61.0    61.0 2024-05-20   2024-05-30   2024-05-31     </span></span>
+<span><span class="co">#&gt;  8 00616   Medicare   175.    175.  2024-05-20   2024-05-21   2024-05-23     </span></span>
+<span><span class="co">#&gt;  9 00651   Cigna      256.      0   2024-05-20   2024-05-30   2024-05-31     </span></span>
+<span><span class="co">#&gt; 10 00815   Cigna      119.      0   2024-05-20   2024-05-26   2024-05-28     </span></span>
+<span><span class="co">#&gt; 11 00817   Cigna      110.      0   2024-05-20   2024-05-29   2024-05-31     </span></span>
+<span><span class="co">#&gt; 12 00888   Medicaid    36.9    36.9 2024-05-20   2024-05-21   2024-05-24     </span></span>
+<span><span class="co">#&gt; 13 00906   Centene     60.4     0   2024-05-20   2024-05-25   2024-05-27     </span></span>
+<span><span class="co">#&gt; 14 00939   BCBS       249.    249.  2024-05-20   2024-05-26   2024-05-30     </span></span>
+<span><span class="co">#&gt; 15 00957   Humana     637.      0   2024-05-20   2024-06-04   2024-06-04     </span></span>
+<span><span class="co">#&gt; 16 01077   UHC         35.4     0   2024-05-20   2024-06-01   2024-06-04     </span></span>
+<span><span class="co">#&gt; 17 01128   Centene     49.5    49.5 2024-05-20   2024-05-21   2024-05-24     </span></span>
+<span><span class="co">#&gt; 18 01167   BCBS       285.    285.  2024-05-20   2024-05-31   2024-06-01     </span></span>
+<span><span class="co">#&gt; 19 01204   BCBS       109.    109.  2024-05-20   2024-05-28   2024-06-02     </span></span>
+<span><span class="co">#&gt; 20 01282   Humana     250.    250.  2024-05-20   2024-05-30   2024-05-30     </span></span>
+<span><span class="co">#&gt; # ℹ 14,980 more rows</span></span>
 <span><span class="co">#&gt; # ℹ 3 more variables: date_acceptance &lt;date&gt;, date_adjudication &lt;date&gt;,</span></span>
 <span><span class="co">#&gt; #   date_reconciliation &lt;date&gt;</span></span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x_pvt</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">claimid</span><span class="op">:</span><span class="va">date_reconciliation</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">long</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">pivot_longer</span><span class="op">(</span></span>
 <span>    cols      <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"date"</span><span class="op">)</span>, </span>
 <span>    names_to  <span class="op">=</span> <span class="st">"date_type"</span>, </span>
+<span>    names_prefix <span class="op">=</span> <span class="st">"date_"</span>,</span>
 <span>    values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    date_lag <span class="op">=</span> <span class="fu">lead</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">-</span> <span class="va">date</span>,</span>
-<span>    date_lag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">date_lag</span>, order_by <span class="op">=</span> <span class="va">date</span><span class="op">)</span>,</span>
-<span>    date_type <span class="op">=</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html" class="external-link">str_to_sentence</a></span><span class="op">(</span></span>
-<span>      <span class="fu">str_remove_all</span><span class="op">(</span><span class="va">date_type</span>, <span class="st">"date_"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">lead</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">-</span> <span class="va">date</span><span class="op">)</span>,</span>
+<span>    days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">days</span>, order_by <span class="op">=</span> <span class="va">date</span><span class="op">)</span>,</span>
 <span>    date_type <span class="op">=</span> <span class="fu">fct_relevel</span><span class="op">(</span></span>
 <span>      <span class="va">date_type</span>, </span>
-<span>      <span class="st">"Service"</span>, </span>
-<span>      <span class="st">"Release"</span>,</span>
-<span>      <span class="st">"Submission"</span>, </span>
-<span>      <span class="st">"Acceptance"</span>, </span>
-<span>      <span class="st">"Adjudication"</span>, </span>
-<span>      <span class="st">"Reconciliation"</span><span class="op">)</span>, </span>
+<span>      <span class="st">"service"</span>, </span>
+<span>      <span class="st">"release"</span>,</span>
+<span>      <span class="st">"submission"</span>, </span>
+<span>      <span class="st">"acceptance"</span>, </span>
+<span>      <span class="st">"adjudication"</span>, </span>
+<span>      <span class="st">"reconciliation"</span><span class="op">)</span>, </span>
 <span>    .by <span class="op">=</span> <span class="va">claimid</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">x_pvt</span></span>
-<span><span class="co">#&gt; # A tibble: 9,000 × 7</span></span>
-<span><span class="co">#&gt;    claimid payer charges balance date_type      date       date_lag</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;          &lt;date&gt;     &lt;drtn&gt;  </span></span>
-<span><span class="co">#&gt;  1 0005    Cigna   265.      0   Service        2024-05-15 NA days </span></span>
-<span><span class="co">#&gt;  2 0005    Cigna   265.      0   Release        2024-05-20  5 days </span></span>
-<span><span class="co">#&gt;  3 0005    Cigna   265.      0   Submission     2024-05-22  2 days </span></span>
-<span><span class="co">#&gt;  4 0005    Cigna   265.      0   Acceptance     2024-05-30  8 days </span></span>
-<span><span class="co">#&gt;  5 0005    Cigna   265.      0   Adjudication   2024-07-02 33 days </span></span>
-<span><span class="co">#&gt;  6 0005    Cigna   265.      0   Reconciliation 2024-07-02  0 days </span></span>
-<span><span class="co">#&gt;  7 0031    UHC      25.8    25.8 Service        2024-05-15 NA days </span></span>
-<span><span class="co">#&gt;  8 0031    UHC      25.8    25.8 Release        2024-05-15  0 days </span></span>
-<span><span class="co">#&gt;  9 0031    UHC      25.8    25.8 Submission     2024-05-15  0 days </span></span>
-<span><span class="co">#&gt; 10 0031    UHC      25.8    25.8 Acceptance     2024-05-29 14 days </span></span>
-<span><span class="co">#&gt; # ℹ 8,990 more rows</span></span></code></pre></div>
+<span><span class="va">long</span></span>
+<span><span class="co">#&gt; # A tibble: 90,000 × 7</span></span>
+<span><span class="co">#&gt;    claimid payer  charges balance date_type      date        days</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;          &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 00137   Anthem    177.    177. service        2024-05-20    NA</span></span>
+<span><span class="co">#&gt;  2 00137   Anthem    177.    177. release        2024-05-23     3</span></span>
+<span><span class="co">#&gt;  3 00137   Anthem    177.    177. submission     2024-05-28     5</span></span>
+<span><span class="co">#&gt;  4 00137   Anthem    177.    177. acceptance     2024-06-04     7</span></span>
+<span><span class="co">#&gt;  5 00137   Anthem    177.    177. adjudication   2024-06-17    13</span></span>
+<span><span class="co">#&gt;  6 00137   Anthem    177.    177. reconciliation NA            NA</span></span>
+<span><span class="co">#&gt;  7 00180   Anthem    192.    192. service        2024-05-20    NA</span></span>
+<span><span class="co">#&gt;  8 00180   Anthem    192.    192. release        2024-06-07    18</span></span>
+<span><span class="co">#&gt;  9 00180   Anthem    192.    192. submission     2024-06-15     8</span></span>
+<span><span class="co">#&gt; 10 00180   Anthem    192.    192. acceptance     2024-06-23     8</span></span>
+<span><span class="co">#&gt; # ℹ 89,990 more rows</span></span></code></pre></div>
 <p><br></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">long</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span></span>
+<span>    names_from <span class="op">=</span> <span class="va">date_type</span>,</span>
+<span>    names_glue <span class="op">=</span> <span class="st">"{.value}_{date_type}"</span>,</span>
+<span>    values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">days</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">janitor</span><span class="fu">::</span><span class="fu"><a href="https://sfirke.github.io/janitor/reference/remove_empty.html" class="external-link">remove_empty</a></span><span class="op">(</span><span class="st">"cols"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">rowwise</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date_service</span>, <span class="va">date_adjudication</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">x</span></span>
+<span><span class="co">#&gt; # A tibble: 15,000 × 16</span></span>
+<span><span class="co">#&gt;    claimid payer    charges balance date_service date_release date_submission</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;       &lt;date&gt;       &lt;date&gt;         </span></span>
+<span><span class="co">#&gt;  1 00137   Anthem     177.    177.  2024-05-20   2024-05-23   2024-05-28     </span></span>
+<span><span class="co">#&gt;  2 00180   Anthem     192.    192.  2024-05-20   2024-06-07   2024-06-15     </span></span>
+<span><span class="co">#&gt;  3 00376   BCBS        88.9    88.9 2024-05-20   2024-05-20   2024-05-21     </span></span>
+<span><span class="co">#&gt;  4 00400   Cigna      224.    224.  2024-05-20   2024-05-29   2024-06-04     </span></span>
+<span><span class="co">#&gt;  5 00490   BCBS       190.    190.  2024-05-20   2024-05-28   2024-06-03     </span></span>
+<span><span class="co">#&gt;  6 00556   Humana      94.4     0   2024-05-20   2024-05-22   2024-05-22     </span></span>
+<span><span class="co">#&gt;  7 00577   Humana      61.0    61.0 2024-05-20   2024-05-30   2024-05-31     </span></span>
+<span><span class="co">#&gt;  8 00616   Medicare   175.    175.  2024-05-20   2024-05-21   2024-05-23     </span></span>
+<span><span class="co">#&gt;  9 00651   Cigna      256.      0   2024-05-20   2024-05-30   2024-05-31     </span></span>
+<span><span class="co">#&gt; 10 00815   Cigna      119.      0   2024-05-20   2024-05-26   2024-05-28     </span></span>
+<span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 9 more variables: date_acceptance &lt;date&gt;, date_adjudication &lt;date&gt;,</span></span>
+<span><span class="co">#&gt; #   date_reconciliation &lt;date&gt;, days_release &lt;dbl&gt;, days_submission &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   days_acceptance &lt;dbl&gt;, days_adjudication &lt;dbl&gt;, days_reconciliation &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   days_in_ar &lt;dbl&gt;</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span></span>
 <span>    year <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/clock-getters.html" class="external-link">get_year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
-<span>    month <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    month <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    <span class="va">payer</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    Claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
-<span>    Balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    Release <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_release</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>    Submission <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_submission</span> <span class="op">-</span> <span class="va">date_release</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Acceptance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_acceptance</span> <span class="op">-</span> <span class="va">date_submission</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Adjudication  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_adjudication</span> <span class="op">-</span> <span class="va">date_acceptance</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Reconciliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_adjudication</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Average_DAR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 10</span></span>
-<span><span class="co">#&gt;    year month    Claims Balance Release Submission Acceptance Adjudication</span></span>
-<span><span class="co">#&gt;   &lt;int&gt; &lt;ord&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1  2024 February    195  17437.    8.01       3.16       13.0         75.1</span></span>
-<span><span class="co">#&gt; 2  2024 March       518  49572.    8.12       3.16       12.5         73.4</span></span>
-<span><span class="co">#&gt; 3  2024 April       530  49209.    7.95       3.02       12.6         75.4</span></span>
-<span><span class="co">#&gt; 4  2024 May         257  23824.    7.93       3.16       12.4         74.5</span></span>
-<span><span class="co">#&gt; # ℹ 2 more variables: Reconciliation &lt;dbl&gt;, Average_DAR &lt;dbl&gt;</span></span></code></pre></div>
+<span>    claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_release <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_release</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>    avg_submission <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_submission</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_acceptance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_acceptance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_adjudication  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_adjudication</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_reconciliation</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 32 × 11</span></span>
+<span><span class="co">#&gt;     year month    payer claims balance avg_release avg_submission avg_acceptance</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;ord&gt;    &lt;fct&gt;  &lt;int&gt;   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2024 February Huma…    122  11228.        7.63           3.02           7.89</span></span>
+<span><span class="co">#&gt;  2  2024 March    Huma…    702  63586.        7.82           2.86           7.41</span></span>
+<span><span class="co">#&gt;  3  2024 April    Huma…    620  55967.        7.76           2.99           7.55</span></span>
+<span><span class="co">#&gt;  4  2024 May      Huma…    422  37436.        8.29           2.88           7.51</span></span>
+<span><span class="co">#&gt;  5  2024 February BCBS     122  12000.        7.75           2.89           7.39</span></span>
+<span><span class="co">#&gt;  6  2024 March    BCBS     674  61762.        8.01           2.91           7.50</span></span>
+<span><span class="co">#&gt;  7  2024 April    BCBS     627  56806.        7.72           3.09           7.44</span></span>
+<span><span class="co">#&gt;  8  2024 May      BCBS     402  36197.        8.15           3.08           7.60</span></span>
+<span><span class="co">#&gt;  9  2024 February UHC       95   8118.        8.04           3.18           7.38</span></span>
+<span><span class="co">#&gt; 10  2024 March    UHC      681  64746.        8.05           3.02           7.66</span></span>
+<span><span class="co">#&gt; # ℹ 22 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: avg_adjudication &lt;dbl&gt;, avg_reconciliation &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   avg_dar &lt;dbl&gt;</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span></span>
-<span>    year  <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/clock-getters.html" class="external-link">get_year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
-<span>    nqtr <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    year <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/clock-getters.html" class="external-link">get_year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    qtr <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    <span class="va">payer</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    Claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
-<span>    Balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    Release <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_release</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>    Submission <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_submission</span> <span class="op">-</span> <span class="va">date_release</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Acceptance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_acceptance</span> <span class="op">-</span> <span class="va">date_submission</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Adjudication  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_adjudication</span> <span class="op">-</span> <span class="va">date_acceptance</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Reconciliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_adjudication</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    Average_DAR <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 10</span></span>
-<span><span class="co">#&gt;    year  nqtr Claims Balance Release Submission Acceptance Adjudication</span></span>
-<span><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1  2024     1    713  67009.    8.09       3.16       12.6         73.9</span></span>
-<span><span class="co">#&gt; 2  2024     2    787  73033.    7.95       3.06       12.5         75.1</span></span>
-<span><span class="co">#&gt; # ℹ 2 more variables: Reconciliation &lt;dbl&gt;, Average_DAR &lt;dbl&gt;</span></span></code></pre></div>
+<span>    claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_release <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_release</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>    avg_submission <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_submission</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_acceptance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_acceptance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_adjudication  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_adjudication</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_reconciliation</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    avg_dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 16 × 11</span></span>
+<span><span class="co">#&gt;     year   qtr payer    claims balance avg_release avg_submission avg_acceptance</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2024     1 Humana      824  74814.        7.79           2.88           7.48</span></span>
+<span><span class="co">#&gt;  2  2024     2 Humana     1042  93402.        7.97           2.95           7.53</span></span>
+<span><span class="co">#&gt;  3  2024     1 BCBS        796  73761.        7.97           2.91           7.48</span></span>
+<span><span class="co">#&gt;  4  2024     2 BCBS       1029  93003.        7.89           3.08           7.50</span></span>
+<span><span class="co">#&gt;  5  2024     1 UHC         776  72865.        8.05           3.04           7.62</span></span>
+<span><span class="co">#&gt;  6  2024     2 UHC        1084  97357.        8.05           3.06           7.52</span></span>
+<span><span class="co">#&gt;  7  2024     1 Medicare    831  74348.        7.88           2.95           7.43</span></span>
+<span><span class="co">#&gt;  8  2024     2 Medicare   1150  98295.        7.81           3.06           7.65</span></span>
+<span><span class="co">#&gt;  9  2024     1 Cigna       790  66635.        8.17           2.9            7.64</span></span>
+<span><span class="co">#&gt; 10  2024     2 Cigna      1078  92283.        8.14           3.04           7.36</span></span>
+<span><span class="co">#&gt; 11  2024     1 Centene     768  66969.        8.01           2.99           7.22</span></span>
+<span><span class="co">#&gt; 12  2024     2 Centene    1083  96715.        7.84           3.00           7.43</span></span>
+<span><span class="co">#&gt; 13  2024     1 Medicaid    809  71241.        8.30           3.10           7.48</span></span>
+<span><span class="co">#&gt; 14  2024     2 Medicaid   1071  96348.        8.19           2.92           7.47</span></span>
+<span><span class="co">#&gt; 15  2024     1 Anthem      795  73446.        8.08           2.88           7.65</span></span>
+<span><span class="co">#&gt; 16  2024     2 Anthem     1074  91720.        8.16           3.05           7.50</span></span>
+<span><span class="co">#&gt; # ℹ 3 more variables: avg_adjudication &lt;dbl&gt;, avg_reconciliation &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   avg_dar &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">days_in_ar</span>, bin_type <span class="op">=</span> <span class="st">"chop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    dar <span class="op">=</span> <span class="fu">if_else</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date_reconciliation</span><span class="op">)</span>, </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_adjudication</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">dar</span>, <span class="st">"chop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
 <span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 7 × 3</span></span>
-<span><span class="co">#&gt;   aging_bin  n_claims balance</span></span>
-<span><span class="co">#&gt;   &lt;fct&gt;         &lt;int&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 (30, 60]         39      0 </span></span>
-<span><span class="co">#&gt; 2 (60, 90]        129      0 </span></span>
-<span><span class="co">#&gt; 3 (90, 120]       147      0 </span></span>
-<span><span class="co">#&gt; 4 (120, 150]      105      0 </span></span>
-<span><span class="co">#&gt; 5 (150, 180]       21      0 </span></span>
-<span><span class="co">#&gt; 6 (180, 210]        1      0 </span></span>
-<span><span class="co">#&gt; 7 &lt;NA&gt;           1058 140042.</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">x</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>days_in_ar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">days_in_ar</span>, bin_type <span class="op">=</span> <span class="st">"case"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://andrewallenbruce.github.io/fuimus/reference/roundup.html" class="external-link">roundup</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 5 × 3</span></span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
 <span><span class="co">#&gt;   aging_bin n_claims balance</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt;        &lt;int&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 31-60           39      0 </span></span>
-<span><span class="co">#&gt; 2 61-90          129      0 </span></span>
-<span><span class="co">#&gt; 3 91-120         147      0 </span></span>
-<span><span class="co">#&gt; 4 121+           127      0 </span></span>
-<span><span class="co">#&gt; 5 &lt;NA&gt;          1058 140042.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 (0, 30]       5251 476554.</span></span>
+<span><span class="co">#&gt; 2 (30, 60]      9699 852812.</span></span>
+<span><span class="co">#&gt; 3 (60, 90]        50   3835.</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    dar <span class="op">=</span> <span class="fu">if_else</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date_reconciliation</span><span class="op">)</span>, </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_adjudication</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">dar</span>, <span class="st">"case"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">payer</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 24 × 4</span></span>
+<span><span class="co">#&gt;    aging_bin payer    n_claims balance</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;     &lt;fct&gt;       &lt;int&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 0-30      Anthem        598  56212.</span></span>
+<span><span class="co">#&gt;  2 0-30      BCBS          657  59662.</span></span>
+<span><span class="co">#&gt;  3 0-30      Humana        655  57631.</span></span>
+<span><span class="co">#&gt;  4 0-30      Cigna         647  57389.</span></span>
+<span><span class="co">#&gt;  5 0-30      Medicaid      660  58457.</span></span>
+<span><span class="co">#&gt;  6 0-30      Centene       647  54513.</span></span>
+<span><span class="co">#&gt;  7 0-30      Medicare      722  64712.</span></span>
+<span><span class="co">#&gt;  8 0-30      UHC           665  67978.</span></span>
+<span><span class="co">#&gt;  9 31-60     Anthem       1263 108131.</span></span>
+<span><span class="co">#&gt; 10 31-60     Cigna        1210 100940.</span></span>
+<span><span class="co">#&gt; # ℹ 14 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-monthly-calculation">Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-monthly-calculation"></a>
@@ -313,25 +390,23 @@
 <span>    <span class="va">earb</span>, </span>
 <span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>    by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 12 × 27</span></span>
-<span><span class="co">#&gt;    date          gct   earb  nmon mon   month      nqtr  yqtr dqtr   year  ymon</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;      &lt;int&gt;  &lt;int&gt; &lt;dbl&gt; &lt;ord&gt; &lt;ord&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2024-01-01 249588 289611     1 Jan   January       1 2024. 1Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  2 2024-02-01 249478 290606     2 Feb   February      1 2024. 1Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  3 2024-03-01 250528 290108     3 Mar   March         1 2024. 1Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  4 2024-04-01 250502 290315     4 Apr   April         2 2024. 2Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  5 2024-05-01 249248 288934     5 May   May           2 2024. 2Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  6 2024-06-01 250733 289835     6 Jun   June          2 2024. 2Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  7 2024-07-01 249966 290830     7 Jul   July          3 2024. 3Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  8 2024-08-01 249868 289768     8 Aug   August        3 2024. 3Q24   2024 2024.</span></span>
-<span><span class="co">#&gt;  9 2024-09-01 249620 289403     9 Sep   September     3 2024. 3Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; 10 2024-10-01 249388 290610    10 Oct   October       4 2024. 4Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; 11 2024-11-01 250213 289555    11 Nov   November      4 2024. 4Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; 12 2024-12-01 250364 289094    12 Dec   December      4 2024. 4Q24   2024 2024.</span></span>
-<span><span class="co">#&gt; # ℹ 16 more variables: myear &lt;chr&gt;, nhalf &lt;int&gt;, yhalf &lt;dbl&gt;, dhalf &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   ndip &lt;int&gt;, adc &lt;dbl&gt;, dar &lt;dbl&gt;, dar_pass &lt;lgl&gt;, dar_diff &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   ratio_actual &lt;dbl&gt;, ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   earb_dec_abs &lt;dbl&gt;, earb_dec_pct &lt;dbl&gt;, earb_gct_diff &lt;int&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 12 × 15</span></span>
+<span><span class="co">#&gt;    date          gct   earb  ndip   adc  dart   dar dar_pass ratio_ideal</span></span>
+<span><span class="co">#&gt;    &lt;date&gt;      &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 2024-01-01 249839 291018    31 8059.    35  36.1 FALSE           1.13</span></span>
+<span><span class="co">#&gt;  2 2024-02-01 250385 289676    29 8634.    35  33.6 TRUE            1.21</span></span>
+<span><span class="co">#&gt;  3 2024-03-01 250576 289570    31 8083.    35  35.8 FALSE           1.13</span></span>
+<span><span class="co">#&gt;  4 2024-04-01 249990 290394    30 8333     35  34.8 TRUE            1.17</span></span>
+<span><span class="co">#&gt;  5 2024-05-01 249706 290428    31 8055.    35  36.1 FALSE           1.13</span></span>
+<span><span class="co">#&gt;  6 2024-06-01 249190 290731    30 8306.    35  35.0 FALSE           1.17</span></span>
+<span><span class="co">#&gt;  7 2024-07-01 249424 289234    31 8046.    35  35.9 FALSE           1.13</span></span>
+<span><span class="co">#&gt;  8 2024-08-01 250495 290265    31 8080.    35  35.9 FALSE           1.13</span></span>
+<span><span class="co">#&gt;  9 2024-09-01 250192 290361    30 8340.    35  34.8 TRUE            1.17</span></span>
+<span><span class="co">#&gt; 10 2024-10-01 250188 289441    31 8071.    35  35.9 FALSE           1.13</span></span>
+<span><span class="co">#&gt; 11 2024-11-01 250335 289483    30 8344.    35  34.7 TRUE            1.17</span></span>
+<span><span class="co">#&gt; 12 2024-12-01 250820 289728    31 8091.    35  35.8 FALSE           1.13</span></span>
+<span><span class="co">#&gt; # ℹ 6 more variables: ratio_actual &lt;dbl&gt;, ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   earb_diff &lt;dbl&gt;, gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
 <p><br></p>
 </div>
 <div class="section level2">
@@ -349,16 +424,15 @@
 <span>    <span class="va">earb</span>, </span>
 <span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
 <span>    by <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 18</span></span>
-<span><span class="co">#&gt;   date         earb  nmon  nqtr month    gct  ndip   adc   dar dar_pass dar_diff</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;      &lt;int&gt; &lt;dbl&gt; &lt;int&gt; &lt;ord&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;       &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2024-03-01 285303     3     1 March 750838    91 8251.  34.6 TRUE      -0.422 </span></span>
-<span><span class="co">#&gt; 2 2024-06-01 286436     6     2 June  750307    91 8245.  34.7 TRUE      -0.260 </span></span>
-<span><span class="co">#&gt; 3 2024-09-01 284659     9     3 Sept… 750146    92 8154.  34.9 TRUE      -0.0886</span></span>
-<span><span class="co">#&gt; 4 2024-12-01 285243    12     4 Dece… 749404    92 8146.  35.0 FALSE      0.0176</span></span>
-<span><span class="co">#&gt; # ℹ 7 more variables: ratio_actual &lt;dbl&gt;, ratio_ideal &lt;dbl&gt;, ratio_diff &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   earb_target &lt;dbl&gt;, earb_dec_abs &lt;dbl&gt;, earb_dec_pct &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   earb_gct_diff &lt;int&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 4 × 15</span></span>
+<span><span class="co">#&gt;   date         earb    gct  ndip   adc  dart   dar dar_pass ratio_ideal</span></span>
+<span><span class="co">#&gt;   &lt;date&gt;      &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 2024-03-01 286313 750638    91 8249.    35  34.7 TRUE           0.385</span></span>
+<span><span class="co">#&gt; 2 2024-06-01 285421 751158    91 8254.    35  34.6 TRUE           0.385</span></span>
+<span><span class="co">#&gt; 3 2024-09-01 284292 751525    92 8169.    35  34.8 TRUE           0.380</span></span>
+<span><span class="co">#&gt; 4 2024-12-01 285983 750953    92 8163.    35  35.0 FALSE          0.380</span></span>
+<span><span class="co">#&gt; # ℹ 6 more variables: ratio_actual &lt;dbl&gt;, ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   earb_diff &lt;dbl&gt;, gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
@@ -410,7 +484,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://choosealicense.com/licenses/mit/" class="external-link"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a></li>
-<li><a href="https://github.com/andrewallenbruce/forager" class="external-link"><img src="https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg" alt="code size"></a></li>
+<li><a href="https://github.com/andrewallenbruce/forager" class="external-link"><img src="https://img.shields.io/github/languages/code-size/andrewallenbruce/forager.svg" alt="Code Size"></a></li>
 <li><a href="https://github.com/andrewallenbruce/forager/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/andrewallenbruce/forager.svg" alt="last commit"></a></li>
 <li><a href="https://app.codecov.io/gh/andrewallenbruce/forager?branch=master" class="external-link"><img src="https://codecov.io/gh/andrewallenbruce/forager/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>

@@ -113,7 +113,26 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dar <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date_reconciliation</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_adjudication</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu">bin_aging</span><span class="op">(</span><span class="va">dar</span>, <span class="st">"chop"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      n_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   aging_bin n_claims balance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (30, 60]        58   <span style="text-decoration: underline;">4</span>439.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> (0, 30]         42   <span style="text-decoration: underline;">3</span>420.</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"date_service"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"charges"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"payer"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span></span>
@@ -122,16 +141,16 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">date_service</span> <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">payer</span>    <span style="font-weight: bold;">days_elapsed</span> <span style="font-weight: bold;">aging_bin</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-05-16     278.  Medicaid           15 0-30     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-04-30      11.2 BCBS               31 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-04-25      95.8 UHC                36 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-13      42.3 UHC                48 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-04-13     132.  BCBS               48 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-04-01     385.  Anthem             60 31-60    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-03-27      21.8 Cigna              65 61-90    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-03-26     144.  Centene            66 61-90    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-03-22      47.9 BCBS               70 61-90    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-03-08      46.3 Anthem             84 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-05-06     189.  Cigna              29 0-30     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-05-05     119.  BCBS               30 0-30     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-04-21     141.  Anthem             44 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-21      31.5 Anthem             44 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-04-17     225.  Humana             48 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-04-08      13.8 Cigna              57 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-03-26     225.  Medicare           70 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-03-25      15.6 Humana             71 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-03-03     186.  Anthem             93 91-120   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-03-02      59.1 UHC                94 91-120   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">charges</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
@@ -154,12 +173,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`2024`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ins_name 0-30 31-60 61-90 91-120 121+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA   78    26    48     50   46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross  186    86    73     83   94</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA  106    37    43     41   46</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry    9     6     6      7    2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare  165    84    71     85   83</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient  344   174   151    177  153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA   73    27    46     51   51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross  174    87    69     89  103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA  101    36    44     42   50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry    9     5     7      7    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare  152    87    67     90   92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient  315   171   160    174  179</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
