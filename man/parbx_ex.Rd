@@ -26,4 +26,3 @@ parbx_ex(
     "CVSHealth"))
 
 }
-\keyword{internal}

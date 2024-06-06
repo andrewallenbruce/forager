@@ -1,9 +1,10 @@
 #' Generate Mock PARBx data
-#' @param payer `[character]` vector of payer names
-#' @param ... `[dots]` additional arguments
-#' @return A [tibble][tibble::tibble-package]
 #'
-#' @keywords internal
+#' @param payer `[character]` vector of payer names
+#'
+#' @param ... `[dots]` additional arguments
+#'
+#' @return A [tibble][tibble::tibble-package]
 #'
 #' @examples
 #' # Every name generates 60 rows of data
@@ -14,6 +15,7 @@
 #'     "CVSHealth"))
 #'
 #' @autoglobal
+#'
 #' @export
 parbx_ex <- function(payer, ...) {
 
@@ -28,7 +30,7 @@ parbx_ex <- function(payer, ...) {
     .add_class()
 }
 
-#' @keywords internal
+#' @autoglobal
 #'
 #' @noRd
 parbx_ex_ <- function(payer, ...) {

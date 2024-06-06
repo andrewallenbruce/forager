@@ -36,6 +36,8 @@ utils::globalVariables(c(
   "ending_ar",
   # <net_ex>
   "gross_charges",
+  # <parbx_ex_>
+  "month",
   # <avg_dar>
   "ndip",
   # <predict_net>
