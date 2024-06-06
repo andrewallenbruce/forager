@@ -5,7 +5,9 @@ print.forager <- function(x, ...) {
     list(
       pillar.bold = TRUE,
       pillar.subtle_num = TRUE,
-      pillar.print_min = 20
+      pillar.width = getOption("width"),
+      pillar.min_title_chars = 8,
+      pillar.sigfig = 2
       ),
     NextMethod()
   )

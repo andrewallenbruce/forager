@@ -26,6 +26,8 @@ library(tidyr)
 library(gt)
 library(gtExtras)
 library(ggplot2)
+library(ggrepel)
+library(ggalt)
 library(scales)
 library(headliner)
 ```
@@ -95,10 +97,11 @@ dar_mon |>
 
 ```{r}
 dar_mon |> 
-  ggplot(aes(x = mon, y = dar)) +
+  ggplot(aes(x = date, y = dar)) +
   geom_line(group = 1, linetype = "dashed", alpha = 0.7) +
   geom_hline(yintercept = 35, color = "red") +
   labs(title = "Days in AR by Month", x = NULL, y = NULL) +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b") +
   ggthemes::scale_color_fivethirtyeight() +
   ggthemes::theme_fivethirtyeight(base_size = 10)
 ```
@@ -114,9 +117,9 @@ dar_ex() |>
     color = "red",
     alpha = 0.7,
     linewidth = 1.5) +
-  scale_y_continuous(labels = dollar_format(prefix = "$")) +
+  labs(title = "Gross Charges & Ending AR Balance by Month", x = NULL, y = NULL) +
+  scale_y_continuous(labels = dollar_format(prefix = "$", scale = 0.001, suffix = "k")) +
   scale_x_date(date_breaks = "1 month", date_labels = "%b") +
-  labs(title = NULL, x = NULL, y = NULL) + 
   ggthemes::scale_color_fivethirtyeight() +
   ggthemes::theme_fivethirtyeight(base_size = 10)
 ```
@@ -150,7 +153,7 @@ dar_mon <- dar_mon |>
 
 dar_mon |> 
   ggplot(aes(x = earb, y = dar)) +
-  geom_point(aes(colour = dar > 35), show.legend = FALSE) +
+  geom_point(aes(fill = dar > 35), show.legend = FALSE, size = 5, stroke = 1, shape = 21) +
   geom_hline(yintercept = 35, color = "red", alpha = 0.5) +
   scale_x_continuous(
     labels = dollar_format(scale = 0.001, suffix = "k"), 
@@ -357,6 +360,33 @@ binned <- load_ex("aging_ex") |>
 
 binned
 ```
+
+
+```{r fig.height=8, fig.width=10, fig.dpi=600}
+binned |> 
+  # filter(charges > mean(charges)) |> 
+  ggplot() +
+  geom_point(aes(x = dos, y = charges, fill = aging_bin), size = 3.5, shape = 21, stroke = 0.6) +
+  ggalt::geom_spikelines(data = binned |> group_by(aging_bin) |> filter(charges == max(charges)), 
+                  aes(x = dos, y = charges, fill = aging_bin), linetype = 3) +
+  ggrepel::geom_label_repel(data = binned |> 
+                              group_by(aging_bin) |> 
+                              filter(charges == max(charges)),  
+                            aes(x = dos, y = charges, label = ins_name)) +
+  labs(title = "Aging Bins", x = NULL, y = NULL) +
+  scale_y_continuous(
+    labels = dollar_format(prefix = "$"),
+    limits = c(min(binned$charges), max(binned$charges) + 10)) +
+  scale_x_date(date_breaks = "1 week", date_labels = "%W") +
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 12) +
+  theme(legend.position = "top",
+        axis.text.x = element_text(size = 10, face = "bold"),
+        axis.text.y = element_text(size = 12, face = "bold")
+        )
+```
+
+
 
 ```{r}
 binned |>

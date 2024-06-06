@@ -8,6 +8,7 @@ utils::globalVariables(c(
   # <generate_data>
   "age",
   # <bin_aging>
+  # <parbx_ex>
   "aging_bin",
   # <generate_data>
   "balance",

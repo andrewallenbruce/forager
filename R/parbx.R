@@ -1,4 +1,8 @@
 #' Generate Mock PARBx data
+#' @param payer `[character]` vector of payer names
+#' @param ... `[dots]` additional arguments
+#' @return A [tibble][tibble::tibble-package]
+#'
 #' @keywords internal
 #'
 #' @examples
@@ -9,7 +13,7 @@
 #'     "Coventry", "Medicaid", "Centene",
 #'     "CVSHealth"))
 #'
-#'
+#' @autoglobal
 #' @export
 parbx_ex <- function(payer, ...) {
 

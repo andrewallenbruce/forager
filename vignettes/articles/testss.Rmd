@@ -17,6 +17,9 @@ options(scipen = 999)
 
 library(forager)
 library(dplyr)
+library(lubridate)
+library(clock)
+library(tidyr)
 library(ggplot2)
 library(ggforce)
 library(scales)
@@ -111,15 +114,40 @@ ggplot(old, aes(y = aging_bin, x = balance)) +
 
 
 ```{r}
-load_ex("aging_biweekly") |> 
-  gt::gt_preview() |> 
-  opt_table_font(font = google_font(name = "Fira Code"))
+biweekly <- load_ex("aging_biweekly") |>
+  mutate(year = get_year(date), 
+         month = date_month_factor(date, abbreviate = TRUE), 
+         .after = date) |> 
+  arrange(date, aging_bin)
+
+ggplot(data = biweekly, 
+       aes(x = forcats::fct_rev(aging_bin), y = balance, fill = date)) +
+  geom_col(position = position_stack(reverse = TRUE)) +
+  # geom_col(position = position_fill(reverse = TRUE)) +
+  coord_flip(clip = "off") +
+  labs(title = NULL, x = NULL) + 
+  ggthemes::scale_color_fivethirtyeight() +
+  ggthemes::theme_fivethirtyeight(base_size = 10) +
+  theme(legend.position = "none",
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 12, face = "bold")
+        )
 ```
 
 
 
+
+
 ```{r}
-load_ex("aging_ex") |> 
+agingex <- load_ex("aging_ex")[1:4] |> 
+  days_between(dos) |> 
+  bin_aging(days_elapsed) |>
+  mutate(year = get_year(dos), 
+         quarter = get_quarter(as_year_quarter_day(dos)),
+         month = date_month_factor(dos), 
+         .after = dos)
+
+agingex |>
   gt::gt_preview() |> 
   opt_table_font(font = google_font(name = "Fira Code"))
 ```

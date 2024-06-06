@@ -6,6 +6,14 @@
 \usage{
 parbx_ex(payer, ...)
 }
+\arguments{
+\item{payer}{\verb{[character]} vector of payer names}
+
+\item{...}{\verb{[dots]} additional arguments}
+}
+\value{
+A \link[tibble:tibble-package]{tibble}
+}
 \description{
 Generate Mock PARBx data
 }
@@ -16,7 +24,6 @@ parbx_ex(
     "Humana", "UHC", "Medicare",
     "Coventry", "Medicaid", "Centene",
     "CVSHealth"))
-
 
 }
 \keyword{internal}
