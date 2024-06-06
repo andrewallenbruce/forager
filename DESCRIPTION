@@ -30,9 +30,9 @@ Suggests:
     covr,
     forcats,
     fuimus,
+    ggalt,
     ggforce,
     ggplot2,
-    ggalt,
     ggrepel,
     ggthemes,
     gt,
@@ -53,7 +53,6 @@ VignetteBuilder:
     knitr
 Remotes: 
     github::andrewallenbruce/fuimus
-    github::hrbrmstr/ggalt
 Config/roxyglobals/filename: generated-globals.R
 Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3

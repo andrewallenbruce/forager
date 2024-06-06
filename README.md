@@ -17,8 +17,8 @@
 
 <!-- badges: start -->
 
-\[![GitHub R package
-version](https://img.shields.io/github/r-package/v/andrewallenbruce/forager?style=flat-square&logo=R&label=Package&color=%23192a38)\]
+![GitHub R package
+version](https://img.shields.io/github/r-package/v/andrewallenbruce/forager?style=flat-square&logo=R&label=Package&color=%23192a38)
 [![R-CMD-check](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andrewallenbruce/forager/actions/workflows/R-CMD-check.yaml)
 [![License:
 MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://choosealicense.com/licenses/mit/)
@@ -62,31 +62,22 @@ library(fuimus)
 x <- generate_data(15000)
 x
 #> # A tibble: 15,000 × 10
-#>    claimid payer    charges balance date_service date_release date_submission
-#>    <fct>   <fct>      <dbl>   <dbl> <date>       <date>       <date>         
-#>  1 00137   Anthem     177.    177.  2024-05-20   2024-05-23   2024-05-28     
-#>  2 00180   Anthem     192.    192.  2024-05-20   2024-06-07   2024-06-15     
-#>  3 00376   BCBS        88.9    88.9 2024-05-20   2024-05-20   2024-05-21     
-#>  4 00400   Cigna      224.    224.  2024-05-20   2024-05-29   2024-06-04     
-#>  5 00490   BCBS       190.    190.  2024-05-20   2024-05-28   2024-06-03     
-#>  6 00556   Humana      94.4     0   2024-05-20   2024-05-22   2024-05-22     
-#>  7 00577   Humana      61.0    61.0 2024-05-20   2024-05-30   2024-05-31     
-#>  8 00616   Medicare   175.    175.  2024-05-20   2024-05-21   2024-05-23     
-#>  9 00651   Cigna      256.      0   2024-05-20   2024-05-30   2024-05-31     
-#> 10 00815   Cigna      119.      0   2024-05-20   2024-05-26   2024-05-28     
-#> 11 00817   Cigna      110.      0   2024-05-20   2024-05-29   2024-05-31     
-#> 12 00888   Medicaid    36.9    36.9 2024-05-20   2024-05-21   2024-05-24     
-#> 13 00906   Centene     60.4     0   2024-05-20   2024-05-25   2024-05-27     
-#> 14 00939   BCBS       249.    249.  2024-05-20   2024-05-26   2024-05-30     
-#> 15 00957   Humana     637.      0   2024-05-20   2024-06-04   2024-06-04     
-#> 16 01077   UHC         35.4     0   2024-05-20   2024-06-01   2024-06-04     
-#> 17 01128   Centene     49.5    49.5 2024-05-20   2024-05-21   2024-05-24     
-#> 18 01167   BCBS       285.    285.  2024-05-20   2024-05-31   2024-06-01     
-#> 19 01204   BCBS       109.    109.  2024-05-20   2024-05-28   2024-06-02     
-#> 20 01282   Humana     250.    250.  2024-05-20   2024-05-30   2024-05-30     
-#> # ℹ 14,980 more rows
-#> # ℹ 3 more variables: date_acceptance <date>, date_adjudication <date>,
-#> #   date_reconciliation <date>
+#>    claimid payer    charges balance date_serv…¹ date_rel…² date_sub…³ date_acc…⁴
+#>    <fct>   <fct>      <dbl>   <dbl> <date>      <date>     <date>     <date>    
+#>  1 00021   BCBS        135.      0  2024-05-22  2024-05-27 2024-05-28 2024-06-05
+#>  2 00062   Centene      65.     65. 2024-05-22  2024-05-23 2024-05-25 2024-06-01
+#>  3 00219   Anthem      196.    196. 2024-05-22  2024-06-09 2024-06-12 2024-06-19
+#>  4 00228   BCBS        189.    189. 2024-05-22  2024-05-27 2024-05-29 2024-06-10
+#>  5 00549   Anthem      113.    113. 2024-05-22  2024-05-28 2024-06-01 2024-06-17
+#>  6 00563   Humana      191.    191. 2024-05-22  2024-06-05 2024-06-05 2024-06-18
+#>  7 00589   Medicaid    107.      0  2024-05-22  2024-05-25 2024-05-26 2024-05-29
+#>  8 00618   BCBS         31.      0  2024-05-22  2024-05-22 2024-05-25 2024-06-03
+#>  9 00627   Humana      231.    231. 2024-05-22  2024-06-11 2024-06-14 2024-06-21
+#> 10 00766   Medicaid    139.      0  2024-05-22  2024-05-23 2024-05-24 2024-06-01
+#> # ℹ 14,990 more rows
+#> # ℹ abbreviated names: ¹​date_service, ²​date_release, ³​date_submission,
+#> #   ⁴​date_acceptance
+#> # ℹ 2 more variables: date_adjudication <date>, date_reconciliation <date>
 ```
 
 <br>
@@ -113,18 +104,18 @@ long <- x |>
 
 long
 #> # A tibble: 90,000 × 7
-#>    claimid payer  charges balance date_type      date        days
-#>    <fct>   <fct>    <dbl>   <dbl> <fct>          <date>     <dbl>
-#>  1 00137   Anthem    177.    177. service        2024-05-20    NA
-#>  2 00137   Anthem    177.    177. release        2024-05-23     3
-#>  3 00137   Anthem    177.    177. submission     2024-05-28     5
-#>  4 00137   Anthem    177.    177. acceptance     2024-06-04     7
-#>  5 00137   Anthem    177.    177. adjudication   2024-06-17    13
-#>  6 00137   Anthem    177.    177. reconciliation NA            NA
-#>  7 00180   Anthem    192.    192. service        2024-05-20    NA
-#>  8 00180   Anthem    192.    192. release        2024-06-07    18
-#>  9 00180   Anthem    192.    192. submission     2024-06-15     8
-#> 10 00180   Anthem    192.    192. acceptance     2024-06-23     8
+#>    claimid payer   charges balance date_type      date        days
+#>    <fct>   <fct>     <dbl>   <dbl> <fct>          <date>     <dbl>
+#>  1 00021   BCBS      135.      0   service        2024-05-22    NA
+#>  2 00021   BCBS      135.      0   release        2024-05-27     5
+#>  3 00021   BCBS      135.      0   submission     2024-05-28     1
+#>  4 00021   BCBS      135.      0   acceptance     2024-06-05     8
+#>  5 00021   BCBS      135.      0   adjudication   2024-06-24    19
+#>  6 00021   BCBS      135.      0   reconciliation 2024-06-24     0
+#>  7 00062   Centene    64.9    64.9 service        2024-05-22    NA
+#>  8 00062   Centene    64.9    64.9 release        2024-05-23     1
+#>  9 00062   Centene    64.9    64.9 submission     2024-05-25     2
+#> 10 00062   Centene    64.9    64.9 acceptance     2024-06-01     7
 #> # ℹ 89,990 more rows
 ```
 
@@ -145,16 +136,16 @@ x
 #> # A tibble: 15,000 × 16
 #>    claimid payer    charges balance date_service date_release date_submission
 #>    <fct>   <fct>      <dbl>   <dbl> <date>       <date>       <date>         
-#>  1 00137   Anthem     177.    177.  2024-05-20   2024-05-23   2024-05-28     
-#>  2 00180   Anthem     192.    192.  2024-05-20   2024-06-07   2024-06-15     
-#>  3 00376   BCBS        88.9    88.9 2024-05-20   2024-05-20   2024-05-21     
-#>  4 00400   Cigna      224.    224.  2024-05-20   2024-05-29   2024-06-04     
-#>  5 00490   BCBS       190.    190.  2024-05-20   2024-05-28   2024-06-03     
-#>  6 00556   Humana      94.4     0   2024-05-20   2024-05-22   2024-05-22     
-#>  7 00577   Humana      61.0    61.0 2024-05-20   2024-05-30   2024-05-31     
-#>  8 00616   Medicare   175.    175.  2024-05-20   2024-05-21   2024-05-23     
-#>  9 00651   Cigna      256.      0   2024-05-20   2024-05-30   2024-05-31     
-#> 10 00815   Cigna      119.      0   2024-05-20   2024-05-26   2024-05-28     
+#>  1 00021   BCBS       135.      0   2024-05-22   2024-05-27   2024-05-28     
+#>  2 00062   Centene     64.9    64.9 2024-05-22   2024-05-23   2024-05-25     
+#>  3 00219   Anthem     196.    196.  2024-05-22   2024-06-09   2024-06-12     
+#>  4 00228   BCBS       189.    189.  2024-05-22   2024-05-27   2024-05-29     
+#>  5 00549   Anthem     113.    113.  2024-05-22   2024-05-28   2024-06-01     
+#>  6 00563   Humana     191.    191.  2024-05-22   2024-06-05   2024-06-05     
+#>  7 00589   Medicaid   107.      0   2024-05-22   2024-05-25   2024-05-26     
+#>  8 00618   BCBS        30.8     0   2024-05-22   2024-05-22   2024-05-25     
+#>  9 00627   Humana     231.    231.  2024-05-22   2024-06-11   2024-06-14     
+#> 10 00766   Medicaid   139.      0   2024-05-22   2024-05-23   2024-05-24     
 #> # ℹ 14,990 more rows
 #> # ℹ 9 more variables: date_acceptance <date>, date_adjudication <date>,
 #> #   date_reconciliation <date>, days_release <dbl>, days_submission <dbl>,
@@ -183,16 +174,16 @@ x |>
 #> # A tibble: 32 × 11
 #>     year month    payer claims balance avg_release avg_submission avg_acceptance
 #>    <int> <ord>    <fct>  <int>   <dbl>       <dbl>          <dbl>          <dbl>
-#>  1  2024 February Huma…    122  11228.        7.63           3.02           7.89
-#>  2  2024 March    Huma…    702  63586.        7.82           2.86           7.41
-#>  3  2024 April    Huma…    620  55967.        7.76           2.99           7.55
-#>  4  2024 May      Huma…    422  37436.        8.29           2.88           7.51
-#>  5  2024 February BCBS     122  12000.        7.75           2.89           7.39
-#>  6  2024 March    BCBS     674  61762.        8.01           2.91           7.50
-#>  7  2024 April    BCBS     627  56806.        7.72           3.09           7.44
-#>  8  2024 May      BCBS     402  36197.        8.15           3.08           7.60
-#>  9  2024 February UHC       95   8118.        8.04           3.18           7.38
-#> 10  2024 March    UHC      681  64746.        8.05           3.02           7.66
+#>  1  2024 February Medi…     78   7496.        8.59           3.17           7.94
+#>  2  2024 March    Medi…    696  62947.        7.94           2.90           7.56
+#>  3  2024 April    Medi…    657  60394.        8.18           3.12           7.28
+#>  4  2024 May      Medi…    452  43507.        8.04           3.05           7.27
+#>  5  2024 February Cigna     64   5721.        8.67           3.41           7.73
+#>  6  2024 March    Cigna    630  58367.        8.07           3.11           7.55
+#>  7  2024 April    Cigna    629  57344.        8.00           2.99           7.68
+#>  8  2024 May      Cigna    488  44116.        7.55           2.92           7.44
+#>  9  2024 February Huma…     76   6431.        7.78           3.30           7.99
+#> 10  2024 March    Huma…    674  58633.        8.04           2.96           7.65
 #> # ℹ 22 more rows
 #> # ℹ 3 more variables: avg_adjudication <dbl>, avg_reconciliation <dbl>,
 #> #   avg_dar <dbl>
@@ -221,22 +212,22 @@ x |>
 #> # A tibble: 16 × 11
 #>     year   qtr payer    claims balance avg_release avg_submission avg_acceptance
 #>    <int> <int> <fct>     <int>   <dbl>       <dbl>          <dbl>          <dbl>
-#>  1  2024     1 Humana      824  74814.        7.79           2.88           7.48
-#>  2  2024     2 Humana     1042  93402.        7.97           2.95           7.53
-#>  3  2024     1 BCBS        796  73761.        7.97           2.91           7.48
-#>  4  2024     2 BCBS       1029  93003.        7.89           3.08           7.50
-#>  5  2024     1 UHC         776  72865.        8.05           3.04           7.62
-#>  6  2024     2 UHC        1084  97357.        8.05           3.06           7.52
-#>  7  2024     1 Medicare    831  74348.        7.88           2.95           7.43
-#>  8  2024     2 Medicare   1150  98295.        7.81           3.06           7.65
-#>  9  2024     1 Cigna       790  66635.        8.17           2.9            7.64
-#> 10  2024     2 Cigna      1078  92283.        8.14           3.04           7.36
-#> 11  2024     1 Centene     768  66969.        8.01           2.99           7.22
-#> 12  2024     2 Centene    1083  96715.        7.84           3.00           7.43
-#> 13  2024     1 Medicaid    809  71241.        8.30           3.10           7.48
-#> 14  2024     2 Medicaid   1071  96348.        8.19           2.92           7.47
-#> 15  2024     1 Anthem      795  73446.        8.08           2.88           7.65
-#> 16  2024     2 Anthem     1074  91720.        8.16           3.05           7.50
+#>  1  2024     1 Medicare    774  70443.        8.01           2.93           7.60
+#>  2  2024     2 Medicare   1109 103900.        8.12           3.09           7.27
+#>  3  2024     1 Cigna       694  64088.        8.12           3.14           7.56
+#>  4  2024     2 Cigna      1117 101460.        7.80           2.96           7.57
+#>  5  2024     1 Humana      750  65063.        8.01           3.00           7.68
+#>  6  2024     2 Humana     1120  97784.        8.11           3.02           7.43
+#>  7  2024     1 Medicaid    724  66020.        8.02           3.00           7.28
+#>  8  2024     2 Medicaid   1121  95469.        7.93           2.98           7.59
+#>  9  2024     1 BCBS        744  66094.        7.93           2.99           7.47
+#> 10  2024     2 BCBS       1114  96027.        7.92           2.92           7.33
+#> 11  2024     1 Centene     719  65663.        8.20           3.12           7.61
+#> 12  2024     2 Centene    1099  94090.        8.06           3.10           7.51
+#> 13  2024     1 Anthem      773  70821.        8.25           2.95           7.65
+#> 14  2024     2 Anthem     1177 103735.        7.87           2.93           7.50
+#> 15  2024     1 UHC         784  69643.        8.10           3.18           7.40
+#> 16  2024     2 UHC        1181 109391.        7.93           3.00           7.39
 #> # ℹ 3 more variables: avg_adjudication <dbl>, avg_reconciliation <dbl>,
 #> #   avg_dar <dbl>
 ```
@@ -260,9 +251,9 @@ x |>
 #> # A tibble: 3 × 3
 #>   aging_bin n_claims balance
 #>   <fct>        <int>   <dbl>
-#> 1 (0, 30]       5251 476554.
-#> 2 (30, 60]      9699 852812.
-#> 3 (60, 90]        50   3835.
+#> 1 (30, 60]      9674 847373.
+#> 2 (0, 30]       5277 488749.
+#> 3 (60, 90]        49   3568.
 ```
 
 ``` r
@@ -283,16 +274,16 @@ x |>
 #> # A tibble: 24 × 4
 #>    aging_bin payer    n_claims balance
 #>    <fct>     <fct>       <int>   <dbl>
-#>  1 0-30      Anthem        598  56212.
-#>  2 0-30      BCBS          657  59662.
-#>  3 0-30      Humana        655  57631.
-#>  4 0-30      Cigna         647  57389.
-#>  5 0-30      Medicaid      660  58457.
-#>  6 0-30      Centene       647  54513.
-#>  7 0-30      Medicare      722  64712.
-#>  8 0-30      UHC           665  67978.
-#>  9 31-60     Anthem       1263 108131.
-#> 10 31-60     Cigna        1210 100940.
+#>  1 0-30      Centene       609  56531.
+#>  2 0-30      Medicaid      632  55602.
+#>  3 0-30      BCBS          700  63211.
+#>  4 0-30      Cigna         634  59991.
+#>  5 0-30      Anthem        673  62800.
+#>  6 0-30      UHC           743  68920.
+#>  7 0-30      Medicare      652  60728.
+#>  8 0-30      Humana        634  60967.
+#>  9 31-60     BCBS         1153  98561.
+#> 10 31-60     Anthem       1271 111388.
 #> # ℹ 14 more rows
 ```
 
@@ -311,22 +302,23 @@ tibble(
     dart = 35,
     by = "month")
 #> # A tibble: 12 × 15
-#>    date          gct   earb  ndip   adc  dart   dar dar_pass ratio_ideal
-#>    <date>      <int>  <int> <int> <dbl> <dbl> <dbl> <lgl>          <dbl>
-#>  1 2024-01-01 249839 291018    31 8059.    35  36.1 FALSE           1.13
-#>  2 2024-02-01 250385 289676    29 8634.    35  33.6 TRUE            1.21
-#>  3 2024-03-01 250576 289570    31 8083.    35  35.8 FALSE           1.13
-#>  4 2024-04-01 249990 290394    30 8333     35  34.8 TRUE            1.17
-#>  5 2024-05-01 249706 290428    31 8055.    35  36.1 FALSE           1.13
-#>  6 2024-06-01 249190 290731    30 8306.    35  35.0 FALSE           1.17
-#>  7 2024-07-01 249424 289234    31 8046.    35  35.9 FALSE           1.13
-#>  8 2024-08-01 250495 290265    31 8080.    35  35.9 FALSE           1.13
-#>  9 2024-09-01 250192 290361    30 8340.    35  34.8 TRUE            1.17
-#> 10 2024-10-01 250188 289441    31 8071.    35  35.9 FALSE           1.13
-#> 11 2024-11-01 250335 289483    30 8344.    35  34.7 TRUE            1.17
-#> 12 2024-12-01 250820 289728    31 8091.    35  35.8 FALSE           1.13
-#> # ℹ 6 more variables: ratio_actual <dbl>, ratio_diff <dbl>, earb_target <dbl>,
-#> #   earb_diff <dbl>, gct_pct <dbl>, earb_pct <dbl>
+#>    date         gct  earb  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²
+#>    <date>     <int> <int> <int> <dbl> <dbl> <dbl> <lgl>         <dbl>      <dbl>
+#>  1 2024-01-01 2.5e5 2.9e5    31 8076.    35   36. FALSE           1.1        1.2
+#>  2 2024-02-01 2.5e5 2.9e5    29 8642.    35   34. TRUE            1.2        1.2
+#>  3 2024-03-01 2.5e5 2.9e5    31 8105.    35   36. FALSE           1.1        1.2
+#>  4 2024-04-01 2.5e5 2.9e5    30 8332.    35   35. TRUE            1.2        1.2
+#>  5 2024-05-01 2.5e5 2.9e5    31 8063.    35   36. FALSE           1.1        1.2
+#>  6 2024-06-01 2.5e5 2.9e5    30 8344.    35   35. TRUE            1.2        1.2
+#>  7 2024-07-01 2.5e5 2.9e5    31 8049.    35   36. FALSE           1.1        1.2
+#>  8 2024-08-01 2.5e5 2.9e5    31 8081.    35   36. FALSE           1.1        1.2
+#>  9 2024-09-01 2.5e5 2.9e5    30 8331     35   35. TRUE            1.2        1.2
+#> 10 2024-10-01 2.5e5 2.9e5    31 8079.    35   36. FALSE           1.1        1.2
+#> 11 2024-11-01 2.5e5 2.9e5    30 8342.    35   35. TRUE            1.2        1.2
+#> 12 2024-12-01 2.5e5 2.9e5    31 8075.    35   36. FALSE           1.1        1.2
+#> # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual
+#> # ℹ 5 more variables: ratio_diff <dbl>, earb_target <dbl>, earb_diff <dbl>,
+#> #   gct_pct <dbl>, earb_pct <dbl>
 ```
 
 <br>
@@ -346,14 +338,15 @@ tibble(
     dart = 35,
     by = "quarter")
 #> # A tibble: 4 × 15
-#>   date         earb    gct  ndip   adc  dart   dar dar_pass ratio_ideal
-#>   <date>      <int>  <int> <int> <dbl> <dbl> <dbl> <lgl>          <dbl>
-#> 1 2024-03-01 286313 750638    91 8249.    35  34.7 TRUE           0.385
-#> 2 2024-06-01 285421 751158    91 8254.    35  34.6 TRUE           0.385
-#> 3 2024-09-01 284292 751525    92 8169.    35  34.8 TRUE           0.380
-#> 4 2024-12-01 285983 750953    92 8163.    35  35.0 FALSE          0.380
-#> # ℹ 6 more variables: ratio_actual <dbl>, ratio_diff <dbl>, earb_target <dbl>,
-#> #   earb_diff <dbl>, gct_pct <dbl>, earb_pct <dbl>
+#>   date         earb   gct  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²
+#>   <date>      <int> <int> <int> <dbl> <dbl> <dbl> <lgl>         <dbl>      <dbl>
+#> 1 2024-03-01 285273 7.5e5    91 8242.    35   35. TRUE           0.38       0.38
+#> 2 2024-06-01 285893 7.5e5    91 8237.    35   35. TRUE           0.38       0.38
+#> 3 2024-09-01 285357 7.5e5    92 8134.    35   35. FALSE          0.38       0.38
+#> 4 2024-12-01 284881 7.5e5    92 8153.    35   35. TRUE           0.38       0.38
+#> # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual
+#> # ℹ 5 more variables: ratio_diff <dbl>, earb_target <dbl>, earb_diff <dbl>,
+#> #   gct_pct <dbl>, earb_pct <dbl>
 ```
 
 ## Code of Conduct
