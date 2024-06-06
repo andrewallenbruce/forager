@@ -156,22 +156,23 @@ are useful for healthcare revenue cycle analysis.</p>
 <span></span>
 <span><span class="va">dar_mon</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 15</span></span></span>
-<span><span class="co">#&gt;    <span style="font-weight: bold;">date</span>           <span style="font-weight: bold;">gct</span>    <span style="font-weight: bold;">earb</span>  <span style="font-weight: bold;">ndip</span>    <span style="font-weight: bold;">adc</span>  <span style="font-weight: bold;">dart</span>   <span style="font-weight: bold;">dar</span> <span style="font-weight: bold;">dar_pass</span> <span style="font-weight: bold;">ratio_ideal</span></span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01 <span style="text-decoration: underline;">325</span><span style="color: #949494;">982</span>. <span style="text-decoration: underline;">288</span><span style="color: #949494;">433</span>.    31 <span style="text-decoration: underline;">10</span>5<span style="color: #949494;">16</span>.    35  27.4 TRUE            1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01 <span style="text-decoration: underline;">297</span><span style="color: #949494;">732</span>. <span style="text-decoration: underline;">307</span><span style="color: #949494;">871</span>.    29 <span style="text-decoration: underline;">10</span>2<span style="color: #949494;">67</span>.    35  30.0 TRUE            1.21</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01 <span style="text-decoration: underline;">198</span><span style="color: #949494;">655</span>. <span style="text-decoration: underline;">253</span><span style="color: #949494;">977</span>.    31  <span style="text-decoration: underline;">6</span>40<span style="color: #949494;">8</span>.    35  39.6 FALSE           1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01 <span style="text-decoration: underline;">186</span><span style="color: #949494;">048</span>. <span style="text-decoration: underline;">183</span><span style="color: #949494;">685</span>.    30  <span style="text-decoration: underline;">6</span>20<span style="color: #949494;">2</span>.    35  29.6 TRUE            1.17</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01 <span style="text-decoration: underline;">123</span><span style="color: #949494;">654</span>. <span style="text-decoration: underline;">204</span><span style="color: #949494;">228</span>.    31  <span style="text-decoration: underline;">3</span>98<span style="color: #949494;">9</span>.    35  51.2 FALSE           1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01 <span style="text-decoration: underline;">131</span><span style="color: #949494;">440</span>. <span style="text-decoration: underline;">203</span><span style="color: #949494;">460</span>.    30  <span style="text-decoration: underline;">4</span>38<span style="color: #949494;">1</span>.    35  46.4 FALSE           1.17</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01 <span style="text-decoration: underline;">153</span><span style="color: #949494;">992</span>. <span style="text-decoration: underline;">182</span><span style="color: #949494;">771</span>.    31  <span style="text-decoration: underline;">4</span>96<span style="color: #949494;">7</span>.    35  36.8 FALSE           1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01 <span style="text-decoration: underline;">156</span><span style="color: #949494;">976</span>. <span style="text-decoration: underline;">169</span><span style="color: #949494;">634</span>.    31  <span style="text-decoration: underline;">5</span>06<span style="color: #949494;">4</span>.    35  33.5 TRUE            1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01 <span style="text-decoration: underline;">146</span><span style="color: #949494;">878</span>. <span style="text-decoration: underline;">179</span><span style="color: #949494;">348</span>.    30  <span style="text-decoration: underline;">4</span>89<span style="color: #949494;">6</span>.    35  36.6 FALSE           1.17</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01 <span style="text-decoration: underline;">163</span><span style="color: #949494;">799</span>. <span style="text-decoration: underline;">178</span><span style="color: #949494;">051</span>.    31  <span style="text-decoration: underline;">5</span>28<span style="color: #949494;">4</span>.    35  33.7 TRUE            1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01 <span style="text-decoration: underline;">151</span><span style="color: #949494;">411</span>. <span style="text-decoration: underline;">162</span><span style="color: #949494;">757</span>.    30  <span style="text-decoration: underline;">5</span>04<span style="color: #949494;">7</span>.    35  32.2 TRUE            1.17</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01 <span style="text-decoration: underline;">169</span><span style="color: #949494;">094</span>. <span style="text-decoration: underline;">199</span><span style="color: #949494;">849</span>.    31  <span style="text-decoration: underline;">5</span>45<span style="color: #949494;">5</span>.    35  36.6 FALSE           1.13</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 6 more variables: </span><span style="color: #949494; font-weight: bold;">ratio_actual</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">ratio_diff</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_target</span><span style="color: #949494;"> &lt;dbl&gt;,</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">earb_diff</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">gct_pct</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_pct</span><span style="color: #949494;"> &lt;dbl&gt;</span></span></span></code></pre>
+<span><span class="co">#&gt;    <span style="font-weight: bold;">date</span>         <span style="font-weight: bold;">gct</span>  <span style="font-weight: bold;">earb</span>  <span style="font-weight: bold;">ndip</span>   <span style="font-weight: bold;">adc</span>  <span style="font-weight: bold;">dart</span>   <span style="font-weight: bold;">dar</span> <span style="font-weight: bold;">dar_pass</span> <span style="font-weight: bold;">ratio_id…¹</span> <span style="font-weight: bold;">ratio_ac…²</span></span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01 3.3<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 1.1<span style="color: #949494;">e</span>4    35   27. TRUE            1.1       <span style="color: #949494;">0.</span>88</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01 3.0<span style="color: #949494;">e</span>5 3.1<span style="color: #949494;">e</span>5    29 1.0<span style="color: #949494;">e</span>4    35   30. TRUE            1.2       1.0 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01 2.0<span style="color: #949494;">e</span>5 2.5<span style="color: #949494;">e</span>5    31 6.4<span style="color: #949494;">e</span>3    35   40. FALSE           1.1       1.3 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01 1.9<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    30 6.2<span style="color: #949494;">e</span>3    35   30. TRUE            1.2       <span style="color: #949494;">0.</span>99</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01 1.2<span style="color: #949494;">e</span>5 2.0<span style="color: #949494;">e</span>5    31 4.0<span style="color: #949494;">e</span>3    35   51. FALSE           1.1       1.7 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01 1.3<span style="color: #949494;">e</span>5 2.0<span style="color: #949494;">e</span>5    30 4.4<span style="color: #949494;">e</span>3    35   46. FALSE           1.2       1.5 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01 1.5<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    31 5.0<span style="color: #949494;">e</span>3    35   37. FALSE           1.1       1.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01 1.6<span style="color: #949494;">e</span>5 1.7<span style="color: #949494;">e</span>5    31 5.1<span style="color: #949494;">e</span>3    35   33. TRUE            1.1       1.1 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01 1.5<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    30 4.9<span style="color: #949494;">e</span>3    35   37. FALSE           1.2       1.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01 1.6<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    31 5.3<span style="color: #949494;">e</span>3    35   34. TRUE            1.1       1.1 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01 1.5<span style="color: #949494;">e</span>5 1.6<span style="color: #949494;">e</span>5    30 5.0<span style="color: #949494;">e</span>3    35   32. TRUE            1.2       1.1 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01 1.7<span style="color: #949494;">e</span>5 2.0<span style="color: #949494;">e</span>5    31 5.5<span style="color: #949494;">e</span>3    35   37. FALSE           1.1       1.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: </span><span style="color: #949494; font-weight: bold;">ratio_diff</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_target</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_diff</span><span style="color: #949494;"> &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">gct_pct</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_pct</span><span style="color: #949494;"> &lt;dbl&gt;</span></span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -873,18 +874,15 @@ are useful for healthcare revenue cycle analysis.</p>
 </div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mon</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Days in AR by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 month"</span>, date_labels <span class="op">=</span> <span class="st">"%b"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `geom_line()`:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Problem while computing aesthetics.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Error occurred in the 1st layer.</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">Caused by error:</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> object 'mon' not found</span></span></code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="getting-started_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">ending_ar</span><span class="op">)</span>,</span>
@@ -895,13 +893,13 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>    color <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>    linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Gross Charges &amp; Ending AR Balance by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span>, scale <span class="op">=</span> <span class="fl">0.001</span>, suffix <span class="op">=</span> <span class="st">"k"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 month"</span>, date_labels <span class="op">=</span> <span class="st">"%b"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ar_ch</span> <span class="op">&lt;-</span> <span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reframe.html" class="external-link">reframe</a></span><span class="op">(</span></span>
 <span>    date <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/month.html" class="external-link">month</a></span><span class="op">(</span><span class="va">date</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, abbr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -920,13 +918,13 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">&lt;-</span> <span class="va">dar_mon</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>month <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, .after <span class="op">=</span> <span class="va">date</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>colour <span class="op">=</span> <span class="va">dar</span> <span class="op">&gt;</span> <span class="fl">35</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dar</span> <span class="op">&gt;</span> <span class="fl">35</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span>, size <span class="op">=</span> <span class="fl">5</span>, stroke <span class="op">=</span> <span class="fl">1</span>, shape <span class="op">=</span> <span class="fl">21</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_x_continuous</span><span class="op">(</span></span>
 <span>    labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">0.001</span>, suffix <span class="op">=</span> <span class="st">"k"</span><span class="op">)</span>, </span>
@@ -938,7 +936,7 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_abline</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="va">ratio_ideal</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey"</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gct</span>, y <span class="op">=</span> <span class="va">earb_target</span><span class="op">)</span>, group <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"red"</span>, shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">2.5</span>, stroke <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
@@ -955,7 +953,7 @@ are useful for healthcare revenue cycle analysis.</p>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>        strip.text.y <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting-started_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">month</span>, <span class="va">gct</span>, <span class="va">earb</span>, <span class="va">earb_target</span>, <span class="va">dar</span>, <span class="va">dar_pass</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">headliner</span><span class="fu">::</span><span class="fu"><a href="https://rjake.github.io/headliner/reference/add_headline_column.html" class="external-link">add_headline_column</a></span><span class="op">(</span></span>
@@ -1600,7 +1598,7 @@ are useful for healthcare revenue cycle analysis.</p>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">right_join</span><span class="op">(</span></span>
 <span>  <span class="va">dar_mon</span>, </span>
 <span>  <span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
@@ -2438,7 +2436,7 @@ are useful for healthcare revenue cycle analysis.</p>
     </tr></tfoot>
 </table>
 </div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
 <span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
@@ -2494,7 +2492,7 @@ are useful for healthcare revenue cycle analysis.</p>
 <div class="section level2">
 <h2 id="aging-bins">Aging Bins<a class="anchor" aria-label="anchor" href="#aging-bins"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">dos</span><span class="op">:</span><span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/days_between.html">days_between</a></span><span class="op">(</span><span class="va">dos</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -2504,28 +2502,41 @@ are useful for healthcare revenue cycle analysis.</p>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,618 × 5</span></span></span>
 <span><span class="co">#&gt;    <span style="font-weight: bold;">dos</span>        <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">ins_name</span>   <span style="font-weight: bold;">days_elapsed</span> <span style="font-weight: bold;">aging_bin</span></span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    390. Medicare            160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    173. Patient             160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    246. Blue Cross          160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    507. AETNA               160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    483. Blue Cross          160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    399. AETNA               160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    850. Patient             160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    351. Medicare            160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    523. Blue Cross          160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    894. Patient             160 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2023-12-28    599. Blue Cross          159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2023-12-28    325. AETNA               159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 2023-12-28    132. Patient             159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 2023-12-28    134. CIGNA               159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> 2023-12-28    498. Patient             159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> 2023-12-28    241. Patient             159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> 2023-12-28    327. CIGNA               159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> 2023-12-28    580. Medicare            159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">19</span> 2023-12-28    588. Patient             159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">20</span> 2023-12-28    345. Medicare            159 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,598 more rows</span></span></span></code></pre>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    39<span style="color: #949494;">0</span>. Medicare            16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    17<span style="color: #949494;">3</span>. Patient             16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    24<span style="color: #949494;">6</span>. Blue Cross          16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    50<span style="color: #949494;">7</span>. AETNA               16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    48<span style="color: #949494;">3</span>. Blue Cross          16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    39<span style="color: #949494;">9</span>. AETNA               16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    85<span style="color: #949494;">0</span>. Patient             16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    35<span style="color: #949494;">1</span>. Medicare            16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    52<span style="color: #949494;">3</span>. Blue Cross          16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    89<span style="color: #949494;">4</span>. Patient             16<span style="color: #949494;">2</span> 121+     </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># filter(charges &gt; mean(charges)) |&gt; </span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">dos</span>, y <span class="op">=</span> <span class="va">charges</span>, fill <span class="op">=</span> <span class="va">aging_bin</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">3.5</span>, shape <span class="op">=</span> <span class="fl">21</span>, stroke <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggalt</span><span class="fu">::</span><span class="fu">geom_spikelines</span><span class="op">(</span>data <span class="op">=</span> <span class="va">binned</span> <span class="op">|&gt;</span> <span class="fu">group_by</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">charges</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>                  <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">dos</span>, y <span class="op">=</span> <span class="va">charges</span>, fill <span class="op">=</span> <span class="va">aging_bin</span><span class="op">)</span>, linetype <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://ggrepel.slowkow.com/reference/geom_text_repel.html" class="external-link">geom_label_repel</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">binned</span> <span class="op">|&gt;</span> </span>
+<span>                              <span class="fu">group_by</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>                              <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">charges</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span><span class="op">)</span>,  </span>
+<span>                            <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">dos</span>, y <span class="op">=</span> <span class="va">charges</span>, label <span class="op">=</span> <span class="va">ins_name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Aging Bins"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span></span>
+<span>    labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">binned</span><span class="op">$</span><span class="va">charges</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">binned</span><span class="op">$</span><span class="va">charges</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 week"</span>, date_labels <span class="op">=</span> <span class="st">"%W"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span>,</span>
+<span>        axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>        axis.text.y <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Error: 'geom_spikelines' is not an exported object from 'namespace:ggalt'</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
@@ -3001,33 +3012,33 @@ are useful for healthcare revenue cycle analysis.</p>
 <tbody class="gt_table_body">
 <tr>
 <th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">0-30</th>
-<td headers="stub_1_1 n_claims" class="gt_row gt_right">824 (31%)</td>
-<td headers="stub_1_1 balance" class="gt_row gt_right">$401,516 (31%)</td>
+<td headers="stub_1_1 n_claims" class="gt_row gt_right">788 (30%)</td>
+<td headers="stub_1_1 balance" class="gt_row gt_right">$382,787 (29%)</td>
 </tr>
 <tr>
 <th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">31-60</th>
-<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">413 (16%)</td>
-<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$204,748 (16%)</td>
+<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">436 (17%)</td>
+<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$215,714 (17%)</td>
 </tr>
 <tr>
 <th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">61-90</th>
-<td headers="stub_1_3 n_claims" class="gt_row gt_right">393 (15%)</td>
-<td headers="stub_1_3 balance" class="gt_row gt_right">$196,633 (15%)</td>
+<td headers="stub_1_3 n_claims" class="gt_row gt_right">386 (15%)</td>
+<td headers="stub_1_3 balance" class="gt_row gt_right">$192,405 (15%)</td>
 </tr>
 <tr>
 <th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">91-120</th>
-<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">453 (17%)</td>
-<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$220,150 (17%)</td>
+<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">440 (17%)</td>
+<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$219,272 (17%)</td>
 </tr>
 <tr>
 <th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub">121+</th>
-<td headers="stub_1_5 n_claims" class="gt_row gt_right">535 (20%)</td>
-<td headers="stub_1_5 balance" class="gt_row gt_right">$277,895 (21%)</td>
+<td headers="stub_1_5 n_claims" class="gt_row gt_right">568 (22%)</td>
+<td headers="stub_1_5 balance" class="gt_row gt_right">$290,764 (22%)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">summarise</span><span class="op">(</span></span>
@@ -3500,18 +3511,18 @@ are useful for healthcare revenue cycle analysis.</p>
 <tr class="gt_row_group_first">
 <td headers="0-30 stub_2_1 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">0-30</td>
 <th id="stub_2_1" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="0-30 stub_2_1 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">73 (2.79%)</td>
-<td headers="0-30 stub_2_1 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$32,970 (2.53%)</td>
+<td headers="0-30 stub_2_1 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">68 (2.60%)</td>
+<td headers="0-30 stub_2_1 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$29,941 (2.30%)</td>
 </tr>
 <tr>
 <th id="n_claims_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="0-30 n_claims_2 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">174 (6.65%)</td>
-<td headers="0-30 n_claims_2 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$85,616 (6.58%)</td>
+<td headers="0-30 n_claims_2 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">164 (6.26%)</td>
+<td headers="0-30 n_claims_2 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$81,305 (6.25%)</td>
 </tr>
 <tr>
 <th id="n_claims_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="0-30 n_claims_3 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">101 (3.86%)</td>
-<td headers="0-30 n_claims_3 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$47,437 (3.65%)</td>
+<td headers="0-30 n_claims_3 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">97 (3.71%)</td>
+<td headers="0-30 n_claims_3 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$45,336 (3.48%)</td>
 </tr>
 <tr>
 <th id="n_claims_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3520,29 +3531,29 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="0-30 n_claims_5 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">152 (5.81%)</td>
-<td headers="0-30 n_claims_5 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$72,622 (5.58%)</td>
+<td headers="0-30 n_claims_5 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">147 (5.61%)</td>
+<td headers="0-30 n_claims_5 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$71,126 (5.47%)</td>
 </tr>
 <tr>
 <th id="n_claims_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="0-30 n_claims_6 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">315 (12.03%)</td>
-<td headers="0-30 n_claims_6 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$158,669 (12.20%)</td>
+<td headers="0-30 n_claims_6 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">303 (11.57%)</td>
+<td headers="0-30 n_claims_6 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$150,877 (11.60%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="31-60 stub_2_7 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">31-60</td>
 <th id="stub_2_7" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="31-60 stub_2_7 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">27 (1.03%)</td>
-<td headers="31-60 stub_2_7 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$14,481 (1.11%)</td>
+<td headers="31-60 stub_2_7 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">32 (1.22%)</td>
+<td headers="31-60 stub_2_7 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$17,510 (1.35%)</td>
 </tr>
 <tr>
 <th id="n_claims_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="31-60 n_claims_8 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">87 (3.32%)</td>
-<td headers="31-60 n_claims_8 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$44,469 (3.42%)</td>
+<td headers="31-60 n_claims_8 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">94 (3.59%)</td>
+<td headers="31-60 n_claims_8 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$46,696 (3.59%)</td>
 </tr>
 <tr>
 <th id="n_claims_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="31-60 n_claims_9 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">36 (1.38%)</td>
-<td headers="31-60 n_claims_9 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$14,603 (1.12%)</td>
+<td headers="31-60 n_claims_9 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">39 (1.49%)</td>
+<td headers="31-60 n_claims_9 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$16,065 (1.23%)</td>
 </tr>
 <tr>
 <th id="n_claims_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3551,29 +3562,29 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="31-60 n_claims_11 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">87 (3.32%)</td>
-<td headers="31-60 n_claims_11 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$42,009 (3.23%)</td>
+<td headers="31-60 n_claims_11 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">90 (3.44%)</td>
+<td headers="31-60 n_claims_11 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$42,389 (3.26%)</td>
 </tr>
 <tr>
 <th id="n_claims_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="31-60 n_claims_12 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">171 (6.53%)</td>
-<td headers="31-60 n_claims_12 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$86,667 (6.66%)</td>
+<td headers="31-60 n_claims_12 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">176 (6.72%)</td>
+<td headers="31-60 n_claims_12 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$90,535 (6.96%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="61-90 stub_2_13 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">61-90</td>
 <th id="stub_2_13" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="61-90 stub_2_13 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">46 (1.76%)</td>
-<td headers="61-90 stub_2_13 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$29,052 (2.23%)</td>
+<td headers="61-90 stub_2_13 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">43 (1.64%)</td>
+<td headers="61-90 stub_2_13 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$26,282 (2.02%)</td>
 </tr>
 <tr>
 <th id="n_claims_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="61-90 n_claims_14 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">69 (2.64%)</td>
-<td headers="61-90 n_claims_14 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$32,043 (2.46%)</td>
+<td headers="61-90 n_claims_14 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">70 (2.67%)</td>
+<td headers="61-90 n_claims_14 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$33,134 (2.55%)</td>
 </tr>
 <tr>
 <th id="n_claims_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="61-90 n_claims_15 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">44 (1.68%)</td>
-<td headers="61-90 n_claims_15 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$19,365 (1.49%)</td>
+<td headers="61-90 n_claims_15 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">42 (1.60%)</td>
+<td headers="61-90 n_claims_15 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$18,208 (1.40%)</td>
 </tr>
 <tr>
 <th id="n_claims_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3582,29 +3593,29 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="61-90 n_claims_17 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">67 (2.56%)</td>
-<td headers="61-90 n_claims_17 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$33,062 (2.54%)</td>
+<td headers="61-90 n_claims_17 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">63 (2.41%)</td>
+<td headers="61-90 n_claims_17 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$30,577 (2.35%)</td>
 </tr>
 <tr>
 <th id="n_claims_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="61-90 n_claims_18 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">160 (6.11%)</td>
-<td headers="61-90 n_claims_18 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$80,404 (6.18%)</td>
+<td headers="61-90 n_claims_18 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">161 (6.15%)</td>
+<td headers="61-90 n_claims_18 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$81,497 (6.26%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="91-120 stub_2_19 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">91-120</td>
 <th id="stub_2_19" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="91-120 stub_2_19 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">51 (1.95%)</td>
-<td headers="91-120 stub_2_19 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$26,857 (2.06%)</td>
+<td headers="91-120 stub_2_19 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">47 (1.80%)</td>
+<td headers="91-120 stub_2_19 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$27,226 (2.09%)</td>
 </tr>
 <tr>
 <th id="n_claims_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="91-120 n_claims_20 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">89 (3.40%)</td>
-<td headers="91-120 n_claims_20 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$44,701 (3.44%)</td>
+<td headers="91-120 n_claims_20 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">84 (3.21%)</td>
+<td headers="91-120 n_claims_20 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$42,873 (3.30%)</td>
 </tr>
 <tr>
 <th id="n_claims_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="91-120 n_claims_21 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">42 (1.60%)</td>
-<td headers="91-120 n_claims_21 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$19,055 (1.46%)</td>
+<td headers="91-120 n_claims_21 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">43 (1.64%)</td>
+<td headers="91-120 n_claims_21 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$20,032 (1.54%)</td>
 </tr>
 <tr>
 <th id="n_claims_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3613,29 +3624,29 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="91-120 n_claims_23 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">90 (3.44%)</td>
-<td headers="91-120 n_claims_23 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$43,465 (3.34%)</td>
+<td headers="91-120 n_claims_23 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">89 (3.40%)</td>
+<td headers="91-120 n_claims_23 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$44,972 (3.46%)</td>
 </tr>
 <tr>
 <th id="n_claims_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="91-120 n_claims_24 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">174 (6.65%)</td>
-<td headers="91-120 n_claims_24 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$81,497 (6.26%)</td>
+<td headers="91-120 n_claims_24 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">170 (6.49%)</td>
+<td headers="91-120 n_claims_24 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$79,594 (6.12%)</td>
 </tr>
 <tr class="gt_row_group_first">
 <td headers="121+ stub_2_25 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">121+</td>
 <th id="stub_2_25" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="121+ stub_2_25 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">57 (2.18%)</td>
-<td headers="121+ stub_2_25 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$30,938 (2.38%)</td>
+<td headers="121+ stub_2_25 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">64 (2.44%)</td>
+<td headers="121+ stub_2_25 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$33,339 (2.56%)</td>
 </tr>
 <tr>
 <th id="n_claims_26" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="121+ n_claims_26 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">116 (4.43%)</td>
-<td headers="121+ n_claims_26 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$63,211 (4.86%)</td>
+<td headers="121+ n_claims_26 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">123 (4.70%)</td>
+<td headers="121+ n_claims_26 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$66,034 (5.08%)</td>
 </tr>
 <tr>
 <th id="n_claims_27" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="121+ n_claims_27 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">56 (2.14%)</td>
-<td headers="121+ n_claims_27 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$31,285 (2.40%)</td>
+<td headers="121+ n_claims_27 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">58 (2.22%)</td>
+<td headers="121+ n_claims_27 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$32,103 (2.47%)</td>
 </tr>
 <tr>
 <th id="n_claims_28" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
@@ -3644,13 +3655,13 @@ are useful for healthcare revenue cycle analysis.</p>
 </tr>
 <tr>
 <th id="n_claims_29" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="121+ n_claims_29 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">101 (3.86%)</td>
-<td headers="121+ n_claims_29 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$47,220 (3.63%)</td>
+<td headers="121+ n_claims_29 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">108 (4.13%)</td>
+<td headers="121+ n_claims_29 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$49,313 (3.79%)</td>
 </tr>
 <tr>
 <th id="n_claims_30" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="121+ n_claims_30 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">203 (7.75%)</td>
-<td headers="121+ n_claims_30 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$103,502 (7.96%)</td>
+<td headers="121+ n_claims_30 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">213 (8.14%)</td>
+<td headers="121+ n_claims_30 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$108,235 (8.32%)</td>
 </tr>
 </tbody>
 </table>

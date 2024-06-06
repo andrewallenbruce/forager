@@ -88,6 +88,24 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parbx_ex</span><span class="op">(</span><span class="va">payer</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>payer</dt>
+<dd><p><code>[character]</code> vector of payer names</p></dd>
+
+
+<dt>...</dt>
+<dd><p><code>[dots]</code> additional arguments</p></dd>
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A <a href="https://tibble.tidyverse.org/reference/tibble-package.html" class="external-link">tibble</a></p>
+
+
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -100,28 +118,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 600 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">date</span>       <span style="font-weight: bold;">month</span>    <span style="font-weight: bold;">payer</span> <span style="font-weight: bold;">aging_bin</span> <span style="font-weight: bold;">aging_prop</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-01-01 January  Cigna 0-30         <span style="color: #949494;">0.00</span>3<span style="text-decoration: underline;">56</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-01-01 January  Cigna 31-60        <span style="color: #949494;">0.</span>279  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-01-01 January  Cigna 61-90        <span style="color: #949494;">0.</span>159  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-01-01 January  Cigna 91-120       <span style="color: #949494;">0.</span>286  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-01-01 January  Cigna 121+         <span style="color: #949494;">0.</span>272  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-02-01 February Cigna 0-30         <span style="color: #949494;">0.</span>272  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-02-01 February Cigna 31-60        <span style="color: #949494;">0.</span>133  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-02-01 February Cigna 61-90        <span style="color: #949494;">0.</span>204  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-02-01 February Cigna 91-120       <span style="color: #949494;">0.0</span>40<span style="text-decoration: underline;">0</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-02-01 February Cigna 121+         <span style="color: #949494;">0.</span>352  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 2024-03-01 March    Cigna 0-30         <span style="color: #949494;">0.</span>390  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 2024-03-01 March    Cigna 31-60        <span style="color: #949494;">0.</span>187  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 2024-03-01 March    Cigna 61-90        <span style="color: #949494;">0.0</span>36<span style="text-decoration: underline;">7</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> 2024-03-01 March    Cigna 91-120       <span style="color: #949494;">0.</span>369  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> 2024-03-01 March    Cigna 121+         <span style="color: #949494;">0.0</span>16<span style="text-decoration: underline;">8</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> 2024-04-01 April    Cigna 0-30         <span style="color: #949494;">0.</span>221  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> 2024-04-01 April    Cigna 31-60        <span style="color: #949494;">0.</span>142  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> 2024-04-01 April    Cigna 61-90        <span style="color: #949494;">0.</span>168  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> 2024-04-01 April    Cigna 91-120       <span style="color: #949494;">0.</span>265  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> 2024-04-01 April    Cigna 121+         <span style="color: #949494;">0.</span>203  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 580 more rows</span></span>
-<span class="r-in"><span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-01-01 January  Cigna 0-30          <span style="color: #949494;">0.00</span>3<span style="text-decoration: underline;">6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-01-01 January  Cigna 31-60         <span style="color: #949494;">0.</span>28  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-01-01 January  Cigna 61-90         <span style="color: #949494;">0.</span>16  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-01-01 January  Cigna 91-120        <span style="color: #949494;">0.</span>29  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-01-01 January  Cigna 121+          <span style="color: #949494;">0.</span>27  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-02-01 February Cigna 0-30          <span style="color: #949494;">0.</span>27  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-02-01 February Cigna 31-60         <span style="color: #949494;">0.</span>13  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-02-01 February Cigna 61-90         <span style="color: #949494;">0.</span>20  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-02-01 February Cigna 91-120        <span style="color: #949494;">0.0</span>40 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-02-01 February Cigna 121+          <span style="color: #949494;">0.</span>35  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 590 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
