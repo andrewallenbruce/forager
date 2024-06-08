@@ -152,21 +152,21 @@
 </ul>
 <p><br></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/generate_data.html">generate_data</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span></span>
 <span><span class="va">x</span></span>
 <span><span class="co">#&gt; # A tibble: 15,000 × 10</span></span>
-<span><span class="co">#&gt;    claimid payer    charges balance date_serv…¹ date_rel…² date_sub…³ date_acc…⁴</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;      &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    </span></span>
-<span><span class="co">#&gt;  1 00021   BCBS        135.      0  2024-05-22  2024-05-27 2024-05-28 2024-06-05</span></span>
-<span><span class="co">#&gt;  2 00062   Centene      65.     65. 2024-05-22  2024-05-23 2024-05-25 2024-06-01</span></span>
-<span><span class="co">#&gt;  3 00219   Anthem      196.    196. 2024-05-22  2024-06-09 2024-06-12 2024-06-19</span></span>
-<span><span class="co">#&gt;  4 00228   BCBS        189.    189. 2024-05-22  2024-05-27 2024-05-29 2024-06-10</span></span>
-<span><span class="co">#&gt;  5 00549   Anthem      113.    113. 2024-05-22  2024-05-28 2024-06-01 2024-06-17</span></span>
-<span><span class="co">#&gt;  6 00563   Humana      191.    191. 2024-05-22  2024-06-05 2024-06-05 2024-06-18</span></span>
-<span><span class="co">#&gt;  7 00589   Medicaid    107.      0  2024-05-22  2024-05-25 2024-05-26 2024-05-29</span></span>
-<span><span class="co">#&gt;  8 00618   BCBS         31.      0  2024-05-22  2024-05-22 2024-05-25 2024-06-03</span></span>
-<span><span class="co">#&gt;  9 00627   Humana      231.    231. 2024-05-22  2024-06-11 2024-06-14 2024-06-21</span></span>
-<span><span class="co">#&gt; 10 00766   Medicaid    139.      0  2024-05-22  2024-05-23 2024-05-24 2024-06-01</span></span>
+<span><span class="co">#&gt;    claimid payer     charges balance date_ser…¹ date_rel…² date_sub…³ date_acc…⁴</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    </span></span>
+<span><span class="co">#&gt;  1 00021   Kaiser P…    139.      0  2024-05-24 2024-06-01 2024-06-03 2024-06-10</span></span>
+<span><span class="co">#&gt;  2 00191   Medicaid     108.    108. 2024-05-24 2024-06-02 2024-06-02 2024-06-15</span></span>
+<span><span class="co">#&gt;  3 00278   Medicaid     152.    152. 2024-05-24 2024-06-06 2024-06-08 2024-06-16</span></span>
+<span><span class="co">#&gt;  4 00304   Cigna He…     93.      0  2024-05-24 2024-05-25 2024-05-31 2024-06-08</span></span>
+<span><span class="co">#&gt;  5 00363   Athene A…     49.     49. 2024-05-24 2024-05-26 2024-05-28 2024-06-01</span></span>
+<span><span class="co">#&gt;  6 00400   Medicare     160.    160. 2024-05-24 2024-06-06 2024-06-13 2024-06-18</span></span>
+<span><span class="co">#&gt;  7 00544   CVS Heal…    104.    104. 2024-05-24 2024-05-29 2024-06-01 2024-06-18</span></span>
+<span><span class="co">#&gt;  8 00614   Elevance…     96.     96. 2024-05-24 2024-06-12 2024-06-16 2024-06-21</span></span>
+<span><span class="co">#&gt;  9 00795   Omaha Su…    159.      0  2024-05-24 2024-06-10 2024-06-14 2024-06-27</span></span>
+<span><span class="co">#&gt; 10 00798   New York…     54.     54. 2024-05-24 2024-05-28 2024-05-31 2024-06-13</span></span>
 <span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
 <span><span class="co">#&gt; # ℹ abbreviated names: ¹​date_service, ²​date_release, ³​date_submission,</span></span>
 <span><span class="co">#&gt; #   ⁴​date_acceptance</span></span>
@@ -194,18 +194,18 @@
 <span></span>
 <span><span class="va">long</span></span>
 <span><span class="co">#&gt; # A tibble: 90,000 × 7</span></span>
-<span><span class="co">#&gt;    claimid payer   charges balance date_type      date        days</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;          &lt;date&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 00021   BCBS      135.      0   service        2024-05-22    NA</span></span>
-<span><span class="co">#&gt;  2 00021   BCBS      135.      0   release        2024-05-27     5</span></span>
-<span><span class="co">#&gt;  3 00021   BCBS      135.      0   submission     2024-05-28     1</span></span>
-<span><span class="co">#&gt;  4 00021   BCBS      135.      0   acceptance     2024-06-05     8</span></span>
-<span><span class="co">#&gt;  5 00021   BCBS      135.      0   adjudication   2024-06-24    19</span></span>
-<span><span class="co">#&gt;  6 00021   BCBS      135.      0   reconciliation 2024-06-24     0</span></span>
-<span><span class="co">#&gt;  7 00062   Centene    64.9    64.9 service        2024-05-22    NA</span></span>
-<span><span class="co">#&gt;  8 00062   Centene    64.9    64.9 release        2024-05-23     1</span></span>
-<span><span class="co">#&gt;  9 00062   Centene    64.9    64.9 submission     2024-05-25     2</span></span>
-<span><span class="co">#&gt; 10 00062   Centene    64.9    64.9 acceptance     2024-06-01     7</span></span>
+<span><span class="co">#&gt;    claimid payer             charges balance date_type      date        days</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;               &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;          &lt;date&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 00021   Kaiser Permanente    139.      0  service        2024-05-24    NA</span></span>
+<span><span class="co">#&gt;  2 00021   Kaiser Permanente    139.      0  release        2024-06-01     8</span></span>
+<span><span class="co">#&gt;  3 00021   Kaiser Permanente    139.      0  submission     2024-06-03     2</span></span>
+<span><span class="co">#&gt;  4 00021   Kaiser Permanente    139.      0  acceptance     2024-06-10     7</span></span>
+<span><span class="co">#&gt;  5 00021   Kaiser Permanente    139.      0  adjudication   2024-07-01    21</span></span>
+<span><span class="co">#&gt;  6 00021   Kaiser Permanente    139.      0  reconciliation 2024-07-01     0</span></span>
+<span><span class="co">#&gt;  7 00191   Medicaid             108.    108. service        2024-05-24    NA</span></span>
+<span><span class="co">#&gt;  8 00191   Medicaid             108.    108. release        2024-06-02     9</span></span>
+<span><span class="co">#&gt;  9 00191   Medicaid             108.    108. submission     2024-06-02     0</span></span>
+<span><span class="co">#&gt; 10 00191   Medicaid             108.    108. acceptance     2024-06-15    13</span></span>
 <span><span class="co">#&gt; # ℹ 89,990 more rows</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -221,18 +221,18 @@
 <span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">x</span></span>
 <span><span class="co">#&gt; # A tibble: 15,000 × 16</span></span>
-<span><span class="co">#&gt;    claimid payer    charges balance date_service date_release date_submission</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;       &lt;date&gt;       &lt;date&gt;         </span></span>
-<span><span class="co">#&gt;  1 00021   BCBS       135.      0   2024-05-22   2024-05-27   2024-05-28     </span></span>
-<span><span class="co">#&gt;  2 00062   Centene     64.9    64.9 2024-05-22   2024-05-23   2024-05-25     </span></span>
-<span><span class="co">#&gt;  3 00219   Anthem     196.    196.  2024-05-22   2024-06-09   2024-06-12     </span></span>
-<span><span class="co">#&gt;  4 00228   BCBS       189.    189.  2024-05-22   2024-05-27   2024-05-29     </span></span>
-<span><span class="co">#&gt;  5 00549   Anthem     113.    113.  2024-05-22   2024-05-28   2024-06-01     </span></span>
-<span><span class="co">#&gt;  6 00563   Humana     191.    191.  2024-05-22   2024-06-05   2024-06-05     </span></span>
-<span><span class="co">#&gt;  7 00589   Medicaid   107.      0   2024-05-22   2024-05-25   2024-05-26     </span></span>
-<span><span class="co">#&gt;  8 00618   BCBS        30.8     0   2024-05-22   2024-05-22   2024-05-25     </span></span>
-<span><span class="co">#&gt;  9 00627   Humana     231.    231.  2024-05-22   2024-06-11   2024-06-14     </span></span>
-<span><span class="co">#&gt; 10 00766   Medicaid   139.      0   2024-05-22   2024-05-23   2024-05-24     </span></span>
+<span><span class="co">#&gt;    claimid payer       charges balance date_service date_release date_submission</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;       &lt;date&gt;       &lt;date&gt;         </span></span>
+<span><span class="co">#&gt;  1 00021   Kaiser Per…   139.      0   2024-05-24   2024-06-01   2024-06-03     </span></span>
+<span><span class="co">#&gt;  2 00191   Medicaid      108.    108.  2024-05-24   2024-06-02   2024-06-02     </span></span>
+<span><span class="co">#&gt;  3 00278   Medicaid      152.    152.  2024-05-24   2024-06-06   2024-06-08     </span></span>
+<span><span class="co">#&gt;  4 00304   Cigna Heal…    93.0     0   2024-05-24   2024-05-25   2024-05-31     </span></span>
+<span><span class="co">#&gt;  5 00363   Athene Ann…    48.6    48.6 2024-05-24   2024-05-26   2024-05-28     </span></span>
+<span><span class="co">#&gt;  6 00400   Medicare      160.    160.  2024-05-24   2024-06-06   2024-06-13     </span></span>
+<span><span class="co">#&gt;  7 00544   CVS Health…   104.    104.  2024-05-24   2024-05-29   2024-06-01     </span></span>
+<span><span class="co">#&gt;  8 00614   Elevance H…    95.5    95.5 2024-05-24   2024-06-12   2024-06-16     </span></span>
+<span><span class="co">#&gt;  9 00795   Omaha Supp…   159.      0   2024-05-24   2024-06-10   2024-06-14     </span></span>
+<span><span class="co">#&gt; 10 00798   New York L…    53.6    53.6 2024-05-24   2024-05-28   2024-05-31     </span></span>
 <span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
 <span><span class="co">#&gt; # ℹ 9 more variables: date_acceptance &lt;date&gt;, date_adjudication &lt;date&gt;,</span></span>
 <span><span class="co">#&gt; #   date_reconciliation &lt;date&gt;, days_release &lt;dbl&gt;, days_submission &lt;dbl&gt;,</span></span>
@@ -255,23 +255,22 @@
 <span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_reconciliation</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    avg_dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 32 × 11</span></span>
-<span><span class="co">#&gt;     year month    payer claims balance avg_release avg_submission avg_acceptance</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;ord&gt;    &lt;fct&gt;  &lt;int&gt;   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  2024 February Medi…     78   7496.        8.59           3.17           7.94</span></span>
-<span><span class="co">#&gt;  2  2024 March    Medi…    696  62947.        7.94           2.90           7.56</span></span>
-<span><span class="co">#&gt;  3  2024 April    Medi…    657  60394.        8.18           3.12           7.28</span></span>
-<span><span class="co">#&gt;  4  2024 May      Medi…    452  43507.        8.04           3.05           7.27</span></span>
-<span><span class="co">#&gt;  5  2024 February Cigna     64   5721.        8.67           3.41           7.73</span></span>
-<span><span class="co">#&gt;  6  2024 March    Cigna    630  58367.        8.07           3.11           7.55</span></span>
-<span><span class="co">#&gt;  7  2024 April    Cigna    629  57344.        8.00           2.99           7.68</span></span>
-<span><span class="co">#&gt;  8  2024 May      Cigna    488  44116.        7.55           2.92           7.44</span></span>
-<span><span class="co">#&gt;  9  2024 February Huma…     76   6431.        7.78           3.30           7.99</span></span>
-<span><span class="co">#&gt; 10  2024 March    Huma…    674  58633.        8.04           2.96           7.65</span></span>
-<span><span class="co">#&gt; # ℹ 22 more rows</span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: avg_adjudication &lt;dbl&gt;, avg_reconciliation &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   avg_dar &lt;dbl&gt;</span></span></code></pre></div>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">payer</span>, <span class="va">claims</span>, <span class="va">balance</span>, <span class="va">avg_dar</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 108 × 6</span></span>
+<span><span class="co">#&gt;     year month    payer                           claims balance avg_dar</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;ord&gt;    &lt;fct&gt;                            &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2024 February HCSC (Health Care Service Corp)      7    786.    34  </span></span>
+<span><span class="co">#&gt;  2  2024 March    HCSC (Health Care Service Corp)    230  20011.    33.6</span></span>
+<span><span class="co">#&gt;  3  2024 April    HCSC (Health Care Service Corp)    191  15769.    32.3</span></span>
+<span><span class="co">#&gt;  4  2024 May      HCSC (Health Care Service Corp)    178  16935.    33.1</span></span>
+<span><span class="co">#&gt;  5  2024 February BCBS Wyoming                         8    340.    30.2</span></span>
+<span><span class="co">#&gt;  6  2024 March    BCBS Wyoming                       199  14814.    33.5</span></span>
+<span><span class="co">#&gt;  7  2024 April    BCBS Wyoming                       188  18413.    33.7</span></span>
+<span><span class="co">#&gt;  8  2024 May      BCBS Wyoming                       153  13511.    34.3</span></span>
+<span><span class="co">#&gt;  9  2024 February BCBS Michigan                        4    288.    25.5</span></span>
+<span><span class="co">#&gt; 10  2024 March    BCBS Michigan                      180  16736.    33.7</span></span>
+<span><span class="co">#&gt; # ℹ 98 more rows</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
@@ -290,28 +289,22 @@
 <span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_reconciliation</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    avg_dar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">days_in_ar</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 16 × 11</span></span>
-<span><span class="co">#&gt;     year   qtr payer    claims balance avg_release avg_submission avg_acceptance</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;       &lt;dbl&gt;          &lt;dbl&gt;          &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  2024     1 Medicare    774  70443.        8.01           2.93           7.60</span></span>
-<span><span class="co">#&gt;  2  2024     2 Medicare   1109 103900.        8.12           3.09           7.27</span></span>
-<span><span class="co">#&gt;  3  2024     1 Cigna       694  64088.        8.12           3.14           7.56</span></span>
-<span><span class="co">#&gt;  4  2024     2 Cigna      1117 101460.        7.80           2.96           7.57</span></span>
-<span><span class="co">#&gt;  5  2024     1 Humana      750  65063.        8.01           3.00           7.68</span></span>
-<span><span class="co">#&gt;  6  2024     2 Humana     1120  97784.        8.11           3.02           7.43</span></span>
-<span><span class="co">#&gt;  7  2024     1 Medicaid    724  66020.        8.02           3.00           7.28</span></span>
-<span><span class="co">#&gt;  8  2024     2 Medicaid   1121  95469.        7.93           2.98           7.59</span></span>
-<span><span class="co">#&gt;  9  2024     1 BCBS        744  66094.        7.93           2.99           7.47</span></span>
-<span><span class="co">#&gt; 10  2024     2 BCBS       1114  96027.        7.92           2.92           7.33</span></span>
-<span><span class="co">#&gt; 11  2024     1 Centene     719  65663.        8.20           3.12           7.61</span></span>
-<span><span class="co">#&gt; 12  2024     2 Centene    1099  94090.        8.06           3.10           7.51</span></span>
-<span><span class="co">#&gt; 13  2024     1 Anthem      773  70821.        8.25           2.95           7.65</span></span>
-<span><span class="co">#&gt; 14  2024     2 Anthem     1177 103735.        7.87           2.93           7.50</span></span>
-<span><span class="co">#&gt; 15  2024     1 UHC         784  69643.        8.10           3.18           7.40</span></span>
-<span><span class="co">#&gt; 16  2024     2 UHC        1181 109391.        7.93           3.00           7.39</span></span>
-<span><span class="co">#&gt; # ℹ 3 more variables: avg_adjudication &lt;dbl&gt;, avg_reconciliation &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   avg_dar &lt;dbl&gt;</span></span></code></pre></div>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">year</span>, <span class="va">qtr</span>, <span class="va">payer</span>, <span class="va">claims</span>, <span class="va">balance</span>, <span class="va">avg_dar</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 54 × 6</span></span>
+<span><span class="co">#&gt;     year   qtr payer                           claims balance avg_dar</span></span>
+<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;                            &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  2024     1 HCSC (Health Care Service Corp)    237  20797.    33.6</span></span>
+<span><span class="co">#&gt;  2  2024     2 HCSC (Health Care Service Corp)    369  32704.    32.7</span></span>
+<span><span class="co">#&gt;  3  2024     1 BCBS Wyoming                       207  15154.    33.4</span></span>
+<span><span class="co">#&gt;  4  2024     2 BCBS Wyoming                       341  31924.    33.9</span></span>
+<span><span class="co">#&gt;  5  2024     1 BCBS Michigan                      184  17024.    33.5</span></span>
+<span><span class="co">#&gt;  6  2024     2 BCBS Michigan                      368  29544.    33.2</span></span>
+<span><span class="co">#&gt;  7  2024     1 CVS Health (Aetna)                 218  18961.    33.2</span></span>
+<span><span class="co">#&gt;  8  2024     2 CVS Health (Aetna)                 345  30575.    33.6</span></span>
+<span><span class="co">#&gt;  9  2024     1 Medicare                           213  18524.    33.5</span></span>
+<span><span class="co">#&gt; 10  2024     2 Medicare                           328  28980.    34.0</span></span>
+<span><span class="co">#&gt; # ℹ 44 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="aging-calculation">Aging Calculation<a class="anchor" aria-label="anchor" href="#aging-calculation"></a>
@@ -333,9 +326,9 @@
 <span><span class="co">#&gt; # A tibble: 3 × 3</span></span>
 <span><span class="co">#&gt;   aging_bin n_claims balance</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt;        &lt;int&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 (30, 60]      9674 847373.</span></span>
-<span><span class="co">#&gt; 2 (0, 30]       5277 488749.</span></span>
-<span><span class="co">#&gt; 3 (60, 90]        49   3568.</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 (30, 60]      9693 847440.</span></span>
+<span><span class="co">#&gt; 2 (0, 30]       5259 463659.</span></span>
+<span><span class="co">#&gt; 3 (60, 90]        48   1954.</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
@@ -351,20 +344,20 @@
 <span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">payer</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 24 × 4</span></span>
-<span><span class="co">#&gt;    aging_bin payer    n_claims balance</span></span>
-<span><span class="co">#&gt;    &lt;fct&gt;     &lt;fct&gt;       &lt;int&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 0-30      Centene       609  56531.</span></span>
-<span><span class="co">#&gt;  2 0-30      Medicaid      632  55602.</span></span>
-<span><span class="co">#&gt;  3 0-30      BCBS          700  63211.</span></span>
-<span><span class="co">#&gt;  4 0-30      Cigna         634  59991.</span></span>
-<span><span class="co">#&gt;  5 0-30      Anthem        673  62800.</span></span>
-<span><span class="co">#&gt;  6 0-30      UHC           743  68920.</span></span>
-<span><span class="co">#&gt;  7 0-30      Medicare      652  60728.</span></span>
-<span><span class="co">#&gt;  8 0-30      Humana        634  60967.</span></span>
-<span><span class="co">#&gt;  9 31-60     BCBS         1153  98561.</span></span>
-<span><span class="co">#&gt; 10 31-60     Anthem       1271 111388.</span></span>
-<span><span class="co">#&gt; # ℹ 14 more rows</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 76 × 4</span></span>
+<span><span class="co">#&gt;    aging_bin payer                      n_claims balance</span></span>
+<span><span class="co">#&gt;    &lt;fct&gt;     &lt;fct&gt;                         &lt;int&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 0-30      Athene Annuity and Life         189  17343.</span></span>
+<span><span class="co">#&gt;  2 0-30      Bright Healthcare of Texas      201  18791.</span></span>
+<span><span class="co">#&gt;  3 0-30      New York Life                   190  18184.</span></span>
+<span><span class="co">#&gt;  4 0-30      Centene                         217  19313.</span></span>
+<span><span class="co">#&gt;  5 0-30      Wellcare, Inc.                  212  18382.</span></span>
+<span><span class="co">#&gt;  6 0-30      Omaha Supplemental              196  17718.</span></span>
+<span><span class="co">#&gt;  7 0-30      BCBS Michigan                   207  18160.</span></span>
+<span><span class="co">#&gt;  8 0-30      BCBS Wyoming                    179  14417.</span></span>
+<span><span class="co">#&gt;  9 0-30      Molina Healthcare               200  17125.</span></span>
+<span><span class="co">#&gt; 10 0-30      Medicare                        186  17489.</span></span>
+<span><span class="co">#&gt; # ℹ 66 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-monthly-calculation">Days in AR Monthly Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-monthly-calculation"></a>
@@ -384,18 +377,18 @@
 <span><span class="co">#&gt; # A tibble: 12 × 15</span></span>
 <span><span class="co">#&gt;    date         gct  earb  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²</span></span>
 <span><span class="co">#&gt;    &lt;date&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2024-01-01 2.5e5 2.9e5    31 8076.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  2 2024-02-01 2.5e5 2.9e5    29 8642.    35   34. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt;  3 2024-03-01 2.5e5 2.9e5    31 8105.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  4 2024-04-01 2.5e5 2.9e5    30 8332.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt;  5 2024-05-01 2.5e5 2.9e5    31 8063.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  6 2024-06-01 2.5e5 2.9e5    30 8344.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt;  7 2024-07-01 2.5e5 2.9e5    31 8049.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  8 2024-08-01 2.5e5 2.9e5    31 8081.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  9 2024-09-01 2.5e5 2.9e5    30 8331     35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt; 10 2024-10-01 2.5e5 2.9e5    31 8079.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt; 11 2024-11-01 2.5e5 2.9e5    30 8342.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt; 12 2024-12-01 2.5e5 2.9e5    31 8075.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt;  1 2024-01-01 2.5e5 2.9e5    31 8070.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt;  2 2024-02-01 2.5e5 2.9e5    29 8620.    35   34. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt;  3 2024-03-01 2.5e5 2.9e5    31 8054.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt;  4 2024-04-01 2.5e5 2.9e5    30 8306.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt;  5 2024-05-01 2.5e5 2.9e5    31 8076.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt;  6 2024-06-01 2.5e5 2.9e5    30 8322.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt;  7 2024-07-01 2.5e5 2.9e5    31 8092.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt;  8 2024-08-01 2.5e5 2.9e5    31 8070.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt;  9 2024-09-01 2.5e5 2.9e5    30 8336.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt; 10 2024-10-01 2.5e5 2.9e5    31 8081.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; 11 2024-11-01 2.5e5 2.9e5    30 8336.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt; 12 2024-12-01 2.5e5 2.9e5    31 8070.    35   36. FALSE           1.1        1.2</span></span>
 <span><span class="co">#&gt; # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span>
 <span><span class="co">#&gt; # ℹ 5 more variables: ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;, earb_diff &lt;dbl&gt;,</span></span>
 <span><span class="co">#&gt; #   gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
@@ -419,10 +412,10 @@
 <span><span class="co">#&gt; # A tibble: 4 × 15</span></span>
 <span><span class="co">#&gt;   date         earb   gct  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²</span></span>
 <span><span class="co">#&gt;   &lt;date&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2024-03-01 285273 7.5e5    91 8242.    35   35. TRUE           0.38       0.38</span></span>
-<span><span class="co">#&gt; 2 2024-06-01 285893 7.5e5    91 8237.    35   35. TRUE           0.38       0.38</span></span>
-<span><span class="co">#&gt; 3 2024-09-01 285357 7.5e5    92 8134.    35   35. FALSE          0.38       0.38</span></span>
-<span><span class="co">#&gt; 4 2024-12-01 284881 7.5e5    92 8153.    35   35. TRUE           0.38       0.38</span></span>
+<span><span class="co">#&gt; 1 2024-03-01 286310 7.5e5    91 8230.    35   35. TRUE           0.38       0.38</span></span>
+<span><span class="co">#&gt; 2 2024-06-01 285787 7.5e5    91 8233.    35   35. TRUE           0.38       0.38</span></span>
+<span><span class="co">#&gt; 3 2024-09-01 285832 7.5e5    92 8150.    35   35. FALSE          0.38       0.38</span></span>
+<span><span class="co">#&gt; 4 2024-12-01 284381 7.5e5    92 8167.    35   35. TRUE           0.38       0.38</span></span>
 <span><span class="co">#&gt; # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span>
 <span><span class="co">#&gt; # ℹ 5 more variables: ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;, earb_diff &lt;dbl&gt;,</span></span>
 <span><span class="co">#&gt; #   gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
