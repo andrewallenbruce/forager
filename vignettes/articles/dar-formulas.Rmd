@@ -84,7 +84,7 @@ dar <- function(earb, gct, ndip) {
 }
 
 dar(earb = 77400, 
-    gct = 180000, 
+    gct  = 180000, 
     ndip = 30)
 ```
 

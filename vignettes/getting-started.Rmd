@@ -126,28 +126,6 @@ dar_ex() |>
 
 
 ```{r}
-ar_ch <- dar_mon |> 
-  dplyr::reframe(
-    date = lubridate::month(date, label = TRUE, abbr = TRUE),
-    change = earb - lag(earb),
-    change = ifelse(is.na(change), earb, change),
-    change = fuimus::roundup(change, 0)
-  )
- 
-waterfalls::waterfall(
-  ar_ch[c('change', 'date')], 
-  calc_total = TRUE,
-  rect_width = 1) +
-  scale_y_continuous(
-    labels = dollar_format(scale = 0.001, suffix = "k")
-    ) +
-  ggthemes::scale_color_fivethirtyeight() +
-  ggthemes::theme_fivethirtyeight(base_size = 10)
-```
-
-
-
-```{r}
 dar_mon <- dar_mon |>
   mutate(month = clock::date_month_factor(date), .after = date)
 
@@ -185,115 +163,6 @@ ggplot() +
   theme(legend.position = "none",
         strip.text.y = element_text(angle = 0))
 ```
-
-
-```{r}
-dar_mon |>
-  select(month, gct, earb, earb_target, dar, dar_pass) |>
-  headliner::add_headline_column(
-    x = earb,
-    y = earb_target,
-    headline = "{delta_p}% {trend} than Target",
-    trend_phrases = headliner::trend_terms(more = "HIGHER", less = "Lower"),
-    n_decimal = 0) |>
-  gt(rowname_col = "month") |>
-  cols_label(
-    gct = "Gross Charges",
-    earb = "Ending AR",
-    earb_target = "Target AR",
-    dar = "Days in AR",
-    dar_pass = "Pass",
-    headline = "Ending AR Trend"
-  ) |>
-  tab_row_group(label = "Q4", rows = c(10:12)) |>
-  tab_row_group(label = "Q3", rows = c(7:9)) |>
-  tab_row_group(label = "Q2", rows = c(4:6)) |>
-  tab_row_group(label = "Q1", rows = c(1:3)) |>
-  fmt_number(columns = dar) |>
-  fmt_currency(columns = c(gct, earb, earb_target)) |>
-  tab_style(style = cell_text(font = c(
-    google_font(name = "IBM Plex Mono"), default_fonts()
-  )), locations = cells_body(columns = c(gct, earb, earb_target, dar))) |>
-  opt_stylize(style = 6, color = "cyan") |>
-  tab_header(
-    title = md("Example **Days in AR Analysis** with the **{forager}** Package"),
-    subtitle = md(
-      "**May** saw the *highest* Days in AR of 2022 *(51.2)*. This coincided with the largest <br> month-to-month increase in AR & highest percentage over the AR Target *(46%)*."
-    )
-  ) |>
-  opt_all_caps() |>
-  grand_summary_rows(
-    columns = c(gct, earb, earb_target, dar),
-    fns = list(
-      Mean = ~ mean(., na.rm = TRUE),
-      Median = ~ median(., na.rm = TRUE)
-    )
-  ) |>
-  opt_align_table_header(align = "left")
-```
-
-
-```{r}
-right_join(
-  dar_mon, 
-  dar_mon |> 
-  transmute(month, gct_pct * 100, earb_pct * 100) |>
-  pivot_longer(-month, names_to = "measure", values_to = "percentage") |>
-  group_by(month) |>
-  summarize(list_data = list(percentage)), 
-  by = "month") |>
-  mutate(target_col = earb, plot_col = earb_target) |>
-  gt(rowname_col = "month") |>
-  cols_label(
-    gct = "Gross Charges",
-    earb = "Ending AR",
-    earb_target = "Optimal AR",
-    dar = "Days in AR",
-    dar_pass = "Pass",
-    plot_col = "Optimal AR Threshold"
-  ) |>
-  tab_row_group(label = "Q4", rows = c(10:12)) |>
-  tab_row_group(label = "Q3", rows = c(7:9)) |>
-  tab_row_group(label = "Q2", rows = c(4:6)) |>
-  tab_row_group(label = "Q1", rows = c(1:3)) |>
-  gt_theme_nytimes() |>
-  fmt_number(columns = dar) |>
-  fmt_currency(columns = c(gct, earb, earb_target)) |>
-  gt_plt_bullet(
-    column = plot_col,
-    target = target_col,
-    palette = c("#8ca0aa", "black"),
-    width = 65
-  ) |>
-  gt_plt_bar_stack(
-    list_data,
-    width = 50,
-    labels = c("Charges (%) ", " AR (%)"),
-    palette = c("#2c3e50", "#8ca0aa")
-  ) |>
-  gt_badge(dar_pass, palette = c("FALSE" = "#8ca0aa")) |>
-  tab_style(
-    style = cell_text(color = "#2c3e50", weight = "bolder"),
-    locations = cells_body(columns = dar_pass, rows = dar_pass == "FALSE")
-  ) |>
-  tab_style(
-    style = cell_text(color = "#8ca0aa", weight = "normal"),
-    locations = cells_body(columns = dar_pass, rows = dar_pass == "TRUE")
-  ) |>
-  data_color(
-    columns = c(gct, earb, dar),
-    colors = col_numeric(
-      palette = c("#2c3e50", "#8ca0aa") |>
-        as.character(),
-      domain = NULL
-    )
-  ) |>
-  tab_footnote(footnote = "Horizontal bar indicates Optimal AR, vertical bar is Actual.", 
-               locations = cells_column_labels(columns = plot_col)) |>
-  tab_header(title = md("Example **Days in AR Analysis** with the **{forager}** Package"))
-```
-
-
 
 
 ```{r eval=FALSE}
@@ -364,22 +233,16 @@ binned
 
 ```{r fig.height=8, fig.width=10, fig.dpi=600}
 binned |> 
-  # filter(charges > mean(charges)) |> 
   ggplot() +
-  geom_point(aes(x = dos, y = charges, fill = aging_bin), size = 3.5, shape = 21, stroke = 0.6) +
-  ggalt::geom_spikelines(data = binned |> group_by(aging_bin) |> filter(charges == max(charges)), 
-                  aes(x = dos, y = charges, fill = aging_bin), linetype = 3) +
-  ggrepel::geom_label_repel(data = binned |> 
-                              group_by(aging_bin) |> 
-                              filter(charges == max(charges)),  
-                            aes(x = dos, y = charges, label = ins_name)) +
-  labs(title = "Aging Bins", x = NULL, y = NULL) +
+  geom_point(aes(x = dos, y = charges, colour = aging_bin), 
+             size = 5, shape = "|", stroke = 5) +
+  labs(x = NULL, y = NULL) +
   scale_y_continuous(
     labels = dollar_format(prefix = "$"),
     limits = c(min(binned$charges), max(binned$charges) + 10)) +
   scale_x_date(date_breaks = "1 week", date_labels = "%W") +
-  ggthemes::scale_color_fivethirtyeight() +
   ggthemes::theme_fivethirtyeight(base_size = 12) +
+  ggthemes::scale_color_pander() +
   theme(legend.position = "top",
         axis.text.x = element_text(size = 10, face = "bold"),
         axis.text.y = element_text(size = 12, face = "bold")

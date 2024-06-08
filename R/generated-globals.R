@@ -5,26 +5,26 @@ utils::globalVariables(c(
   ":=",
   # <avg_dar>
   "adc",
-  # <generate_data>
+  # <mock_claims>
   "age",
   # <bin_aging>
-  # <parbx_ex>
+  # <mock_parbx>
   "aging_bin",
-  # <generate_data>
+  # <mock_claims>
   "balance",
-  # <generate_data>
+  # <mock_claims>
   "charges",
-  # <generate_data>
+  # <mock_claims>
   "date_acceptance",
-  # <generate_data>
+  # <mock_claims>
   "date_adjudication",
-  # <generate_data>
+  # <mock_claims>
   "date_reconciliation",
-  # <generate_data>
+  # <mock_claims>
   "date_release",
-  # <generate_data>
+  # <mock_claims>
   "date_service",
-  # <generate_data>
+  # <mock_claims>
   "date_submission",
   # <predict_net>
   "earb_gt120",

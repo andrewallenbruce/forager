@@ -74,7 +74,7 @@ library(fuimus)
 <br>
 
 ```{r, echo=TRUE, warning=FALSE}
-x <- generate_data(15000)
+x <- mock_claims(15000)
 x
 ```
 
@@ -137,7 +137,8 @@ x |>
     avg_reconciliation = mean(days_reconciliation, na.rm = TRUE),
     avg_dar = mean(days_in_ar, na.rm = TRUE),
     .groups = "drop") |> 
-  arrange(payer)
+  arrange(payer) |>
+  select(year, month, payer, claims, balance, avg_dar)
 ```
 
 <br>
@@ -159,7 +160,8 @@ x |>
     avg_reconciliation = mean(days_reconciliation, na.rm = TRUE),
     avg_dar = mean(days_in_ar, na.rm = TRUE),
     .groups = "drop") |> 
-  arrange(payer)
+  arrange(payer) |>
+  select(year, qtr, payer, claims, balance, avg_dar)
 ```
 
 

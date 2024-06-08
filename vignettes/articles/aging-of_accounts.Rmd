@@ -58,17 +58,12 @@ To identify patterns of problem CPT codes or payers, the FPP/Denial metric needs
 
 
 ```{r}
-payers <- c("Cigna", "BCBS", "Anthem", 
-            "Humana", "UHC", "Medicare", 
-            "Coventry", "Medicaid", "Centene", 
-            "CVSHealth", "Geico", "Peachstate")
-
-parbx_ex(payers)
+mock_parbx()
 ```
 
 
 ```{r}
-parbx_ex(payers) |> 
+mock_parbx() |>
   mutate(aging_prop = fuimus::roundup(aging_prop * 100)) |> 
   pivot_wider(names_from = "aging_bin", 
               values_from = "aging_prop") |> 
@@ -102,14 +97,14 @@ parbx_ex(payers) |>
 
 
 ```{r}
-ex_prop <- parbx_ex(payers) |> 
+ex_prop <- mock_parbx() |> 
   pivot_wider(names_from = "aging_bin", 
               values_from = "aging_prop") |> 
   select(month, payer, `121+`) |> 
   pivot_wider(names_from = month, values_from = `121+`) |> 
   rlang::set_names(c("payer", month.abb))
 
-ex_prop_payer <- parbx_ex(payers) |> 
+ex_prop_payer <- mock_parbx() |> 
   pivot_wider(names_from = "aging_bin", 
               values_from = "aging_prop") |> 
   select(month, payer, `121+`) |> 
