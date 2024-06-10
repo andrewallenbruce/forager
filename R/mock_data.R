@@ -2,6 +2,8 @@
 #'
 #' @param rows `[integerish]` rows number of rows to generate; default is `100`
 #'
+#' @param payers `[character]` vector of payer names; default is `payer_names()`
+#'
 #' @param count_days `[logical]` add columns for days between events; default is `FALSE`
 #'
 #' @param ... `[dots]` additional arguments
@@ -16,23 +18,12 @@
 #' @export
 mock_claims <- function(rows = 100, payers = payer_names(), count_days = FALSE, ...) {
 
-  # payer_names <- c(
-  #   "Medicare",
-  #   "Medicaid",
-  #   "Cigna",
-  #   "Humana",
-  #   "UHC",
-  #   "Anthem",
-  #   "BCBS",
-  #   "Centene"
-  # )
-
   # df$column <- sample(c("A", "B", "C"), nrow(relig_income), replace = TRUE)
 
   rsmpl <- sample(1:rows, size = (75 * rows / 100))
 
   df <- dplyr::tibble(
-    claimid             = wakefield::id_factor(n = rows),
+    claimid             = wakefield::id(n = rows),
     payer               = forcats::as_factor(fixtuRes::set_vector(size = rows, set = payers)),
     charges             = as.double(wakefield::income(n = rows, digits = 2) / 300),
     age                 = as.double(wakefield::age(n = rows, x = 15:100)),
@@ -85,7 +76,7 @@ mock_claims <- function(rows = 100, payers = payer_names(), count_days = FALSE, 
 #' @return A [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' # Every name generates 60 rows of data
+#' # Every payer name generates 60 rows of data
 #' mock_parbx()
 #'
 #' @autoglobal

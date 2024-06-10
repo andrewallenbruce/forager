@@ -20,280 +20,229 @@ knitr::opts_chunk$set(
 )
 options(scipen = 999)
 
+# Personal libraries
 library(forager)
+library(fuimus)
+
+# Data wrangling
+library(clock)
 library(dplyr)
 library(tidyr)
+library(forcats)
+library(ymd)
+
+# Data visualization
 library(gt)
 library(gtExtras)
 library(ggplot2)
 library(ggrepel)
-library(ggalt)
 library(scales)
-library(headliner)
 ```
 
 ## Introduction
 
-The `forager` package is a collection of functions that are useful for healthcare revenue cycle analysis. 
+Date of Service (DOS) to Date of Reconciliation is a critical metric for Revenue Cycle Management. The time it takes to process a claim can have a significant impact on cash flow. This vignette demonstrates how to calculate the average days in accounts receivable (AR) for a medical practice.
 
-## Days in Accounts Receivable
+## Definitions
 
-```{r}
-dar_ex()
+Date of Service: The date a patient receives medical services.
+
+Date of Release: The date a claim is released for billing.
+
+Date of Submission: The date a claim is submitted to the payer.
+
+Date of Acceptance: The date a claim is accepted by the payer.
+
+Date of Adjudication: The date a claim is adjudicated by the payer.
+
+Date of Reconciliation: The date a claim is reconciled by the medical practice.
+
+## The Lifecycle of a Claim 
+
+  * <b>Provider Lag</b>:    Date of Service - Date of Release
+  * <b>Billing Lag</b>:     Date of Release - Date of Submission
+  * <b>Acceptance Lag</b>:  Date of Submission - Date of Acceptance
+  * <b>Payment Lag</b>:     Date of Acceptance - Date of Adjudication
+  * <b>Days in AR</b>:      Date of Release - Date of Adjudication
+  
+
+<br>
+
+```{r, echo=TRUE, warning=FALSE}
+# Balances, when zero, add net payment and adjustments
+# Payment and adjustments should be a percentage of the balance, equal to one
+(x <- mock_claims(15000))
 ```
 
+<br>
 
+```{r echo=TRUE}
+long <- x |> 
+  pivot_longer(
+    cols      = starts_with("date"), 
+    names_to  = "date_type", 
+    names_prefix = "date_",
+    values_to = "date") |> 
+  mutate(
+    date_type = fct_relevel(
+      date_type, 
+      "service", 
+      "release",
+      "submission", 
+      "acceptance", 
+      "adjudication", 
+      "reconciliation"), 
+    days = as.numeric(lead(date) - date),
+    days = lag(days, order_by = date),
+    .by = claimid) |> 
+  arrange(claimid, date_type)
 
-```{r}
-dar_mon <- avg_dar(
-  df     = dar_ex(),
-  date   = date,
-  gct    = gross_charges,
-  earb   = ending_ar,
-  dart   = 35,
-  by = "month"
-)
-
-dar_mon
+long
 ```
 
-
+<br>
 
 ```{r}
-dar_mon |> 
-  gt(rowname_col = "date") |> 
-  fmt_currency(
-    columns = c(
-      gct, 
-      earb, 
-      adc, 
-      earb_target, 
-      earb_diff
-      )) |> 
-  fmt_percent(
-    columns = c(
-      gct_pct, 
-      earb_pct
-      )) |> 
-  fmt_number(
-    columns = c(
-      dar, 
-      dart, 
-      ratio_actual, 
-      ratio_ideal, 
-      ratio_diff
-      )) |> 
-  cols_label(
-    date = "Month",
-    gct = "Gross Charges",
-    earb = "Ending AR",
-    adc = "ADC",
-    dar_pass = "",
-    dar = "DAR"
+x <- long |> 
+  pivot_wider(
+    names_from = date_type,
+    names_glue = "{.value}_{date_type}",
+    values_from = c(date, days)
   ) |> 
-  opt_stylize()
+  remove_quiet() |> 
+  rowwise() |> 
+  mutate(days_in_ar = if_else(
+      !is.na(date_reconciliation), 
+      as.numeric((date_reconciliation - date_service)),
+      as.numeric((date_adjudication - date_service))
+  )) |> 
+  ungroup() |> 
+  nest(dates = c(date_release, date_submission, date_acceptance, date_adjudication, date_reconciliation)) |>
+  bin_aging(days_in_ar)
+x
 ```
 
 
-```{r}
-dar_mon |> 
-  ggplot(aes(x = date, y = dar)) +
-  geom_line(group = 1, linetype = "dashed", alpha = 0.7) +
-  geom_hline(yintercept = 35, color = "red") +
-  labs(title = "Days in AR by Month", x = NULL, y = NULL) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b") +
-  ggthemes::scale_color_fivethirtyeight() +
-  ggthemes::theme_fivethirtyeight(base_size = 10)
-```
-
-```{r}
-dar_ex() |>
-  ggplot() +
-  geom_line(aes(x = date, y = ending_ar),
-            alpha = 0.7,
-            linewidth = 1.5) +
-  geom_line(
-    aes(x = date, y = gross_charges),
-    color = "red",
-    alpha = 0.7,
-    linewidth = 1.5) +
-  labs(title = "Gross Charges & Ending AR Balance by Month", x = NULL, y = NULL) +
-  scale_y_continuous(labels = dollar_format(prefix = "$", scale = 0.001, suffix = "k")) +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b") +
-  ggthemes::scale_color_fivethirtyeight() +
-  ggthemes::theme_fivethirtyeight(base_size = 10)
-```
-
-
-```{r}
-dar_mon <- dar_mon |>
-  mutate(month = clock::date_month_factor(date), .after = date)
-
-dar_mon |> 
-  ggplot(aes(x = earb, y = dar)) +
-  geom_point(aes(fill = dar > 35), show.legend = FALSE, size = 5, stroke = 1, shape = 21) +
-  geom_hline(yintercept = 35, color = "red", alpha = 0.5) +
-  scale_x_continuous(
-    labels = dollar_format(scale = 0.001, suffix = "k"), 
-    limits = c(0, max(dar_mon$gct))) +
-  labs(title = "Days in AR by Month", x = NULL, y = NULL) +
-  facet_wrap( ~ ndip) +
-  # facet_grid(ndip ~ mon, margins = TRUE) +
-  coord_flip() +
-  ggthemes::scale_color_fivethirtyeight() +
-  ggthemes::theme_fivethirtyeight(base_size = 10)
-```
-
-
-
-```{r fig.height=14, fig.width=10, fig.dpi=600}
-ggplot() +
-  geom_abline(data = dar_mon, aes(intercept = 0, slope = ratio_ideal), color = "grey", linewidth = 1.5) +
-  geom_point(data = dar_mon, aes(x = gct, y = earb_target), group = 1, color = "red", shape = 21, size = 2.5, stroke = 1) +
-  geom_point(data = dar_mon, aes(x = gct, y = earb), group = 1, color = "grey40", shape = 17, size = 2.5) +
-  # facet_wrap( ~ ndip) +
-  facet_grid(month ~ ndip) +
-  scale_y_continuous(
-    labels = dollar_format(prefix = NULL, scale = 0.001, suffix = "k"), 
-    limits = c(min(c(dar_mon$earb, dar_mon$earb_target)), max(c(dar_mon$earb, dar_mon$earb_target)) + 100000)) +
-  scale_x_continuous(
-    labels = dollar_format(scale = 0.001, suffix = "k"), 
-    limits = c(min(dar_mon$gct), max(dar_mon$gct))) +
-  ggthemes::theme_few(base_size = 14) +
-  theme(legend.position = "none",
-        strip.text.y = element_text(angle = 0))
-```
-
-
-```{r eval=FALSE}
-avg_dar(
-  df     = dar_ex(),
-  date   = date,
-  gct    = gross_charges,
-  earb   = ending_ar,
-  dart   = 39,
-  by = "quarter"
-) |> 
-  gt(rowname_col = "nqtr") |>
-  fmt_currency(
-    columns = c(
-      gross_charges,
-      ending_ar,
-      adc,
-      ending_ar_target,
-      ending_ar_dec_abs,
-      earb_gct_diff
-    )
-  ) |>
-  fmt_percent(columns = c(ending_ar_dec_pct)) |>
-  fmt_number(columns = c(dar, dar_diff, ratio_actual, ratio_ideal, ratio_diff)) |>
-  cols_move_to_start(
-    c(
-      nqtr,
-      gross_charges,
-      ending_ar,
-      earb_gct_diff,
-      adc,
-      dar_pass,
-      dar,
-      dar_diff,
-      ratio_actual,
-      ratio_ideal,
-      ratio_diff,
-      ending_ar_target,
-      ending_ar_dec_abs,
-      ending_ar_dec_pct
-    )
-  ) |>
-  cols_label(
-    gross_charges = "Gross Charges",
-    ending_ar = "Ending AR",
-    adc = "ADC",
-    dar_pass = "",
-    dar = "DAR",
-    ratio_diff = "AR/GC Diff",
-    ending_ar_dec_abs = "AR Decrease Needed",
-    ending_ar_dec_pct = "%",
-    earb_gct_diff = "AR - GC"
-  ) |>
-  opt_stylize()
-```
-
-## Aging Bins
-
-```{r}
-binned <- load_ex("aging_ex") |> 
-  select(dos:ins_name) |> 
-  days_between(dos) |>
-  bin_aging(days_elapsed)
-
-binned
-```
-
-
-```{r fig.height=8, fig.width=10, fig.dpi=600}
-binned |> 
-  ggplot() +
-  geom_point(aes(x = dos, y = charges, colour = aging_bin), 
-             size = 5, shape = "|", stroke = 5) +
-  labs(x = NULL, y = NULL) +
-  scale_y_continuous(
-    labels = dollar_format(prefix = "$"),
-    limits = c(min(binned$charges), max(binned$charges) + 10)) +
-  scale_x_date(date_breaks = "1 week", date_labels = "%W") +
-  ggthemes::theme_fivethirtyeight(base_size = 12) +
-  ggthemes::scale_color_pander() +
-  theme(legend.position = "top",
-        axis.text.x = element_text(size = 10, face = "bold"),
-        axis.text.y = element_text(size = 12, face = "bold")
-        )
-```
-
-
-
-```{r}
-binned |>
-  arrange(aging_bin) |>
-  summarise(n_claims = n(),
-            balance = sum(charges),
-            .by = aging_bin) |>
-  mutate(pct_claims = n_claims / sum(n_claims),
-         pct_balance = balance / sum(balance)) |>
-  gt(rowname_col = "aging_bin") |>
-  fmt_percent(columns = pct_claims:pct_balance, decimals = 0) |>
-  fmt_currency(columns = balance, decimals = 0) |>
-  fmt_number(columns = n_claims, decimals = 0) |>
-  opt_stylize() |>
-  cols_label(n_claims = "Claims", balance = "Charges") |>
-  cols_move_to_start(c(n_claims, pct_claims, balance, pct_balance)) |>
-  cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
-  cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
-  tab_header(title = "Aging Report", ) |>
-  tab_options(heading.align = "left",
-              quarto.disable_processing = TRUE,
-              table.font.size = px(18),
-              table.width = pct(75))
-```
-
-
-```{r}
-binned |>
-  arrange(aging_bin, ins_name) |>
+```{r echo=TRUE}
+x |> 
+  group_by(
+    year = year(date_service),
+    month = month(date_service)
+    ) |>
   summarise(
-    n_claims = n(),
-    balance = sum(charges),
-    .by = c(aging_bin, ins_name)
-  ) |>
-  mutate(pct_claims = n_claims / sum(n_claims),
-         pct_balance = balance / sum(balance)) |>
-  gt(groupname_col = "aging_bin", 
-     rowname_col = "ins_name",
-     row_group_as_column = TRUE) |>
-  fmt_percent(columns = pct_claims:pct_balance) |>
-  fmt_currency(columns = balance, decimals = 0) |>
-  fmt_number(columns = n_claims, decimals = 0) |>
-  cols_label(n_claims = "Claims", balance = "Charges") |>
-  cols_merge(c(n_claims, pct_claims), pattern = "{1} ({2})") |>
-  cols_merge(c(balance, pct_balance), pattern = "{1} ({2})") |>
-  gtExtras::gt_theme_nytimes()
+    claims             = n(), 
+    balance            = sum_na(balance),
+    avg_release        = mean_na(days_release), 
+    avg_submission     = mean_na(days_submission),
+    avg_acceptance     = mean_na(days_acceptance),
+    avg_adjudication   = mean_na(days_adjudication),
+    avg_reconciliation = mean_na(days_reconciliation),
+    avg_days_in_ar     = mean_na(days_in_ar),
+    .groups = "drop")
 ```
+
+<br>
+
+```{r echo=TRUE}
+x |> 
+  group_by(
+    year = year(date_service),
+    quarter = quarter(date_service)
+    ) |>
+  summarise(
+    claims             = n(), 
+    balance            = sum_na(balance),
+    avg_release        = mean_na(days_release), 
+    avg_submission     = mean_na(days_submission),
+    avg_acceptance     = mean_na(days_acceptance),
+    avg_adjudication   = mean_na(days_adjudication),
+    avg_reconciliation = mean_na(days_reconciliation),
+    avg_days_in_ar     = mean_na(days_in_ar),
+    .groups = "drop")
+```
+
+
+```{r echo=TRUE}
+x |> 
+  group_by(
+    year = year(date_service),
+    month = month(date_service),
+    payer,
+    aging_bin
+    ) |>
+  summarise(
+    claims             = n(), 
+    balance            = sum_na(balance),
+    avg_release        = mean_na(days_release), 
+    avg_submission     = mean_na(days_submission),
+    avg_acceptance     = mean_na(days_acceptance),
+    avg_adjudication   = mean_na(days_adjudication),
+    avg_reconciliation = mean_na(days_reconciliation),
+    avg_days_in_ar     = mean_na(days_in_ar),
+    .groups = "drop")
+```
+
+<br>
+
+```{r echo=TRUE}
+x |> 
+  group_by(
+    year = year(date_service),
+    quarter = quarter(date_service),
+    payer,
+    aging_bin
+    ) |>
+  summarise(
+    claims             = n(), 
+    balance            = sum_na(balance),
+    avg_release        = mean_na(days_release), 
+    avg_submission     = mean_na(days_submission),
+    avg_acceptance     = mean_na(days_acceptance),
+    avg_adjudication   = mean_na(days_adjudication),
+    avg_reconciliation = mean_na(days_reconciliation),
+    avg_days_in_ar     = mean_na(days_in_ar),
+    .groups = "drop")
+```
+
+
+
+
+
+
+# Average Days in AR
+
+## Monthly Calculation
+
+```{r echo=TRUE}
+tibble(
+  date = date_build(2024, 1:12),
+  gct  = rpois(12, 250000:400000),
+  earb = rpois(12, 290000:400000)
+  ) |> 
+  avg_dar(
+    date, 
+    gct, 
+    earb, 
+    dart = 35,
+    by = "month")
+```
+
+<br>
+
+## Quarterly Calculation
+
+```{r echo=TRUE}
+tibble(
+  date = date_build(2024, 1:12),
+  gct  = rpois(12, 250000:400000),
+  earb = rpois(12, 285500:400000)
+  ) |> 
+  avg_dar(
+    date, 
+    gct, 
+    earb, 
+    dart = 35,
+    by = "quarter")
+```
+
+<br>

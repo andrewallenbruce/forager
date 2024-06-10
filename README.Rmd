@@ -64,18 +64,8 @@ library(fuimus)
 
 ## The Lifecycle of a Claim 
 
-  * <b>Provider Lag</b>:    Date of Service - Date of Release
-  * <b>Billing Lag</b>:     Date of Release - Date of Submission
-  * <b>Acceptance Lag</b>:  Date of Submission - Date of Acceptance
-  * <b>Payment Lag</b>:     Date of Acceptance - Date of Adjudication
-  * <b>Days in AR</b>:      Date of Release - Date of Adjudication
-
-
-<br>
-
 ```{r, echo=TRUE, warning=FALSE}
-x <- mock_claims(15000)
-x
+(x <- mock_claims(15000))
 ```
 
 <br>
@@ -88,8 +78,6 @@ long <- x |>
     names_prefix = "date_",
     values_to = "date") |> 
   mutate(
-    days = as.numeric(lead(date) - date),
-    days = lag(days, order_by = date),
     date_type = fct_relevel(
       date_type, 
       "service", 
@@ -98,7 +86,10 @@ long <- x |>
       "acceptance", 
       "adjudication", 
       "reconciliation"), 
-    .by = claimid)
+    days = as.numeric(lead(date) - date),
+    days = lag(days, order_by = date),
+    .by = claimid) |> 
+  arrange(claimid, date_type)
 
 long
 ```
@@ -112,10 +103,23 @@ x <- long |>
     names_glue = "{.value}_{date_type}",
     values_from = c(date, days)
   ) |> 
-  janitor::remove_empty("cols") |> 
+  remove_quiet() |> 
   rowwise() |> 
-  mutate(days_in_ar = as.numeric(diff(c(date_service, date_adjudication)))) |> 
-  ungroup()
+  mutate(days_in_ar = if_else(
+      !is.na(date_reconciliation), 
+      as.numeric((date_reconciliation - date_service)),
+      as.numeric((date_adjudication - date_service))
+  )) |> 
+  ungroup() |> 
+  nest(dates = c(
+    date_release, 
+    date_submission, 
+    date_acceptance, 
+    date_adjudication, 
+    date_reconciliation
+    )
+  ) |>
+  bin_aging(days_in_ar)
 x
 ```
 
@@ -123,22 +127,22 @@ x
 ```{r echo=TRUE}
 x |> 
   group_by(
-    year = get_year(date_service),
-    month = date_month_factor(date_service),
+    year = year(date_service),
+    month = month(date_service),
     payer
-    ) |>
+  ) |>
   summarise(
-    claims = n(), 
-    balance = sum(balance, na.rm = TRUE),
-    avg_release = mean(days_release, na.rm = TRUE), 
-    avg_submission = mean(days_submission, na.rm = TRUE),
-    avg_acceptance = mean(days_acceptance, na.rm = TRUE),
-    avg_adjudication  = mean(days_adjudication, na.rm = TRUE),
-    avg_reconciliation = mean(days_reconciliation, na.rm = TRUE),
-    avg_dar = mean(days_in_ar, na.rm = TRUE),
+    claims             = n(), 
+    balance            = sum_na(balance),
+    avg_release        = mean_na(days_release), 
+    avg_submission     = mean_na(days_submission),
+    avg_acceptance     = mean_na(days_acceptance),
+    avg_adjudication   = mean_na(days_adjudication),
+    avg_reconciliation = mean_na(days_reconciliation),
+    avg_days_in_ar     = mean_na(days_in_ar),
     .groups = "drop") |> 
   arrange(payer) |>
-  select(year, month, payer, claims, balance, avg_dar)
+  select(year, month, payer, claims, balance, avg_days_in_ar)
 ```
 
 <br>
@@ -151,57 +155,22 @@ x |>
     payer
     ) |>
   summarise(
-    claims = n(), 
-    balance = sum(balance, na.rm = TRUE),
-    avg_release = mean(days_release, na.rm = TRUE), 
-    avg_submission = mean(days_submission, na.rm = TRUE),
-    avg_acceptance = mean(days_acceptance, na.rm = TRUE),
-    avg_adjudication  = mean(days_adjudication, na.rm = TRUE),
-    avg_reconciliation = mean(days_reconciliation, na.rm = TRUE),
-    avg_dar = mean(days_in_ar, na.rm = TRUE),
+    claims             = n(), 
+    balance            = sum_na(balance),
+    avg_release        = mean_na(days_release), 
+    avg_submission     = mean_na(days_submission),
+    avg_acceptance     = mean_na(days_acceptance),
+    avg_adjudication   = mean_na(days_adjudication),
+    avg_reconciliation = mean_na(days_reconciliation),
+    avg_days_in_ar     = mean_na(days_in_ar),
     .groups = "drop") |> 
   arrange(payer) |>
-  select(year, qtr, payer, claims, balance, avg_dar)
+  select(year, qtr, payer, claims, balance, avg_days_in_ar)
 ```
 
+## Days in AR Calculation
 
-## Aging Calculation
-
-```{r echo=TRUE}
-x |> 
-  mutate(
-    dar = if_else(
-      !is.na(date_reconciliation), 
-      as.numeric((date_reconciliation - date_service)),
-      as.numeric((date_adjudication - date_service))
-  )
-    ) |> 
-  bin_aging(dar, "chop") |> 
-  summarise(
-    n_claims = n(),
-    balance = sum(balance, na.rm = TRUE),
-    .by = c(aging_bin))
-```
-
-
-```{r echo=TRUE}
-x |> 
-  mutate(
-    dar = if_else(
-      !is.na(date_reconciliation), 
-      as.numeric((date_reconciliation - date_service)),
-      as.numeric((date_adjudication - date_service))
-  )
-    ) |> 
-  bin_aging(dar, "case") |> 
-  summarise(
-    n_claims = n(),
-    balance = sum(balance, na.rm = TRUE),
-    .by = c(aging_bin, payer)) |> 
-  arrange(aging_bin)
-```
-
-## Days in AR Monthly Calculation
+> Monthly
 
 ```{r echo=TRUE}
 tibble(
@@ -219,7 +188,7 @@ tibble(
 
 <br>
 
-## Days in AR Quarterly Calculation
+> Quarterly
 
 ```{r echo=TRUE}
 tibble(

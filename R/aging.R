@@ -9,7 +9,7 @@
 #' @template returns-default
 #'
 #' @examples
-#' generate_data(100) |>
+#' mock_claims(100) |>
 #'   dplyr::mutate(
 #'     dar = dplyr::if_else(
 #'       !is.na(date_reconciliation),
@@ -23,7 +23,7 @@
 #'       balance = sum(balance, na.rm = TRUE),
 #'       .by = c(aging_bin))
 #'
-#' generate_data(10)[c(
+#' mock_claims(10)[c(
 #'   "date_service",
 #'   "charges",
 #'   "payer")] |>
@@ -96,7 +96,7 @@ bin_aging <- function(df, ndays, bin_type = c("case", "chop")) {
 #' @template returns-default
 #'
 #' @examples
-#' generate_data(10)[c(
+#' mock_claims(10)[c(
 #'   "date_service",
 #'   "charges",
 #'   "payer")] |>

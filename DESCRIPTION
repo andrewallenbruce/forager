@@ -25,19 +25,18 @@ Imports:
     santoku,
     vctrs,
     wakefield,
-    withr (>= 3.0.0)
+    withr (>= 3.0.0),
+    ymd
 Suggests:
     covr,
     forcats,
     fuimus,
-    ggalt,
     ggforce,
     ggplot2,
     ggrepel,
     ggthemes,
     gt,
     gtExtras,
-    headliner,
     ivs,
     janitor,
     knitr,
@@ -47,8 +46,7 @@ Suggests:
     scales,
     svglite,
     testthat (>= 3.0.0),
-    tidyr,
-    waterfalls
+    tidyr
 VignetteBuilder: 
     knitr
 Remotes: 

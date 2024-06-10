@@ -20,7 +20,7 @@ a \link[tibble:tibble-package]{tibble}
 Apply 30-Day Aging Bins
 }
 \examples{
-generate_data(100) |>
+mock_claims(100) |>
   dplyr::mutate(
     dar = dplyr::if_else(
       !is.na(date_reconciliation),
@@ -34,7 +34,7 @@ generate_data(100) |>
       balance = sum(balance, na.rm = TRUE),
       .by = c(aging_bin))
 
-generate_data(10)[c(
+mock_claims(10)[c(
   "date_service",
   "charges",
   "payer")] |>
