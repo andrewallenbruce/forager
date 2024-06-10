@@ -75,7 +75,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Generate Mock PARBx data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/andrewallenbruce/forager/blob/HEAD/R/mock_generators.R" class="external-link"><code>R/mock_generators.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/andrewallenbruce/forager/blob/HEAD/R/mock_data.R" class="external-link"><code>R/mock_data.R</code></a></small>
       <div class="d-none name"><code>mock_parbx.Rd</code></div>
     </div>
 
@@ -109,21 +109,21 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Every name generates 60 rows of data</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Every payer name generates 60 rows of data</span></span></span>
 <span class="r-in"><span><span class="fu">mock_parbx</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,620 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">date</span>       <span style="font-weight: bold;">month</span>    <span style="font-weight: bold;">payer</span>    <span style="font-weight: bold;">aging_bin</span> <span style="font-weight: bold;">aging_prop</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;ord&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-01-01 January  Medicare 0-30           <span style="color: #949494;">0.</span>34 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-01-01 January  Medicare 31-60          <span style="color: #949494;">0.</span>10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-01-01 January  Medicare 61-90          <span style="color: #949494;">0.0</span>13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-01-01 January  Medicare 91-120         <span style="color: #949494;">0.</span>27 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-01-01 January  Medicare 121+           <span style="color: #949494;">0.</span>27 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-02-01 February Medicare 0-30           <span style="color: #949494;">0.</span>26 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-02-01 February Medicare 31-60          <span style="color: #949494;">0.0</span>45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-02-01 February Medicare 61-90          <span style="color: #949494;">0.</span>27 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-02-01 February Medicare 91-120         <span style="color: #949494;">0.</span>16 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-02-01 February Medicare 121+           <span style="color: #949494;">0.</span>27 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-01-01 January  Medicare 0-30           <span style="color: #949494;">0.</span>15 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-01-01 January  Medicare 31-60          <span style="color: #949494;">0.</span>28 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-01-01 January  Medicare 61-90          <span style="color: #949494;">0.</span>33 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-01-01 January  Medicare 91-120         <span style="color: #949494;">0.</span>11 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-01-01 January  Medicare 121+           <span style="color: #949494;">0.</span>13 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-02-01 February Medicare 0-30           <span style="color: #949494;">0.</span>22 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-02-01 February Medicare 31-60          <span style="color: #949494;">0.</span>10 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-02-01 February Medicare 61-90          <span style="color: #949494;">0.0</span>16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-02-01 February Medicare 91-120         <span style="color: #949494;">0.</span>33 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-02-01 February Medicare 121+           <span style="color: #949494;">0.</span>33 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,610 more rows</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

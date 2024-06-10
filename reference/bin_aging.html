@@ -113,7 +113,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">generate_data</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    dar <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date_reconciliation</span><span class="op">)</span>,</span></span>
@@ -126,15 +126,31 @@
 <span class="r-in"><span>      n_claims <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in generate_data(100):</span> could not find function "generate_data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   aging_bin n_claims balance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (30, 60]        61   <span style="text-decoration: underline;">5</span>861.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> (0, 30]         39   <span style="text-decoration: underline;">2</span>813.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">generate_data</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="st">"date_service"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"charges"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"payer"</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="days_between.html">days_between</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">bin_aging</span><span class="op">(</span><span class="va">days_elapsed</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in generate_data(10):</span> could not find function "generate_data"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">date_service</span> <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">payer</span>                           <span style="font-weight: bold;">days_elapsed</span> <span style="font-weight: bold;">aging_bin</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 2024-05-12      18<span style="color: #949494;">9</span>. Allianz Insurance                         29 0-30     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2024-05-11      11<span style="color: #949494;">9</span>. Massachusetts Mutual Life                 30 0-30     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 2024-05-01      14<span style="color: #949494;">5</span>. Massachusetts Mutual Life                 40 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2024-04-27      14<span style="color: #949494;">1</span>. GuideWell (Florida Blue)                  44 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2024-04-27       31. UnitedHealth                              44 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2024-04-14       14. Allianz Insurance                         57 31-60    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2024-04-01      22<span style="color: #949494;">5</span>. Medicare                                  70 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2024-03-31       16. Elevance Health (Anthem)                  71 61-90    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2024-03-09      18<span style="color: #949494;">6</span>. BCBS Michigan                             93 91-120   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2024-03-08       59. HCSC (Health Care Service Corp)           94 91-120   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">dos</span>, <span class="va">charges</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
@@ -157,12 +173,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`2024`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    ins_name 31-60 61-90 91-120 121+</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA    99    39     50   60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross   253    71     86  112</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA   136    38     44   55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry    14     6      6    4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare   227    69     84  108</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient   473   153    176  197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       AETNA    95    41     51   61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Blue Cross   248    70     90  114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       CIGNA   134    38     44   57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Coventry    14     5      6    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Medicare   222    69     84  113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Patient   459   158    175  207</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -61,6 +61,9 @@
     <loc>https://andrewallenbruce.github.io/forager/reference/load_ex.html</loc>
   </url>
   <url>
+    <loc>https://andrewallenbruce.github.io/forager/reference/mean_na.html</loc>
+  </url>
+  <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/mock_claims.html</loc>
   </url>
   <url>
@@ -73,6 +76,12 @@
     <loc>https://andrewallenbruce.github.io/forager/reference/predict_net.html</loc>
   </url>
   <url>
+    <loc>https://andrewallenbruce.github.io/forager/reference/remove_quiet.html</loc>
+  </url>
+  <url>
     <loc>https://andrewallenbruce.github.io/forager/reference/sorted_bars.html</loc>
+  </url>
+  <url>
+    <loc>https://andrewallenbruce.github.io/forager/reference/sum_na.html</loc>
   </url>
 </urlset>

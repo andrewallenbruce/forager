@@ -118,2009 +118,318 @@
 
     
     
-<div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
-<p>The <code>forager</code> package is a collection of functions that
-are useful for healthcare revenue cycle analysis.</p>
+<div class="section level3">
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h3>
+<p>Date of Service (DOS) to Date of Reconciliation is a critical metric
+for Revenue Cycle Management. The time it takes to process a claim can
+have a significant impact on cash flow. This vignette demonstrates how
+to calculate the average days in accounts receivable (AR) for a medical
+practice.</p>
+</div>
+<div class="section level3">
+<h3 id="definitions">Definitions<a class="anchor" aria-label="anchor" href="#definitions"></a>
+</h3>
+<p>Date of Service: The date a patient receives medical services.</p>
+<p>Date of Release: The date a claim is released for billing.</p>
+<p>Date of Submission: The date a claim is submitted to the payer.</p>
+<p>Date of Acceptance: The date a claim is accepted by the payer.</p>
+<p>Date of Adjudication: The date a claim is adjudicated by the
+payer.</p>
+<p>Date of Reconciliation: The date a claim is reconciled by the medical
+practice.</p>
+</div>
+<div class="section level3">
+<h3 id="the-lifecycle-of-a-claim">The Lifecycle of a Claim<a class="anchor" aria-label="anchor" href="#the-lifecycle-of-a-claim"></a>
+</h3>
+<ul>
+<li>
+<b>Provider Lag</b>: Date of Service - Date of Release</li>
+<li>
+<b>Billing Lag</b>: Date of Release - Date of Submission</li>
+<li>
+<b>Acceptance Lag</b>: Date of Submission - Date of Acceptance</li>
+<li>
+<b>Payment Lag</b>: Date of Acceptance - Date of Adjudication</li>
+<li>
+<b>Days in AR</b>: Date of Release - Date of Adjudication</li>
+</ul>
+<p><br></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Balances, when zero, add net payment and adjustments</span></span>
+<span><span class="co"># Payment and adjustments should be a percentage of the balance, equal to one</span></span>
+<span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 15,000 × 10</span></span></span>
+<span><span class="co">#&gt;    <span style="font-weight: bold;">claimid</span>    <span style="font-weight: bold;">payer</span>  <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">balance</span> <span style="font-weight: bold;">date_ser…¹</span> <span style="font-weight: bold;">date_rel…²</span> <span style="font-weight: bold;">date_sub…³</span> <span style="font-weight: bold;">date_acc…⁴</span></span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 00064      Unite…    27<span style="color: #949494;">7</span>.      <span style="color: #949494;">0</span>  2024-05-26 2024-05-28 2024-05-31 2024-06-11</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 00102      Oscar…     55.      <span style="color: #949494;">0</span>  2024-05-26 2024-06-05 2024-06-05 2024-06-24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 00134      Medic…     61.     61. 2024-05-26 2024-06-06 2024-06-12 2024-06-19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 00242      Ameri…    20<span style="color: #949494;">0</span>.      <span style="color: #949494;">0</span>  2024-05-26 2024-05-28 2024-05-29 2024-06-04</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 00337      Allia…    19<span style="color: #949494;">9</span>.      <span style="color: #949494;">0</span>  2024-05-26 2024-06-08 2024-06-11 2024-06-17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 00395      Molin…    12<span style="color: #949494;">4</span>.    12<span style="color: #949494;">4</span>. 2024-05-26 2024-06-05 2024-06-09 2024-06-15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 00449      Oscar…    39<span style="color: #949494;">6</span>.      <span style="color: #949494;">0</span>  2024-05-26 2024-06-23 2024-06-27 2024-07-08</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 00484      Molin…    18<span style="color: #949494;">2</span>.    18<span style="color: #949494;">2</span>. 2024-05-26 2024-05-31 2024-06-06 2024-06-22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 00487      Guide…     75.      <span style="color: #949494;">0</span>  2024-05-26 2024-05-30 2024-06-03 2024-06-07</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 00580      Athen…    23<span style="color: #949494;">7</span>.    23<span style="color: #949494;">7</span>. 2024-05-26 2024-06-03 2024-06-08 2024-06-13</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 14,990 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated names: ¹​date_service, ²​date_release, ³​date_submission,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   ⁴​date_acceptance</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: </span><span style="color: #949494; font-weight: bold;">date_adjudication</span><span style="color: #949494;"> &lt;date&gt;, </span><span style="color: #949494; font-weight: bold;">date_reconciliation</span><span style="color: #949494;"> &lt;date&gt;</span></span></span></code></pre>
+<p><br></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">long</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span></span>
+<span>    cols      <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"date"</span><span class="op">)</span>, </span>
+<span>    names_to  <span class="op">=</span> <span class="st">"date_type"</span>, </span>
+<span>    names_prefix <span class="op">=</span> <span class="st">"date_"</span>,</span>
+<span>    values_to <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    date_type <span class="op">=</span> <span class="fu">fct_relevel</span><span class="op">(</span></span>
+<span>      <span class="va">date_type</span>, </span>
+<span>      <span class="st">"service"</span>, </span>
+<span>      <span class="st">"release"</span>,</span>
+<span>      <span class="st">"submission"</span>, </span>
+<span>      <span class="st">"acceptance"</span>, </span>
+<span>      <span class="st">"adjudication"</span>, </span>
+<span>      <span class="st">"reconciliation"</span><span class="op">)</span>, </span>
+<span>    days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu">lead</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">-</span> <span class="va">date</span><span class="op">)</span>,</span>
+<span>    days <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">days</span>, order_by <span class="op">=</span> <span class="va">date</span><span class="op">)</span>,</span>
+<span>    .by <span class="op">=</span> <span class="va">claimid</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">claimid</span>, <span class="va">date_type</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">long</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 90,000 × 7</span></span></span>
+<span><span class="co">#&gt;    claimid    payer                  charges balance date_type  date        days</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 00001      University Health Care    467.      0  service    2024-04-10    <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 00001      University Health Care    467.      0  release    2024-04-11     1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 00001      University Health Care    467.      0  submission 2024-04-13     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 00001      University Health Care    467.      0  acceptance 2024-04-15     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 00001      University Health Care    467.      0  adjudicat… 2024-05-04    19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 00001      University Health Care    467.      0  reconcili… 2024-05-04     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 00002      BCBS Wyoming              263.    263. service    2024-04-20    <span style="color: #BB0000;">NA</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 00002      BCBS Wyoming              263.    263. release    2024-04-23     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 00002      BCBS Wyoming              263.    263. submission 2024-04-25     2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 00002      BCBS Wyoming              263.    263. acceptance 2024-05-02     7</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 89,990 more rows</span></span></span></code></pre>
+<p><br></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">long</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_wider</span><span class="op">(</span></span>
+<span>    names_from <span class="op">=</span> <span class="va">date_type</span>,</span>
+<span>    names_glue <span class="op">=</span> <span class="st">"{.value}_{date_type}"</span>,</span>
+<span>    values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">days</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/remove_quiet.html">remove_quiet</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">rowwise</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>days_in_ar <span class="op">=</span> <span class="fu">if_else</span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">date_reconciliation</span><span class="op">)</span>, </span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_reconciliation</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">(</span><span class="va">date_adjudication</span> <span class="op">-</span> <span class="va">date_service</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">nest</span><span class="op">(</span>dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">date_release</span>, <span class="va">date_submission</span>, <span class="va">date_acceptance</span>, <span class="va">date_adjudication</span>, <span class="va">date_reconciliation</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span></span>
+<span><span class="va">x</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 15,000 × 13</span></span></span>
+<span><span class="co">#&gt;    claimid    payer    charges balance date_service days_release days_submission</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;variable&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 00001      Univers…  467.      0    2024-04-10              1               2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 00002      BCBS Wy…  263.    263.   2024-04-20              3               2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 00003      Humana     30.2    30.2  2024-05-03              1               4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 00004      Medicare    7.46    7.46 2024-04-29              2               5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 00005      America…   82.6     0    2024-05-23              3               3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 00006      Massach…  186.    186.   2024-05-08              5               1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 00007      HCSC (H…  177.    177.   2024-03-03              7               2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 00008      Massach…  118.    118.   2024-03-14              6               3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 00009      Wellcar…   54.9    54.9  2024-03-15             13               2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 00010      New Yor…  132.      0    2024-04-10              7               5</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 14,990 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 6 more variables: days_acceptance &lt;dbl&gt;, days_adjudication &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   days_reconciliation &lt;dbl&gt;, days_in_ar &lt;dbl&gt;, dates &lt;list&gt;, aging_bin &lt;fct&gt;</span></span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span></span>
+<span>    year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    month <span class="op">=</span> <span class="fu">month</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    claims             <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance            <span class="op">=</span> <span class="fu"><a href="../reference/sum_na.html">sum_na</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>    avg_release        <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_release</span><span class="op">)</span>, </span>
+<span>    avg_submission     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_submission</span><span class="op">)</span>,</span>
+<span>    avg_acceptance     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_acceptance</span><span class="op">)</span>,</span>
+<span>    avg_adjudication   <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_adjudication</span><span class="op">)</span>,</span>
+<span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_reconciliation</span><span class="op">)</span>,</span>
+<span>    avg_days_in_ar     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 10</span></span></span>
+<span><span class="co">#&gt;    year month claims balance avg_release avg_submission avg_acceptance</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">2</span>024     3   <span style="text-decoration: underline;">5</span>263 <span style="text-decoration: underline;">461</span>506.        8.05           3.04           7.47</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">2</span>024     4   <span style="text-decoration: underline;">5</span>212 <span style="text-decoration: underline;">464</span>145.        8.02           2.99           7.59</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">2</span>024     5   <span style="text-decoration: underline;">4</span>525 <span style="text-decoration: underline;">393</span>453.        7.95           2.95           7.46</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: avg_adjudication &lt;dbl&gt;, avg_reconciliation &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   avg_days_in_ar &lt;dbl&gt;</span></span></span></code></pre>
+<p><br></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span></span>
+<span>    year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    quarter <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    claims             <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance            <span class="op">=</span> <span class="fu"><a href="../reference/sum_na.html">sum_na</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>    avg_release        <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_release</span><span class="op">)</span>, </span>
+<span>    avg_submission     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_submission</span><span class="op">)</span>,</span>
+<span>    avg_acceptance     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_acceptance</span><span class="op">)</span>,</span>
+<span>    avg_adjudication   <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_adjudication</span><span class="op">)</span>,</span>
+<span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_reconciliation</span><span class="op">)</span>,</span>
+<span>    avg_days_in_ar     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 10</span></span></span>
+<span><span class="co">#&gt;    year quarter claims balance avg_release avg_submission avg_acceptance</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>  <span style="text-decoration: underline;">2</span>024       1   <span style="text-decoration: underline;">5</span>263 <span style="text-decoration: underline;">461</span>506.        8.05           3.04           7.47</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>  <span style="text-decoration: underline;">2</span>024       2   <span style="text-decoration: underline;">9</span>737 <span style="text-decoration: underline;">857</span>598.        7.99           2.97           7.53</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: avg_adjudication &lt;dbl&gt;, avg_reconciliation &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   avg_days_in_ar &lt;dbl&gt;</span></span></span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span></span>
+<span>    year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    month <span class="op">=</span> <span class="fu">month</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    <span class="va">payer</span>,</span>
+<span>    <span class="va">aging_bin</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    claims             <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance            <span class="op">=</span> <span class="fu"><a href="../reference/sum_na.html">sum_na</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>    avg_release        <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_release</span><span class="op">)</span>, </span>
+<span>    avg_submission     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_submission</span><span class="op">)</span>,</span>
+<span>    avg_acceptance     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_acceptance</span><span class="op">)</span>,</span>
+<span>    avg_adjudication   <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_adjudication</span><span class="op">)</span>,</span>
+<span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_reconciliation</span><span class="op">)</span>,</span>
+<span>    avg_days_in_ar     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 198 × 12</span></span></span>
+<span><span class="co">#&gt;     year month payer         aging_bin claims balance avg_release avg_submission</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">2</span>024     3 University H… 0-30          62   <span style="text-decoration: underline;">4</span>695.        4.97           2.03</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">2</span>024     3 University H… 31-60        117  <span style="text-decoration: underline;">11</span>510.        9.91           3.56</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">2</span>024     3 BCBS Wyoming  0-30          53   <span style="text-decoration: underline;">4</span>695.        4.32           2.30</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">2</span>024     3 BCBS Wyoming  31-60        133  <span style="text-decoration: underline;">12</span>486.        9.62           3.63</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">2</span>024     3 Humana        0-30          74   <span style="text-decoration: underline;">6</span>593.        3.99           2.19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">2</span>024     3 Humana        31-60        145  <span style="text-decoration: underline;">10</span>976.       10.0            3.37</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">2</span>024     3 Humana        61-90          1      0        21              4   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">2</span>024     3 Medicare      0-30          64   <span style="text-decoration: underline;">6</span>292.        4.64           2.09</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">2</span>024     3 Medicare      31-60        104   <span style="text-decoration: underline;">9</span>266.        9.15           3.61</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">2</span>024     3 Medicare      61-90          1      0        20              8   </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 188 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: avg_acceptance &lt;dbl&gt;, avg_adjudication &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   avg_reconciliation &lt;dbl&gt;, avg_days_in_ar &lt;dbl&gt;</span></span></span></code></pre>
+<p><br></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">group_by</span><span class="op">(</span></span>
+<span>    year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    quarter <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    <span class="va">payer</span>,</span>
+<span>    <span class="va">aging_bin</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    claims             <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
+<span>    balance            <span class="op">=</span> <span class="fu"><a href="../reference/sum_na.html">sum_na</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span>,</span>
+<span>    avg_release        <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_release</span><span class="op">)</span>, </span>
+<span>    avg_submission     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_submission</span><span class="op">)</span>,</span>
+<span>    avg_acceptance     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_acceptance</span><span class="op">)</span>,</span>
+<span>    avg_adjudication   <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_adjudication</span><span class="op">)</span>,</span>
+<span>    avg_reconciliation <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_reconciliation</span><span class="op">)</span>,</span>
+<span>    avg_days_in_ar     <span class="op">=</span> <span class="fu"><a href="../reference/mean_na.html">mean_na</a></span><span class="op">(</span><span class="va">days_in_ar</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 139 × 12</span></span></span>
+<span><span class="co">#&gt;     year quarter payer       aging_bin claims balance avg_release avg_submission</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  <span style="text-decoration: underline;">2</span>024       1 University… 0-30          62   <span style="text-decoration: underline;">4</span>695.        4.97           2.03</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>  <span style="text-decoration: underline;">2</span>024       1 University… 31-60        117  <span style="text-decoration: underline;">11</span>510.        9.91           3.56</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>  <span style="text-decoration: underline;">2</span>024       1 BCBS Wyomi… 0-30          53   <span style="text-decoration: underline;">4</span>695.        4.32           2.30</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>  <span style="text-decoration: underline;">2</span>024       1 BCBS Wyomi… 31-60        133  <span style="text-decoration: underline;">12</span>486.        9.62           3.63</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>  <span style="text-decoration: underline;">2</span>024       1 Humana      0-30          74   <span style="text-decoration: underline;">6</span>593.        3.99           2.19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>  <span style="text-decoration: underline;">2</span>024       1 Humana      31-60        145  <span style="text-decoration: underline;">10</span>976.       10.0            3.37</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>  <span style="text-decoration: underline;">2</span>024       1 Humana      61-90          1      0        21              4   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>  <span style="text-decoration: underline;">2</span>024       1 Medicare    0-30          64   <span style="text-decoration: underline;">6</span>292.        4.64           2.09</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>  <span style="text-decoration: underline;">2</span>024       1 Medicare    31-60        104   <span style="text-decoration: underline;">9</span>266.        9.15           3.61</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>  <span style="text-decoration: underline;">2</span>024       1 Medicare    61-90          1      0        20              8   </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 129 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: avg_acceptance &lt;dbl&gt;, avg_adjudication &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   avg_reconciliation &lt;dbl&gt;, avg_days_in_ar &lt;dbl&gt;</span></span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="days-in-accounts-receivable">Days in Accounts Receivable<a class="anchor" aria-label="anchor" href="#days-in-accounts-receivable"></a>
+<h2 id="average-days-in-ar">Average Days in AR<a class="anchor" aria-label="anchor" href="#average-days-in-ar"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 3</span></span></span>
-<span><span class="co">#&gt;    date       gross_charges ending_ar</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01       <span style="text-decoration: underline;">325</span>982.   <span style="text-decoration: underline;">288</span>433.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01       <span style="text-decoration: underline;">297</span>732.   <span style="text-decoration: underline;">307</span>871.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01       <span style="text-decoration: underline;">198</span>655.   <span style="text-decoration: underline;">253</span>977.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01       <span style="text-decoration: underline;">186</span>048.   <span style="text-decoration: underline;">183</span>685.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01       <span style="text-decoration: underline;">123</span>654.   <span style="text-decoration: underline;">204</span>228.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01       <span style="text-decoration: underline;">131</span>440.   <span style="text-decoration: underline;">203</span>460.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01       <span style="text-decoration: underline;">153</span>992.   <span style="text-decoration: underline;">182</span>771.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01       <span style="text-decoration: underline;">156</span>976.   <span style="text-decoration: underline;">169</span>634.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01       <span style="text-decoration: underline;">146</span>878.   <span style="text-decoration: underline;">179</span>348.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01       <span style="text-decoration: underline;">163</span>799.   <span style="text-decoration: underline;">178</span>051.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01       <span style="text-decoration: underline;">151</span>411.   <span style="text-decoration: underline;">162</span>757.</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01       <span style="text-decoration: underline;">169</span>094.   <span style="text-decoration: underline;">199</span>849.</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
-<span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
-<span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
-<span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
-<span>  dart   <span class="op">=</span> <span class="fl">35</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"month"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dar_mon</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="monthly-calculation">Monthly Calculation<a class="anchor" aria-label="anchor" href="#monthly-calculation"></a>
+</h3>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>  gct  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">250000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span>,</span>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">290000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>    <span class="va">date</span>, </span>
+<span>    <span class="va">gct</span>, </span>
+<span>    <span class="va">earb</span>, </span>
+<span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 15</span></span></span>
 <span><span class="co">#&gt;    <span style="font-weight: bold;">date</span>         <span style="font-weight: bold;">gct</span>  <span style="font-weight: bold;">earb</span>  <span style="font-weight: bold;">ndip</span>   <span style="font-weight: bold;">adc</span>  <span style="font-weight: bold;">dart</span>   <span style="font-weight: bold;">dar</span> <span style="font-weight: bold;">dar_pass</span> <span style="font-weight: bold;">ratio_id…¹</span> <span style="font-weight: bold;">ratio_ac…²</span></span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01 3.3<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 1.1<span style="color: #949494;">e</span>4    35   27. TRUE            1.1       <span style="color: #949494;">0.</span>88</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01 3.0<span style="color: #949494;">e</span>5 3.1<span style="color: #949494;">e</span>5    29 1.0<span style="color: #949494;">e</span>4    35   30. TRUE            1.2       1.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01 2.0<span style="color: #949494;">e</span>5 2.5<span style="color: #949494;">e</span>5    31 6.4<span style="color: #949494;">e</span>3    35   40. FALSE           1.1       1.3 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01 1.9<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    30 6.2<span style="color: #949494;">e</span>3    35   30. TRUE            1.2       <span style="color: #949494;">0.</span>99</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01 1.2<span style="color: #949494;">e</span>5 2.0<span style="color: #949494;">e</span>5    31 4.0<span style="color: #949494;">e</span>3    35   51. FALSE           1.1       1.7 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01 1.3<span style="color: #949494;">e</span>5 2.0<span style="color: #949494;">e</span>5    30 4.4<span style="color: #949494;">e</span>3    35   46. FALSE           1.2       1.5 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01 1.5<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    31 5.0<span style="color: #949494;">e</span>3    35   37. FALSE           1.1       1.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01 1.6<span style="color: #949494;">e</span>5 1.7<span style="color: #949494;">e</span>5    31 5.1<span style="color: #949494;">e</span>3    35   33. TRUE            1.1       1.1 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01 1.5<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    30 4.9<span style="color: #949494;">e</span>3    35   37. FALSE           1.2       1.2 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01 1.6<span style="color: #949494;">e</span>5 1.8<span style="color: #949494;">e</span>5    31 5.3<span style="color: #949494;">e</span>3    35   34. TRUE            1.1       1.1 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01 1.5<span style="color: #949494;">e</span>5 1.6<span style="color: #949494;">e</span>5    30 5.0<span style="color: #949494;">e</span>3    35   32. TRUE            1.2       1.1 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01 1.7<span style="color: #949494;">e</span>5 2.0<span style="color: #949494;">e</span>5    31 5.5<span style="color: #949494;">e</span>3    35   37. FALSE           1.1       1.2 </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2024-01-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">66</span>.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2024-02-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    29 <span style="text-decoration: underline;">8</span>6<span style="color: #949494;">06</span>.    35   34. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2024-03-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">50</span>.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2024-04-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    30 <span style="text-decoration: underline;">8</span>3<span style="color: #949494;">49</span>.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2024-05-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">54</span>.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2024-06-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    30 <span style="text-decoration: underline;">8</span>3<span style="color: #949494;">36</span>.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2024-07-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">61</span>.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2024-08-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">51</span>.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2024-09-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    30 <span style="text-decoration: underline;">8</span>3<span style="color: #949494;">53</span>.    35   35. TRUE            1.2        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2024-10-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">67</span>.    35   36. FALSE           1.1        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> 2024-11-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    30 <span style="text-decoration: underline;">8</span>3<span style="color: #949494;">03</span>.    35   35. FALSE           1.2        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> 2024-12-01 2.5<span style="color: #949494;">e</span>5 2.9<span style="color: #949494;">e</span>5    31 <span style="text-decoration: underline;">8</span>0<span style="color: #949494;">52</span>.    35   36. FALSE           1.1        1.2</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: </span><span style="color: #949494; font-weight: bold;">ratio_diff</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_target</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_diff</span><span style="color: #949494;"> &lt;dbl&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">gct_pct</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_pct</span><span style="color: #949494;"> &lt;dbl&gt;</span></span></span></code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"date"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span></span>
-<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="va">gct</span>, </span>
-<span>      <span class="va">earb</span>, </span>
-<span>      <span class="va">adc</span>, </span>
-<span>      <span class="va">earb_target</span>, </span>
-<span>      <span class="va">earb_diff</span></span>
-<span>      <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span></span>
-<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="va">gct_pct</span>, </span>
-<span>      <span class="va">earb_pct</span></span>
-<span>      <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span></span>
-<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="va">dar</span>, </span>
-<span>      <span class="va">dart</span>, </span>
-<span>      <span class="va">ratio_actual</span>, </span>
-<span>      <span class="va">ratio_ideal</span>, </span>
-<span>      <span class="va">ratio_diff</span></span>
-<span>      <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
-<span>    date <span class="op">=</span> <span class="st">"Month"</span>,</span>
-<span>    gct <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>    earb <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
-<span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    dar <span class="op">=</span> <span class="st">"DAR"</span></span>
+<p><br></p>
+</div>
+<div class="section level3">
+<h3 id="quarterly-calculation">Quarterly Calculation<a class="anchor" aria-label="anchor" href="#quarterly-calculation"></a>
+</h3>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>  gct  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">250000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span>,</span>
+<span>  earb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">285500</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="mwlefoodfi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwlefoodfi table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#mwlefoodfi thead, #mwlefoodfi tbody, #mwlefoodfi tfoot, #mwlefoodfi tr, #mwlefoodfi td, #mwlefoodfi th {
-  border-style: none;
-}
-
-#mwlefoodfi p {
-  margin: 0;
-  padding: 0;
-}
-
-#mwlefoodfi .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #004D80;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #004D80;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#mwlefoodfi .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#mwlefoodfi .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#mwlefoodfi .gt_heading {
-  background-color: #FFFFFF;
-  text-align: center;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-}
-
-#mwlefoodfi .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#mwlefoodfi .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#mwlefoodfi .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#mwlefoodfi .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#mwlefoodfi .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#mwlefoodfi .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  vertical-align: middle;
-}
-
-#mwlefoodfi .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#mwlefoodfi .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#mwlefoodfi .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: none;
-  border-top-width: 1px;
-  border-top-color: #89D3FE;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #89D3FE;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #89D3FE;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#mwlefoodfi .gt_stub {
-  color: #FFFFFF;
-  background-color: #0076BA;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #0076BA;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#mwlefoodfi .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #0076BA;
-}
-
-#mwlefoodfi .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#mwlefoodfi .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-}
-
-#mwlefoodfi .gt_grand_summary_row {
-  color: #333333;
-  background-color: #89D3FE;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #0076BA;
-}
-
-#mwlefoodfi .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #0076BA;
-}
-
-#mwlefoodfi .gt_striped {
-  background-color: #F4F4F4;
-}
-
-#mwlefoodfi .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-}
-
-#mwlefoodfi .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#mwlefoodfi .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#mwlefoodfi .gt_left {
-  text-align: left;
-}
-
-#mwlefoodfi .gt_center {
-  text-align: center;
-}
-
-#mwlefoodfi .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#mwlefoodfi .gt_font_normal {
-  font-weight: normal;
-}
-
-#mwlefoodfi .gt_font_bold {
-  font-weight: bold;
-}
-
-#mwlefoodfi .gt_font_italic {
-  font-style: italic;
-}
-
-#mwlefoodfi .gt_super {
-  font-size: 65%;
-}
-
-#mwlefoodfi .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#mwlefoodfi .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#mwlefoodfi .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#mwlefoodfi .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#mwlefoodfi .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#mwlefoodfi .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#mwlefoodfi .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Gross Charges">Gross Charges</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Ending AR">Ending AR</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ndip">ndip</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ADC">ADC</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="dart">dart</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="DAR">DAR</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ratio_ideal">ratio_ideal</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ratio_actual">ratio_actual</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="ratio_diff">ratio_diff</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="earb_target">earb_target</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="earb_diff">earb_diff</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="gct_pct">gct_pct</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="earb_pct">earb_pct</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr>
-<th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">2024-01-01</th>
-<td headers="stub_1_1 gct" class="gt_row gt_right">$325,982.23</td>
-<td headers="stub_1_1 earb" class="gt_row gt_right">$288,432.52</td>
-<td headers="stub_1_1 ndip" class="gt_row gt_right">31</td>
-<td headers="stub_1_1 adc" class="gt_row gt_right">$10,515.56</td>
-<td headers="stub_1_1 dart" class="gt_row gt_right">35.00</td>
-<td headers="stub_1_1 dar" class="gt_row gt_right">27.43</td>
-<td headers="stub_1_1 dar_pass" class="gt_row gt_center">TRUE</td>
-<td headers="stub_1_1 ratio_ideal" class="gt_row gt_right">1.13</td>
-<td headers="stub_1_1 ratio_actual" class="gt_row gt_right">0.88</td>
-<td headers="stub_1_1 ratio_diff" class="gt_row gt_right">0.24</td>
-<td headers="stub_1_1 earb_target" class="gt_row gt_right">$368,044.45</td>
-<td headers="stub_1_1 earb_diff" class="gt_row gt_right">$79,611.93</td>
-<td headers="stub_1_1 gct_pct" class="gt_row gt_right">53.06%</td>
-<td headers="stub_1_1 earb_pct" class="gt_row gt_right">46.94%</td>
-</tr>
-<tr>
-<th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">2024-02-01</th>
-<td headers="stub_1_2 gct" class="gt_row gt_right gt_striped">$297,731.74</td>
-<td headers="stub_1_2 earb" class="gt_row gt_right gt_striped">$307,871.08</td>
-<td headers="stub_1_2 ndip" class="gt_row gt_right gt_striped">29</td>
-<td headers="stub_1_2 adc" class="gt_row gt_right gt_striped">$10,266.61</td>
-<td headers="stub_1_2 dart" class="gt_row gt_right gt_striped">35.00</td>
-<td headers="stub_1_2 dar" class="gt_row gt_right gt_striped">29.99</td>
-<td headers="stub_1_2 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
-<td headers="stub_1_2 ratio_ideal" class="gt_row gt_right gt_striped">1.21</td>
-<td headers="stub_1_2 ratio_actual" class="gt_row gt_right gt_striped">1.03</td>
-<td headers="stub_1_2 ratio_diff" class="gt_row gt_right gt_striped">0.17</td>
-<td headers="stub_1_2 earb_target" class="gt_row gt_right gt_striped">$359,331.41</td>
-<td headers="stub_1_2 earb_diff" class="gt_row gt_right gt_striped">$51,460.33</td>
-<td headers="stub_1_2 gct_pct" class="gt_row gt_right gt_striped">49.16%</td>
-<td headers="stub_1_2 earb_pct" class="gt_row gt_right gt_striped">50.84%</td>
-</tr>
-<tr>
-<th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">2024-03-01</th>
-<td headers="stub_1_3 gct" class="gt_row gt_right">$198,655.14</td>
-<td headers="stub_1_3 earb" class="gt_row gt_right">$253,976.56</td>
-<td headers="stub_1_3 ndip" class="gt_row gt_right">31</td>
-<td headers="stub_1_3 adc" class="gt_row gt_right">$6,408.23</td>
-<td headers="stub_1_3 dart" class="gt_row gt_right">35.00</td>
-<td headers="stub_1_3 dar" class="gt_row gt_right">39.63</td>
-<td headers="stub_1_3 dar_pass" class="gt_row gt_center">FALSE</td>
-<td headers="stub_1_3 ratio_ideal" class="gt_row gt_right">1.13</td>
-<td headers="stub_1_3 ratio_actual" class="gt_row gt_right">1.28</td>
-<td headers="stub_1_3 ratio_diff" class="gt_row gt_right">−0.15</td>
-<td headers="stub_1_3 earb_target" class="gt_row gt_right">$224,288.06</td>
-<td headers="stub_1_3 earb_diff" class="gt_row gt_right">−$29,688.50</td>
-<td headers="stub_1_3 gct_pct" class="gt_row gt_right">43.89%</td>
-<td headers="stub_1_3 earb_pct" class="gt_row gt_right">56.11%</td>
-</tr>
-<tr>
-<th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">2024-04-01</th>
-<td headers="stub_1_4 gct" class="gt_row gt_right gt_striped">$186,047.56</td>
-<td headers="stub_1_4 earb" class="gt_row gt_right gt_striped">$183,684.92</td>
-<td headers="stub_1_4 ndip" class="gt_row gt_right gt_striped">30</td>
-<td headers="stub_1_4 adc" class="gt_row gt_right gt_striped">$6,201.59</td>
-<td headers="stub_1_4 dart" class="gt_row gt_right gt_striped">35.00</td>
-<td headers="stub_1_4 dar" class="gt_row gt_right gt_striped">29.62</td>
-<td headers="stub_1_4 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
-<td headers="stub_1_4 ratio_ideal" class="gt_row gt_right gt_striped">1.17</td>
-<td headers="stub_1_4 ratio_actual" class="gt_row gt_right gt_striped">0.99</td>
-<td headers="stub_1_4 ratio_diff" class="gt_row gt_right gt_striped">0.18</td>
-<td headers="stub_1_4 earb_target" class="gt_row gt_right gt_striped">$217,055.49</td>
-<td headers="stub_1_4 earb_diff" class="gt_row gt_right gt_striped">$33,370.57</td>
-<td headers="stub_1_4 gct_pct" class="gt_row gt_right gt_striped">50.32%</td>
-<td headers="stub_1_4 earb_pct" class="gt_row gt_right gt_striped">49.68%</td>
-</tr>
-<tr>
-<th id="stub_1_5" scope="row" class="gt_row gt_right gt_stub">2024-05-01</th>
-<td headers="stub_1_5 gct" class="gt_row gt_right">$123,654.34</td>
-<td headers="stub_1_5 earb" class="gt_row gt_right">$204,227.59</td>
-<td headers="stub_1_5 ndip" class="gt_row gt_right">31</td>
-<td headers="stub_1_5 adc" class="gt_row gt_right">$3,988.85</td>
-<td headers="stub_1_5 dart" class="gt_row gt_right">35.00</td>
-<td headers="stub_1_5 dar" class="gt_row gt_right">51.20</td>
-<td headers="stub_1_5 dar_pass" class="gt_row gt_center">FALSE</td>
-<td headers="stub_1_5 ratio_ideal" class="gt_row gt_right">1.13</td>
-<td headers="stub_1_5 ratio_actual" class="gt_row gt_right">1.65</td>
-<td headers="stub_1_5 ratio_diff" class="gt_row gt_right">−0.52</td>
-<td headers="stub_1_5 earb_target" class="gt_row gt_right">$139,609.74</td>
-<td headers="stub_1_5 earb_diff" class="gt_row gt_right">−$64,617.85</td>
-<td headers="stub_1_5 gct_pct" class="gt_row gt_right">37.71%</td>
-<td headers="stub_1_5 earb_pct" class="gt_row gt_right">62.29%</td>
-</tr>
-<tr>
-<th id="stub_1_6" scope="row" class="gt_row gt_right gt_stub">2024-06-01</th>
-<td headers="stub_1_6 gct" class="gt_row gt_right gt_striped">$131,440.28</td>
-<td headers="stub_1_6 earb" class="gt_row gt_right gt_striped">$203,460.47</td>
-<td headers="stub_1_6 ndip" class="gt_row gt_right gt_striped">30</td>
-<td headers="stub_1_6 adc" class="gt_row gt_right gt_striped">$4,381.34</td>
-<td headers="stub_1_6 dart" class="gt_row gt_right gt_striped">35.00</td>
-<td headers="stub_1_6 dar" class="gt_row gt_right gt_striped">46.44</td>
-<td headers="stub_1_6 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
-<td headers="stub_1_6 ratio_ideal" class="gt_row gt_right gt_striped">1.17</td>
-<td headers="stub_1_6 ratio_actual" class="gt_row gt_right gt_striped">1.55</td>
-<td headers="stub_1_6 ratio_diff" class="gt_row gt_right gt_striped">−0.38</td>
-<td headers="stub_1_6 earb_target" class="gt_row gt_right gt_striped">$153,346.99</td>
-<td headers="stub_1_6 earb_diff" class="gt_row gt_right gt_striped">−$50,113.48</td>
-<td headers="stub_1_6 gct_pct" class="gt_row gt_right gt_striped">39.25%</td>
-<td headers="stub_1_6 earb_pct" class="gt_row gt_right gt_striped">60.75%</td>
-</tr>
-<tr>
-<th id="stub_1_7" scope="row" class="gt_row gt_right gt_stub">2024-07-01</th>
-<td headers="stub_1_7 gct" class="gt_row gt_right">$153,991.95</td>
-<td headers="stub_1_7 earb" class="gt_row gt_right">$182,771.32</td>
-<td headers="stub_1_7 ndip" class="gt_row gt_right">31</td>
-<td headers="stub_1_7 adc" class="gt_row gt_right">$4,967.48</td>
-<td headers="stub_1_7 dart" class="gt_row gt_right">35.00</td>
-<td headers="stub_1_7 dar" class="gt_row gt_right">36.79</td>
-<td headers="stub_1_7 dar_pass" class="gt_row gt_center">FALSE</td>
-<td headers="stub_1_7 ratio_ideal" class="gt_row gt_right">1.13</td>
-<td headers="stub_1_7 ratio_actual" class="gt_row gt_right">1.19</td>
-<td headers="stub_1_7 ratio_diff" class="gt_row gt_right">−0.06</td>
-<td headers="stub_1_7 earb_target" class="gt_row gt_right">$173,861.88</td>
-<td headers="stub_1_7 earb_diff" class="gt_row gt_right">−$8,909.44</td>
-<td headers="stub_1_7 gct_pct" class="gt_row gt_right">45.73%</td>
-<td headers="stub_1_7 earb_pct" class="gt_row gt_right">54.27%</td>
-</tr>
-<tr>
-<th id="stub_1_8" scope="row" class="gt_row gt_right gt_stub">2024-08-01</th>
-<td headers="stub_1_8 gct" class="gt_row gt_right gt_striped">$156,975.52</td>
-<td headers="stub_1_8 earb" class="gt_row gt_right gt_striped">$169,633.64</td>
-<td headers="stub_1_8 ndip" class="gt_row gt_right gt_striped">31</td>
-<td headers="stub_1_8 adc" class="gt_row gt_right gt_striped">$5,063.73</td>
-<td headers="stub_1_8 dart" class="gt_row gt_right gt_striped">35.00</td>
-<td headers="stub_1_8 dar" class="gt_row gt_right gt_striped">33.50</td>
-<td headers="stub_1_8 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
-<td headers="stub_1_8 ratio_ideal" class="gt_row gt_right gt_striped">1.13</td>
-<td headers="stub_1_8 ratio_actual" class="gt_row gt_right gt_striped">1.08</td>
-<td headers="stub_1_8 ratio_diff" class="gt_row gt_right gt_striped">0.05</td>
-<td headers="stub_1_8 earb_target" class="gt_row gt_right gt_striped">$177,230.43</td>
-<td headers="stub_1_8 earb_diff" class="gt_row gt_right gt_striped">$7,596.79</td>
-<td headers="stub_1_8 gct_pct" class="gt_row gt_right gt_striped">48.06%</td>
-<td headers="stub_1_8 earb_pct" class="gt_row gt_right gt_striped">51.94%</td>
-</tr>
-<tr>
-<th id="stub_1_9" scope="row" class="gt_row gt_right gt_stub">2024-09-01</th>
-<td headers="stub_1_9 gct" class="gt_row gt_right">$146,878.12</td>
-<td headers="stub_1_9 earb" class="gt_row gt_right">$179,347.72</td>
-<td headers="stub_1_9 ndip" class="gt_row gt_right">30</td>
-<td headers="stub_1_9 adc" class="gt_row gt_right">$4,895.94</td>
-<td headers="stub_1_9 dart" class="gt_row gt_right">35.00</td>
-<td headers="stub_1_9 dar" class="gt_row gt_right">36.63</td>
-<td headers="stub_1_9 dar_pass" class="gt_row gt_center">FALSE</td>
-<td headers="stub_1_9 ratio_ideal" class="gt_row gt_right">1.17</td>
-<td headers="stub_1_9 ratio_actual" class="gt_row gt_right">1.22</td>
-<td headers="stub_1_9 ratio_diff" class="gt_row gt_right">−0.05</td>
-<td headers="stub_1_9 earb_target" class="gt_row gt_right">$171,357.81</td>
-<td headers="stub_1_9 earb_diff" class="gt_row gt_right">−$7,989.91</td>
-<td headers="stub_1_9 gct_pct" class="gt_row gt_right">45.02%</td>
-<td headers="stub_1_9 earb_pct" class="gt_row gt_right">54.98%</td>
-</tr>
-<tr>
-<th id="stub_1_10" scope="row" class="gt_row gt_right gt_stub">2024-10-01</th>
-<td headers="stub_1_10 gct" class="gt_row gt_right gt_striped">$163,799.44</td>
-<td headers="stub_1_10 earb" class="gt_row gt_right gt_striped">$178,051.11</td>
-<td headers="stub_1_10 ndip" class="gt_row gt_right gt_striped">31</td>
-<td headers="stub_1_10 adc" class="gt_row gt_right gt_striped">$5,283.85</td>
-<td headers="stub_1_10 dart" class="gt_row gt_right gt_striped">35.00</td>
-<td headers="stub_1_10 dar" class="gt_row gt_right gt_striped">33.70</td>
-<td headers="stub_1_10 dar_pass" class="gt_row gt_center gt_striped">TRUE</td>
-<td headers="stub_1_10 ratio_ideal" class="gt_row gt_right gt_striped">1.13</td>
-<td headers="stub_1_10 ratio_actual" class="gt_row gt_right gt_striped">1.09</td>
-<td headers="stub_1_10 ratio_diff" class="gt_row gt_right gt_striped">0.04</td>
-<td headers="stub_1_10 earb_target" class="gt_row gt_right gt_striped">$184,934.85</td>
-<td headers="stub_1_10 earb_diff" class="gt_row gt_right gt_striped">$6,883.74</td>
-<td headers="stub_1_10 gct_pct" class="gt_row gt_right gt_striped">47.92%</td>
-<td headers="stub_1_10 earb_pct" class="gt_row gt_right gt_striped">52.08%</td>
-</tr>
-<tr>
-<th id="stub_1_11" scope="row" class="gt_row gt_right gt_stub">2024-11-01</th>
-<td headers="stub_1_11 gct" class="gt_row gt_right">$151,410.74</td>
-<td headers="stub_1_11 earb" class="gt_row gt_right">$162,757.49</td>
-<td headers="stub_1_11 ndip" class="gt_row gt_right">30</td>
-<td headers="stub_1_11 adc" class="gt_row gt_right">$5,047.02</td>
-<td headers="stub_1_11 dart" class="gt_row gt_right">35.00</td>
-<td headers="stub_1_11 dar" class="gt_row gt_right">32.25</td>
-<td headers="stub_1_11 dar_pass" class="gt_row gt_center">TRUE</td>
-<td headers="stub_1_11 ratio_ideal" class="gt_row gt_right">1.17</td>
-<td headers="stub_1_11 ratio_actual" class="gt_row gt_right">1.07</td>
-<td headers="stub_1_11 ratio_diff" class="gt_row gt_right">0.09</td>
-<td headers="stub_1_11 earb_target" class="gt_row gt_right">$176,645.86</td>
-<td headers="stub_1_11 earb_diff" class="gt_row gt_right">$13,888.37</td>
-<td headers="stub_1_11 gct_pct" class="gt_row gt_right">48.19%</td>
-<td headers="stub_1_11 earb_pct" class="gt_row gt_right">51.81%</td>
-</tr>
-<tr>
-<th id="stub_1_12" scope="row" class="gt_row gt_right gt_stub">2024-12-01</th>
-<td headers="stub_1_12 gct" class="gt_row gt_right gt_striped">$169,094.46</td>
-<td headers="stub_1_12 earb" class="gt_row gt_right gt_striped">$199,849.32</td>
-<td headers="stub_1_12 ndip" class="gt_row gt_right gt_striped">31</td>
-<td headers="stub_1_12 adc" class="gt_row gt_right gt_striped">$5,454.66</td>
-<td headers="stub_1_12 dart" class="gt_row gt_right gt_striped">35.00</td>
-<td headers="stub_1_12 dar" class="gt_row gt_right gt_striped">36.64</td>
-<td headers="stub_1_12 dar_pass" class="gt_row gt_center gt_striped">FALSE</td>
-<td headers="stub_1_12 ratio_ideal" class="gt_row gt_right gt_striped">1.13</td>
-<td headers="stub_1_12 ratio_actual" class="gt_row gt_right gt_striped">1.18</td>
-<td headers="stub_1_12 ratio_diff" class="gt_row gt_right gt_striped">−0.05</td>
-<td headers="stub_1_12 earb_target" class="gt_row gt_right gt_striped">$190,913.10</td>
-<td headers="stub_1_12 earb_diff" class="gt_row gt_right gt_striped">−$8,936.22</td>
-<td headers="stub_1_12 gct_pct" class="gt_row gt_right gt_striped">45.83%</td>
-<td headers="stub_1_12 earb_pct" class="gt_row gt_right gt_striped">54.17%</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Days in AR by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 month"</span>, date_labels <span class="op">=</span> <span class="st">"%b"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">ending_ar</span><span class="op">)</span>,</span>
-<span>            alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>            linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span></span>
-<span>    <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">gross_charges</span><span class="op">)</span>,</span>
-<span>    color <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>    alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>    linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Gross Charges &amp; Ending AR Balance by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span>, scale <span class="op">=</span> <span class="fl">0.001</span>, suffix <span class="op">=</span> <span class="st">"k"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 month"</span>, date_labels <span class="op">=</span> <span class="st">"%b"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dar_mon</span> <span class="op">&lt;-</span> <span class="va">dar_mon</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>month <span class="op">=</span> <span class="fu">clock</span><span class="fu">::</span><span class="fu"><a href="https://clock.r-lib.org/reference/date_month_factor.html" class="external-link">date_month_factor</a></span><span class="op">(</span><span class="va">date</span><span class="op">)</span>, .after <span class="op">=</span> <span class="va">date</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dar_mon</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">earb</span>, y <span class="op">=</span> <span class="va">dar</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">dar</span> <span class="op">&gt;</span> <span class="fl">35</span><span class="op">)</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span>, size <span class="op">=</span> <span class="fl">5</span>, stroke <span class="op">=</span> <span class="fl">1</span>, shape <span class="op">=</span> <span class="fl">21</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_hline</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">35</span>, color <span class="op">=</span> <span class="st">"red"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span></span>
-<span>    labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">0.001</span>, suffix <span class="op">=</span> <span class="st">"k"</span><span class="op">)</span>, </span>
-<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">gct</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Days in AR by Month"</span>, x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">facet_wrap</span><span class="op">(</span> <span class="op">~</span> <span class="va">ndip</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># facet_grid(ndip ~ mon, margins = TRUE) +</span></span>
-<span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_fivethirtyeight.html" class="external-link">scale_color_fivethirtyeight</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_abline</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="va">ratio_ideal</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey"</span>, linewidth <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gct</span>, y <span class="op">=</span> <span class="va">earb_target</span><span class="op">)</span>, group <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"red"</span>, shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">2.5</span>, stroke <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dar_mon</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">gct</span>, y <span class="op">=</span> <span class="va">earb</span><span class="op">)</span>, group <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"grey40"</span>, shape <span class="op">=</span> <span class="fl">17</span>, size <span class="op">=</span> <span class="fl">2.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># facet_wrap( ~ ndip) +</span></span>
-<span>  <span class="fu">facet_grid</span><span class="op">(</span><span class="va">month</span> <span class="op">~</span> <span class="va">ndip</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span></span>
-<span>    labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="cn">NULL</span>, scale <span class="op">=</span> <span class="fl">0.001</span>, suffix <span class="op">=</span> <span class="st">"k"</span><span class="op">)</span>, </span>
-<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">earb</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">earb_target</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">earb</span>, <span class="va">dar_mon</span><span class="op">$</span><span class="va">earb_target</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">100000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_continuous</span><span class="op">(</span></span>
-<span>    labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>scale <span class="op">=</span> <span class="fl">0.001</span>, suffix <span class="op">=</span> <span class="st">"k"</span><span class="op">)</span>, </span>
-<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">gct</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">dar_mon</span><span class="op">$</span><span class="va">gct</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_few.html" class="external-link">theme_few</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
-<span>        strip.text.y <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
-<span>  df     <span class="op">=</span> <span class="fu"><a href="../reference/dar_ex.html">dar_ex</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  date   <span class="op">=</span> <span class="va">date</span>,</span>
-<span>  gct    <span class="op">=</span> <span class="va">gross_charges</span>,</span>
-<span>  earb   <span class="op">=</span> <span class="va">ending_ar</span>,</span>
-<span>  dart   <span class="op">=</span> <span class="fl">39</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"quarter"</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"nqtr"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span></span>
-<span>    columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="va">gross_charges</span>,</span>
-<span>      <span class="va">ending_ar</span>,</span>
-<span>      <span class="va">adc</span>,</span>
-<span>      <span class="va">ending_ar_target</span>,</span>
-<span>      <span class="va">ending_ar_dec_abs</span>,</span>
-<span>      <span class="va">earb_gct_diff</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ending_ar_dec_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">dar</span>, <span class="va">dar_diff</span>, <span class="va">ratio_actual</span>, <span class="va">ratio_ideal</span>, <span class="va">ratio_diff</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>      <span class="va">nqtr</span>,</span>
-<span>      <span class="va">gross_charges</span>,</span>
-<span>      <span class="va">ending_ar</span>,</span>
-<span>      <span class="va">earb_gct_diff</span>,</span>
-<span>      <span class="va">adc</span>,</span>
-<span>      <span class="va">dar_pass</span>,</span>
-<span>      <span class="va">dar</span>,</span>
-<span>      <span class="va">dar_diff</span>,</span>
-<span>      <span class="va">ratio_actual</span>,</span>
-<span>      <span class="va">ratio_ideal</span>,</span>
-<span>      <span class="va">ratio_diff</span>,</span>
-<span>      <span class="va">ending_ar_target</span>,</span>
-<span>      <span class="va">ending_ar_dec_abs</span>,</span>
-<span>      <span class="va">ending_ar_dec_pct</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_label</span><span class="op">(</span></span>
-<span>    gross_charges <span class="op">=</span> <span class="st">"Gross Charges"</span>,</span>
-<span>    ending_ar <span class="op">=</span> <span class="st">"Ending AR"</span>,</span>
-<span>    adc <span class="op">=</span> <span class="st">"ADC"</span>,</span>
-<span>    dar_pass <span class="op">=</span> <span class="st">""</span>,</span>
-<span>    dar <span class="op">=</span> <span class="st">"DAR"</span>,</span>
-<span>    ratio_diff <span class="op">=</span> <span class="st">"AR/GC Diff"</span>,</span>
-<span>    ending_ar_dec_abs <span class="op">=</span> <span class="st">"AR Decrease Needed"</span>,</span>
-<span>    ending_ar_dec_pct <span class="op">=</span> <span class="st">"%"</span>,</span>
-<span>    earb_gct_diff <span class="op">=</span> <span class="st">"AR - GC"</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="aging-bins">Aging Bins<a class="anchor" aria-label="anchor" href="#aging-bins"></a>
-</h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_ex.html">load_ex</a></span><span class="op">(</span><span class="st">"aging_ex"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">dos</span><span class="op">:</span><span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="../reference/days_between.html">days_between</a></span><span class="op">(</span><span class="va">dos</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/bin_aging.html">bin_aging</a></span><span class="op">(</span><span class="va">days_elapsed</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">binned</span></span></code></pre></div>
-<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,618 × 5</span></span></span>
-<span><span class="co">#&gt;    <span style="font-weight: bold;">dos</span>        <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">ins_name</span>   <span style="font-weight: bold;">days_elapsed</span> <span style="font-weight: bold;">aging_bin</span></span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 2023-12-27    39<span style="color: #949494;">0</span>. Medicare            16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2023-12-27    17<span style="color: #949494;">3</span>. Patient             16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 2023-12-27    24<span style="color: #949494;">6</span>. Blue Cross          16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 2023-12-27    50<span style="color: #949494;">7</span>. AETNA               16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 2023-12-27    48<span style="color: #949494;">3</span>. Blue Cross          16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 2023-12-27    39<span style="color: #949494;">9</span>. AETNA               16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 2023-12-27    85<span style="color: #949494;">0</span>. Patient             16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 2023-12-27    35<span style="color: #949494;">1</span>. Medicare            16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 2023-12-27    52<span style="color: #949494;">3</span>. Blue Cross          16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 2023-12-27    89<span style="color: #949494;">4</span>. Patient             16<span style="color: #949494;">4</span> 121+     </span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,608 more rows</span></span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">dos</span>, y <span class="op">=</span> <span class="va">charges</span>, colour <span class="op">=</span> <span class="va">aging_bin</span><span class="op">)</span>, </span>
-<span>             size <span class="op">=</span> <span class="fl">5</span>, shape <span class="op">=</span> <span class="st">"|"</span>, stroke <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span></span>
-<span>    labels <span class="op">=</span> <span class="fu">dollar_format</span><span class="op">(</span>prefix <span class="op">=</span> <span class="st">"$"</span><span class="op">)</span>,</span>
-<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">binned</span><span class="op">$</span><span class="va">charges</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">binned</span><span class="op">$</span><span class="va">charges</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"1 week"</span>, date_labels <span class="op">=</span> <span class="st">"%W"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/theme_fivethirtyeight.html" class="external-link">theme_fivethirtyeight</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggthemes</span><span class="fu">::</span><span class="fu"><a href="http://jrnold.github.io/ggthemes/reference/scale_pander.html" class="external-link">scale_color_pander</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span>,</span>
-<span>        axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
-<span>        axis.text.y <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="getting-started_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
-<span>            .by <span class="op">=</span> <span class="va">aging_bin</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
-<span>         pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="op">(</span>rowname_col <span class="op">=</span> <span class="st">"aging_bin"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">opt_stylize</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_label</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="st">"Claims"</span>, balance <span class="op">=</span> <span class="st">"Charges"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_move_to_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span>, <span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tab_header</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Aging Report"</span>, <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">tab_options</span><span class="op">(</span>heading.align <span class="op">=</span> <span class="st">"left"</span>,</span>
-<span>              quarto.disable_processing <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>              table.font.size <span class="op">=</span> <span class="fu">px</span><span class="op">(</span><span class="fl">18</span><span class="op">)</span>,</span>
-<span>              table.width <span class="op">=</span> <span class="fu">pct</span><span class="op">(</span><span class="fl">75</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="eexombwkke" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eexombwkke table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#eexombwkke thead, #eexombwkke tbody, #eexombwkke tfoot, #eexombwkke tr, #eexombwkke td, #eexombwkke th {
-  border-style: none;
-}
-
-#eexombwkke p {
-  margin: 0;
-  padding: 0;
-}
-
-#eexombwkke .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 18px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: 75%;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #004D80;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #004D80;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#eexombwkke .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#eexombwkke .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#eexombwkke .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#eexombwkke .gt_heading {
-  background-color: #FFFFFF;
-  text-align: left;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_bottom_border {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-}
-
-#eexombwkke .gt_col_headings {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#eexombwkke .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#eexombwkke .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#eexombwkke .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#eexombwkke .gt_column_spanner {
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#eexombwkke .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#eexombwkke .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#eexombwkke .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-  vertical-align: middle;
-}
-
-#eexombwkke .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#eexombwkke .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#eexombwkke .gt_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: none;
-  border-top-width: 1px;
-  border-top-color: #89D3FE;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #89D3FE;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #89D3FE;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#eexombwkke .gt_stub {
-  color: #FFFFFF;
-  background-color: #0076BA;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #0076BA;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#eexombwkke .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#eexombwkke .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#eexombwkke .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #0076BA;
-}
-
-#eexombwkke .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#eexombwkke .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-}
-
-#eexombwkke .gt_grand_summary_row {
-  color: #333333;
-  background-color: #89D3FE;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #0076BA;
-}
-
-#eexombwkke .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #0076BA;
-}
-
-#eexombwkke .gt_striped {
-  background-color: #F4F4F4;
-}
-
-#eexombwkke .gt_table_body {
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #0076BA;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #0076BA;
-}
-
-#eexombwkke .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#eexombwkke .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#eexombwkke .gt_left {
-  text-align: left;
-}
-
-#eexombwkke .gt_center {
-  text-align: center;
-}
-
-#eexombwkke .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#eexombwkke .gt_font_normal {
-  font-weight: normal;
-}
-
-#eexombwkke .gt_font_bold {
-  font-weight: bold;
-}
-
-#eexombwkke .gt_font_italic {
-  font-style: italic;
-}
-
-#eexombwkke .gt_super {
-  font-size: 65%;
-}
-
-#eexombwkke .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#eexombwkke .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#eexombwkke .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#eexombwkke .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#eexombwkke .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#eexombwkke .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#eexombwkke .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="true" data-quarto-bootstrap="false">
-<thead>
-<tr class="gt_heading">
-<td colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border" style>Aging Report</td>
-    </tr>
-<tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Claims">Claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" scope="col" id="Charges">Charges</th>
-    </tr>
-</thead>
-<tbody class="gt_table_body">
-<tr>
-<th id="stub_1_1" scope="row" class="gt_row gt_right gt_stub">31-60</th>
-<td headers="stub_1_1 n_claims" class="gt_row gt_right">1,202 (46%)</td>
-<td headers="stub_1_1 balance" class="gt_row gt_right">$586,688 (45%)</td>
-</tr>
-<tr>
-<th id="stub_1_2" scope="row" class="gt_row gt_right gt_stub">61-90</th>
-<td headers="stub_1_2 n_claims" class="gt_row gt_right gt_striped">376 (14%)</td>
-<td headers="stub_1_2 balance" class="gt_row gt_right gt_striped">$187,258 (14%)</td>
-</tr>
-<tr>
-<th id="stub_1_3" scope="row" class="gt_row gt_right gt_stub">91-120</th>
-<td headers="stub_1_3 n_claims" class="gt_row gt_right">446 (17%)</td>
-<td headers="stub_1_3 balance" class="gt_row gt_right">$221,430 (17%)</td>
-</tr>
-<tr>
-<th id="stub_1_4" scope="row" class="gt_row gt_right gt_stub">121+</th>
-<td headers="stub_1_4 n_claims" class="gt_row gt_right gt_striped">594 (23%)</td>
-<td headers="stub_1_4 balance" class="gt_row gt_right gt_striped">$305,566 (23%)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">binned</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    n_claims <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    balance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">charges</span><span class="op">)</span>,</span>
-<span>    .by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">aging_bin</span>, <span class="va">ins_name</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>pct_claims <span class="op">=</span> <span class="va">n_claims</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_claims</span><span class="op">)</span>,</span>
-<span>         pct_balance <span class="op">=</span> <span class="va">balance</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">balance</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gt</span><span class="op">(</span>groupname_col <span class="op">=</span> <span class="st">"aging_bin"</span>, </span>
-<span>     rowname_col <span class="op">=</span> <span class="st">"ins_name"</span>,</span>
-<span>     row_group_as_column <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_percent</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">pct_claims</span><span class="op">:</span><span class="va">pct_balance</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_currency</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">balance</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fmt_number</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">n_claims</span>, decimals <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_label</span><span class="op">(</span>n_claims <span class="op">=</span> <span class="st">"Claims"</span>, balance <span class="op">=</span> <span class="st">"Charges"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_claims</span>, <span class="va">pct_claims</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">cols_merge</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">balance</span>, <span class="va">pct_balance</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"{1} ({2})"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">gtExtras</span><span class="fu">::</span><span class="fu"><a href="https://jthomasmock.github.io/gtExtras/reference/gt_theme_nytimes.html" class="external-link">gt_theme_nytimes</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div id="ulbfdpbcyv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ulbfdpbcyv table {
-  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-#ulbfdpbcyv thead, #ulbfdpbcyv tbody, #ulbfdpbcyv tfoot, #ulbfdpbcyv tr, #ulbfdpbcyv td, #ulbfdpbcyv th {
-  border-style: none;
-}
-
-#ulbfdpbcyv p {
-  margin: 0;
-  padding: 0;
-}
-
-#ulbfdpbcyv .gt_table {
-  display: table;
-  border-collapse: collapse;
-  line-height: normal;
-  margin-left: auto;
-  margin-right: auto;
-  color: #333333;
-  font-size: 16px;
-  font-weight: normal;
-  font-style: normal;
-  background-color: #FFFFFF;
-  width: auto;
-  border-top-style: none;
-  border-top-width: 2px;
-  border-top-color: #A8A8A8;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #A8A8A8;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_caption {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-#ulbfdpbcyv .gt_title {
-  color: #333333;
-  font-size: 125%;
-  font-weight: initial;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-color: #FFFFFF;
-  border-bottom-width: 0;
-}
-
-#ulbfdpbcyv .gt_subtitle {
-  color: #333333;
-  font-size: 85%;
-  font-weight: initial;
-  padding-top: 3px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-color: #FFFFFF;
-  border-top-width: 0;
-}
-
-#ulbfdpbcyv .gt_heading {
-  background-color: #FFFFFF;
-  text-align: left;
-  border-bottom-color: #FFFFFF;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_bottom_border {
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_col_headings {
-  border-top-style: none;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: none;
-  border-bottom-width: 1px;
-  border-bottom-color: #334422;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_col_heading {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 12px;
-  font-weight: normal;
-  text-transform: inherit;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 6px;
-  padding-left: 5px;
-  padding-right: 5px;
-  overflow-x: hidden;
-}
-
-#ulbfdpbcyv .gt_column_spanner_outer {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 12px;
-  font-weight: normal;
-  text-transform: inherit;
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-#ulbfdpbcyv .gt_column_spanner_outer:first-child {
-  padding-left: 0;
-}
-
-#ulbfdpbcyv .gt_column_spanner_outer:last-child {
-  padding-right: 0;
-}
-
-#ulbfdpbcyv .gt_column_spanner {
-  border-bottom-style: none;
-  border-bottom-width: 1px;
-  border-bottom-color: #334422;
-  vertical-align: bottom;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  overflow-x: hidden;
-  display: inline-block;
-  width: 100%;
-}
-
-#ulbfdpbcyv .gt_spanner_row {
-  border-bottom-style: hidden;
-}
-
-#ulbfdpbcyv .gt_group_heading {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  text-align: left;
-}
-
-#ulbfdpbcyv .gt_empty_group_heading {
-  padding: 0.5px;
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  border-top-style: solid;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  vertical-align: middle;
-}
-
-#ulbfdpbcyv .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#ulbfdpbcyv .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#ulbfdpbcyv .gt_row {
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin: 10px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 1px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 1px;
-  border-right-color: #D3D3D3;
-  vertical-align: middle;
-  overflow-x: hidden;
-}
-
-#ulbfdpbcyv .gt_stub {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_stub_row_group {
-  color: #333333;
-  background-color: #FFFFFF;
-  font-size: 100%;
-  font-weight: initial;
-  text-transform: inherit;
-  border-right-style: solid;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-  padding-left: 5px;
-  padding-right: 5px;
-  vertical-align: top;
-}
-
-#ulbfdpbcyv .gt_row_group_first td {
-  border-top-width: 2px;
-}
-
-#ulbfdpbcyv .gt_row_group_first th {
-  border-top-width: 2px;
-}
-
-#ulbfdpbcyv .gt_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_first_summary_row {
-  border-top-style: solid;
-  border-top-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_first_summary_row.thick {
-  border-top-width: 2px;
-}
-
-#ulbfdpbcyv .gt_last_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_grand_summary_row {
-  color: #333333;
-  background-color: #FFFFFF;
-  text-transform: inherit;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_first_grand_summary_row {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-top-style: double;
-  border-top-width: 6px;
-  border-top-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_last_grand_summary_row_top {
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-bottom-style: double;
-  border-bottom-width: 6px;
-  border-bottom-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_striped {
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-#ulbfdpbcyv .gt_table_body {
-  border-top-style: none;
-  border-top-width: 2px;
-  border-top-color: #D3D3D3;
-  border-bottom-style: solid;
-  border-bottom-width: 2px;
-  border-bottom-color: #FFFFFF;
-}
-
-#ulbfdpbcyv .gt_footnotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_footnote {
-  margin: 0px;
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_sourcenotes {
-  color: #333333;
-  background-color: #FFFFFF;
-  border-bottom-style: none;
-  border-bottom-width: 2px;
-  border-bottom-color: #D3D3D3;
-  border-left-style: none;
-  border-left-width: 2px;
-  border-left-color: #D3D3D3;
-  border-right-style: none;
-  border-right-width: 2px;
-  border-right-color: #D3D3D3;
-}
-
-#ulbfdpbcyv .gt_sourcenote {
-  font-size: 90%;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#ulbfdpbcyv .gt_left {
-  text-align: left;
-}
-
-#ulbfdpbcyv .gt_center {
-  text-align: center;
-}
-
-#ulbfdpbcyv .gt_right {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-
-#ulbfdpbcyv .gt_font_normal {
-  font-weight: normal;
-}
-
-#ulbfdpbcyv .gt_font_bold {
-  font-weight: bold;
-}
-
-#ulbfdpbcyv .gt_font_italic {
-  font-style: italic;
-}
-
-#ulbfdpbcyv .gt_super {
-  font-size: 65%;
-}
-
-#ulbfdpbcyv .gt_footnote_marks {
-  font-size: 75%;
-  vertical-align: 0.4em;
-  position: initial;
-}
-
-#ulbfdpbcyv .gt_asterisk {
-  font-size: 100%;
-  vertical-align: 0;
-}
-
-#ulbfdpbcyv .gt_indent_1 {
-  text-indent: 5px;
-}
-
-#ulbfdpbcyv .gt_indent_2 {
-  text-indent: 10px;
-}
-
-#ulbfdpbcyv .gt_indent_3 {
-  text-indent: 15px;
-}
-
-#ulbfdpbcyv .gt_indent_4 {
-  text-indent: 20px;
-}
-
-#ulbfdpbcyv .gt_indent_5 {
-  text-indent: 25px;
-}
-</style>
-<table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="2" scope="colgroup" id=""></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Claims">Claims</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="color: #A9A9A9; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Charges">Charges</th>
-    </tr></thead>
-<tbody class="gt_table_body">
-<tr class="gt_row_group_first">
-<td headers="31-60 stub_2_1 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">31-60</td>
-<th id="stub_2_1" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="31-60 stub_2_1 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">99 (3.78%)</td>
-<td headers="31-60 stub_2_1 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$47,362 (3.64%)</td>
-</tr>
-<tr>
-<th id="n_claims_2" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="31-60 n_claims_2 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">253 (9.66%)</td>
-<td headers="31-60 n_claims_2 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$124,870 (9.60%)</td>
-</tr>
-<tr>
-<th id="n_claims_3" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="31-60 n_claims_3 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">136 (5.19%)</td>
-<td headers="31-60 n_claims_3 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$61,401 (4.72%)</td>
-</tr>
-<tr>
-<th id="n_claims_4" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
-<td headers="31-60 n_claims_4 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">14 (0.53%)</td>
-<td headers="31-60 n_claims_4 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$6,721 (0.52%)</td>
-</tr>
-<tr>
-<th id="n_claims_5" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="31-60 n_claims_5 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">227 (8.67%)</td>
-<td headers="31-60 n_claims_5 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$108,603 (8.35%)</td>
-</tr>
-<tr>
-<th id="n_claims_6" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="31-60 n_claims_6 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">473 (18.07%)</td>
-<td headers="31-60 n_claims_6 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$237,731 (18.27%)</td>
-</tr>
-<tr class="gt_row_group_first">
-<td headers="61-90 stub_2_7 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">61-90</td>
-<th id="stub_2_7" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="61-90 stub_2_7 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">39 (1.49%)</td>
-<td headers="61-90 stub_2_7 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$23,634 (1.82%)</td>
-</tr>
-<tr>
-<th id="n_claims_8" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="61-90 n_claims_8 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">71 (2.71%)</td>
-<td headers="61-90 n_claims_8 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$35,206 (2.71%)</td>
-</tr>
-<tr>
-<th id="n_claims_9" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="61-90 n_claims_9 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">38 (1.45%)</td>
-<td headers="61-90 n_claims_9 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$16,147 (1.24%)</td>
-</tr>
-<tr>
-<th id="n_claims_10" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
-<td headers="61-90 n_claims_10 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">6 (0.23%)</td>
-<td headers="61-90 n_claims_10 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$1,757 (0.14%)</td>
-</tr>
-<tr>
-<th id="n_claims_11" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="61-90 n_claims_11 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">69 (2.64%)</td>
-<td headers="61-90 n_claims_11 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$34,056 (2.62%)</td>
-</tr>
-<tr>
-<th id="n_claims_12" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="61-90 n_claims_12 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">153 (5.84%)</td>
-<td headers="61-90 n_claims_12 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$76,458 (5.88%)</td>
-</tr>
-<tr class="gt_row_group_first">
-<td headers="91-120 stub_2_13 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">91-120</td>
-<th id="stub_2_13" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="91-120 stub_2_13 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">50 (1.91%)</td>
-<td headers="91-120 stub_2_13 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$28,395 (2.18%)</td>
-</tr>
-<tr>
-<th id="n_claims_14" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="91-120 n_claims_14 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">86 (3.28%)</td>
-<td headers="91-120 n_claims_14 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$42,397 (3.26%)</td>
-</tr>
-<tr>
-<th id="n_claims_15" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="91-120 n_claims_15 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">44 (1.68%)</td>
-<td headers="91-120 n_claims_15 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$20,494 (1.58%)</td>
-</tr>
-<tr>
-<th id="n_claims_16" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
-<td headers="91-120 n_claims_16 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">6 (0.23%)</td>
-<td headers="91-120 n_claims_16 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$3,981 (0.31%)</td>
-</tr>
-<tr>
-<th id="n_claims_17" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="91-120 n_claims_17 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">84 (3.21%)</td>
-<td headers="91-120 n_claims_17 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$41,899 (3.22%)</td>
-</tr>
-<tr>
-<th id="n_claims_18" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="91-120 n_claims_18 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">176 (6.72%)</td>
-<td headers="91-120 n_claims_18 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$84,264 (6.48%)</td>
-</tr>
-<tr class="gt_row_group_first">
-<td headers="121+ stub_2_19 stub_1" rowspan="6" class="gt_row gt_left gt_stub_row_group">121+</td>
-<th id="stub_2_19" scope="row" class="gt_row gt_left gt_stub">AETNA</th>
-<td headers="121+ stub_2_19 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">66 (2.52%)</td>
-<td headers="121+ stub_2_19 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$34,907 (2.68%)</td>
-</tr>
-<tr>
-<th id="n_claims_20" scope="row" class="gt_row gt_left gt_stub">Blue Cross</th>
-<td headers="121+ n_claims_20 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">125 (4.77%)</td>
-<td headers="121+ n_claims_20 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$67,569 (5.19%)</td>
-</tr>
-<tr>
-<th id="n_claims_21" scope="row" class="gt_row gt_left gt_stub">CIGNA</th>
-<td headers="121+ n_claims_21 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">61 (2.33%)</td>
-<td headers="121+ n_claims_21 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$33,702 (2.59%)</td>
-</tr>
-<tr>
-<th id="n_claims_22" scope="row" class="gt_row gt_left gt_stub">Coventry</th>
-<td headers="121+ n_claims_22 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">4 (0.15%)</td>
-<td headers="121+ n_claims_22 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$3,282 (0.25%)</td>
-</tr>
-<tr>
-<th id="n_claims_23" scope="row" class="gt_row gt_left gt_stub">Medicare</th>
-<td headers="121+ n_claims_23 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">117 (4.47%)</td>
-<td headers="121+ n_claims_23 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$53,820 (4.14%)</td>
-</tr>
-<tr>
-<th id="n_claims_24" scope="row" class="gt_row gt_left gt_stub">Patient</th>
-<td headers="121+ n_claims_24 n_claims" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">221 (8.44%)</td>
-<td headers="121+ n_claims_24 balance" class="gt_row gt_right" style="font-family: 'Source Sans Pro'; font-weight: 400;">$112,286 (8.63%)</td>
-</tr>
-</tbody>
-</table>
+<span>  <span class="fu"><a href="../reference/avg_dar.html">avg_dar</a></span><span class="op">(</span></span>
+<span>    <span class="va">date</span>, </span>
+<span>    <span class="va">gct</span>, </span>
+<span>    <span class="va">earb</span>, </span>
+<span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
+<span>    by <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 15</span></span></span>
+<span><span class="co">#&gt;   <span style="font-weight: bold;">date</span>         <span style="font-weight: bold;">earb</span>   <span style="font-weight: bold;">gct</span>  <span style="font-weight: bold;">ndip</span>   <span style="font-weight: bold;">adc</span>  <span style="font-weight: bold;">dart</span>   <span style="font-weight: bold;">dar</span> <span style="font-weight: bold;">dar_pass</span> <span style="font-weight: bold;">ratio_id…¹</span> <span style="font-weight: bold;">ratio_ac…²</span></span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 2024-03-01 <span style="text-decoration: underline;">28</span><span style="color: #949494; text-decoration: underline;">5</span><span style="color: #949494;">675</span> 7.5<span style="color: #949494;">e</span>5    91 <span style="text-decoration: underline;">8</span>2<span style="color: #949494;">44</span>.    35   35. TRUE           <span style="color: #949494;">0.</span>38       <span style="color: #949494;">0.</span>38</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2024-06-01 <span style="text-decoration: underline;">28</span><span style="color: #949494; text-decoration: underline;">5</span><span style="color: #949494;">325</span> 7.5<span style="color: #949494;">e</span>5    91 <span style="text-decoration: underline;">8</span>2<span style="color: #949494;">33</span>.    35   35. TRUE           <span style="color: #949494;">0.</span>38       <span style="color: #949494;">0.</span>38</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2024-09-01 <span style="text-decoration: underline;">28</span><span style="color: #949494; text-decoration: underline;">5</span><span style="color: #949494;">589</span> 7.5<span style="color: #949494;">e</span>5    92 <span style="text-decoration: underline;">8</span>1<span style="color: #949494;">67</span>.    35   35. TRUE           <span style="color: #949494;">0.</span>38       <span style="color: #949494;">0.</span>38</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 2024-12-01 <span style="text-decoration: underline;">28</span><span style="color: #949494; text-decoration: underline;">5</span><span style="color: #949494;">249</span> 7.5<span style="color: #949494;">e</span>5    92 <span style="text-decoration: underline;">8</span>1<span style="color: #949494;">56</span>.    35   35. TRUE           <span style="color: #949494;">0.</span>38       <span style="color: #949494;">0.</span>38</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 5 more variables: </span><span style="color: #949494; font-weight: bold;">ratio_diff</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_target</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_diff</span><span style="color: #949494;"> &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">gct_pct</span><span style="color: #949494;"> &lt;dbl&gt;, </span><span style="color: #949494; font-weight: bold;">earb_pct</span><span style="color: #949494;"> &lt;dbl&gt;</span></span></span></code></pre>
+<p><br></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
