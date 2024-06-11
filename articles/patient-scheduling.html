@@ -506,12 +506,12 @@ that operation <a href="https://davisvaughan.github.io/ivs/reference/iv-splits.h
 <span><span class="va">enrollments</span> <span class="op">&lt;-</span> <span class="va">enrollments</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    start <span class="op">=</span> <span class="va">enrollment_start</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu">year_month_day_parse</span><span class="op">(</span>format <span class="op">=</span> <span class="st">"%d, %b, %Y"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu">calendar_narrow</span><span class="op">(</span><span class="st">"month"</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/year_month_day_parse.html" class="external-link">year_month_day_parse</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"%d, %b, %Y"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/calendar_narrow.html" class="external-link">calendar_narrow</a></span><span class="op">(</span><span class="st">"month"</span><span class="op">)</span>,</span>
 <span>    end <span class="op">=</span> <span class="va">enrollment_end</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu">year_month_day_parse</span><span class="op">(</span>format <span class="op">=</span> <span class="st">"%d, %b, %Y"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu">calendar_narrow</span><span class="op">(</span><span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu">add_months</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/year_month_day_parse.html" class="external-link">year_month_day_parse</a></span><span class="op">(</span>format <span class="op">=</span> <span class="st">"%d, %b, %Y"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/calendar_narrow.html" class="external-link">calendar_narrow</a></span><span class="op">(</span><span class="st">"month"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/clock-arithmetic.html" class="external-link">add_months</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>    .keep <span class="op">=</span> <span class="st">"unused"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -595,8 +595,8 @@ records with start / end dates<a class="anchor" aria-label="anchor" href="#numbe
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Record the start and end months to generate the counts for</span></span>
-<span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu">date_start</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">ds</span><span class="op">$</span><span class="va">record_start_date</span><span class="op">)</span>, <span class="st">"year"</span><span class="op">)</span></span>
-<span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu">date_end</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ds</span><span class="op">$</span><span class="va">record_end_date</span><span class="op">)</span>, <span class="st">"year"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span></span>
+<span><span class="va">start</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date-and-date-time-boundary.html" class="external-link">date_start</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">ds</span><span class="op">$</span><span class="va">record_start_date</span><span class="op">)</span>, <span class="st">"year"</span><span class="op">)</span></span>
+<span><span class="va">end</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date-and-date-time-boundary.html" class="external-link">date_end</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ds</span><span class="op">$</span><span class="va">record_end_date</span><span class="op">)</span>, <span class="st">"year"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1L</span></span>
 <span></span>
 <span><span class="co"># Construct an interval vector</span></span>
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="va">ds</span> <span class="op">|&gt;</span> </span>
@@ -613,10 +613,10 @@ records with start / end dates<a class="anchor" aria-label="anchor" href="#numbe
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate the months sequence to count along</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span></span>
-<span>  month <span class="op">=</span> <span class="fu">date_seq</span><span class="op">(</span></span>
+<span>  month <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_seq.html" class="external-link">date_seq</a></span><span class="op">(</span></span>
 <span>    from <span class="op">=</span> <span class="va">start</span>, </span>
 <span>    to <span class="op">=</span> <span class="va">end</span>, </span>
-<span>    by <span class="op">=</span> <span class="fu">duration_months</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/duration-helper.html" class="external-link">duration_months</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -748,7 +748,7 @@ each time a month fell between a range, which gives us our n_total</p>
 <span><span class="va">ddf</span> <span class="op">&lt;-</span> <span class="va">ddf</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    <span class="fu">across</span><span class="op">(</span><span class="fu">everything</span><span class="op">(</span><span class="op">)</span>, \<span class="op">(</span><span class="va">col</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu">date_parse</span><span class="op">(</span><span class="va">col</span>, format <span class="op">=</span> <span class="st">"%d/%m/%Y"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/date_parse.html" class="external-link">date_parse</a></span><span class="op">(</span><span class="va">col</span>, format <span class="op">=</span> <span class="st">"%d/%m/%Y"</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -756,7 +756,7 @@ each time a month fell between a range, which gives us our n_total</p>
 <span><span class="va">ddf</span> <span class="op">&lt;-</span> <span class="va">ddf</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
 <span>    <span class="fu">across</span><span class="op">(</span><span class="fu">everything</span><span class="op">(</span><span class="op">)</span>, \<span class="op">(</span><span class="va">col</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu">calendar_narrow</span><span class="op">(</span><span class="fu">as_year_month_day</span><span class="op">(</span><span class="va">col</span><span class="op">)</span>, <span class="st">"month"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://clock.r-lib.org/reference/calendar_narrow.html" class="external-link">calendar_narrow</a></span><span class="op">(</span><span class="fu"><a href="https://clock.r-lib.org/reference/as_year_month_day.html" class="external-link">as_year_month_day</a></span><span class="op">(</span><span class="va">col</span><span class="op">)</span>, <span class="st">"month"</span><span class="op">)</span></span>
 <span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
