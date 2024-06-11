@@ -9,23 +9,45 @@ utils::globalVariables(c(
   "age",
   # <bin_aging>
   # <mock_parbx>
+  # <prep_claims>
   "aging_bin",
   # <mock_claims>
+  # <prep_claims>
+  # <summarise_claims>
   "balance",
   # <mock_claims>
+  # <prep_claims>
+  # <summarise_claims>
   "charges",
+  # <prep_claims>
+  "claimid",
+  # <prep_claims>
+  # <summarise_claims>
+  "dar",
   # <mock_claims>
+  # <prep_claims>
   "date_acceptance",
   # <mock_claims>
+  # <prep_claims>
   "date_adjudication",
   # <mock_claims>
+  # <prep_claims>
   "date_reconciliation",
   # <mock_claims>
+  # <prep_claims>
   "date_release",
   # <mock_claims>
+  # <prep_claims>
   "date_service",
   # <mock_claims>
+  # <prep_claims>
   "date_submission",
+  # <prep_claims>
+  "date_type",
+  # <prep_claims>
+  "dates",
+  # <prep_claims>
+  "days",
   # <predict_net>
   "earb_gt120",
   # <predict_net>
@@ -48,6 +70,8 @@ utils::globalVariables(c(
   "net_pred",
   # <predict_net>
   "parl_120",
+  # <prep_claims>
+  "payer",
   # <predict_net>
   "pct_paid",
   # <avg_dar>

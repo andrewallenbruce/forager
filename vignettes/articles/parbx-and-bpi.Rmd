@@ -28,6 +28,8 @@ PARB$x$, or *Percentage of Accounts Receivable Beyond $x$ Days*, is exactly what
 
 PARB$x$ data can then be used to calculate a BPI, or Billing Performance Index. BPI is a key billing performance characteristic because it’s an indicator of claims that are never paid. Obviously, the lower the index, the better the billing performance. But this statistic is meaningful only when considered in the context of the relative performance of other payers. Lirov (2009)
 
+PARBx resolves the sensitivity issues of the DAR metric. It offers a simple billing process metric that’s not dependent on the charge. Its graphic representation has a skewed bell shape. Its steepness represents billing process quality; a steep curve and thin tail mean a healthy billing process, while a flat bell and fat tail also mean billing problems.
+
 
 ## Billing Performance Index (BPI)
 
@@ -755,4 +757,127 @@ bpi_ann_tbl <- reactable(
   add_subtitle("Top 15 Payers Ranked by Number of Months Included in the Monthly BPI", align = "left", font_color = "black", font_size = 18, font_weight = "normal")
 
 div(class = "rcm-analysis", bpi_ann_tbl)
+```
+
+
+## Mock PARBx
+
+
+```{r}
+mock_parbx()
+```
+
+
+```{r}
+mock_parbx() |>
+  mutate(aging_prop = fuimus::roundup(aging_prop * 100)) |> 
+  pivot_wider(names_from = "aging_bin", 
+              values_from = "aging_prop") |> 
+  arrange(month) |> 
+  select(-date) |> 
+  gt(rowname_col = "payer", 
+     groupname_col = "month", 
+     row_group_as_column = TRUE) |> 
+  fmt_number(decimals = 1) |> 
+  opt_table_font(font = google_font(name = "Atkinson Hyperlegible")) |> 
+  tab_options(
+    column_labels.font.weight = "bold",
+    column_labels.font.size = px(16),
+    column_labels.border.bottom.width = px(3),
+    quarto.disable_processing = TRUE,
+    table.font.size = px(18),
+    table.width = pct(75),
+    heading.align = "left",
+    heading.title.font.size = px(24),
+    heading.subtitle.font.size = px(21),
+    # table_body.hlines.style = "none",
+    column_labels.border.top.color = "darkgreen",
+    column_labels.border.bottom.color = "darkgreen",
+    table_body.border.bottom.color = "darkgreen",
+    stub.border.style = "none",
+    stub.background.color = "darkgreen",
+    # stub.font.weight = "bold",
+    row_group.font.weight = "bold"
+    )
+```
+
+
+```{r}
+ex_prop <- mock_parbx() |> 
+  pivot_wider(names_from = "aging_bin", 
+              values_from = "aging_prop") |> 
+  select(month, payer, `121+`) |> 
+  pivot_wider(names_from = month, values_from = `121+`) |> 
+  rlang::set_names(c("payer", month.abb))
+
+ex_prop_payer <- mock_parbx() |> 
+  pivot_wider(names_from = "aging_bin", 
+              values_from = "aging_prop") |> 
+  select(month, payer, `121+`) |> 
+  pivot_wider(names_from = payer, values_from = `121+`)
+
+ex_prop |> 
+  gt(rowname_col = "payer") |> 
+  fmt_percent(decimals = 0) |>
+  cols_align(align = "center") |> 
+  data_color(
+    columns = !payer,
+    palette = "ggsci::red_material",
+    apply_to = "text"
+    ) |> 
+  opt_table_font(font = google_font(name = "Fira Code")) |> 
+  tab_options(
+    column_labels.font.weight = "bold",
+    quarto.disable_processing = TRUE,
+    # table.background.color = "grey50",
+    table.font.size = gt::px(18),
+    table.width = gt::pct(100),
+    heading.align = "left",
+    heading.title.font.size = gt::px(24),
+    heading.subtitle.font.size = gt::px(21))
+```
+
+
+```{r}
+ex_prop |> 
+  reframe(
+    payer,
+    Jan = min_rank(Jan),
+    Feb = min_rank(Feb),
+    Mar = min_rank(Mar),
+    Apr = min_rank(Apr),
+    May = min_rank(May),
+    Jun = min_rank(Jun),
+    Jul = min_rank(Jul),
+    Aug = min_rank(Aug),
+    Sep = min_rank(Sep),
+    Oct = min_rank(Oct),
+    Nov = min_rank(Nov),
+    Dec = min_rank(Dec)) |> 
+  gt(rowname_col = "payer") |> 
+  opt_table_font(font = google_font(name = "JetBrains Mono")) |> 
+  data_color(
+    columns = !payer,
+    palette = "Greens",
+    apply_to = "text",
+    reverse = TRUE
+    ) |> 
+  cols_align(align = "center") |> 
+  tab_options(
+    column_labels.font.weight = "bold",
+    column_labels.font.size = px(16),
+    column_labels.border.bottom.width = px(3),
+    quarto.disable_processing = TRUE,
+    table.font.size = px(18),
+    table.width = pct(75),
+    heading.align = "left",
+    heading.title.font.size = px(24),
+    heading.subtitle.font.size = px(21),
+    table_body.hlines.style = "none",
+    column_labels.border.top.color = "darkgreen",
+    column_labels.border.bottom.color = "darkgreen",
+    table_body.border.bottom.color = "darkgreen",
+    stub.border.style = "none",
+    stub.background.color = "darkgreen"
+    )
 ```

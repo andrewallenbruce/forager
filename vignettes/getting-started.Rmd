@@ -77,50 +77,16 @@ Date of Reconciliation: The date a claim is reconciled by the medical practice.
 <br>
 
 ```{r echo=TRUE}
-long <- x |> 
-  pivot_longer(
-    cols      = starts_with("date"), 
-    names_to  = "date_type", 
-    names_prefix = "date_",
-    values_to = "date") |> 
-  mutate(
-    date_type = fct_relevel(
-      date_type, 
-      "service", 
-      "release",
-      "submission", 
-      "acceptance", 
-      "adjudication", 
-      "reconciliation"), 
-    days = as.numeric(lead(date) - date),
-    days = lag(days, order_by = date),
-    .by = claimid) |> 
-  arrange(claimid, date_type)
-
-long
+(x <- prep_claims(x))
 ```
 
 <br>
 
 ```{r}
-x <- long |> 
-  pivot_wider(
-    names_from = date_type,
-    names_glue = "{.value}_{date_type}",
-    values_from = c(date, days)
-  ) |> 
-  remove_quiet() |> 
-  rowwise() |> 
-  mutate(days_in_ar = if_else(
-      !is.na(date_reconciliation), 
-      as.numeric((date_reconciliation - date_service)),
-      as.numeric((date_adjudication - date_service))
-  )) |> 
-  ungroup() |> 
-  nest(dates = c(date_release, date_submission, date_acceptance, date_adjudication, date_reconciliation)) |>
-  bin_aging(days_in_ar)
-x
+summarise_claims(x) |> 
+  glimpse()
 ```
+
 
 
 ```{r echo=TRUE}
@@ -129,16 +95,7 @@ x |>
     year = year(date_service),
     month = month(date_service)
     ) |>
-  summarise(
-    claims             = n(), 
-    balance            = sum_na(balance),
-    avg_release        = mean_na(days_release), 
-    avg_submission     = mean_na(days_submission),
-    avg_acceptance     = mean_na(days_acceptance),
-    avg_adjudication   = mean_na(days_adjudication),
-    avg_reconciliation = mean_na(days_reconciliation),
-    avg_days_in_ar     = mean_na(days_in_ar),
-    .groups = "drop")
+  summarise_claims()
 ```
 
 <br>
@@ -149,16 +106,7 @@ x |>
     year = year(date_service),
     quarter = quarter(date_service)
     ) |>
-  summarise(
-    claims             = n(), 
-    balance            = sum_na(balance),
-    avg_release        = mean_na(days_release), 
-    avg_submission     = mean_na(days_submission),
-    avg_acceptance     = mean_na(days_acceptance),
-    avg_adjudication   = mean_na(days_adjudication),
-    avg_reconciliation = mean_na(days_reconciliation),
-    avg_days_in_ar     = mean_na(days_in_ar),
-    .groups = "drop")
+  summarise_claims()
 ```
 
 
@@ -167,19 +115,9 @@ x |>
   group_by(
     year = year(date_service),
     month = month(date_service),
-    payer,
     aging_bin
     ) |>
-  summarise(
-    claims             = n(), 
-    balance            = sum_na(balance),
-    avg_release        = mean_na(days_release), 
-    avg_submission     = mean_na(days_submission),
-    avg_acceptance     = mean_na(days_acceptance),
-    avg_adjudication   = mean_na(days_adjudication),
-    avg_reconciliation = mean_na(days_reconciliation),
-    avg_days_in_ar     = mean_na(days_in_ar),
-    .groups = "drop")
+  summarise_claims()
 ```
 
 <br>
@@ -189,19 +127,9 @@ x |>
   group_by(
     year = year(date_service),
     quarter = quarter(date_service),
-    payer,
-    aging_bin
+    payer
     ) |>
-  summarise(
-    claims             = n(), 
-    balance            = sum_na(balance),
-    avg_release        = mean_na(days_release), 
-    avg_submission     = mean_na(days_submission),
-    avg_acceptance     = mean_na(days_acceptance),
-    avg_adjudication   = mean_na(days_adjudication),
-    avg_reconciliation = mean_na(days_reconciliation),
-    avg_days_in_ar     = mean_na(days_in_ar),
-    .groups = "drop")
+  summarise_claims()
 ```
 
 

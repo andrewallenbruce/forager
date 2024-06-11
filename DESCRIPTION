@@ -17,21 +17,21 @@ Imports:
     collapse,
     dplyr,
     fixtuRes,
+    forcats,
     fs,
     lubridate,
     pins,
     purrr,
     rlang,
     santoku,
+    stringr,
+    tidyr,
     vctrs,
     wakefield,
-    withr (>= 3.0.0),
-    ymd
+    withr (>= 3.0.0)
 Suggests:
     covr,
-    forcats,
     fuimus,
-    ggforce,
     ggplot2,
     ggrepel,
     ggthemes,
@@ -46,7 +46,7 @@ Suggests:
     scales,
     svglite,
     testthat (>= 3.0.0),
-    tidyr
+    ymd
 VignetteBuilder: 
     knitr
 Remotes: 
