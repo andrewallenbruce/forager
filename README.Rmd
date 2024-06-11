@@ -57,6 +57,7 @@ pak::pak("andrewallenbruce/forager")
 
 ```{r setup, echo=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(clock)
 library(ymd)
 library(forager)
 library(fuimus)
@@ -100,7 +101,7 @@ x |>
 ```{r echo=TRUE}
 x |> 
   group_by(
-    year = get_year(date_service),
+    year = year(date_service),
     qtr = quarter(date_service),
     payer
     ) |>

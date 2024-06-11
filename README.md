@@ -43,6 +43,7 @@ pak::pak("andrewallenbruce/forager")
 
 ``` r
 library(tidyverse)
+library(clock)
 library(ymd)
 library(forager)
 library(fuimus)
@@ -55,16 +56,16 @@ library(fuimus)
 #> # A tibble: 15,000 × 10
 #>    claimid payer     charges balance date_ser…¹ date_rel…² date_sub…³ date_acc…⁴
 #>    <chr>   <fct>       <dbl>   <dbl> <date>     <date>     <date>     <date>    
-#>  1 00008   Oscar       420.    420.  2024-05-26 2024-06-02 2024-06-05 2024-06-12
-#>  2 00108   Omaha       152.    152.  2024-05-26 2024-05-30 2024-06-02 2024-06-07
-#>  3 00299   Molina       26.     26.  2024-05-26 2024-06-04 2024-06-10 2024-06-17
-#>  4 00390   Highmark     93.      0   2024-05-26 2024-06-12 2024-06-17 2024-06-25
-#>  5 00415   Medicare     63.      0   2024-05-26 2024-05-31 2024-06-10 2024-06-16
-#>  6 00431   GuideWell   127.      0   2024-05-26 2024-06-01 2024-06-01 2024-06-10
-#>  7 00445   Wellcare      4.3     4.3 2024-05-26 2024-06-02 2024-06-08 2024-06-12
-#>  8 00451   Cigna       120.      0   2024-05-26 2024-05-28 2024-05-30 2024-06-05
-#>  9 00531   Lincoln …   224.      0   2024-05-26 2024-05-31 2024-06-02 2024-06-07
-#> 10 00568   GuideWell   166.    166.  2024-05-26 2024-06-09 2024-06-17 2024-06-26
+#>  1 00008   Oscar        115.    115. 2024-05-26 2024-06-04 2024-06-08 2024-06-14
+#>  2 00343   American     284.      0  2024-05-26 2024-06-17 2024-06-19 2024-06-23
+#>  3 00389   Wellcare     325.    325. 2024-05-26 2024-06-11 2024-06-19 2024-06-28
+#>  4 00473   Medicaid      35.     35. 2024-05-26 2024-06-05 2024-06-08 2024-06-20
+#>  5 00604   Humana        50.     50. 2024-05-26 2024-06-03 2024-06-10 2024-06-18
+#>  6 01138   Omaha        107.      0  2024-05-26 2024-06-07 2024-06-08 2024-06-15
+#>  7 01161   CVS Aetna     27.     27. 2024-05-26 2024-06-01 2024-06-03 2024-06-08
+#>  8 01216   Lincoln …     73.     73. 2024-05-26 2024-05-26 2024-05-27 2024-06-07
+#>  9 01262   Centene       97.      0  2024-05-26 2024-05-27 2024-05-29 2024-05-31
+#> 10 01284   Medicaid      43.     43. 2024-05-26 2024-06-05 2024-06-10 2024-06-21
 #> # ℹ 14,990 more rows
 #> # ℹ abbreviated names: ¹​date_service, ²​date_release, ³​date_submission,
 #> #   ⁴​date_acceptance
@@ -78,16 +79,16 @@ library(fuimus)
 #> # A tibble: 15,000 × 13
 #>    claimid payer         charges balance date_service aging_bin   dar days_rel…¹
 #>    <chr>   <fct>           <dbl>   <dbl> <date>       <fct>     <dbl>      <dbl>
-#>  1 00001   Medicaid         401.      0  2024-03-29   0-30         17          1
-#>  2 00002   New York Life    171.      0  2024-04-14   0-30         22          2
-#>  3 00003   Centene           60.     60. 2024-03-02   0-30         17          1
-#>  4 00004   Centene          183.    183. 2024-05-16   0-30         21          2
-#>  5 00005   Cigna            314.      0  2024-03-09   31-60        32          5
-#>  6 00006   UnitedHealth      50.      0  2024-03-21   0-30         30          5
-#>  7 00007   Equitable        243.      0  2024-04-06   0-30         24          5
-#>  8 00008   Oscar            420.    420. 2024-05-26   31-60        33          7
-#>  9 00009   Lincoln Nat'l     79.     79. 2024-04-10   31-60        38         10
-#> 10 00010   Medicaid          32.     32. 2024-04-30   31-60        35         13
+#>  1 00001   Oscar            166.    166. 2024-05-17   0-30         11          0
+#>  2 00002   Medicare          23.     23. 2024-04-03   0-30         20          2
+#>  3 00003   UnitedHealth     212.    212. 2024-03-27   0-30         18          2
+#>  4 00004   GuideWell         84.     84. 2024-05-13   31-60        34          6
+#>  5 00005   Lincoln Nat'l    194.    194. 2024-04-03   0-30         29          5
+#>  6 00006   HCSC              98.      0  2024-04-04   31-60        34          8
+#>  7 00007   Mass Mutual       37.     37. 2024-05-13   31-60        37          7
+#>  8 00008   Oscar            115.    115. 2024-05-26   31-60        37          9
+#>  9 00009   BCBS MI          190.    190. 2024-04-06   31-60        42         10
+#> 10 00010   CVS Aetna         57.     57. 2024-04-10   31-60        40          5
 #> # ℹ 14,990 more rows
 #> # ℹ abbreviated name: ¹​days_release
 #> # ℹ 5 more variables: days_submission <dbl>, days_acceptance <dbl>,
@@ -102,14 +103,14 @@ summarise_claims(x) |>
 #> Rows: 1
 #> Columns: 9
 #> $ n_claims            <int> 15000
-#> $ gross_charges       <dbl> 2009316
-#> $ ending_ar           <dbl> 1329560
-#> $ mean_release        <dbl> 7.9998
-#> $ mean_submission     <dbl> 3.023933
-#> $ mean_acceptance     <dbl> 7.507067
-#> $ mean_adjudication   <dbl> 14.98853
-#> $ mean_reconciliation <dbl> 2.208127
-#> $ mean_dar            <dbl> 34.262
+#> $ gross_charges       <dbl> 1998810
+#> $ ending_ar           <dbl> 1315266
+#> $ mean_release        <dbl> 8.0004
+#> $ mean_submission     <dbl> 3.01
+#> $ mean_acceptance     <dbl> 7.518067
+#> $ mean_adjudication   <dbl> 14.9988
+#> $ mean_reconciliation <dbl> 2.23959
+#> $ mean_dar            <dbl> 34.2838
 ```
 
 ``` r
@@ -123,18 +124,18 @@ x |>
   arrange(payer) |>
   select(year, month, payer, n_claims, ending_ar, mean_dar)
 #> # A tibble: 81 × 6
-#>     year month payer         n_claims ending_ar mean_dar
-#>    <int> <int> <fct>            <int>     <dbl>    <dbl>
-#>  1  2024     3 Medicaid           210    16083.      34.
-#>  2  2024     4 Medicaid           191    17277.      34.
-#>  3  2024     5 Medicaid           158    14752.      34.
-#>  4  2024     3 New York Life      217    19324.      34.
-#>  5  2024     4 New York Life      192    17413.      34.
-#>  6  2024     5 New York Life      180    15011.      34.
-#>  7  2024     3 Centene            185    16104.      34.
-#>  8  2024     4 Centene            201    14927.      35.
-#>  9  2024     5 Centene            158    13403.      35.
-#> 10  2024     3 Cigna              205    17912.      34.
+#>     year month payer        n_claims ending_ar mean_dar
+#>    <int> <int> <fct>           <int>     <dbl>    <dbl>
+#>  1  2024     3 Oscar             195    18188.      34.
+#>  2  2024     4 Oscar             181    15630.      34.
+#>  3  2024     5 Oscar             148    14025.      34.
+#>  4  2024     3 Medicare          186    16966.      34.
+#>  5  2024     4 Medicare          208    17676.      34.
+#>  6  2024     5 Medicare          157    13925.      36.
+#>  7  2024     3 UnitedHealth      179    15377.      33.
+#>  8  2024     4 UnitedHealth      182    17476.      34.
+#>  9  2024     5 UnitedHealth      156    14550.      34.
+#> 10  2024     3 GuideWell         202    19187.      34.
 #> # ℹ 71 more rows
 ```
 
@@ -143,17 +144,27 @@ x |>
 ``` r
 x |> 
   group_by(
-    year = get_year(date_service),
+    year = year(date_service),
     qtr = quarter(date_service),
     payer
     ) |>
   summarise_claims() |> 
   arrange(payer) |>
   select(year, qtr, payer, n_claims, ending_ar, mean_dar)
-#> Error in `group_by()`:
-#> ℹ In argument: `year = get_year(date_service)`.
-#> Caused by error in `get_year()`:
-#> ! could not find function "get_year"
+#> # A tibble: 54 × 6
+#>     year   qtr payer         n_claims ending_ar mean_dar
+#>    <int> <int> <fct>            <int>     <dbl>    <dbl>
+#>  1  2024     1 Oscar              195    18188.      34.
+#>  2  2024     2 Oscar              329    29655.      34.
+#>  3  2024     1 Medicare           186    16966.      34.
+#>  4  2024     2 Medicare           365    31601.      35.
+#>  5  2024     1 UnitedHealth       179    15377.      33.
+#>  6  2024     2 UnitedHealth       338    32026.      34.
+#>  7  2024     1 GuideWell          202    19187.      34.
+#>  8  2024     2 GuideWell          356    31347.      35.
+#>  9  2024     1 Lincoln Nat'l      199    17432.      34.
+#> 10  2024     2 Lincoln Nat'l      392    36733.      34.
+#> # ℹ 44 more rows
 ```
 
 ## Days in AR Calculation
@@ -172,7 +183,24 @@ tibble(
     earb, 
     dart = 35,
     by = "month")
-#> Error in date_build(2024, 1:12): could not find function "date_build"
+#> # A tibble: 12 × 15
+#>    date         gct  earb  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²
+#>    <date>     <int> <int> <int> <dbl> <dbl> <dbl> <lgl>         <dbl>      <dbl>
+#>  1 2024-01-01 2.5e5 2.9e5    31 8080.    35   36. FALSE           1.1        1.2
+#>  2 2024-02-01 2.5e5 2.9e5    29 8624.    35   34. TRUE            1.2        1.2
+#>  3 2024-03-01 2.5e5 2.9e5    31 8062.    35   36. FALSE           1.1        1.2
+#>  4 2024-04-01 2.5e5 2.9e5    30 8320.    35   35. TRUE            1.2        1.2
+#>  5 2024-05-01 2.5e5 2.9e5    31 8026.    35   36. FALSE           1.1        1.2
+#>  6 2024-06-01 2.5e5 2.9e5    30 8310.    35   35. TRUE            1.2        1.2
+#>  7 2024-07-01 2.5e5 2.9e5    31 8053.    35   36. FALSE           1.1        1.2
+#>  8 2024-08-01 2.5e5 2.9e5    31 8041.    35   36. FALSE           1.1        1.2
+#>  9 2024-09-01 2.5e5 2.9e5    30 8324.    35   35. TRUE            1.2        1.2
+#> 10 2024-10-01 2.5e5 2.9e5    31 8084.    35   36. FALSE           1.1        1.2
+#> 11 2024-11-01 2.5e5 2.9e5    30 8353.    35   35. TRUE            1.2        1.2
+#> 12 2024-12-01 2.5e5 2.9e5    31 8040.    35   36. FALSE           1.1        1.2
+#> # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual
+#> # ℹ 5 more variables: ratio_diff <dbl>, earb_target <dbl>, earb_diff <dbl>,
+#> #   gct_pct <dbl>, earb_pct <dbl>
 ```
 
 <br>
@@ -191,7 +219,16 @@ tibble(
     earb, 
     dart = 35,
     by = "quarter")
-#> Error in date_build(2024, 1:12): could not find function "date_build"
+#> # A tibble: 4 × 15
+#>   date         earb   gct  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²
+#>   <date>      <int> <int> <int> <dbl> <dbl> <dbl> <lgl>         <dbl>      <dbl>
+#> 1 2024-03-01 285562 7.5e5    91 8249.    35   35. TRUE           0.38       0.38
+#> 2 2024-06-01 285591 7.5e5    91 8253.    35   35. TRUE           0.38       0.38
+#> 3 2024-09-01 285469 7.5e5    92 8149.    35   35. FALSE          0.38       0.38
+#> 4 2024-12-01 285639 7.5e5    92 8131.    35   35. FALSE          0.38       0.38
+#> # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual
+#> # ℹ 5 more variables: ratio_diff <dbl>, earb_target <dbl>, earb_diff <dbl>,
+#> #   gct_pct <dbl>, earb_pct <dbl>
 ```
 
 ## Code of Conduct
