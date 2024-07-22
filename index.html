@@ -88,13 +88,20 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
+<p><br></p>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h2 id="package-installation">
+<span class="emoji" data-emoji="package">📦</span> Installation<a class="anchor" aria-label="anchor" href="#package-installation"></a>
 </h2>
-<p>You can install the development version of <code>forager</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install <code>forager</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"andrewallenbruce/forager"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="beginner-usage">
+<span class="emoji" data-emoji="beginner">🔰</span> Usage<a class="anchor" aria-label="anchor" href="#beginner-usage"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://clock.r-lib.org" class="external-link">clock</a></span><span class="op">)</span></span>
@@ -106,60 +113,60 @@
 <h2 id="the-lifecycle-of-a-claim">The Lifecycle of a Claim<a class="anchor" aria-label="anchor" href="#the-lifecycle-of-a-claim"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 15,000 × 10</span></span>
-<span><span class="co">#&gt;    claimid payer     charges balance date_ser…¹ date_rel…² date_sub…³ date_acc…⁴</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;   &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    </span></span>
-<span><span class="co">#&gt;  1 00008   Oscar        115.    115. 2024-05-26 2024-06-04 2024-06-08 2024-06-14</span></span>
-<span><span class="co">#&gt;  2 00343   American     284.      0  2024-05-26 2024-06-17 2024-06-19 2024-06-23</span></span>
-<span><span class="co">#&gt;  3 00389   Wellcare     325.    325. 2024-05-26 2024-06-11 2024-06-19 2024-06-28</span></span>
-<span><span class="co">#&gt;  4 00473   Medicaid      35.     35. 2024-05-26 2024-06-05 2024-06-08 2024-06-20</span></span>
-<span><span class="co">#&gt;  5 00604   Humana        50.     50. 2024-05-26 2024-06-03 2024-06-10 2024-06-18</span></span>
-<span><span class="co">#&gt;  6 01138   Omaha        107.      0  2024-05-26 2024-06-07 2024-06-08 2024-06-15</span></span>
-<span><span class="co">#&gt;  7 01161   CVS Aetna     27.     27. 2024-05-26 2024-06-01 2024-06-03 2024-06-08</span></span>
-<span><span class="co">#&gt;  8 01216   Lincoln …     73.     73. 2024-05-26 2024-05-26 2024-05-27 2024-06-07</span></span>
-<span><span class="co">#&gt;  9 01262   Centene       97.      0  2024-05-26 2024-05-27 2024-05-29 2024-05-31</span></span>
-<span><span class="co">#&gt; 10 01284   Medicaid      43.     43. 2024-05-26 2024-06-05 2024-06-10 2024-06-21</span></span>
-<span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
-<span><span class="co">#&gt; # ℹ abbreviated names: ¹​date_service, ²​date_release, ³​date_submission,</span></span>
-<span><span class="co">#&gt; #   ⁴​date_acceptance</span></span>
-<span><span class="co">#&gt; # ℹ 2 more variables: date_adjudication &lt;date&gt;, date_reconciliation &lt;date&gt;</span></span></code></pre></div>
-<p><br></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/prep_claims.html">prep_claims</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 15,000 × 13</span></span>
-<span><span class="co">#&gt;    claimid payer         charges balance date_service aging_bin   dar days_rel…¹</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;   &lt;fct&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;       &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 00001   Oscar            166.    166. 2024-05-17   0-30         11          0</span></span>
-<span><span class="co">#&gt;  2 00002   Medicare          23.     23. 2024-04-03   0-30         20          2</span></span>
-<span><span class="co">#&gt;  3 00003   UnitedHealth     212.    212. 2024-03-27   0-30         18          2</span></span>
-<span><span class="co">#&gt;  4 00004   GuideWell         84.     84. 2024-05-13   31-60        34          6</span></span>
-<span><span class="co">#&gt;  5 00005   Lincoln Nat'l    194.    194. 2024-04-03   0-30         29          5</span></span>
-<span><span class="co">#&gt;  6 00006   HCSC              98.      0  2024-04-04   31-60        34          8</span></span>
-<span><span class="co">#&gt;  7 00007   Mass Mutual       37.     37. 2024-05-13   31-60        37          7</span></span>
-<span><span class="co">#&gt;  8 00008   Oscar            115.    115. 2024-05-26   31-60        37          9</span></span>
-<span><span class="co">#&gt;  9 00009   BCBS MI          190.    190. 2024-04-06   31-60        42         10</span></span>
-<span><span class="co">#&gt; 10 00010   CVS Aetna         57.     57. 2024-04-10   31-60        40          5</span></span>
-<span><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
-<span><span class="co">#&gt; # ℹ abbreviated name: ¹​days_release</span></span>
-<span><span class="co">#&gt; # ℹ 5 more variables: days_submission &lt;dbl&gt;, days_acceptance &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   days_adjudication &lt;dbl&gt;, days_reconciliation &lt;dbl&gt;, dates &lt;list&gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">15000</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&gt; # A tibble: 15,000 × 10</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;    claimid payer     charges balance date_ser…¹ date_rel…² date_sub…³ date_acc…⁴</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;   &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;     &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    </span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  1 00135   American      90.     90. 2024-07-06 2024-07-21 2024-07-26 2024-08-11</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;  2 00159   New York…     87.      0  2024-07-06 2024-07-16 2024-07-18 2024-08-03</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;  3 00180   Medicare     187.    187. 2024-07-06 2024-07-20 2024-07-25 2024-08-06</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;  4 00195   BCBS WY      174.    174. 2024-07-06 2024-07-22 2024-07-25 2024-08-03</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;  5 00199   Athene        32.     32. 2024-07-06 2024-07-13 2024-07-17 2024-07-25</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;  6 00251   BCBS WY      260.    260. 2024-07-06 2024-07-10 2024-07-13 2024-07-23</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;  7 00369   HCSC         104.    104. 2024-07-06 2024-07-16 2024-07-20 2024-07-28</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;  8 00373   Athene       144.    144. 2024-07-06 2024-07-19 2024-07-20 2024-07-24</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;  9 00481   Humana       119.      0  2024-07-06 2024-07-08 2024-07-09 2024-07-14</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; 10 00522   Molina       102.    102. 2024-07-06 2024-07-19 2024-07-20 2024-07-30</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; # ℹ abbreviated names: ¹​date_service, ²​date_release, ³​date_submission,</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; #   ⁴​date_acceptance</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: date_adjudication &lt;date&gt;, date_reconciliation &lt;date&gt;</span></span></code></pre></div>
 <p><br></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/prep_claims.html">prep_claims</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co">#&gt; # A tibble: 15,000 × 13</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt;    claimid payer         charges balance date_service aging_bin   dar days_rel…¹</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;   &lt;fct&gt;           &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;       &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;  1 00001   Humana            87.     87. 2024-06-11   0-30         16          1</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;  2 00002   Cigna            216.      0  2024-05-12   0-30         29          1</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt;  3 00003   Equitable        140.    140. 2024-06-07   0-30         24          3</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt;  4 00004   Highmark         185.    185. 2024-05-21   0-30         27          3</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;  5 00005   HCSC              72.     72. 2024-04-27   0-30         29          6</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt;  6 00006   BCBS WY          124.    124. 2024-05-03   31-60        31          7</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt;  7 00007   Athene           230.    230. 2024-04-12   0-30         30          8</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt;  8 00008   New York Life     43.     43. 2024-06-09   31-60        50         12</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt;  9 00009   New York Life    256.    256. 2024-04-20   31-60        34         17</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; 10 00010   Lincoln Nat'l    236.    236. 2024-05-05   31-60        49         12</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 14,990 more rows</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; # ℹ abbreviated name: ¹​days_release</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; # ℹ 5 more variables: days_submission &lt;dbl&gt;, days_acceptance &lt;dbl&gt;,</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; #   days_adjudication &lt;dbl&gt;, days_reconciliation &lt;dbl&gt;, dates &lt;list&gt;</span></span></code></pre></div>
+<p><br></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/summarise_claims.html">summarise_claims</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 1</span></span>
-<span><span class="co">#&gt; Columns: 9</span></span>
-<span><span class="co">#&gt; $ n_claims            &lt;int&gt; 15000</span></span>
-<span><span class="co">#&gt; $ gross_charges       &lt;dbl&gt; 1998810</span></span>
-<span><span class="co">#&gt; $ ending_ar           &lt;dbl&gt; 1315266</span></span>
-<span><span class="co">#&gt; $ mean_release        &lt;dbl&gt; 8.0004</span></span>
-<span><span class="co">#&gt; $ mean_submission     &lt;dbl&gt; 3.01</span></span>
-<span><span class="co">#&gt; $ mean_acceptance     &lt;dbl&gt; 7.518067</span></span>
-<span><span class="co">#&gt; $ mean_adjudication   &lt;dbl&gt; 14.9988</span></span>
-<span><span class="co">#&gt; $ mean_reconciliation &lt;dbl&gt; 2.23959</span></span>
-<span><span class="co">#&gt; $ mean_dar            &lt;dbl&gt; 34.2838</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<span>  <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co">#&gt; Rows: 1</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; Columns: 9</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; $ n_claims            &lt;int&gt; 15000</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; $ gross_charges       &lt;dbl&gt; 1986374</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; $ ending_ar           &lt;dbl&gt; 1323904</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; $ mean_release        &lt;dbl&gt; 8.010267</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; $ mean_submission     &lt;dbl&gt; 3.013267</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; $ mean_acceptance     &lt;dbl&gt; 7.467933</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; $ mean_adjudication   &lt;dbl&gt; 15.0508</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; $ mean_reconciliation &lt;dbl&gt; 2.227745</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; $ mean_dar            &lt;dbl&gt; 34.28633</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span></span>
 <span>    year <span class="op">=</span> <span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
@@ -168,23 +175,23 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/summarise_claims.html">summarise_claims</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">payer</span>, <span class="va">n_claims</span>, <span class="va">ending_ar</span>, <span class="va">mean_dar</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 81 × 6</span></span>
-<span><span class="co">#&gt;     year month payer        n_claims ending_ar mean_dar</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;           &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  2024     3 Oscar             195    18188.      34.</span></span>
-<span><span class="co">#&gt;  2  2024     4 Oscar             181    15630.      34.</span></span>
-<span><span class="co">#&gt;  3  2024     5 Oscar             148    14025.      34.</span></span>
-<span><span class="co">#&gt;  4  2024     3 Medicare          186    16966.      34.</span></span>
-<span><span class="co">#&gt;  5  2024     4 Medicare          208    17676.      34.</span></span>
-<span><span class="co">#&gt;  6  2024     5 Medicare          157    13925.      36.</span></span>
-<span><span class="co">#&gt;  7  2024     3 UnitedHealth      179    15377.      33.</span></span>
-<span><span class="co">#&gt;  8  2024     4 UnitedHealth      182    17476.      34.</span></span>
-<span><span class="co">#&gt;  9  2024     5 UnitedHealth      156    14550.      34.</span></span>
-<span><span class="co">#&gt; 10  2024     3 GuideWell         202    19187.      34.</span></span>
-<span><span class="co">#&gt; # ℹ 71 more rows</span></span></code></pre></div>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">payer</span>, <span class="va">n_claims</span>, <span class="va">ending_ar</span>, <span class="va">mean_dar</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#&gt; # A tibble: 108 × 6</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt;     year month payer     n_claims ending_ar mean_dar</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;  1  2024     4 Humana         131    11829.      35.</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;  2  2024     5 Humana         197    16190.      34.</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt;  3  2024     6 Humana         209    18879.      34.</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt;  4  2024     7 Humana          39     2893.      33.</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt;  5  2024     4 Cigna          106    10455.      34.</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt;  6  2024     5 Cigna          208    17423.      34.</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt;  7  2024     6 Cigna          190    17407.      33.</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt;  8  2024     7 Cigna           44     3708.      36.</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt;  9  2024     4 Equitable      125    11415.      35.</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; 10  2024     5 Equitable      202    13414.      35.</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 98 more rows</span></span></code></pre></div>
 <p><br></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span></span>
 <span>    year <span class="op">=</span> <span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
@@ -193,21 +200,21 @@
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/summarise_claims.html">summarise_claims</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">payer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">year</span>, <span class="va">qtr</span>, <span class="va">payer</span>, <span class="va">n_claims</span>, <span class="va">ending_ar</span>, <span class="va">mean_dar</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 54 × 6</span></span>
-<span><span class="co">#&gt;     year   qtr payer         n_claims ending_ar mean_dar</span></span>
-<span><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;            &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1  2024     1 Oscar              195    18188.      34.</span></span>
-<span><span class="co">#&gt;  2  2024     2 Oscar              329    29655.      34.</span></span>
-<span><span class="co">#&gt;  3  2024     1 Medicare           186    16966.      34.</span></span>
-<span><span class="co">#&gt;  4  2024     2 Medicare           365    31601.      35.</span></span>
-<span><span class="co">#&gt;  5  2024     1 UnitedHealth       179    15377.      33.</span></span>
-<span><span class="co">#&gt;  6  2024     2 UnitedHealth       338    32026.      34.</span></span>
-<span><span class="co">#&gt;  7  2024     1 GuideWell          202    19187.      34.</span></span>
-<span><span class="co">#&gt;  8  2024     2 GuideWell          356    31347.      35.</span></span>
-<span><span class="co">#&gt;  9  2024     1 Lincoln Nat'l      199    17432.      34.</span></span>
-<span><span class="co">#&gt; 10  2024     2 Lincoln Nat'l      392    36733.      34.</span></span>
-<span><span class="co">#&gt; # ℹ 44 more rows</span></span></code></pre></div>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">year</span>, <span class="va">qtr</span>, <span class="va">payer</span>, <span class="va">n_claims</span>, <span class="va">ending_ar</span>, <span class="va">mean_dar</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co">#&gt; # A tibble: 54 × 6</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt;     year   qtr payer     n_claims ending_ar mean_dar</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt; &lt;int&gt; &lt;fct&gt;        &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;  1  2024     2 Humana         537    46899.      34.</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;  2  2024     3 Humana          39     2893.      33.</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;  3  2024     2 Cigna          504    45285.      34.</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt;  4  2024     3 Cigna           44     3708.      36.</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt;  5  2024     2 Equitable      519    41301.      35.</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;  6  2024     3 Equitable       40     2298.      35 </span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt;  7  2024     2 Highmark       489    41779.      35.</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt;  8  2024     3 Highmark        29     2757.      34.</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt;  9  2024     2 HCSC           547    52913.      34.</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt; 10  2024     3 HCSC            41     3544.      34.</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 44 more rows</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="days-in-ar-calculation">Days in AR Calculation<a class="anchor" aria-label="anchor" href="#days-in-ar-calculation"></a>
@@ -215,7 +222,7 @@
 <blockquote>
 <p>Monthly</p>
 </blockquote>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
 <span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
 <span>  gct  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">250000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span>,</span>
@@ -226,30 +233,30 @@
 <span>    <span class="va">gct</span>, </span>
 <span>    <span class="va">earb</span>, </span>
 <span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
-<span>    by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 12 × 15</span></span>
-<span><span class="co">#&gt;    date         gct  earb  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²</span></span>
-<span><span class="co">#&gt;    &lt;date&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 2024-01-01 2.5e5 2.9e5    31 8080.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  2 2024-02-01 2.5e5 2.9e5    29 8624.    35   34. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt;  3 2024-03-01 2.5e5 2.9e5    31 8062.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  4 2024-04-01 2.5e5 2.9e5    30 8320.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt;  5 2024-05-01 2.5e5 2.9e5    31 8026.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  6 2024-06-01 2.5e5 2.9e5    30 8310.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt;  7 2024-07-01 2.5e5 2.9e5    31 8053.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  8 2024-08-01 2.5e5 2.9e5    31 8041.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt;  9 2024-09-01 2.5e5 2.9e5    30 8324.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt; 10 2024-10-01 2.5e5 2.9e5    31 8084.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt; 11 2024-11-01 2.5e5 2.9e5    30 8353.    35   35. TRUE            1.2        1.2</span></span>
-<span><span class="co">#&gt; 12 2024-12-01 2.5e5 2.9e5    31 8040.    35   36. FALSE           1.1        1.2</span></span>
-<span><span class="co">#&gt; # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span>
-<span><span class="co">#&gt; # ℹ 5 more variables: ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;, earb_diff &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
+<span>    by <span class="op">=</span> <span class="st">"month"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co">#&gt; # A tibble: 12 × 15</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt;    date         gct  earb  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt;    &lt;date&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;  1 2024-01-01 2.5e5 2.9e5    31 8021.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt;  2 2024-02-01 2.5e5 2.9e5    29 8604.    35   34. TRUE            1.2        1.2</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt;  3 2024-03-01 2.5e5 2.9e5    31 8066.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt;  4 2024-04-01 2.5e5 2.9e5    30 8339.    35   35. TRUE            1.2        1.2</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt;  5 2024-05-01 2.5e5 2.9e5    31 8047.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt;  6 2024-06-01 2.5e5 2.9e5    30 8329.    35   35. TRUE            1.2        1.2</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt;  7 2024-07-01 2.5e5 2.9e5    31 8099.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt;  8 2024-08-01 2.5e5 2.9e5    31 8061.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a><span class="co">#&gt;  9 2024-09-01 2.5e5 2.9e5    30 8302.    35   35. TRUE            1.2        1.2</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co">#&gt; 10 2024-10-01 2.5e5 2.9e5    31 8049.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; 11 2024-11-01 2.5e5 2.9e5    30 8313.    35   35. TRUE            1.2        1.2</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; 12 2024-12-01 2.5e5 2.9e5    31 8054.    35   36. FALSE           1.1        1.2</span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt; # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt; # ℹ 5 more variables: ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;, earb_diff &lt;dbl&gt;,</span></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a><span class="co">#&gt; #   gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
 <p><br></p>
 <blockquote>
 <p>Quarterly</p>
 </blockquote>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
 <span>  date <span class="op">=</span> <span class="fu"><a href="https://clock.r-lib.org/reference/date_build.html" class="external-link">date_build</a></span><span class="op">(</span><span class="fl">2024</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span>
 <span>  gct  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">250000</span><span class="op">:</span><span class="fl">400000</span><span class="op">)</span>,</span>
@@ -260,22 +267,30 @@
 <span>    <span class="va">gct</span>, </span>
 <span>    <span class="va">earb</span>, </span>
 <span>    dart <span class="op">=</span> <span class="fl">35</span>,</span>
-<span>    by <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 15</span></span>
-<span><span class="co">#&gt;   date         earb   gct  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²</span></span>
-<span><span class="co">#&gt;   &lt;date&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;      &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 2024-03-01 285562 7.5e5    91 8249.    35   35. TRUE           0.38       0.38</span></span>
-<span><span class="co">#&gt; 2 2024-06-01 285591 7.5e5    91 8253.    35   35. TRUE           0.38       0.38</span></span>
-<span><span class="co">#&gt; 3 2024-09-01 285469 7.5e5    92 8149.    35   35. FALSE          0.38       0.38</span></span>
-<span><span class="co">#&gt; 4 2024-12-01 285639 7.5e5    92 8131.    35   35. FALSE          0.38       0.38</span></span>
-<span><span class="co">#&gt; # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span>
-<span><span class="co">#&gt; # ℹ 5 more variables: ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;, earb_diff &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
+<span>    by <span class="op">=</span> <span class="st">"quarter"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 15</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt;   date         earb   gct  ndip   adc  dart   dar dar_pass ratio_id…¹ ratio_ac…²</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt;   &lt;date&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;lgl&gt;         &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; 1 2024-03-01 284676 7.5e5    91 8245.    35   35. TRUE           0.38       0.38</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; 2 2024-06-01 285645 7.5e5    91 8262.    35   35. TRUE           0.38       0.38</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; 3 2024-09-01 285768 7.5e5    92 8162.    35   35. FALSE          0.38       0.38</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; 4 2024-12-01 285689 7.5e5    92 8133.    35   35. FALSE          0.38       0.38</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; # ℹ abbreviated names: ¹​ratio_ideal, ²​ratio_actual</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="co">#&gt; # ℹ 5 more variables: ratio_diff &lt;dbl&gt;, earb_target &lt;dbl&gt;, earb_diff &lt;dbl&gt;,</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; #   gct_pct &lt;dbl&gt;, earb_pct &lt;dbl&gt;</span></span></code></pre></div>
+<hr>
 </div>
 <div class="section level2">
-<h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+<h2 id="balance_scale-code-of-conduct">
+<span class="emoji" data-emoji="balance_scale">⚖️</span> Code of Conduct<a class="anchor" aria-label="anchor" href="#balance_scale-code-of-conduct"></a>
 </h2>
 <p>Please note that the <code>forager</code> project is released with a <a href="https://andrewallenbruce.github.io/forager/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
+<div class="section level2">
+<h2 id="classical_building-governance">
+<span class="emoji" data-emoji="classical_building">🏛️</span> Governance<a class="anchor" aria-label="anchor" href="#classical_building-governance"></a>
+</h2>
+<p>This project is primarily maintained by <a href="https://github.com/andrewallenbruce" class="external-link">Andrew Bruce</a>. Other authors may occasionally assist with some of these duties.</p>
 </div>
 </div>
 
