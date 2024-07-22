@@ -1,93 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/404.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/aging-of_accounts.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/dar-formulas.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/getting-started.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/parbx-and-bpi.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/patient-scheduling.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/articles/testss.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/index.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/avg_dar.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/bin_aging.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/dar_ex.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/days_between.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/load_ex.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/mean_na.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/mock_claims.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/mock_parbx.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/net_ex.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/predict_net.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/prep_claims.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/remove_quiet.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/sorted_bars.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/sum_na.html</loc>
-  </url>
-  <url>
-    <loc>https://andrewallenbruce.github.io/forager/reference/summarise_claims.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://andrewallenbruce.github.io/forager/404.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/LICENSE-text.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/LICENSE.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/aging-of_accounts.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/dar-formulas.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/getting-started.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/index.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/parbx-and-bpi.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/patient-scheduling.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/articles/testss.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/authors.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/index.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/news/index.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/avg_dar.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/bin_aging.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/dar_ex.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/days_between.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/index.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/load_ex.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/mean_na.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/mock_claims.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/mock_parbx.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/net_ex.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/predict_net.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/prep_claims.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/remove_quiet.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/sorted_bars.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/sum_na.html</loc></url>
+<url><loc>https://andrewallenbruce.github.io/forager/reference/summarise_claims.html</loc></url>
 </urlset>
+
