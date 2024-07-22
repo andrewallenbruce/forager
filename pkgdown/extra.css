@@ -1,0 +1,77 @@
+h1, .h1 {
+  font-size: 2rem;
+  line-height: 1.25em;
+}
+
+h2, .h2 {
+  font-size: 1.75rem;
+  line-height: 1.25em;
+}
+
+h3, .h3 {
+  font-size: 1.5rem;
+}
+
+h4, .h4 {
+  font-size: 1.25rem;
+}
+
+dt {
+  color: rgb(38, 38, 38);
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-underline-offset: 4px;
+  font-family: monospace;
+  border-top-style: dotted;
+  border-top-width: 1px;
+  border-top-color: gray;
+  margin-bottom: 5px;
+  padding-top: 5px;
+}
+
+img {
+  border-radius: 4px;
+}
+
+.roles {
+    color: rgb(3, 153, 3) !important;
+}
+
+.active .nav-link {
+  color: rgb(3, 153, 3) !important;
+}
+
+.text-muted {
+  color: rgb(0, 141, 158) !important
+}
+
+dd > p:nth-child(1) > em {
+  color: gray !important;
+  margin-bottom: 4px !important
+}
+
+dd > p:nth-child(1) {
+  margin-bottom: -5px !important;
+  margin-left: -3px !important;
+}
+
+dd > p:nth-child(2) {
+  margin-left: -6px !important;
+}
+
+.row > main {
+  max-width: 100%;
+}
+
+@media only screen and (min-width: 640px) {
+  main + .col-md-3 {
+    margin-left: unset;
+    padding-left: 5rem;
+    max-width: 75%;
+  }
+}
+
+h4.author,h4.date {
+  padding-top:0px;
+  margin-top:0px;
+}

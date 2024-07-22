@@ -2,21 +2,25 @@ url: https://andrewallenbruce.github.io/forager/
 
 template:
   bootstrap: 5
-  light-switch: TRUE
   bootswatch: flatly
+  theme: tango
   bslib:
+    font_scale: 1
+    line_height: 1.75
     base_font: {google: "Roboto"}
     heading_font: {google: "Roboto Slab"}
-    code_font: {google: "JetBrains Mono"}
-    pkgdown-nav-height: 100px
+    code_font: "Hack, mono"
+  includes:
+    in_header: <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack-subset.css">
 
 home:
+  title: forager • Tidy Healthcare Revenue Cycle Analysis
+  description: >
+    Tidy tools for wrangling and analyzing healthcare revenue cycles.
   sidebar:
     structure: [links, license, community, citation, authors, dev]
 
 navbar:
-  bg: primary
-  type: dark
   structure:
     left:
     - intro
@@ -31,25 +35,30 @@ navbar:
   components:
     home:
       icon: fas fa-home fa-lg
-      text: ""
       href: index.html
+      aria-label: Home
+      text: ""
     reference:
       text: Reference
       href: reference/index.html
     news:
       icon: far fa-newspaper fa-lg
       href: news/index.html
-      text: ""
+      aria-label: News
       title: "Changelog"
+      text: ""
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/andrewallenbruce/forager
+      aria-label: GitHub
     linkedin:
       icon: fas fa-linkedin fa-lg
       href: https://www.linkedin.com/in/andrewallenbruce/
+      aria-label: LinkedIn
     twitter:
       icon: fab fa-twitter fa-lg
       href: http://twitter.com/andrewallbruce
+      aria-label: X
   opengraph:
     image:
       src: man/figures/card.png

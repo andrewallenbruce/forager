@@ -1,15 +1,12 @@
 ---
 output: github_document
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse  = TRUE,
   echo      = TRUE, 
   message   = FALSE, 
   warning   = FALSE,
@@ -20,6 +17,8 @@ knitr::opts_chunk$set(
   fig.path  = "man/figures/README-"
 )
 ```
+
+
 
 # forager <a href="#"><img src="man/figures/logo.svg" align="right" width="25%" min-width="120px"/></a>
 
@@ -46,14 +45,18 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-## Installation
+<br>
 
-You can install the development version of `forager` from [GitHub](https://github.com/) with:
+## :package: Installation
+
+You can install `forager` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("andrewallenbruce/forager")
 ```
+
+## :beginner: Usage
 
 ```{r setup, echo=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -62,6 +65,7 @@ library(ymd)
 library(forager)
 library(fuimus)
 ```
+
 
 ## The Lifecycle of a Claim 
 
@@ -147,12 +151,15 @@ tibble(
 ```
 
 
-## Code of Conduct
+------------------------------------------------------------------------------
 
-Please note that the `forager` project is released with a [Contributor
-Code of
-Conduct](https://andrewallenbruce.github.io/forager/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms.
+## :balance_scale: Code of Conduct
+
+Please note that the `forager` project is released with a [Contributor Code of Conduct](https://andrewallenbruce.github.io/forager/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
+## :classical_building: Governance
+
+This project is primarily maintained by [Andrew Bruce](https://github.com/andrewallenbruce). Other authors may occasionally assist with some of these duties.
 
 [^1]: <https://dictionary.cambridge.org/dictionary/english/forager>
 
