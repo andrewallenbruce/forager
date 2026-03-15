@@ -8,9 +8,10 @@ aging <- read_sheet("1Td3_6sYOEVwSOdaWdBeUl8yLUp7ztFu8tesZ6LcLlv4") |>
   clean_names() |>
   mutate(
     dos = make_date(
-    year = year(dos) + 2,
-    month = month(dos),
-    day = day(dos)),
+      year = year(dos) + 2,
+      month = month(dos),
+      day = day(dos)
+    ),
     location = case_match(
       location,
       "Houston" ~ "HOU",
@@ -22,24 +23,26 @@ aging <- read_sheet("1Td3_6sYOEVwSOdaWdBeUl8yLUp7ztFu8tesZ6LcLlv4") |>
   select(
     # patient,
     dos,
-    charges            = amt,
-    ins_name           = payer,
-    ins_class          = payer_type,
+    charges = amt,
+    ins_name = payer,
+    ins_class = payer_type,
     referring_provider = referring_phys,
     rendering_provider = provider,
     # office_state       = state,
-    practice_location    = location,
+    practice_location = location,
   ) |>
   mutate(
     age_days = clock::date_count_between(dos, today(), "day"),
     dos = if_else(age_days < 0, dos - (age_days * -1) - 1, dos),
     age_days = NULL
-    )
+  )
 
 # A tibble: 2,618 × 7
 
+aging_ex <- get_pin("aging_ex")
+
 pin_update(
-  aging,
+  aging_ex,
   name = "aging_ex",
   title = "Aging Example No. 1",
   description = "Aging Example No. 1"
@@ -54,5 +57,11 @@ pin_update(
 binned <- aging |>
   mutate(
     days_in_ar = clock::date_count_between(dos, lubridate::today(), "day"),
-    aging_bin = santoku::chop_width(days_in_ar, 30, start = 0, left = FALSE, close_end = FALSE)
+    aging_bin = santoku::chop_width(
+      days_in_ar,
+      30,
+      start = 0,
+      left = FALSE,
+      close_end = FALSE
     )
+  )

@@ -6,19 +6,22 @@
 #'
 #' @noRd
 mount_board <- function(source = c("local", "remote")) {
-
   source <- match.arg(source)
+
+  gh_raw <- \(x) paste0("https://raw.githubusercontent.com/", x)
 
   switch(
     source,
-    local  = pins::board_folder(
+    local = pins::board_folder(
       fs::path_package(
         "extdata/pins",
-        package = "forager")
+        package = "forager"
+      )
     ),
     remote = pins::board_url(
-      fuimus::gh_raw(
-        "andrewallenbruce/forager/master/inst/extdata/pins/")
+      gh_raw(
+        "andrewallenbruce/forager/master/inst/extdata/pins/"
+      )
     )
   )
 }
@@ -33,13 +36,11 @@ mount_board <- function(source = c("local", "remote")) {
 #'
 #' @noRd
 get_pin <- function(pin, ...) {
-
   board <- mount_board(...)
 
   pin <- rlang::arg_match0(pin, list_pins())
 
   pins::pin_read(board, pin)
-
 }
 
 #' List pins from a [pins][pins::pins-package] board
@@ -50,11 +51,9 @@ get_pin <- function(pin, ...) {
 #'
 #' @noRd
 list_pins <- function(...) {
-
   board <- mount_board(...)
 
   pins::pin_list(board)
-
 }
 
 #' Load example data
@@ -67,9 +66,7 @@ list_pins <- function(...) {
 #'
 #' @export
 load_ex <- function(name) {
-
   get_pin(name)
-
 }
 
 #' Remove empty rows and columns
@@ -82,11 +79,10 @@ load_ex <- function(name) {
 #'
 #' @export
 remove_quiet <- function(df) {
-
   janitor::remove_empty(
     df,
     which = c("rows", "cols")
-    )
+  )
 }
 
 #' `mean()` with `NA` removal
@@ -99,7 +95,6 @@ remove_quiet <- function(df) {
 #'
 #' @export
 mean_na <- function(x) {
-
   mean(x, na.rm = TRUE)
 }
 
@@ -113,7 +108,6 @@ mean_na <- function(x) {
 #'
 #' @export
 sum_na <- function(x) {
-
   sum(x, na.rm = TRUE)
 }
 
@@ -132,8 +126,11 @@ sum_na <- function(x) {
 #' @export
 sorted_bars <- function(df, var) {
   df |>
-    dplyr::mutate({{ var }} := forcats::fct_rev(
-      forcats::fct_infreq({{ var }})))  |>
+    dplyr::mutate(
+      {{ var }} := forcats::fct_rev(
+        forcats::fct_infreq({{ var }})
+      )
+    ) |>
     ggplot2::ggplot(ggplot2::aes(y = {{ var }})) +
     ggplot2::geom_bar()
 }

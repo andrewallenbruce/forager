@@ -1,0 +1,10 @@
+file: practicum.rds
+file_size: 42004
+pin_hash: a1f7e84d7e3d9d42
+type: rds
+title: AAPC CPC Practicum Case Data
+description: AAPC CPC Practicum Case Data
+tags: ~
+urls: ~
+created: 20260315T150010Z
+api_version: 1

@@ -26,24 +26,22 @@ healthr <- healthyR.data::healthyR_data |>
     payer = payer_grouping,
     payer = case_match(
       payer,
-        "Medicare A" ~ "Medicare Part A",
-        "Medicaid HMO" ~ "Anthem",
-        "Medicare B" ~ "Medicare Part B",
-        "Medicare HMO" ~ "Aetna",
-        "HMO" ~ "Humana",
-        "Self Pay" ~ "Patient",
-        "Compensation" ~ "Worker's Comp",
-        "Exchange Plans" ~ "Medicare Advantage",
-        c("No Fault", "?") ~ "Commercial",
+      "Medicare A" ~ "Medicare Part A",
+      "Medicaid HMO" ~ "Anthem",
+      "Medicare B" ~ "Medicare Part B",
+      "Medicare HMO" ~ "Aetna",
+      "HMO" ~ "Humana",
+      "Self Pay" ~ "Patient",
+      "Compensation" ~ "Worker's Comp",
+      "Exchange Plans" ~ "Medicare Advantage",
+      c("No Fault", "?") ~ "Commercial",
       .default = payer
     ),
     payer = as_factor(payer),
   ) |>
   arrange(pid) |>
   group_by(pid) |>
-  mutate(visit = row_number(),
-         .after = pid
-         ) |>
+  mutate(visit = row_number(), .after = pid) |>
   ungroup() |>
   arrange(dos) |>
   select(
@@ -56,15 +54,16 @@ healthr <- healthyR.data::healthyR_data |>
     payment,
     balance,
     closed
-    )
+  )
+
+healthyr <- get_pin("healthyr")
 
 pin_update(
-  healthr,
+  healthyr,
   name = "healthyr",
   title = "HealthyR Example",
   description = "HealthyR Example"
 )
-
 
 healthr |>
   filter(closed) |>
@@ -87,7 +86,9 @@ healthr |>
 healthr |>
   mutate(
     date_recon = if_else(closed, add_months(dos, 3, invalid = "previous"), NA),
-    date_recon = case_when(date_recon >= date_today("") ~ add_years(dos, -1, invalid = "previous")),
+    date_recon = case_when(
+      date_recon >= date_today("") ~ add_years(dos, -1, invalid = "previous")
+    ),
     days_in_ar = if_else(closed, as.integer(date_recon - dos), NA)
   ) |>
   fuimus::count_days(

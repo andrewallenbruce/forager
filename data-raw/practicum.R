@@ -39,7 +39,7 @@ practicum <- vctrs::vec_rbind(
       "ENDOCR" ~ "Endocrinology",
       c("OPTIC", "OPTHAM") ~ "Opthamology",
       "WORKCMP" ~ "Worker's Comp"
-      ) |>
+    ) |>
       as_factor(),
     diagnosis = na_if(diagnosis, "-"),
     icd = na_if(icd, "-"),
@@ -60,8 +60,9 @@ practicum <- vctrs::vec_rbind(
     group = NULL,
     case = NULL,
     .before = 1
-    )
+  )
 
+practicum <- get_pin("practicum")
 
 pin_update(
   practicum,

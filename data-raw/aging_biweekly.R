@@ -23,35 +23,40 @@ aging_patient <- tibble(
     56568.36,
     53080.52,
     51767.56,
-    49885.46),
+    49885.46
+  ),
   bin_31_60 = c(
     28367.74,
     29028.02,
     28305.13,
     27418.41,
     16049.72,
-    17951.76),
+    17951.76
+  ),
   bin_61_90 = c(
     19662.67,
     14178.66,
     12004.71,
     12822.42,
     17589.60,
-    12513.82),
+    12513.82
+  ),
   bin_91_120 = c(
     22224.74,
     15808.45,
     11680.13,
     10378.60,
     6307.86,
-    8685.47),
+    8685.47
+  ),
   bin_121_plus = c(
     158209.16,
     159144.52,
     148043.08,
     133822.27,
     126928.76,
-    125077.03)
+    125077.03
+  )
 ) |>
   rowwise() |>
   mutate(aging_total = sum(c_across(bin_0_30:bin_121_plus))) |>
@@ -68,8 +73,8 @@ aging_patient |>
 
 aging_patient <- aging_patient |>
   pivot_longer(
-    cols      = bin_0_30:bin_121_plus,
-    names_to  = "aging_bin",
+    cols = bin_0_30:bin_121_plus,
+    names_to = "aging_bin",
     values_to = "balance"
   ) |>
   mutate(
@@ -84,13 +89,15 @@ aging_patient <- aging_patient |>
     aging_bin = factor(
       aging_bin,
       levels = c("0-30", "31-60", "61-90", "91-120", "121+"),
-      ordered = TRUE),
+      ordered = TRUE
+    ),
     percent = balance / aging_total
   )
 
+aging_biweekly <- get_pin("aging_biweekly")
 
 pin_update(
-  aging_patient,
+  aging_biweekly,
   name = "aging_biweekly",
   title = "Aging Biweekly Example",
   description = "Aging Biweekly Example"

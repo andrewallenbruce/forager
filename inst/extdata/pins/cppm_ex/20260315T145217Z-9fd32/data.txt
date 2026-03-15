@@ -1,0 +1,10 @@
+file: cppm_ex.rds
+file_size: 673
+pin_hash: 9fd32a80e1859028
+type: rds
+title: CPPM Example
+description: CPPM Example
+tags: ~
+urls: ~
+created: 20260315T145217Z
+api_version: 1

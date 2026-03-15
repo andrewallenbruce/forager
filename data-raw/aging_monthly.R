@@ -19,7 +19,8 @@ aging_monthly <- tibble(
     985444.69,
     888797.41,
     808376.95
-  )) |>
+  )
+) |>
   mutate(
     mon = month(date, label = TRUE),
     change_abs = provider:::chg(total),
@@ -27,7 +28,8 @@ aging_monthly <- tibble(
   ) |>
   mutate(
     across(
-      ends_with("_pct"), ~ .x + 1,
+      ends_with("_pct"),
+      ~ .x + 1,
       .names = "{.col}_ror"
     )
   ) |>
@@ -39,6 +41,8 @@ aging_monthly <- tibble(
     change_pct,
     change_ror = change_pct_ror
   )
+
+aging_monthly <- get_pin("aging_monthly")
 
 pin_update(
   aging_monthly,

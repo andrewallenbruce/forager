@@ -4,7 +4,9 @@ library(clock)
 library(janitor)
 library(readxl)
 
-fac_a <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snapshot/Aging_FacilityA.xlsx") |>
+fac_a <- read_xlsx(
+  "D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snapshot/Aging_FacilityA.xlsx"
+) |>
   clean_names() |>
   remove_empty(c("rows", "cols")) |>
   mutate(
@@ -39,7 +41,12 @@ fac_a <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
       "OCCUPATIONAL THERAPY" ~ "Occupational Therapy",
       "CANCER CENTER" ~ "Cancer Center",
       "RADIATION THERAPY" ~ "Radiation Therapy",
-      c("OTHER THERAPY", "THERAPY/SERIES PATIENT", "N CANTON THERAPY", "THERAPY - ORRVILLE") ~ "Other Therapy",
+      c(
+        "OTHER THERAPY",
+        "THERAPY/SERIES PATIENT",
+        "N CANTON THERAPY",
+        "THERAPY - ORRVILLE"
+      ) ~ "Other Therapy",
       "LTACH/GENETIC COUNSELING" ~ "Genetic Counseling",
       "BEHAVORIAL HEALTH" ~ "Behavioral Health",
       "NON-PATIENT" ~ "Non-Patient",
@@ -51,7 +58,8 @@ fac_a <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
       "DIALYSIS TUSC" ~ "Dialysis",
       "INPATIENT SWING" ~ "Inpatient Swing",
       "HOSPICE" ~ "Hospice"
-    ) |> as_factor(),
+    ) |>
+      as_factor(),
     facility = "A",
     account_chronology = case_match(
       account_chronology,
@@ -59,7 +67,8 @@ fac_a <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
       "DNFB In Suspense" ~ "DNFB: In Suspense",
       "DNFB Beyond Suspense" ~ "DNFB: Beyond Suspense",
       .default = account_chronology
-      ) |> as_factor()
+    ) |>
+      as_factor()
   ) |>
   select(
     pt_id = pid,
@@ -81,27 +90,32 @@ fac_a <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
     balance = account_balance,
     charges = total_charges
   ) |>
-  mutate(date_billed = as_date(date_billed + lubridate::dyears(1)),
-         aging_tier = case_match(
-           aging_tier,
-           "0 - 30" ~ "0-30",
-           "31 - 60" ~ "31-60",
-           "61 - 90" ~ "61-90",
-           "91 - 120" ~ "91-120",
-           c("121 - 180", "181 - 365", "366 +") ~ "121+",
-           .default = aging_tier
-         ) |> as_factor(),
-         aging_bin = suppressWarnings(
-           forcats::fct_relevel(
-             aging_tier,
-             c("0-30", "31-60", "61-90", "91-120", "121+"),
-             after = Inf
-           )
-         ),
-         aging_tier = NULL)
+  mutate(
+    date_billed = as_date(date_billed + lubridate::dyears(1)),
+    aging_tier = case_match(
+      aging_tier,
+      "0 - 30" ~ "0-30",
+      "31 - 60" ~ "31-60",
+      "61 - 90" ~ "61-90",
+      "91 - 120" ~ "91-120",
+      c("121 - 180", "181 - 365", "366 +") ~ "121+",
+      .default = aging_tier
+    ) |>
+      as_factor(),
+    aging_bin = suppressWarnings(
+      forcats::fct_relevel(
+        aging_tier,
+        c("0-30", "31-60", "61-90", "91-120", "121+"),
+        after = Inf
+      )
+    ),
+    aging_tier = NULL
+  )
 
 
-fac_b <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snapshot/Aging_FacilityB.xlsx") |>
+fac_b <- read_xlsx(
+  "D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snapshot/Aging_FacilityB.xlsx"
+) |>
   clean_names() |>
   remove_empty(c("rows", "cols")) |>
   mutate(
@@ -136,7 +150,12 @@ fac_b <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
       "OCCUPATIONAL THERAPY" ~ "Occupational Therapy",
       "CANCER CENTER" ~ "Cancer Center",
       "RADIATION THERAPY" ~ "Radiation Therapy",
-      c("OTHER THERAPY", "THERAPY/SERIES PATIENT", "N CANTON THERAPY", "THERAPY - ORRVILLE") ~ "Other Therapy",
+      c(
+        "OTHER THERAPY",
+        "THERAPY/SERIES PATIENT",
+        "N CANTON THERAPY",
+        "THERAPY - ORRVILLE"
+      ) ~ "Other Therapy",
       "LTACH/GENETIC COUNSELING" ~ "Genetic Counseling",
       "BEHAVORIAL HEALTH" ~ "Behavioral Health",
       "NON-PATIENT" ~ "Non-Patient",
@@ -148,7 +167,8 @@ fac_b <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
       "DIALYSIS TUSC" ~ "Dialysis",
       "INPATIENT SWING" ~ "Inpatient Swing",
       "HOSPICE" ~ "Hospice"
-    ) |> as_factor(),
+    ) |>
+      as_factor(),
     facility = "B",
     account_chronology = case_match(
       account_chronology,
@@ -156,7 +176,8 @@ fac_b <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
       "DNFB In Suspense" ~ "DNFB: In Suspense",
       "DNFB Beyond Suspense" ~ "DNFB: Beyond Suspense",
       .default = account_chronology
-    ) |> as_factor()
+    ) |>
+      as_factor()
   ) |>
   select(
     pt_id = pid,
@@ -178,29 +199,34 @@ fac_b <- read_xlsx("D:/medical_ins_large_claims/rcm_kit_ar_aging_denials/AR Snap
     balance = account_balance,
     charges = total_charges
   ) |>
-  mutate(date_billed = as_date(date_billed + lubridate::dyears(1)),
-         aging_tier = case_match(
-           aging_tier,
-           "0 - 30" ~ "0-30",
-           "31 - 60" ~ "31-60",
-           "61 - 90" ~ "61-90",
-           "91 - 120" ~ "91-120",
-           c("121 - 180", "181 - 365", "366 +") ~ "121+",
-           .default = aging_tier
-         ) |> as_factor(),
-         aging_bin = suppressWarnings(
-           forcats::fct_relevel(
-             aging_tier,
-             c("0-30", "31-60", "61-90", "91-120", "121+"),
-             after = Inf
-           )
-         ),
-         aging_tier = NULL)
+  mutate(
+    date_billed = as_date(date_billed + lubridate::dyears(1)),
+    aging_tier = case_match(
+      aging_tier,
+      "0 - 30" ~ "0-30",
+      "31 - 60" ~ "31-60",
+      "61 - 90" ~ "61-90",
+      "91 - 120" ~ "91-120",
+      c("121 - 180", "181 - 365", "366 +") ~ "121+",
+      .default = aging_tier
+    ) |>
+      as_factor(),
+    aging_bin = suppressWarnings(
+      forcats::fct_relevel(
+        aging_tier,
+        c("0-30", "31-60", "61-90", "91-120", "121+"),
+        after = Inf
+      )
+    ),
+    aging_tier = NULL
+  )
 
 aging_facility <- bind_rows(
   fac_a,
   fac_b
 )
+
+aging_facility <- get_pin("aging_facility")
 
 pin_update(
   aging_facility,

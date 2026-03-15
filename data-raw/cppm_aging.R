@@ -7,13 +7,15 @@ cppm_ex <- tidytable::fread(here::here("cppm_ex.csv")) |>
     date = readr::parse_date(
       month,
       format = "%b-%y"
-      ) + lubridate::years(3),
+    ) +
+      lubridate::years(3),
     gross_charges = charges,
     ending_ar = ar_balance,
     adjustments,
     collections
-    )
+  )
 
+cppm_ex <- get_pin("cppm_ex")
 
 pin_update(
   cppm_ex,
