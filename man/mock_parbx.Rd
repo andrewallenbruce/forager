@@ -4,12 +4,7 @@
 \alias{mock_parbx}
 \title{Generate Mock PARBx data}
 \usage{
-mock_parbx(payers = payer_names(), ...)
-}
-\arguments{
-\item{payers}{\verb{[character]} vector of payer names}
-
-\item{...}{\verb{[dots]} additional arguments}
+mock_parbx()
 }
 \value{
 A \link[tibble:tibble-package]{tibble}
@@ -18,7 +13,5 @@ A \link[tibble:tibble-package]{tibble}
 Generate Mock PARBx data
 }
 \examples{
-# Every payer name generates 60 rows of data
 mock_parbx()
-
 }

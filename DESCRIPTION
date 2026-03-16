@@ -2,7 +2,7 @@ Package: forager
 Title: Healthcare Revenue Cycle Analysis
 Version: 0.0.1.9002
 Authors@R: 
-    person("Andrew", "Bruce", , "andrewallenbruce@gmail.com", role = c("aut", "cre", "cph"))
+    person(c("Andrew", "Allen"), "Bruce", , "andrewallenbruce@gmail.com", role = c("aut", "cre", "cph"))
 Maintainer: Andrew Bruce <andrewallenbruce@gmail.com>
 Description: The goal of forager is to provide a suite of analytic tools
     for healthcare revenue cycle management.
@@ -13,26 +13,27 @@ BugReports: https://github.com/andrewallenbruce/forager/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
-    cheapr,
+    cheapr (>= 1.5.0),
+    cli (>= 3.6.5),
     clock,
-    collapse,
-    dplyr,
-    forcats,
+    collapse (>= 2.1.6),
+    fastplyr,
     fs,
     lubridate,
     pins,
-    purrr,
-    rlang,
+    purrr (>= 1.2.1),
+    rlang (>= 1.1.7),
     santoku,
-    stringr,
+    stringr (>= 1.6.0),
     tidyr,
-    vctrs,
+    vctrs (>= 0.7.1),
     withr (>= 3.0.0)
 Suggests:
     fuimus,
     knitr,
-    roxyglobals,
-    testthat (>= 3.0.0)
+    roxyglobals (>= 3.0.0),
+    testthat (>= 3.3.2),
+    tibble (>= 3.3.1)
 VignetteBuilder: 
     knitr
 Remotes: 

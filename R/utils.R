@@ -1,9 +1,6 @@
 #' Mount [pins][pins::pins-package] board
-#'
 #' @param source `[character]` string: `"local"` (default) or `"remote"`
-#'
 #' @returns `<pins_board_folder>` or `<pins_board_url>`
-#'
 #' @noRd
 mount_board <- function(source = c("local", "remote")) {
   source <- match.arg(source)
@@ -27,13 +24,9 @@ mount_board <- function(source = c("local", "remote")) {
 }
 
 #' Get a pinned dataset from a [pins][pins::pins-package] board
-#'
 #' @param pin `[character]` string name of pinned dataset
-#'
 #' @template args-dots
-#'
 #' @returns A [tibble][tibble::tibble-package]
-#'
 #' @noRd
 get_pin <- function(pin, ...) {
   board <- mount_board(...)
@@ -44,15 +37,11 @@ get_pin <- function(pin, ...) {
 }
 
 #' List pins from a [pins][pins::pins-package] board
-#'
 #' @param ... arguments to pass to [mount_board()]
-#'
 #' @returns A `[list]` of [pins][pins::pins-package]
-#'
 #' @noRd
 list_pins <- function(...) {
   board <- mount_board(...)
-
   pins::pin_list(board)
 }
 
