@@ -16,7 +16,6 @@ Imports:
     clock,
     collapse,
     dplyr,
-    fixtuRes,
     forcats,
     fs,
     lubridate,
@@ -40,13 +39,9 @@ Suggests:
     ivs,
     janitor,
     knitr,
-    qs,
-    rmarkdown,
     roxyglobals,
     scales,
-    svglite,
-    testthat (>= 3.0.0),
-    ymd
+    testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Remotes: 
