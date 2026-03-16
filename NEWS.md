@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# forager 0.0.1.9002 (2026-03-16)
+
+* cleaned up vignette
+
+
 # forager 0.0.1.9001 (2026-03-16)
 
 * removed dependencies causing build to fail
