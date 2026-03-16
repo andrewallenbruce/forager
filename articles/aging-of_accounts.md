@@ -1,0 +1,63 @@
+# Aging of Accounts
+
+An **account** is a *billable episode of care*.
+
+It begins to age once it is billed to an insurance company or patient.
+Note: This is not entirely true, and it depends on an organization’s
+policies. Some may choose to say an account/claim begins to age once the
+episode of care is complete, i.e. a healthcare provider has performed
+work, charges have been entered into the chart, etc. Keep in mind that
+gross charges are essentially a measurement of unpaid work.
+
+These outstanding accounts are monitored by age in 30-day increments
+(0 - 30, 31 - 60, 61 - 90, and so forth.) AR departments monitor the
+number of accounts outstanding, the dollar amount in each 30-day
+increment (sometimes called “bins” or “buckets”), and the responsible
+parties.
+
+Aging should be broken down by many metrics, such as Provider, Patient,
+Insurance Types (Commercial, Primary, Secondary, Worker’s Compensation,
+Managed Care), Facility, Diagnosis/Procedure code, Specialty, etc. The
+older the account or the longer the account remains unpaid, the less
+likely it will be reimbursed.
+
+Most claims are originally billed to insurance and, until the insurance
+makes a payment, the responsibility for the payment continues to be with
+the insurance payer.
+
+After the payer makes or denies a payment (with no just cause for an
+appeal), the responsibility for the balance of goes to the patient (to
+be sent an invoice) or the physician (to be written off.)
+
+## Patient Liability
+
+Patient liability is the ratio of patient responsibility to total billed
+charges, and roughly reflects patient deductibles. This metric is
+important in measuring front office function because it has little to do
+with clean claim submission or effective follow-up.
+
+## First-Pass Pay (FPP) Rate and Denial Rate
+
+The FPP Rate is the percentage of claims paid in full upon the first
+submission (subject to federal or state timely payment regulations; most
+state laws require 15 days for electronic submission and 30 days for
+paper submission.)
+
+The denial rate is the complementary metric to the FPP rate. It counts
+the percentage of claims that require follow-up and therefore cost more
+to process.
+
+Follow-up may take the form of a phone call to the payer to discover a
+lost claim, receive an interpretation of a denial message, correct
+earlier submitted data, resubmit the original claim, and consult with
+the provider and medical note, or denial appeal.
+
+Both FPP and denial rates are very important metrics often used for
+billing process improvement. The upside of the FPP/denial metric is that
+it’s not affected by the charge, but its downside is that it hides the
+differences between process imperfections on the claim submission and
+claim payment sides.
+
+To identify patterns of problem CPT codes or payers, the FPP/Denial
+metric needs to be computed and compared across all payer-CPT code
+pairs.
