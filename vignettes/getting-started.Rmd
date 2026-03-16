@@ -19,24 +19,11 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 options(scipen = 999)
-
-# Personal libraries
 library(forager)
-library(fuimus)
-
-# Data wrangling
 library(clock)
 library(dplyr)
 library(tidyr)
 library(forcats)
-library(ymd)
-
-# Data visualization
-library(gt)
-library(gtExtras)
-library(ggplot2)
-library(ggrepel)
-library(scales)
 ```
 
 ## Introduction
@@ -45,17 +32,12 @@ Date of Service (DOS) to Date of Reconciliation is a critical metric for Revenue
 
 ## Definitions
 
-Date of Service: The date a patient receives medical services.
-
-Date of Release: The date a claim is released for billing.
-
-Date of Submission: The date a claim is submitted to the payer.
-
-Date of Acceptance: The date a claim is accepted by the payer.
-
-Date of Adjudication: The date a claim is adjudicated by the payer.
-
-Date of Reconciliation: The date a claim is reconciled by the medical practice.
+   - Date of Service: The date a patient receives medical services.
+   - Date of Release: The date a claim is released for billing.
+   - Date of Submission: The date a claim is submitted to the payer.
+   - Date of Acceptance: The date a claim is accepted by the payer.
+   - Date of Adjudication: The date a claim is adjudicated by the payer.
+   - Date of Reconciliation: The date a claim is reconciled by the medical practice.
 
 ## The Lifecycle of a Claim 
 
@@ -69,8 +51,6 @@ Date of Reconciliation: The date a claim is reconciled by the medical practice.
 <br>
 
 ```{r, echo=TRUE, warning=FALSE}
-# Balances, when zero, add net payment and adjustments
-# Payment and adjustments should be a percentage of the balance, equal to one
 (x <- mock_claims(15000))
 ```
 
@@ -84,17 +64,16 @@ Date of Reconciliation: The date a claim is reconciled by the medical practice.
 
 ```{r}
 summarise_claims(x) |> 
-  glimpse()
+  dplyr::glimpse()
 ```
 
 
 
 ```{r echo=TRUE}
 x |> 
-  group_by(
-    year = year(date_service),
-    month = month(date_service)
-    ) |>
+  dplyr::group_by(
+    year = clock::get_year(date_service),
+    month = clock::get_month(date_service)) |>
   summarise_claims()
 ```
 
@@ -102,21 +81,19 @@ x |>
 
 ```{r echo=TRUE}
 x |> 
-  group_by(
-    year = year(date_service),
-    quarter = quarter(date_service)
-    ) |>
+  dplyr::group_by(
+    year = clock::get_year(date_service),
+    quarter = lubridate::quarter(date_service)) |>
   summarise_claims()
 ```
 
 
 ```{r echo=TRUE}
 x |> 
-  group_by(
-    year = year(date_service),
-    month = month(date_service),
-    aging_bin
-    ) |>
+  dplyr::group_by(
+    year = clock::get_year(date_service),
+    month = clock::get_month(date_service),
+    aging_bin) |>
   summarise_claims()
 ```
 
@@ -124,11 +101,10 @@ x |>
 
 ```{r echo=TRUE}
 x |> 
-  group_by(
-    year = year(date_service),
-    quarter = quarter(date_service),
-    payer
-    ) |>
+  dplyr::group_by(
+    year = clock::get_year(date_service),
+    quarter = lubridate::quarter(date_service),
+    payer) |>
   summarise_claims()
 ```
 

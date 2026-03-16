@@ -13,6 +13,7 @@ BugReports: https://github.com/andrewallenbruce/forager/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
+    cheapr,
     clock,
     collapse,
     dplyr,
@@ -26,26 +27,18 @@ Imports:
     stringr,
     tidyr,
     vctrs,
-    wakefield,
     withr (>= 3.0.0)
 Suggests:
-    covr,
     fuimus,
-    ggplot2,
-    ggrepel,
-    ggthemes,
-    gt,
-    gtExtras,
-    ivs,
-    janitor,
     knitr,
     roxyglobals,
-    scales,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
 Remotes: 
     github::andrewallenbruce/fuimus
+Config/Needs/website: ivs, gt, gtExtras, ggplot2, ggforce, scales,
+    ggrepel, ggthemes
 Config/roxyglobals/filename: generated-globals.R
 Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3

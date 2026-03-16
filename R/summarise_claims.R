@@ -13,13 +13,13 @@
 #'
 #' @export
 prep_claims <- function(df, ...) {
-
   df |>
     tidyr::pivot_longer(
-      cols         = dplyr::starts_with("date"),
-      names_to     = "date_type",
+      cols = dplyr::starts_with("date"),
+      names_to = "date_type",
       names_prefix = "date_",
-      values_to    = "date") |>
+      values_to = "date"
+    ) |>
     dplyr::mutate(
       date_type = forcats::fct_relevel(
         date_type,
@@ -28,23 +28,27 @@ prep_claims <- function(df, ...) {
         "submission",
         "acceptance",
         "adjudication",
-        "reconciliation"),
+        "reconciliation"
+      ),
       days = as.numeric(dplyr::lead(date) - date),
       days = dplyr::lag(days, order_by = date),
-      .by = claimid) |>
+      .by = claimid
+    ) |>
     dplyr::arrange(claimid, date_type) |>
     tidyr::pivot_wider(
       names_from = date_type,
       names_glue = "{.value}_{date_type}",
       values_from = c(date, days)
     ) |>
-    remove_quiet() |>
+    # remove_quiet() |>
     dplyr::rowwise() |>
-    dplyr::mutate(dar = dplyr::if_else(
-      !is.na(date_reconciliation),
-      as.numeric(date_reconciliation - date_service),
-      as.numeric(date_adjudication - date_service)
-    )) |>
+    dplyr::mutate(
+      dar = dplyr::if_else(
+        !is.na(date_reconciliation),
+        as.numeric(date_reconciliation - date_service),
+        as.numeric(date_adjudication - date_service)
+      )
+    ) |>
     dplyr::ungroup() |>
     tidyr::nest(
       dates = c(
@@ -52,7 +56,8 @@ prep_claims <- function(df, ...) {
         date_submission,
         date_acceptance,
         date_adjudication,
-        date_reconciliation)
+        date_reconciliation
+      )
     ) |>
     bin_aging(dar) |>
     dplyr::select(
@@ -92,13 +97,12 @@ prep_claims <- function(df, ...) {
 #'
 #' @export
 summarise_claims <- function(df, vars = c(dplyr::starts_with("days_"), dar)) {
-
   df |>
     dplyr::summarise(
-      n_claims      = dplyr::n(),
-      gross_charges = sum_na(charges),
-      ending_ar     = sum_na(balance),
-      dplyr::across({{ vars }}, \(x) mean_na(x), .names = "mean_{.col}"),
+      n_claims = dplyr::n(),
+      gross_charges = sum(charges),
+      ending_ar = sum(balance),
+      dplyr::across({{ vars }}, \(x) mean(x), .names = "mean_{.col}"),
       .groups = "drop"
     ) |>
     dplyr::rename_with(
@@ -106,5 +110,4 @@ summarise_claims <- function(df, vars = c(dplyr::starts_with("days_"), dar)) {
       dplyr::starts_with("mean_")
     ) |>
     .add_class()
-
 }

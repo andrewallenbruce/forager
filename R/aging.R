@@ -45,11 +45,9 @@
 #'
 #' @export
 bin_aging <- function(df, ndays, bin_type = c("case", "chop")) {
-
   bin_type <- match.arg(bin_type)
 
   if (bin_type == "chop") {
-
     df <- df |>
       dplyr::mutate(
         aging_bin = santoku::chop_width(
@@ -63,7 +61,6 @@ bin_aging <- function(df, ndays, bin_type = c("case", "chop")) {
   }
 
   if (bin_type == "case") {
-
     df <- df |>
       dplyr::mutate(
         aging_bin = dplyr::case_when(
@@ -106,27 +103,25 @@ bin_aging <- function(df, ndays, bin_type = c("case", "chop")) {
 #'
 #' @export
 days_between <- function(df, from, to = NULL) {
-
   if (is.null(to)) {
-
     df |>
       dplyr::mutate(
         days_elapsed = clock::date_count_between(
           {{ from }},
           clock::date_today(""),
-          "day")
-        ) |>
+          "day"
+        )
+      ) |>
       .add_class()
-
   } else {
-
     df |>
       dplyr::mutate(
         days_elapsed = clock::date_count_between(
           {{ from }},
           {{ to }},
-          "day")
-        ) |>
+          "day"
+        )
+      ) |>
       .add_class()
-    }
+  }
 }

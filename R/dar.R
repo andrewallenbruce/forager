@@ -33,28 +33,31 @@
 #' @autoglobal
 #'
 #' @export
-avg_dar <- function(df,
-                    date,
-                    gct,
-                    earb,
-                    dart = 35,
-                    by = c("month", "quarter")) {
-
-  by  <- match.arg(by)
+avg_dar <- function(
+  df,
+  date,
+  gct,
+  earb,
+  dart = 35,
+  by = c("month", "quarter")
+) {
+  by <- match.arg(by)
 
   df <- dplyr::transmute(
     df,
     date = clock::as_date({{ date }}),
     gct = {{ gct }},
     earb = {{ earb }},
-    ndip = lubridate::days_in_month(date))
+    ndip = lubridate::days_in_month(date)
+  )
 
   if (by == "quarter") {
-
     qtr_dates <- collapse::funique(
       lubridate::quarter(
         df$date,
-        type = "date_last")) |>
+        type = "date_last"
+      )
+    ) |>
       lubridate::floor_date("month")
 
     qtr_earb <- df |>
@@ -64,10 +67,12 @@ avg_dar <- function(df,
     qtr_gct <- df |>
       dplyr::group_by(
         date = lubridate::quarter(date, type = "date_last") |>
-          lubridate::floor_date("month")) |>
+          lubridate::floor_date("month")
+      ) |>
       dplyr::summarise(
         gct = sum(gct),
-        ndip = sum(ndip))
+        ndip = sum(ndip)
+      )
 
     df <- dplyr::full_join(
       qtr_earb,
@@ -102,8 +107,7 @@ avg_dar <- function(df,
       # Ending AR Percentage Decrease Needed
       # earb_diff_pct = earb_target / {{ earb }},
       # earb_gct_diff = {{ earb }} - {{ gct }},
-
-      ) |>
+    ) |>
     .add_class()
 }
 
@@ -115,7 +119,6 @@ avg_dar <- function(df,
 #'
 #' @export
 dar_ex <- function() {
-
   dplyr::tibble(
     date = seq(
       as.Date("2024-01-01"),
