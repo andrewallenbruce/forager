@@ -58,28 +58,27 @@ load_ex <- function(name) {
   get_pin(name)
 }
 
-#' Sorted Bar Chart
-#' @param df data frame
-#' @param var column to plot
-#' @returns A [ggplot2][ggplot2::ggplot2-package] object
-#' @autoglobal
-#' @noRd
-sorted_bars <- function(df, var) {
-  df |>
-    dplyr::mutate(
-      {{ var }} := forcats::fct_rev(
-        forcats::fct_infreq({{ var }})
-      )
-    ) |>
-    ggplot2::ggplot(ggplot2::aes(y = {{ var }})) +
-    ggplot2::geom_bar()
-}
+# Sorted Bar Chart
+# @param df data frame
+# @param var column to plot
+# @returns A [ggplot2][ggplot2::ggplot2-package] object
+# @autoglobal
+# @noRd
+# sorted_bars <- function(df, var) {
+#   df |>
+#     dplyr::mutate(
+#       {{ var }} := forcats::fct_rev(
+#         forcats::fct_infreq({{ var }})
+#       )
+#     ) |>
+#     ggplot2::ggplot(ggplot2::aes(y = {{ var }})) +
+#     ggplot2::geom_bar()
+# }
 
-
-col_palette <- c(
-  "#8ba58e",
-  "#192a38",
-  "#528084",
-  "#2c3e50",
-  "#8ca0aa"
-)
+# col_palette <- c(
+#   "#8ba58e",
+#   "#192a38",
+#   "#528084",
+#   "#2c3e50",
+#   "#8ca0aa"
+# )

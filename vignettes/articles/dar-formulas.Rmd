@@ -13,11 +13,7 @@ knitr::opts_chunk$set(
   dpi       = 600, 
   out.width = "100%"
   )
-
 library(forager)
-library(dplyr)
-library(tidyr)
-library(gt)
 ```
 
 ## Days in Accounts Receivable

@@ -26,12 +26,6 @@ a \link[tibble:tibble-package]{tibble}
 Lirov's Net Payment Estimation
 }
 \examples{
-predict_net(
-  net_ex(),
-  date,
-  gct,
-  earb,
-  net,
-  parb_120)
-
+predict_net(net_ex(), date, gct, earb, net, parb_120) |>
+dplyr::glimpse()
 }

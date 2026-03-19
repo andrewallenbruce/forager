@@ -1,30 +1,16 @@
 #' Lirov's Net Payment Estimation
 #'
 #' @template args-df-default
-#'
 #' @template args-date-col
-#'
 #' @template args-gct-col
-#'
 #' @template args-earb-col
-#'
 #' @param net column of net payments
-#'
 #' @param parb_120 column of percentage of AR beyond 120 days old
-#'
 #' @template returns-default
-#'
 #' @examples
-#' predict_net(
-#'   net_ex(),
-#'   date,
-#'   gct,
-#'   earb,
-#'   net,
-#'   parb_120)
-#'
+#' predict_net(net_ex(), date, gct, earb, net, parb_120) |>
+#' dplyr::glimpse()
 #' @autoglobal
-#'
 #' @export
 predict_net <- function(df, date, gct, earb, net, parb_120) {
   df <- df |>
@@ -65,11 +51,8 @@ predict_net <- function(df, date, gct, earb, net, parb_120) {
 }
 
 #' Net Prediction Example Data
-#'
 #' @keywords internal
-#'
 #' @autoglobal
-#'
 #' @export
 net_ex <- function() {
   load_ex("monthly_raw") |>

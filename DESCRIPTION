@@ -14,32 +14,35 @@ Depends:
     R (>= 4.1.0)
 Imports: 
     cheapr (>= 1.5.0),
-    cli (>= 3.6.5),
-    clock,
+    clock (>= 0.7.4),
     collapse (>= 2.1.6),
-    fastplyr,
-    fs,
-    lubridate,
-    pins,
-    purrr (>= 1.2.1),
+    dplyr (>= 1.2.0),
+    fastplyr (>= 0.9.91),
+    forcats (>= 1.0.1),
+    fs (>= 1.6.7),
+    lubridate (>= 1.9.5),
+    pins (>= 1.4.2),
     rlang (>= 1.1.7),
-    santoku,
+    santoku (>= 1.1.0),
     stringr (>= 1.6.0),
-    tidyr,
+    tidyr (>= 1.3.2),
     vctrs (>= 0.7.1),
     withr (>= 3.0.0)
 Suggests:
     fuimus,
+    janitor,
     knitr,
-    roxyglobals (>= 3.0.0),
+    rmarkdown,
+    roxyglobals (>= 1.0.0),
     testthat (>= 3.3.2),
-    tibble (>= 3.3.1)
+    tibble (>= 3.3.1),
+    ymd
 VignetteBuilder: 
     knitr
 Remotes: 
     github::andrewallenbruce/fuimus
 Config/Needs/website: ivs, gt, gtExtras, ggplot2, ggforce, scales,
-    ggrepel, ggthemes
+    ggrepel, ggthemes, rmarkdown
 Config/roxyglobals/filename: generated-globals.R
 Config/roxyglobals/unique: TRUE
 Config/testthat/edition: 3

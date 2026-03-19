@@ -7,9 +7,9 @@
 summarise_claims(df, vars = c(dplyr::starts_with("days_"), dar))
 }
 \arguments{
-\item{df}{\verb{[data.frame]} data frame generated from \code{mock_claims() |> prep_claims()}}
+\item{df}{\verb{[data.frame]} data generated from \code{prep_claims(mock_claims())}}
 
-\item{vars}{\verb{[character]} variables to summarise, e.g. \code{c(days_service, days_reconciliation)}}
+\item{vars}{\verb{[character]} variables to summarise, e.g. \code{c(days_srv, days_rec)}}
 }
 \value{
 A \link[tibble:tibble-package]{tibble}
@@ -18,14 +18,18 @@ A \link[tibble:tibble-package]{tibble}
 Summarise mock coding/billing data frame
 }
 \examples{
-x <- mock_claims(rows = 500) |> prep_claims()
+x <- mock_claims(5000)
+x
 
-summarise_claims(x)
+x <- prep_claims(x)
+x
 
-x |>
-  dplyr::group_by(
-    year = ymd::year(date_service),
-    month = ymd::month(date_service)) |>
-  summarise_claims()
+summarise_claims(x) |>
+dplyr::glimpse()
 
+dplyr::group_by(x,
+year = ymd::year(date_srv),
+month = ymd::month(date_srv)) |>
+summarise_claims() |>
+dplyr::glimpse()
 }

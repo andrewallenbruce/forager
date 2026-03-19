@@ -122,8 +122,8 @@ parbx_rank |>
 parbx_rank |> 
   select(payer, parbx_nov, parbx_dec) |> 
   mutate(
-    parbx_nov = parbx_nov * wakefield::probs(n()),
-    parbx_dec = parbx_dec * wakefield::probs(n()),
+    parbx_nov = parbx_nov * forager:::prob(n()),
+    parbx_dec = parbx_dec * forager:::prob(n()),
     rank_nov = dplyr::min_rank(parbx_nov),
     rank_dec = dplyr::min_rank(parbx_dec),
     rank_change = rank_nov - rank_dec
@@ -367,8 +367,8 @@ props <- tibble(
     "BCBS Pennsylvania",
     "BCBS Georgia"
   ),
-  nov_pct = wakefield::probs(10),
-  dec_pct = wakefield::probs(10)
+  nov_pct = forager:::prob(10),
+  dec_pct = forager:::prob(10)
 )
 
 # Merge the two data frames

@@ -1,6 +1,6 @@
 ---
 title: "Getting started"
-output: rmarkdown::html_vignette
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{Getting started}
   %\VignetteEngine{knitr::rmarkdown}
@@ -72,8 +72,8 @@ summarise_claims(x) |>
 ```{r echo=TRUE}
 x |> 
   dplyr::group_by(
-    year = clock::get_year(date_service),
-    month = clock::get_month(date_service)) |>
+    year = clock::get_year(date_srv),
+    month = clock::get_month(date_srv)) |>
   summarise_claims()
 ```
 
@@ -82,8 +82,8 @@ x |>
 ```{r echo=TRUE}
 x |> 
   dplyr::group_by(
-    year = clock::get_year(date_service),
-    quarter = lubridate::quarter(date_service)) |>
+    year = clock::get_year(date_srv),
+    quarter = lubridate::quarter(date_srv)) |>
   summarise_claims()
 ```
 
@@ -91,8 +91,8 @@ x |>
 ```{r echo=TRUE}
 x |> 
   dplyr::group_by(
-    year = clock::get_year(date_service),
-    month = clock::get_month(date_service),
+    year = clock::get_year(date_srv),
+    month = clock::get_month(date_srv),
     aging_bin) |>
   summarise_claims()
 ```
@@ -102,8 +102,8 @@ x |>
 ```{r echo=TRUE}
 x |> 
   dplyr::group_by(
-    year = clock::get_year(date_service),
-    quarter = lubridate::quarter(date_service),
+    year = clock::get_year(date_srv),
+    quarter = lubridate::quarter(date_srv),
     payer) |>
   summarise_claims()
 ```

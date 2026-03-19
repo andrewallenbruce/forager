@@ -1,20 +1,13 @@
 #' Calculate Average Days in AR
 #'
 #' @template args-df-default
-#'
 #' @template args-date-col
-#'
 #' @template args-gct-col
-#'
 #' @template args-earb-col
-#'
 #' @param dart `[numeric]` Target Days in AR, default is `35` days
-#'
 #' @param by `[character]` string specifying the calculation period; one of
 #'   `"month"`, `"quarter"`, or `"year"`; defaults to `"month"`
-#'
 #' @template returns-default
-#'
 #' @examples
 #' avg_dar(df     = dar_ex(),
 #'         date   = date,
@@ -29,9 +22,7 @@
 #'         earb   = ending_ar,
 #'         dart   = 35,
 #'         by = "quarter")
-#'
 #' @autoglobal
-#'
 #' @export
 avg_dar <- function(
   df,
@@ -112,11 +103,8 @@ avg_dar <- function(
 }
 
 #' Days in AR Example Data
-#'
 #' @keywords internal
-#'
 #' @autoglobal
-#'
 #' @export
 dar_ex <- function() {
   dplyr::tibble(

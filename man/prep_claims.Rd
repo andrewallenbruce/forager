@@ -18,6 +18,5 @@ A \link[tibble:tibble-package]{tibble}
 Prep mock coding/billing data frame
 }
 \examples{
-prep_claims(mock_claims(rows = 5))
-
+prep_claims(mock_claims(500))
 }

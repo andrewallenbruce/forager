@@ -4,7 +4,7 @@
 \alias{mock_claims}
 \title{Generate mock coding/billing data frame}
 \usage{
-mock_claims(rows = 1000, days = FALSE)
+mock_claims(rows = 1000L, days = FALSE)
 }
 \arguments{
 \item{rows}{\verb{<int>} number of rows to generate}

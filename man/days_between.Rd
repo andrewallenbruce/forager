@@ -20,10 +20,6 @@ a \link[tibble:tibble-package]{tibble}
 Calculate Number of Days Between Two Dates
 }
 \examples{
-mock_claims(10)[c(
-  "date_service",
-  "charges",
-  "payer")] |>
-  days_between(date_service)
-
+mock_claims(100)[c("date_srv", "charges", "payer")] |>
+  days_between(date_srv)
 }

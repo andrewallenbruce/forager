@@ -40,5 +40,4 @@ avg_dar(df     = dar_ex(),
         earb   = ending_ar,
         dart   = 35,
         by = "quarter")
-
 }

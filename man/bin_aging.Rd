@@ -20,25 +20,27 @@ a \link[tibble:tibble-package]{tibble}
 Apply 30-Day Aging Bins
 }
 \examples{
-mock_claims(100) |>
+mock_claims(1000) |>
   dplyr::mutate(
     dar = dplyr::if_else(
-      !is.na(date_reconciliation),
-      as.numeric((date_reconciliation - date_service)),
-      as.numeric((date_adjudication - date_service))
+      !is.na(date_rec),
+      as.integer(date_rec - date_srv),
+      as.integer(date_adj - date_srv)
     )
   ) |>
-    bin_aging(dar, "chop") |>
-    dplyr::summarise(
-      n_claims = dplyr::n(),
-      balance = sum(balance, na.rm = TRUE),
-      .by = c(aging_bin))
+  bin_aging(dar, "chop") |>
+  dplyr::summarise(
+    n_claims = dplyr::n(),
+    balance = sum(balance, na.rm = TRUE),
+    .by = c(aging_bin)
+  )
 
-mock_claims(10)[c(
-  "date_service",
+mock_claims(100)[c(
+  "date_srv",
   "charges",
-  "payer")] |>
-  days_between(date_service) |>
+  "payer"
+)] |>
+  days_between(date_srv) |>
   bin_aging(days_elapsed)
 
 load_ex("aging_ex") |>
@@ -51,5 +53,4 @@ load_ex("aging_ex") |>
     month = clock::date_month_factor(dos),
   ) |>
   janitor::tabyl(ins_name, aging_bin, year)
-
 }
