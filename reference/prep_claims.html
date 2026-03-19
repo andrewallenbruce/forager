@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">forager</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,9 +70,23 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">prep_claims</span><span class="op">(</span><span class="fu"><a href="mock_claims.html">mock_claims</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘fastplyr’</span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">prep_claims</span><span class="op">(</span><span class="fu"><a href="mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 500 × 13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">id</span>    <span style="font-weight: bold;">payer</span>      <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">balance</span> <span style="font-weight: bold;">date_srv</span>   <span style="font-weight: bold;">aging_bin</span>   <span style="font-weight: bold;">dar</span> <span style="font-weight: bold;">days_rel</span> <span style="font-weight: bold;">days_sub</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 001   Lincoln       17<span style="color: #949494;">5</span>.    17<span style="color: #949494;">5</span>. 2025-02-25 0-30         22        6        4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 002   BCBS          15<span style="color: #949494;">3</span>.    15<span style="color: #949494;">3</span>. 2025-01-17 31-60        31        9        <span style="color: #949494;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 003   Oscar          75.     75. 2025-02-23 31-60        45       10       10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 004   Medicaid       19.     19. 2025-02-12 31-60        32        8        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 005   Lincoln       13<span style="color: #949494;">7</span>.    13<span style="color: #949494;">7</span>. 2025-03-04 31-60        33        9        6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 006   Aetna         23<span style="color: #949494;">7</span>.    23<span style="color: #949494;">7</span>. 2025-01-11 31-60        41        8        <span style="color: #949494;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 007   Mass Mutu…    22<span style="color: #949494;">3</span>.    22<span style="color: #949494;">3</span>. 2025-01-22 31-60        37        8        5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 008   Highmark      46<span style="color: #949494;">4</span>.    46<span style="color: #949494;">4</span>. 2025-01-05 0-30         30        9        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 009   Centene       17<span style="color: #949494;">9</span>.    17<span style="color: #949494;">9</span>. 2025-02-19 31-60        38       10        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 010   Lincoln       43<span style="color: #949494;">9</span>.    43<span style="color: #949494;">9</span>. 2025-01-27 31-60        39        8        3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 490 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: </span><span style="color: #949494; font-weight: bold;">days_acc</span><span style="color: #949494;"> &lt;int&gt;, </span><span style="color: #949494; font-weight: bold;">days_adj</span><span style="color: #949494;"> &lt;int&gt;, </span><span style="color: #949494; font-weight: bold;">days_rec</span><span style="color: #949494;"> &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">dates</span><span style="color: #949494;"> &lt;list&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -80,7 +94,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Andrew Bruce.</p>
+  <p>Developed by Andrew Allen Bruce.</p>
 </div>
 
 <div class="pkgdown-footer-right">

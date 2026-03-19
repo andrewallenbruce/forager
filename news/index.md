@@ -1,5 +1,10 @@
 # Changelog
 
+## forager 0.0.1.9003 (2026-03-19)
+
+- This might just pass
+- refactoring
+
 ## forager 0.0.1.9002 (2026-03-16)
 
 - cleaned up vignette

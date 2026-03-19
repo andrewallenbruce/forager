@@ -29,28 +29,47 @@ a [tibble](https://tibble.tidyverse.org/reference/tibble-package.html)
 ## Examples
 
 ``` r
-mock_claims(100) |>
+mock_claims(1000) |>
   dplyr::mutate(
     dar = dplyr::if_else(
-      !is.na(date_reconciliation),
-      as.numeric((date_reconciliation - date_service)),
-      as.numeric((date_adjudication - date_service))
+      !is.na(date_rec),
+      as.integer(date_rec - date_srv),
+      as.integer(date_adj - date_srv)
     )
   ) |>
-    bin_aging(dar, "chop") |>
-    dplyr::summarise(
-      n_claims = dplyr::n(),
-      balance = sum(balance, na.rm = TRUE),
-      .by = c(aging_bin))
-#> Error in loadNamespace(x): there is no package called ‘fastplyr’
+  bin_aging(dar, "chop") |>
+  dplyr::summarise(
+    n_claims = dplyr::n(),
+    balance = sum(balance, na.rm = TRUE),
+    .by = c(aging_bin)
+  )
+#> # A tibble: 2 × 3
+#>   aging_bin n_claims balance
+#>   <fct>        <int>   <dbl>
+#> 1 (30, 60]       732  55136.
+#> 2 (0, 30]        268  22686.
 
-mock_claims(10)[c(
-  "date_service",
+mock_claims(100)[c(
+  "date_srv",
   "charges",
-  "payer")] |>
-  days_between(date_service) |>
+  "payer"
+)] |>
+  days_between(date_srv) |>
   bin_aging(days_elapsed)
-#> Error in loadNamespace(x): there is no package called ‘fastplyr’
+#> # A tibble: 100 × 5
+#>    date_srv   charges payer       days_elapsed aging_bin
+#>    <date>       <dbl> <fct>              <int> <fct>    
+#>  1 2025-03-04    232. Highmark             380 121+     
+#>  2 2025-03-03    295. Medicaid             381 121+     
+#>  3 2025-03-02    202. Centene              382 121+     
+#>  4 2025-03-01    237. GuideWell            383 121+     
+#>  5 2025-02-28    305. HCSC                 384 121+     
+#>  6 2025-02-26    309. Wellcare             386 121+     
+#>  7 2025-02-25     20. Bright               387 121+     
+#>  8 2025-02-24     82. Omaha                388 121+     
+#>  9 2025-02-23    166. Athene               389 121+     
+#> 10 2025-02-23    173. Mass Mutual          389 121+     
+#> # ℹ 90 more rows
 
 load_ex("aging_ex") |>
   dplyr::select(dos, charges, ins_name) |>

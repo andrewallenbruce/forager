@@ -5,18 +5,8 @@ Generate Mock PARBx data
 ## Usage
 
 ``` r
-mock_parbx(payers = payer_names(), ...)
+mock_parbx()
 ```
-
-## Arguments
-
-- payers:
-
-  `[character]` vector of payer names
-
-- ...:
-
-  `[dots]` additional arguments
 
 ## Value
 
@@ -25,20 +15,30 @@ A [tibble](https://tibble.tidyverse.org/reference/tibble-package.html)
 ## Examples
 
 ``` r
-# Every payer name generates 60 rows of data
 mock_parbx()
-#> # A tibble: 1,440 × 5
-#>    date       month    payer    aging_bin aging_prop
-#>    <date>     <ord>    <chr>    <ord>          <dbl>
-#>  1 2024-01-01 January  Medicare 0-30           0.22 
-#>  2 2024-01-01 January  Medicare 31-60          0.19 
-#>  3 2024-01-01 January  Medicare 61-90          0.078
-#>  4 2024-01-01 January  Medicare 91-120         0.25 
-#>  5 2024-01-01 January  Medicare 121+           0.26 
-#>  6 2024-02-01 February Medicare 0-30           0.13 
-#>  7 2024-02-01 February Medicare 31-60          0.11 
-#>  8 2024-02-01 February Medicare 61-90          0.36 
-#>  9 2024-02-01 February Medicare 91-120         0.35 
-#> 10 2024-02-01 February Medicare 121+           0.050
-#> # ℹ 1,430 more rows
+#> ! Expressions will be optimised where possible.
+#> 
+#> Optimised expressions are independent from unoptimised ones and typical
+#> data-masking rules may not apply
+#> 
+#> Run `fastplyr::fastplyr_disable_optimisations()` to disable optimisations
+#> globally
+#> 
+#> Run `fastplyr::fastplyr_disable_informative_msgs()` to disable this and other
+#> informative messages
+#> This message is displayed once per session.
+#> # A tibble: 60 × 5
+#>    date       month    payer    bin    aging
+#>    <date>     <ord>    <fct>    <fct>  <dbl>
+#>  1 2025-01-01 January  Bright   0-30    0.12
+#>  2 2025-01-01 January  Bright   31-60   0.15
+#>  3 2025-01-01 January  Bright   61-90   0.33
+#>  4 2025-01-01 January  Wellcare 91-120  0.23
+#>  5 2025-01-01 January  Wellcare 121+    0.17
+#>  6 2025-02-01 February Humana   0-30    0.13
+#>  7 2025-02-01 February Omaha    31-60   0.27
+#>  8 2025-02-01 February Omaha    61-90   0.22
+#>  9 2025-02-01 February BCBS     91-120  0.25
+#> 10 2025-02-01 February Wellcare 121+    0.13
+#> # ℹ 50 more rows
 ```

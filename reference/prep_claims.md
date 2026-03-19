@@ -26,6 +26,21 @@ A [tibble](https://tibble.tidyverse.org/reference/tibble-package.html)
 ## Examples
 
 ``` r
-prep_claims(mock_claims(rows = 5))
-#> Error in loadNamespace(x): there is no package called ‘fastplyr’
+prep_claims(mock_claims(500))
+#> # A tibble: 500 × 13
+#>    id    payer      charges balance date_srv   aging_bin   dar days_rel days_sub
+#>    <chr> <fct>        <dbl>   <dbl> <date>     <fct>     <int>    <int>    <int>
+#>  1 001   Lincoln       175.    175. 2025-02-25 0-30         22        6        4
+#>  2 002   BCBS          153.    153. 2025-01-17 31-60        31        9        0
+#>  3 003   Oscar          75.     75. 2025-02-23 31-60        45       10       10
+#>  4 004   Medicaid       19.     19. 2025-02-12 31-60        32        8        2
+#>  5 005   Lincoln       137.    137. 2025-03-04 31-60        33        9        6
+#>  6 006   Aetna         237.    237. 2025-01-11 31-60        41        8        0
+#>  7 007   Mass Mutu…    223.    223. 2025-01-22 31-60        37        8        5
+#>  8 008   Highmark      464.    464. 2025-01-05 0-30         30        9        2
+#>  9 009   Centene       179.    179. 2025-02-19 31-60        38       10        2
+#> 10 010   Lincoln       439.    439. 2025-01-27 31-60        39        8        3
+#> # ℹ 490 more rows
+#> # ℹ 4 more variables: days_acc <int>, days_adj <int>, days_rec <int>,
+#> #   dates <list>
 ```

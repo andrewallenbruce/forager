@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">forager</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,11 +56,11 @@
 
 
 <dl><dt id="arg-df">df<a class="anchor" aria-label="anchor" href="#arg-df"></a></dt>
-<dd><p><code>[data.frame]</code> data frame generated from <code>mock_claims() |&gt; prep_claims()</code></p></dd>
+<dd><p><code>[data.frame]</code> data generated from <code>prep_claims(mock_claims())</code></p></dd>
 
 
 <dt id="arg-vars">vars<a class="anchor" aria-label="anchor" href="#arg-vars"></a></dt>
-<dd><p><code>[character]</code> variables to summarise, e.g. <code>c(days_service, days_reconciliation)</code></p></dd>
+<dd><p><code>[character]</code> variables to summarise, e.g. <code>c(days_srv, days_rec)</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -70,19 +70,75 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="mock_claims.html">mock_claims</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">500</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="prep_claims.html">prep_claims</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘fastplyr’</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="mock_claims.html">mock_claims</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5,000 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">id</span>    <span style="font-weight: bold;">payer</span>    <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">date_srv</span>   <span style="font-weight: bold;">date_rel</span>   <span style="font-weight: bold;">date_sub</span>   <span style="font-weight: bold;">date_acc</span>   <span style="font-weight: bold;">date_adj</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1374  Lincoln     30<span style="color: #949494;">1</span>. 2025-03-04 2025-03-11 2025-03-11 2025-03-18 2025-03-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 4063  Lincoln      39. 2025-03-04 2025-03-14 2025-03-15 2025-03-17 2025-04-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1120  Oscar       12<span style="color: #949494;">0</span>. 2025-03-04 2025-03-13 2025-03-22 2025-03-28 2025-04-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 3714  Aetna        14. 2025-03-04 2025-03-14 2025-03-15 2025-03-19 2025-04-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2853  Medicaid     19. 2025-03-04 2025-03-12 2025-03-14 2025-03-22 2025-04-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2359  Oscar        17. 2025-03-04 2025-03-15 2025-03-19 2025-03-26 2025-04-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2859  Molina      14<span style="color: #949494;">8</span>. 2025-03-04 2025-03-12 2025-03-16 2025-03-23 2025-04-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2702  Allianz     15<span style="color: #949494;">4</span>. 2025-03-04 2025-03-11 2025-03-14 2025-03-20 2025-03-28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2579  Molina      24<span style="color: #949494;">8</span>. 2025-03-04 2025-03-13 2025-03-13 2025-03-21 2025-04-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 4867  GuideWe…     77. 2025-03-04 2025-03-11 2025-03-11 2025-03-20 2025-03-30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,990 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: </span><span style="color: #949494; font-weight: bold;">date_rec</span><span style="color: #949494;"> &lt;date&gt;, </span><span style="color: #949494; font-weight: bold;">balance</span><span style="color: #949494;"> &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">summarise_claims</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'x' not found</span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="prep_claims.html">prep_claims</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5,000 × 13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">id</span>    <span style="font-weight: bold;">payer</span>      <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">balance</span> <span style="font-weight: bold;">date_srv</span>   <span style="font-weight: bold;">aging_bin</span>   <span style="font-weight: bold;">dar</span> <span style="font-weight: bold;">days_rel</span> <span style="font-weight: bold;">days_sub</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 0001  Omaha         37<span style="color: #949494;">4</span>.    37<span style="color: #949494;">4</span>. 2025-01-27 31-60        34        8        4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 0002  Highmark      10<span style="color: #949494;">5</span>.      <span style="color: #949494;">0</span>  2024-12-20 0-30         29        7        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 0003  Cigna         18<span style="color: #949494;">5</span>.      <span style="color: #949494;">0</span>  2024-12-30 31-60        42        6        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 0004  Bright        13<span style="color: #949494;">9</span>.    13<span style="color: #949494;">9</span>. 2025-01-11 31-60        34       10        1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 0005  Mass Mutu…    16<span style="color: #949494;">5</span>.      <span style="color: #949494;">0</span>  2025-02-15 31-60        37       10        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 0006  Lincoln       25<span style="color: #949494;">6</span>.    25<span style="color: #949494;">6</span>. 2025-02-24 31-60        34        7        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 0007  Mass Mutu…    23<span style="color: #949494;">4</span>.      <span style="color: #949494;">0</span>  2025-02-11 31-60        31        8        <span style="color: #949494;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 0008  Allianz        22.     22. 2025-01-06 31-60        32        9        5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 0009  Cigna         34<span style="color: #949494;">0</span>.      <span style="color: #949494;">0</span>  2024-12-24 31-60        36        7        <span style="color: #949494;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 0010  American      16<span style="color: #949494;">0</span>.      <span style="color: #949494;">0</span>  2025-02-13 31-60        35        8        2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,990 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: </span><span style="color: #949494; font-weight: bold;">days_acc</span><span style="color: #949494;"> &lt;int&gt;, </span><span style="color: #949494; font-weight: bold;">days_adj</span><span style="color: #949494;"> &lt;int&gt;, </span><span style="color: #949494; font-weight: bold;">days_rec</span><span style="color: #949494;"> &lt;int&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   </span><span style="color: #949494; font-weight: bold;">dates</span><span style="color: #949494;"> &lt;list&gt;</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    year <span class="op">=</span> <span class="fu">ymd</span><span class="fu">::</span><span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    month <span class="op">=</span> <span class="fu">ymd</span><span class="fu">::</span><span class="fu">month</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu">summarise_claims</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'x' not found</span>
+<span class="r-in"><span><span class="fu">summarise_claims</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ n_claims      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 5000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ gross_charges <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 664468.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ ending_ar     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 372201.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_rel      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 8.4854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_sub      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.9998</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_acc      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 7.4984</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_adj      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 14.971</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_rec      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_dar      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 35.0556</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">x</span>,</span></span>
+<span class="r-in"><span>year <span class="op">=</span> <span class="fu">ymd</span><span class="fu">::</span><span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date_srv</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>month <span class="op">=</span> <span class="fu">ymd</span><span class="fu">::</span><span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">month</a></span><span class="op">(</span><span class="va">date_srv</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">summarise_claims</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ year          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2024<span style="color: #949494;">, </span>2025<span style="color: #949494;">, </span>2025<span style="color: #949494;">, </span>2025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ month         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 12<span style="color: #949494;">, </span>1<span style="color: #949494;">, </span>2<span style="color: #949494;">, </span>3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ n_claims      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 788<span style="color: #949494;">, </span>2046<span style="color: #949494;">, </span>1863<span style="color: #949494;">, </span>303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ gross_charges <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 101572.34<span style="color: #949494;">, </span>276983.34<span style="color: #949494;">, </span>248050.85<span style="color: #949494;">, </span>37862.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ ending_ar     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.00<span style="color: #949494;">, </span>180113.10<span style="color: #949494;">, </span>168749.51<span style="color: #949494;">, </span>23338.71</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_rel      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 8.390863<span style="color: #949494;">, </span>8.521017<span style="color: #949494;">, </span>8.478261<span style="color: #949494;">, </span>8.534653</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_sub      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.019036<span style="color: #949494;">, </span>3.010264<span style="color: #949494;">, </span>2.973698<span style="color: #949494;">, </span>3.039604</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_acc      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 7.436548<span style="color: #949494;">, </span>7.553275<span style="color: #949494;">, </span>7.543747<span style="color: #949494;">, </span>7.009901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_adj      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 14.76396<span style="color: #949494;">, </span>15.03275<span style="color: #949494;">, </span>14.99463<span style="color: #949494;">, </span>14.94719</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_rec      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.046954<span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span><span style="color: #949494;">, </span><span style="color: #BB0000;">NA</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ mean_dar      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 36.65736<span style="color: #949494;">, </span>34.87830<span style="color: #949494;">, </span>34.68706<span style="color: #949494;">, </span>34.35314</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -90,7 +146,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Andrew Bruce.</p>
+  <p>Developed by Andrew Allen Bruce.</p>
 </div>
 
 <div class="pkgdown-footer-right">

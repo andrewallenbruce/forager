@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="index.html">forager</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -168,8 +168,8 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span></span>
-<span>    year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
-<span>    month <span class="op">=</span> <span class="fu">month</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    year <span class="op">=</span> <span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    month <span class="op">=</span> <span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">month</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
 <span>    <span class="va">payer</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/summarise_claims.html">summarise_claims</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -193,8 +193,8 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span></span>
-<span>    year <span class="op">=</span> <span class="fu">year</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
-<span>    qtr <span class="op">=</span> <span class="fu">quarter</span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    year <span class="op">=</span> <span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">year</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
+<span>    qtr <span class="op">=</span> <span class="fu"><a href="https://shrektan.github.io/ymd/reference/date_part.html" class="external-link">quarter</a></span><span class="op">(</span><span class="va">date_service</span><span class="op">)</span>,</span>
 <span>    <span class="va">payer</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/summarise_claims.html">summarise_claims</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -327,7 +327,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Andrew Bruce <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
+<li>Andrew Allen Bruce <br><small class="roles"> Author, maintainer, copyright holder </small>   </li>
 </ul>
 </div>
 
@@ -347,7 +347,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Andrew Bruce.</p>
+  <p>Developed by Andrew Allen Bruce.</p>
 </div>
 
 <div class="pkgdown-footer-right">

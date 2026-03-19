@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">forager</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mock_claims</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">100</span>, payers <span class="op">=</span> <span class="fu">payer_names</span><span class="op">(</span><span class="op">)</span>, count_days <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mock_claims</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">1000L</span>, days <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -56,19 +56,11 @@
 
 
 <dl><dt id="arg-rows">rows<a class="anchor" aria-label="anchor" href="#arg-rows"></a></dt>
-<dd><p><code>[integerish]</code> rows number of rows to generate; default is <code>100</code></p></dd>
+<dd><p><code>&lt;int&gt;</code> number of rows to generate</p></dd>
 
 
-<dt id="arg-payers">payers<a class="anchor" aria-label="anchor" href="#arg-payers"></a></dt>
-<dd><p><code>[character]</code> vector of payer names; default is <code>payer_names()</code></p></dd>
-
-
-<dt id="arg-count-days">count_days<a class="anchor" aria-label="anchor" href="#arg-count-days"></a></dt>
-<dd><p><code>[logical]</code> add columns for days between events; default is <code>FALSE</code></p></dd>
-
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p><code>[dots]</code> additional arguments</p></dd>
+<dt id="arg-days">days<a class="anchor" aria-label="anchor" href="#arg-days"></a></dt>
+<dd><p><code>&lt;lgl&gt;</code> add counts of days between events</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -78,9 +70,22 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mock_claims</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘fastplyr’</span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">mock_claims</span><span class="op">(</span>rows <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 100 × 10</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="font-weight: bold;">id</span>    <span style="font-weight: bold;">payer</span>    <span style="font-weight: bold;">charges</span> <span style="font-weight: bold;">date_srv</span>   <span style="font-weight: bold;">date_rel</span>   <span style="font-weight: bold;">date_sub</span>   <span style="font-weight: bold;">date_acc</span>   <span style="font-weight: bold;">date_adj</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 018   Cigna        98. 2025-03-04 2025-03-12 2025-03-15 2025-03-20 2025-04-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 016   Omaha        49. 2025-03-04 2025-03-13 2025-03-16 2025-03-24 2025-04-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 031   Highmark    19<span style="color: #949494;">3</span>. 2025-03-04 2025-03-13 2025-03-19 2025-03-22 2025-04-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 086   Medicaid     23. 2025-03-03 2025-03-11 2025-03-13 2025-03-19 2025-04-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 026   Humana      14<span style="color: #949494;">7</span>. 2025-03-03 2025-03-10 2025-03-14 2025-03-23 2025-04-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 077   Medicaid    16<span style="color: #949494;">9</span>. 2025-03-02 2025-03-11 2025-03-17 2025-03-30 2025-04-09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 052   Wellcare     71. 2025-02-27 2025-03-07 2025-03-13 2025-03-25 2025-04-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 009   Cigna       30<span style="color: #949494;">9</span>. 2025-02-27 2025-03-09 2025-03-12 2025-03-21 2025-03-31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 011   Equitab…    24<span style="color: #949494;">5</span>. 2025-02-27 2025-03-06 2025-03-11 2025-03-18 2025-04-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 039   NY Life     20<span style="color: #949494;">7</span>. 2025-02-24 2025-03-04 2025-03-04 2025-03-11 2025-03-29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 90 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: </span><span style="color: #949494; font-weight: bold;">date_rec</span><span style="color: #949494;"> &lt;date&gt;, </span><span style="color: #949494; font-weight: bold;">balance</span><span style="color: #949494;"> &lt;dbl&gt;</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -88,7 +93,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Andrew Bruce.</p>
+  <p>Developed by Andrew Allen Bruce.</p>
 </div>
 
 <div class="pkgdown-footer-right">

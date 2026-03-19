@@ -60,13 +60,13 @@ agingex |>
 
 |         | dos        | year | quarter | month    | charges | ins_name   | ins_class | days_elapsed | aging_bin |
 |---------|------------|------|---------|----------|---------|------------|-----------|--------------|-----------|
-| 1       | 2023-12-27 | 2023 | 4       | December | 389.70  | Medicare   | Primary   | 810          | 121+      |
-| 2       | 2023-12-27 | 2023 | 4       | December | 172.72  | Patient    | Patient   | 810          | 121+      |
-| 3       | 2023-12-27 | 2023 | 4       | December | 246.46  | Blue Cross | Primary   | 810          | 121+      |
-| 4       | 2023-12-27 | 2023 | 4       | December | 507.45  | AETNA      | Primary   | 810          | 121+      |
-| 5       | 2023-12-27 | 2023 | 4       | December | 483.09  | Blue Cross | Primary   | 810          | 121+      |
+| 1       | 2023-12-27 | 2023 | 4       | December | 389.70  | Medicare   | Primary   | 813          | 121+      |
+| 2       | 2023-12-27 | 2023 | 4       | December | 172.72  | Patient    | Patient   | 813          | 121+      |
+| 3       | 2023-12-27 | 2023 | 4       | December | 246.46  | Blue Cross | Primary   | 813          | 121+      |
+| 4       | 2023-12-27 | 2023 | 4       | December | 507.45  | AETNA      | Primary   | 813          | 121+      |
+| 5       | 2023-12-27 | 2023 | 4       | December | 483.09  | Blue Cross | Primary   | 813          | 121+      |
 | 6..2617 |            |      |         |          |         |            |           |              |           |
-| 2618    | 2024-05-07 | 2024 | 2       | May      | 583.24  | Medicare   | Secondary | 678          | 121+      |
+| 2618    | 2024-05-07 | 2024 | 2       | May      | 583.24  | Medicare   | Secondary | 681          | 121+      |
 
 ``` r
 load_ex("aging_facility") |> 
